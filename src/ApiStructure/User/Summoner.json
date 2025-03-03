@@ -1,0 +1,47 @@
+{
+  "data": {
+    "summoner": {
+      "puuid": "eVTX2bccuCWJ66v1J18sgBDYnrl6NBykyDzzIA_wo_D9XUabAIbuUB9F8SSaU3tantbdQYXLMUBqzw",
+      "name": "Jaishankar",
+      "gameName": "Jaishankar",
+      "tagLine": "EUW",
+      "profileIconUrl": "https://ddragon.leagueoflegends.com/cdn/14.8.1/img/profileicon/29.png",
+      "syncedAt": "2024-03-13T08:11:07.000Z"
+    },
+    "summonerSeasons": [
+      {
+        "season": "set8.5",
+        "tier": "PLATINUM",
+        "rank": "IV"
+      },
+      {
+        "season": "set9",
+        "tier": "GOLD",
+        "rank": "III"
+      },
+      {
+        "season": "set10",
+        "tier": "EMERALD",
+        "rank": "IV"
+      },
+      {
+        "season": "set11",
+        "tier": "PLATINUM",
+        "rank": "IV"
+      }
+    ],
+    "summonerLeagues": [
+      {
+        "season": "set11",
+        "queue": "RANKED_TFT",
+        "tier": "PLATINUM",
+        "rank": "IV",
+        "leaguePoints": 42,
+        "plays": 54,
+        "wins": 0,
+        "tops": 28,
+        "avgPlacement": 0
+      }
+    ]
+  }
+}
