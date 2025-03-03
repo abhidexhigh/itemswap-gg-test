@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { FaTint } from "react-icons/fa";
-import ChineseArmor from "@assets/image/items/armors/chinese.png";
 
 // Tooltip Container
 const Tooltip = styled.div`
@@ -106,7 +105,6 @@ const TraitTooltip = ({
   <Tooltip>
     <Header>
       <span>{title}</span>
-      <SkillIcon src={ChineseArmor.src} />
     </Header>
     <hr />
     <Body>
