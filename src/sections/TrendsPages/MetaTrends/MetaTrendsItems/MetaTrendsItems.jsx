@@ -339,6 +339,7 @@ const ProjectItems = () => {
                         setSelectedChampion={(key) =>
                           handleFilterChange("champion", key)
                         }
+                        forces={forces}
                       />
                       {/* <MetaTrendsCard cost="Cost 2" itemCount={13} />
                         <MetaTrendsCard cost="Cost 3" itemCount={13} />
@@ -423,8 +424,8 @@ const ProjectItems = () => {
                                 >
                                   <Image
                                     alt="Image"
-                                    width={5}
-                                    height={5}
+                                    width={80}
+                                    height={80}
                                     src={trait?.imageUrl}
                                     className="w-[96px] h-[96px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center"
                                   />
@@ -471,8 +472,8 @@ const ProjectItems = () => {
                                 >
                                   <Image
                                     alt="Image"
-                                    width={5}
-                                    height={5}
+                                    width={80}
+                                    height={80}
                                     src={trait?.imageUrl}
                                     className="w-[96px] h-[96px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center"
                                   />
@@ -564,8 +565,8 @@ const ProjectItems = () => {
                                   >
                                     <Image
                                       alt="Image"
-                                      width={5}
-                                      height={5}
+                                      width={80}
+                                      height={80}
                                       src={item?.imageUrl}
                                       className="w-[48px] md:w-[84px] h-[48px] md:h-[84px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center"
                                     />
@@ -638,8 +639,8 @@ const ProjectItems = () => {
                               <div className="flex justify-center items-center bg-[#000] rounded-full mx-1 pr-2 border-[1px] border-[#ffffff50]">
                                 <Image
                                   alt="Image"
-                                  width={5}
-                                  height={5}
+                                  width={50}
+                                  height={50}
                                   src={
                                     forces?.find(
                                       (t) =>
@@ -680,8 +681,8 @@ const ProjectItems = () => {
                                 >
                                   <Image
                                     alt="Image"
-                                    width={5}
-                                    height={5}
+                                    width={50}
+                                    height={50}
                                     src={
                                       traits
                                         ?.find((t) => t.key === trait?.key)
@@ -769,19 +770,19 @@ const ProjectItems = () => {
                                         >
                                           <Image
                                             alt="Image"
-                                            width={5}
-                                            height={5}
+                                            width={100}
+                                            height={100}
                                             src={
                                               champions?.find(
                                                 (c) => c.key === champion?.key
                                               )?.cardImage
                                             }
-                                            className="h-full w-full object-cover object-center rounded-[10px]"
+                                            className="h-full w-28 object-cover object-center rounded-[10px]"
                                           />
                                           <Image
                                             alt="Image"
-                                            width={5}
-                                            height={5}
+                                            width={20}
+                                            height={20}
                                             src={
                                               forces?.find(
                                                 (f) =>
@@ -829,8 +830,8 @@ const ProjectItems = () => {
                                             />
                                             <Image
                                               alt="Image"
-                                              width={5}
-                                              height={5}
+                                              width={50}
+                                              height={50}
                                               src={
                                                 items?.find(
                                                   (i) => i.key === item
@@ -874,8 +875,8 @@ const ProjectItems = () => {
                                   <div className="flex justify-center items-center relative">
                                     <Image
                                       alt="Image"
-                                      width={5}
-                                      height={5}
+                                      width={80}
+                                      height={80}
                                       src={
                                         augments?.find((a) => a.key === augment)
                                           .imageUrl
@@ -979,7 +980,7 @@ const ProjectItems = () => {
                                 options={options}
                                 series={series}
                                 type="bar"
-                                height={5}
+                                height={20}
                               />
                             </div> */}
                             <div className="flex w-full flex-col justify-between rounded-[4px] bg-[#1D1D1D] pt-[10px] pb-1">
@@ -1001,8 +1002,8 @@ const ProjectItems = () => {
                                 <div className="flex justify-center items-center md:w-[64px] relative">
                                   <Image
                                     alt="Image"
-                                    width={5}
-                                    height={5}
+                                    width={80}
+                                    height={80}
                                     src={
                                       augments?.find((a) => a.key === augment)
                                         .imageUrl
@@ -1069,8 +1070,8 @@ const ProjectItems = () => {
                                     <div className="flex justify-center items-center relative">
                                       <Image
                                         alt="Image"
-                                        width={5}
-                                        height={5}
+                                        width={20}
+                                        height={20}
                                         src={augment.src}
                                         className="w-[64px]"
                                       />
@@ -1085,7 +1086,7 @@ const ProjectItems = () => {
                                   options={options}
                                   series={series}
                                   type="bar"
-                                  height={5}
+                                  height={20}
                                 />
                               </div> */}
                             </div>
@@ -1098,8 +1099,8 @@ const ProjectItems = () => {
                               >
                                 <Image
                                   alt="Image"
-                                  width={5}
-                                  height={5}
+                                  width={20}
+                                  height={20}
                                   src={arrowRight.src}
                                 />
                               </a>

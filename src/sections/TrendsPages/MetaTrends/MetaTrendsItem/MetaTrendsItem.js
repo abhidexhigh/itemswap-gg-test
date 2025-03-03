@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { Tooltip as Ttip } from "flowbite-react";
 import annie from "@assets/image/items/annie.jpeg";
 import { IoMdCheckmarkCircle, IoMdCheckmark } from "react-icons/io";
@@ -13,6 +14,7 @@ const MetaTrendsItem = ({
   link,
   setSelectedChampion,
   index,
+  forces,
 }) => {
   const handleClick = (key) => {
     setSelectedChampion(key);
@@ -41,14 +43,22 @@ ${champion?.variant === "Light" || champion?.variant === "Dark" ? "inline-flex" 
               backgroundImage: `url(${ImageBorders?.find((border) => border?.cost === champion?.cost).imageUrl})`,
             }}
           >
-            <img
+            <Image
               src={champion.cardImage}
-              alt="icon"
+              alt="Champion Image"
               className="w-[95%] h-[95%] m-auto"
+              width={80}
+              height={80}
             />
-            <img
-              src={champion?.identificationImageUrl}
+            <Image
+              src={
+                forces?.find((force) => force?.key === champion?.variant)
+                  ?.imageUrl
+              }
               className="absolute -top-[3px] -right-[3px] w-[20px] md:w-[30px]"
+              alt="icon"
+              width={32}
+              height={32}
             />
             {champion?.selected && (
               <IoMdCheckmarkCircle className="absolute top-0 right-0 w-full h-full p-3 bg-[#00000060] text-[#86efaccc]" />

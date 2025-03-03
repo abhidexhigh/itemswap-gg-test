@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import MetaTrendsItem from "../MetaTrendsItem/MetaTrendsItem";
 // import Champions from "../../../../data/champions.json";
 import Cost from "../../../../data/compsChampions.json";
@@ -13,6 +14,7 @@ const MetaTrendsCard = ({
   championsByCost,
   setSelectedChampion,
   selectedChampion,
+  forces,
 }) => {
   const coin =
     "https://res.cloudinary.com/dg0cmj6su/image/upload/v1727238375/selling_coins_sjs6so.webp";
@@ -113,10 +115,12 @@ const MetaTrendsCard = ({
                 }}
               >
                 <div className="hidden md:flex items-center">
-                  <img
+                  <Image
                     src={coinIcons[i]}
                     className="w-8 md:w-10 2xl:w-12"
                     alt="Coin Icon"
+                    width={48}
+                    height={48}
                   />
                 </div>
                 {champions &&
@@ -127,6 +131,7 @@ const MetaTrendsCard = ({
                       champion={champion}
                       setSelectedChampion={setSelectedChampion}
                       index={j}
+                      forces={forces}
                     />
                   ))}
               </div>
