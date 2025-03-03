@@ -4,7 +4,7 @@ import "../../../../../i18n";
 import "react-tooltip/dist/react-tooltip.css";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import { FaSortAmountDownAlt, FaSortAmountUp } from "react-icons/fa";
-import metaDeckChampions from "../../../../data/trends/metaDeckChampions.json";
+import metaDeckChampions from "./metaDeckChampions.json";
 import Comps from "../../../../data/compsNew.json";
 import CardImage from "src/components/cardImage";
 import TrendFilters from "src/components/trendFilters";

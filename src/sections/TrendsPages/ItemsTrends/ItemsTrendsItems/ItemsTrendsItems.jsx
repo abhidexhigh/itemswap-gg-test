@@ -5,7 +5,7 @@ import "../../../../../i18n";
 import "react-tooltip/dist/react-tooltip.css";
 import TrendFilters from "src/components/trendFilters";
 import { FaSortAmountDownAlt, FaSortAmountUp } from "react-icons/fa";
-import metaDeckItems from "../../../../data/trends/metaDeckItems.json";
+import metaDeckItems from "./metaDeckItems.json";
 import Comps from "../../../../data/compsNew.json";
 import Forces from "../../../../data/newData/force.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
