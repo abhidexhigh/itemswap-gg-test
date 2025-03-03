@@ -14,7 +14,7 @@ const ProjectItems = () => {
   return (
     // <ProjectItemsStyleWrapper>
     <>
-      <div className="container md:!max-w-[95%] px-0 md:pt-4">
+      <div className="container md:!max-w-[95%] 2xl:!max-w-[80%] px-0 md:pt-4">
         {/* <TrendFilters
           dropdown1={["v14.2", "v14.1"]}
           dropdown2={[

@@ -37,7 +37,7 @@ const TierCard = ({ cost, itemsData }) => {
             {itemsData.map((champion, index) => (
               <tr className="bg-[#1e293b] shadow-xl">
                 <td className="text-center py-0">
-                  <div className="flex pt-[8px] pr-0 pb-[4px] pl-[5px] justify-center md:justify-between  items-center mb-2">
+                  <div className="flex pt-[8px] pr-0 pb-[4px] pl-[5px] justify-center gap-x-2 items-center mb-2">
                     <div className="flex flex-shrink-1 gap-[2px]">
                       <div className="flex flex-col relative">
                         <div className="flex justify-between gap-2">
