@@ -148,6 +148,8 @@ const ProjectItems = () => {
   }, {});
   const groupedArray = Object.values(groupedByCost);
 
+  console.log("Grouped Array", groupedArray);
+
   // if (selectedChampion !== null) {
   groupedArray.forEach((subArray) => {
     // Traverse through each object in the sub-array

@@ -7,7 +7,7 @@ import CardImage from "src/components/cardImage";
 import "react-tooltip/dist/react-tooltip.css";
 import TrendFilters from "src/components/trendFilters";
 import { FaSortAmountDownAlt, FaSortAmountUp } from "react-icons/fa";
-import MetaDeckTraits from "../../../../data/trends/MetaDeckTraits.json";
+import metaDeckTraitStats from "../../../../data/newData/MetaDeckTraits.json";
 import Comps from "../../../../data/compsNew.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 
@@ -16,7 +16,7 @@ const ProjectItems = () => {
   const { i18n } = useTranslation();
   const others = t("others");
 
-  const { metaDeckTraitStats } = MetaDeckTraits?.metaDeckTrait;
+  // const { metaDeckTraitStats } = MetaDeckTraits?.metaDeckTrait;
 
   const [metaDeckTraitStatsData, setMetaDeckTraitStatsData] =
     useState(metaDeckTraitStats);
@@ -339,7 +339,7 @@ const ProjectItems = () => {
                           <>
                             <CardImage
                               src={champions?.find(
-                                (champ) => champ?.key === champion?.key
+                                (champ) => champ?.key === champion
                               )}
                               imgStyle="w-[72px] md:w-[84px]"
                               identificationImageStyle="w=[16px] md:w-[32px]"

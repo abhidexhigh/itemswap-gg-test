@@ -4,6 +4,14 @@ import MetaTrendsItem from "../MetaTrendsItem/MetaTrendsItem";
 // import Champions from "../../../../data/champions.json";
 import Cost from "../../../../data/compsChampions.json";
 
+function getRandomCharacters(characters, count = 12) {
+  // Shuffle the array using Fisher-Yates algorithm
+  let shuffled = characters.slice().sort(() => Math.random() - 0.5);
+
+  // Return the first 'count' elements
+  return shuffled.slice(0, count);
+}
+
 const MetaTrendsCard = ({
   title,
   description,
@@ -125,7 +133,7 @@ const MetaTrendsCard = ({
                 </div>
                 {champions &&
                   champions.length > 0 &&
-                  champions.map((champion, j) => (
+                  getRandomCharacters(champions).map((champion, j) => (
                     <MetaTrendsItem
                       key={j}
                       champion={champion}
