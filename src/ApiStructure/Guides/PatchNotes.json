@@ -1,0 +1,26 @@
+// REQUEST : POST
+// ENDPOINT: api/patch-notes
+// params: {patch: "11.1"}
+
+// RESPONSE
+{
+  "data": [
+    {
+      "patch": "11.1",
+      "notes": [
+        {
+          "title": "New Champion",
+          "description": "New champion: Yone"
+        },
+        {
+          "title": "Item Changes",
+          "description": "New item: Moonstone Renewer"
+        },
+        {
+          "title": "Champion Changes",
+          "description": "Nerf: Akali"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "tier": "IRON",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1723280058/Iron_i6bmm4.png"
+  },
+  {
+    "tier": "BRONZE",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1723280066/bronze_fpnz5p.png"
+  },
+  {
+    "tier": "SILVER",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1723280065/silver_d5qvbz.png"
+  },
+  {
+    "tier": "GOLD",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1723280060/Gold_frtetx.png"
+  },
+  {
+    "tier": "PLATINUM",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1723280066/Platinum_nf3rnx.png"
+  },
+  {
+    "tier": "DIAMOND",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1723280067/Diamond_zkpqcr.png"
+  },
+  {
+    "tier": "MASTER",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1723280069/Master_fz7rty.png"
+  }
+]

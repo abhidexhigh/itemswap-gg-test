@@ -1,0 +1,75 @@
+{
+        "data": {
+          "season": "set11",
+          "traits": [
+            {
+              "key": "Altruist",
+              "ingameKey": "TFT11_Altruist",
+              "name": "Altruist",
+              "desc": "Altruists heal the lowest Health ally for 15% of damage they deal. Your team gains Armor and Magic Resist.",
+              "imageUrl": "//cdn.lolchess.gg/upload/images/traits/Altruist_normal_1709371718-altruist.svg",
+              "blackImageUrl": "//cdn.lolchess.gg/upload/images/traits/Altruist_black_1709371718-altruist.svg",
+              "whiteImageUrl": "//cdn.lolchess.gg/upload/images/traits/Altruist_white_1709371718-altruist.svg",
+              "type": "CLASS",
+              "styles": [
+                {
+                  "style": "bronze",
+                  "min": 2,
+                  "max": 2
+                },
+                {
+                  "style": "silver",
+                  "min": 3,
+                  "max": 3
+                },
+                {
+                  "style": "gold",
+                  "min": 4
+                }
+              ],
+              "stats": {
+                "2": "+10 AR/MR",
+                "3": "+20 AR/MR",
+                "4": "+40 AR/MR"
+              }
+            },
+            {
+              "key": "Arcanist",
+              "ingameKey": "TFT11_Arcanist",
+              "name": "Arcanist",
+              "desc": "Arcanists gain Ability Power and grant Ability Power to allies.",
+              "imageUrl": "//cdn.lolchess.gg/upload/images/traits/Arcanist_normal_1709371622-arcanist.svg",
+              "blackImageUrl": "//cdn.lolchess.gg/upload/images/traits/Arcanist_black_1709371622-arcanist.svg",
+              "whiteImageUrl": "//cdn.lolchess.gg/upload/images/traits/Arcanist_white_1709371623-arcanist.svg",
+              "type": "CLASS",
+              "styles": [
+                {
+                  "style": "bronze",
+                  "min": 2,
+                  "max": 3
+                },
+                {
+                  "style": "silver",
+                  "min": 4,
+                  "max": 5
+                },
+                {
+                  "style": "gold",
+                  "min": 6,
+                  "max": 7
+                },
+                {
+                  "style": "chromatic",
+                  "min": 8
+                }
+              ],
+              "stats": {
+                "2": "20 AP to all allies.",
+                "4": "50 AP for Arcanists; 20 AP for others",
+                "6": "85 AP for Arcanists; 40 AP for others",
+                "8": "125 AP for Arcanists; 125 AP for others"
+              }
+            }
+          ]
+        }
+      }

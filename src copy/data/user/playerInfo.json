@@ -1,0 +1,615 @@
+{
+  "matches": [
+    {
+      "key": "EUW1_7058218518",
+      "dateTime": 1722618729162,
+      "duration": "32:46",
+      "patch": 14150,
+      "queueId": 1100,
+      "gameType": "Ranked",
+      "info": {
+        "name": "Jaishankar",
+        "imageUrl": "https://ap.tft.tools/img/ll-icons/48cd7725-a66e-4c23-a06d-a9d6e84b035d.png?w=104",
+        "tag": "EUW",
+        "companionId": "48cd7725-a66e-4c23-a06d-a9d6e84b035d",
+        "lastRound": 35,
+        "level": 9,
+        "coins": 43,
+        "placement": 2,
+        "playersEliminated": 2,
+        "totalDamageToPlayers": 130,
+        "traits": [
+          {
+            "name": "Blockbuster",
+            "numUnits": 2,
+            "currentTier": 1
+          },
+          {
+            "name": "Chaos",
+            "numUnits": 2,
+            "currentTier": 1
+          },
+          {
+            "name": "Druid",
+            "numUnits": 1,
+            "currentTier": 0
+          },
+          {
+            "name": "Fury",
+            "numUnits": 1,
+            "currentTier": 0
+          },
+          {
+            "name": "GirlCrush",
+            "numUnits": 3,
+            "currentTier": 2
+          },
+          {
+            "name": "Mirage",
+            "numUnits": 1,
+            "currentTier": 0
+          },
+          {
+            "name": "Wildrush",
+            "numUnits": 2,
+            "currentTier": 1
+          }
+        ],
+        "units": [
+          {
+            "key": "Karna",
+            "items": [],
+            "rarity": 1,
+            "tier": 1
+          },
+          {
+            "key": "Fiorella",
+            "items": [],
+            "rarity": 2,
+            "tier": 1
+          },
+          {
+            "key": "Keres",
+            "items": ["KoreanBow"],
+            "rarity": 2,
+            "tier": 2
+          },
+          {
+            "key": "Aello",
+            "items": ["HextechGunblade", "IndianArmor"],
+            "rarity": 4,
+            "tier": 2
+          },
+          {
+            "key": "Daji",
+            "items": ["VikingHelmet", "JapaneseArmor", "VikingWeapon"],
+            "rarity": 4,
+            "tier": 2
+          },
+          {
+            "key": "Hecate",
+            "items": [],
+            "rarity": 4,
+            "tier": 2
+          },
+          {
+            "key": "Tamamo",
+            "items": ["ChineseWeapon", "GreekArmor", "KoreanHelmet"],
+            "rarity": 4,
+            "tier": 2
+          },
+          {
+            "key": "Oinari",
+            "items": ["NativeAmericanWeapon", "KoreanHelmet"],
+            "rarity": 4,
+            "tier": 2
+          },
+          {
+            "key": "Kazuha",
+            "items": ["GreekHelmet", "ChineseArmor"],
+            "rarity": 6,
+            "tier": 1
+          }
+        ],
+        "augments": [
+          "TFT9_Augment_StarsAreBorn",
+          "TFT_Augment_AllThatShimmersPlus",
+          "TFT_Augment_SupportSentinel2"
+        ]
+      },
+      "rankBefore": ["GOLD III", 49],
+      "rankAfter": ["GOLD II", 10],
+      "ratings": {
+        "meta": 0.5147693479952165,
+        "econ": 0.20674581753688198,
+        "items": 0.272563917864603,
+        "augments": -0.0,
+        "meta2": 0.5506893699199147,
+        "econ2": 0.24266583946158019,
+        "items2": 0.3752580925820541,
+        "augments2": 0.2739603336136953,
+        "contestedRatio3": 0.9827275237720744
+      }
+    },
+    {
+      "key": "EUW1_7058136434",
+      "dateTime": 1722616934929,
+      "duration": 2321.3547,
+      "patch": 14150,
+      "queueId": 1100,
+      "gameType": "Ranked",
+      "info": {
+        "name": "Jaishankar",
+        "imageUrl": "https://ap.tft.tools/img/ll-icons/48cd7725-a66e-4c23-a06d-a9d6e84b035d.png?w=104",
+        "tag": "EUW",
+        "companionId": "48cd7725-a66e-4c23-a06d-a9d6e84b035d",
+        "lastRound": 27,
+        "level": 8,
+        "coins": 43,
+        "placement": 7,
+        "playersEliminated": 0,
+        "totalDamageToPlayers": 43,
+        "traits": [
+          {
+            "name": "Chaos",
+            "numUnits": 2,
+            "currentTier": 1
+          },
+          {
+            "name": "Druid",
+            "numUnits": 1,
+            "currentTier": 0
+          },
+          {
+            "name": "GirlCrush",
+            "numUnits": 2,
+            "currentTier": 1
+          },
+          {
+            "name": "Mirage",
+            "numUnits": 1,
+            "currentTier": 0
+          }
+        ],
+        "units": [
+          {
+            "key": "Rei",
+            "items": [],
+            "rarity": 2,
+            "tier": 1
+          },
+          {
+            "key": "Tamamo",
+            "items": ["EgyptianHelmet", "PersianArmor", "IndianWeapon"],
+            "rarity": 4,
+            "tier": 1
+          },
+          {
+            "key": "Fuma",
+            "items": ["GreekHelmet", "PersianWeapon", "ChineseArmor"],
+            "rarity": 4,
+            "tier": 1
+          },
+          {
+            "key": "Morwen",
+            "items": ["GreekHelmet", "EnglandArmor", "GreekMagicWeapon"],
+            "rarity": 4,
+            "tier": 2
+          },
+          {
+            "key": "Celaeno",
+            "items": ["KoreanHelmet"],
+            "rarity": 6,
+            "tier": 1
+          },
+          {
+            "key": "HuliJing",
+            "items": ["JapaneseHelmet", "VikingWeapon", "EnglandArmor"],
+            "rarity": 6,
+            "tier": 2
+          },
+          {
+            "key": "Miho",
+            "items": [],
+            "rarity": 6,
+            "tier": 1
+          },
+          {
+            "key": "Aetheria",
+            "items": ["JapaneseWeapon"],
+            "rarity": 6,
+            "tier": 1
+          },
+          {
+            "key": "Merope",
+            "items": [],
+            "rarity": 9,
+            "tier": 1
+          }
+        ],
+        "augments": [
+          "TFT_Augment_FortuneFavorsTheBold",
+          "TFT9_Augment_BuildingACollectionPlusPlus",
+          "TFT_Augment_Spellblades"
+        ]
+      },
+      "rankBefore": ["GOLD III", 76],
+      "rankAfter": ["GOLD III", 49],
+      "ratings": {
+        "meta": 0.3278310383214732,
+        "econ": -0.8257179127587216,
+        "items": -0.2512516823326705,
+        "augments": -0.0,
+        "meta2": 0.27283606147517225,
+        "econ2": -0.8807128896050226,
+        "items2": -0.24579128533294814,
+        "augments2": 0.24384268212755988,
+        "contestedRatio3": 0.8345486991052147
+      }
+    },
+    {
+      "key": "EUW1_7057670579",
+      "dateTime": 1722600735598,
+      "duration": 2056.1077,
+      "patch": 14150,
+      "queueId": 1100,
+      "gameType": "Ranked",
+      "info": {
+        "name": "Jaishankar",
+        "imageUrl": "https://ap.tft.tools/img/ll-icons/48cd7725-a66e-4c23-a06d-a9d6e84b035d.png?w=104",
+        "tag": "EUW",
+        "companionId": "48cd7725-a66e-4c23-a06d-a9d6e84b035d",
+        "lastRound": 33,
+        "level": 9,
+        "coins": 43,
+        "placement": 3,
+        "playersEliminated": 1,
+        "totalDamageToPlayers": 92,
+        "traits": [
+          {
+            "name": "Blockbuster",
+            "numUnits": 1,
+            "currentTier": 0
+          },
+          {
+            "name": "Druid",
+            "numUnits": 1,
+            "currentTier": 0
+          },
+          {
+            "name": "Wildrush",
+            "numUnits": 1,
+            "currentTier": 0
+          }
+        ],
+        "units": [
+          {
+            "key": "Pyra",
+            "items": [],
+            "rarity": 0,
+            "tier": 2
+          },
+          {
+            "key": "Meliae",
+            "items": ["NativeAmericanArmor"],
+            "rarity": 0,
+            "tier": 2
+          },
+          {
+            "key": "Elysia",
+            "items": [],
+            "rarity": 1,
+            "tier": 2
+          },
+          {
+            "key": "Seraphina",
+            "items": [],
+            "rarity": 1,
+            "tier": 1
+          },
+          {
+            "key": "Keres",
+            "items": ["ChineseArmor", "ChineseArmor", "Artifact_WitsEnd"],
+            "rarity": 1,
+            "tier": 3
+          },
+          {
+            "key": "Nergal",
+            "items": ["12PortalEmblemItem"],
+            "rarity": 2,
+            "tier": 2
+          },
+          {
+            "key": "Ravana",
+            "items": [],
+            "rarity": 2,
+            "tier": 2
+          },
+          {
+            "key": "Hecate",
+            "items": ["PersianArmor", "WarmogsArmor", "VikingWeapon"],
+            "rarity": 4,
+            "tier": 2
+          },
+          {
+            "key": "Hestial",
+            "items": ["GreekArmor", "GreekHelmet", "VikingWeapon"],
+            "rarity": 4,
+            "tier": 2
+          },
+          {
+            "key": "Rhiannon",
+            "items": ["GreekArmor"],
+            "rarity": 4,
+            "tier": 2
+          },
+          {
+            "key": "Aetheria",
+            "items": [],
+            "rarity": 6,
+            "tier": 1
+          },
+          {
+            "key": "Merope",
+            "items": [],
+            "rarity": 9,
+            "tier": 1
+          }
+        ],
+        "augments": [
+          "TFT12_Augment_GalioCarry",
+          "TFT6_Augment_ForceOfNature",
+          "TFT12_Augment_Vanguard"
+        ]
+      },
+      "rankBefore": ["GOLD III", 40],
+      "rankAfter": ["GOLD III", 76],
+      "ratings": {
+        "meta": 0.40724425774704076,
+        "econ": -0.3574883016343172,
+        "items": 0.06113106120632896,
+        "augments": -0.0,
+        "meta2": 0.5123511325665631,
+        "econ2": -0.2523814268147949,
+        "items2": 0.21802855097271476,
+        "augments2": 0.07485861534159222,
+        "contestedRatio3": 0.2843428414585564
+      }
+    },
+    {
+      "key": "EUW1_7056875719",
+      "dateTime": 1722547244972,
+      "duration": 2272.727,
+      "patch": 14150,
+      "queueId": 1100,
+      "gameType": "Ranked",
+      "info": {
+        "name": "Jaishankar",
+        "imageUrl": "https://ap.tft.tools/img/ll-icons/48cd7725-a66e-4c23-a06d-a9d6e84b035d.png?w=104",
+        "tag": "EUW",
+        "companionId": "48cd7725-a66e-4c23-a06d-a9d6e84b035d",
+        "lastRound": 26,
+        "level": 8,
+        "coins": 43,
+        "placement": 7,
+        "playersEliminated": 0,
+        "totalDamageToPlayers": 27,
+        "traits": [
+          {
+            "name": "Blockbuster",
+            "numUnits": 1,
+            "currentTier": 0
+          },
+          {
+            "name": "Chaos",
+            "numUnits": 1,
+            "currentTier": 0
+          },
+          {
+            "name": "Fury",
+            "numUnits": 1,
+            "currentTier": 0
+          },
+          {
+            "name": "GirlCrush",
+            "numUnits": 1,
+            "currentTier": 0
+          },
+          {
+            "name": "Wildrush",
+            "numUnits": 1,
+            "currentTier": 0
+          }
+        ],
+        "units": [
+          {
+            "key": "Selene",
+            "items": [],
+            "rarity": 1,
+            "tier": 1
+          },
+          {
+            "key": "Merope",
+            "items": [],
+            "rarity": 2,
+            "tier": 2
+          },
+          {
+            "key": "Aello",
+            "items": ["IndianHelmet", "ChineseArmor", "GreekMagicWeapon"],
+            "rarity": 4,
+            "tier": 1
+          },
+          {
+            "key": "Daji",
+            "items": ["IndianHelmet", "VikingWeapon", "JapaneseArmor"],
+            "rarity": 4,
+            "tier": 2
+          },
+          {
+            "key": "Tamamo",
+            "items": ["PersianArmor", "EgyptianHelmet"],
+            "rarity": 4,
+            "tier": 1
+          },
+          {
+            "key": "Hecate",
+            "items": [],
+            "rarity": 4,
+            "tier": 1
+          },
+          {
+            "key": "HuliJing",
+            "items": [],
+            "rarity": 6,
+            "tier": 1
+          },
+          {
+            "key": "Meliae",
+            "items": ["GreekHelmet", "EgyptianWeapon", "EnglandArmor"],
+            "rarity": 6,
+            "tier": 2
+          }
+        ],
+        "augments": [
+          "TFT_Augment_FortuneFavorsTheBold",
+          "TFT_Augment_UnleashTheBeast",
+          "TFT11_Augment_Reinfourcement"
+        ]
+      },
+      "rankBefore": ["GOLD III", 68],
+      "rankAfter": ["GOLD III", 40],
+      "ratings": {
+        "meta": 0.23033034746492387,
+        "econ": -0.8128215992253875,
+        "items": -0.6271014893524003,
+        "augments": -0.0,
+        "meta2": 0.19180254818349748,
+        "econ2": -0.8513493985068139,
+        "items2": -0.5988551358410739,
+        "augments2": 0.33570477660188436,
+        "contestedRatio3": 1.3690310591557502
+      }
+    }
+  ],
+  "playerInfo": {
+    "profileIconId": 29,
+    "name": "Jaishankar",
+    "imageUrl": "https://ap.tft.tools/img/ll-icons/48cd7725-a66e-4c23-a06d-a9d6e84b035d.png?w=104",
+    "region": "euw1",
+    "tag": "EUW",
+    "puuid": "utO1XuevMEUIAfv1G0_Q7wsAZ3gneviUQ3QZoOh5yGurx4iRmLgrE29pJkfwJeEgRI7aZxCc_Foe7g",
+    "localRank": [12964, 0.06390645719440596],
+    "globalRank": [131245, 0.07414083736863156],
+    "rankedLeague": ["GOLD II", 10],
+    "fevoriteCombined": "IndianArmor",
+    "fevoriteChampion": "Tamamo",
+    "setsRanks": [
+      {
+        "set": 120,
+        "ranked": [1722619066, "GOLD II", 10, 16],
+        "played": true
+      },
+      {
+        "set": 110,
+        "ranked": [1722167129, "DIAMOND IV", 0, 298],
+        "played": true
+      },
+      {
+        "set": 100,
+        "ranked": [1710235584, "EMERALD IV", 73, 234],
+        "played": true
+      },
+      {
+        "set": 95,
+        "played": false
+      },
+      {
+        "set": 90,
+        "ranked": [1694109080, "GOLD III", 20, 45],
+        "played": true
+      },
+      {
+        "set": 85,
+        "ranked": [1685839137, "PLATINUM IV", 20, 118],
+        "played": true
+      },
+      {
+        "set": 80,
+        "played": false
+      },
+      {
+        "set": 75,
+        "played": false
+      },
+      {
+        "set": 70,
+        "played": false
+      },
+      {
+        "set": 65,
+        "played": false
+      },
+      {
+        "set": 60,
+        "played": false
+      },
+      {
+        "set": 55,
+        "played": false
+      },
+      {
+        "set": 50,
+        "played": false
+      },
+      {
+        "set": 45,
+        "played": false
+      },
+      {
+        "set": 40,
+        "played": false
+      },
+      {
+        "set": 35,
+        "played": false
+      },
+      {
+        "set": 30,
+        "played": false
+      }
+    ]
+  },
+  "rankHistory": [
+    [1722619066, "GOLD II", 10, 16],
+    [1722616685, "GOLD III", 49, 15],
+    [1722601075, "GOLD III", 76, 14],
+    [1722547058, "GOLD III", 40, 13],
+    [1722544926, "GOLD III", 68, 12],
+    [1722542865, "GOLD IV", 85, 11],
+    [1722526676, "GOLD IV", 75, 10],
+    [1722524256, "GOLD III", 0, 9],
+    [1722523045, "GOLD III", 13, 8],
+    [1722520659, "GOLD IV", 79, 7],
+    [1722500850, "GOLD IV", 14, 6],
+    [1722496039, "GOLD IV", 24, 5]
+  ],
+  "hrRankHistory": [],
+  "duoRankHistory": [],
+  "seasonStats": {
+    "games": 16,
+    "avgPlace": 4.0625,
+    "top4": 9,
+    "win": 3,
+    "topCarry": "Tamamo"
+  },
+  "queueSeasonStats": {
+    "1100": {
+      "games": 16,
+      "avgPlace": 4.0625,
+      "top4": 9,
+      "win": 3,
+      "topCarry": "Tamamo"
+    }
+  }
+}

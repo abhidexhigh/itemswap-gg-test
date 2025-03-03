@@ -1,0 +1,110 @@
+{
+  "metaDeckTrait": {
+    "updatedAt": 1725265727964,
+    "shard": "global",
+    "queueId": 1100,
+    "dt": 3,
+    "patch": 1417,
+    "revision": 0,
+    "tierId": 0,
+    "plays": 11396744,
+    "metaDeckTraitStats": [
+      {
+        "key": "Chaos",
+        "level": "silver",
+        "plays": 3086675,
+        "wins": 426393,
+        "tops": 1655968,
+        "placements": 13317616,
+        "pickRate": 0.0553,
+        "avgPlacement": 4.31,
+        "traitChampionStats": [
+          {
+            "key": "Circe",
+            "plays": 1380139,
+            "wins": 164254,
+            "tops": 676933,
+            "placements": 6280441,
+            "pickRate": 0.4471,
+            "avgPlacement": 4.55
+          },
+          {
+            "key": "Pontianak",
+            "plays": 1224577,
+            "wins": 204099,
+            "tops": 709487,
+            "placements": 4985333,
+            "pickRate": 0.3967,
+            "avgPlacement": 4.07
+          },
+          {
+            "key": "Orphne",
+            "plays": 1070505,
+            "wins": 134209,
+            "tops": 537622,
+            "placements": 4803397,
+            "pickRate": 0.3468,
+            "avgPlacement": 4.49
+          },
+          {
+            "key": "Nicothoe",
+            "plays": 877479,
+            "wins": 176842,
+            "tops": 556018,
+            "placements": 3313136,
+            "pickRate": 0.2843,
+            "avgPlacement": 3.78
+          },
+          {
+            "key": "Oinari",
+            "plays": 734213,
+            "wins": 80881,
+            "tops": 401670,
+            "placements": 3160050,
+            "pickRate": 0.2379,
+            "avgPlacement": 4.3
+          }
+        ]
+      },
+      {
+        "key": "Guardian",
+        "level": "gold",
+        "plays": 2554082,
+        "wins": 328579,
+        "tops": 1301949,
+        "placements": 11351976,
+        "pickRate": 0.0458,
+        "avgPlacement": 4.44,
+        "traitChampionStats": [
+          {
+            "key": "Seraphina",
+            "plays": 1261241,
+            "wins": 167862,
+            "tops": 632936,
+            "placements": 5646558,
+            "pickRate": 0.4938,
+            "avgPlacement": 4.48
+          },
+          {
+            "key": "Rei",
+            "plays": 1184251,
+            "wins": 189726,
+            "tops": 636081,
+            "placements": 5056603,
+            "pickRate": 0.4637,
+            "avgPlacement": 4.27
+          },
+          {
+            "key": "Hecate",
+            "plays": 1056302,
+            "wins": 124547,
+            "tops": 530652,
+            "placements": 4748940,
+            "pickRate": 0.4136,
+            "avgPlacement": 4.5
+          }
+        ]
+      }
+    ]
+  }
+}

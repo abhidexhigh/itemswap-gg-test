@@ -1,0 +1,7 @@
+// REQUEST : GET
+// ENDPOINT: api/patches
+
+// RESPONSE
+{
+  "data": ["11.1", "11.3", "11.4", "11.5"]
+}
