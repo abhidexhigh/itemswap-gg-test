@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import "react-tooltip/dist/react-tooltip.css";
@@ -80,6 +81,7 @@ const ProjectItems = () => {
   } = Comps;
   const { champions } = data?.refs;
   const { items } = data?.refs;
+  const { forces } = data?.refs;
 
   const lookup = new Map(champions.map((champion) => [champion.key, champion]));
 
@@ -147,16 +149,14 @@ const ProjectItems = () => {
         <div>
           <table className="w-[900px] md:w-full border-separate border-spacing-y-2">
             <tr className="bg-[#1a1b31]">
-              <th className="th1 rounded-l-lg">
-                <p className="p-0 text-sm md:text-base mb-0 text-center py-2 text-[#fff]">
-                  #
-                </p>
+              <th className="rounded-l-lg">
+                <p className="p-0 text-sm !mx-2 my-2 md:text-[14px]">#</p>
               </th>
               <th
                 className={`cursor-pointer ${sortConfig?.key === "key" ? "bg-[#000000]" : ""}`}
                 onClick={() => requestSort("key")}
               >
-                <p className="p-0 text-sm md:text-base mb-0 text-left py-2 text-[#fff]">
+                <p className="p-0 text-sm my-auto md:text-[16px] text-left">
                   {others.champion}
                   <span className="ml-2">
                     {sortConfig?.key === "key" ? (
@@ -173,7 +173,7 @@ const ProjectItems = () => {
                 className={`cursor-pointer ${sortConfig?.key === "avgPlacement" ? "bg-[#000000]" : ""}`}
                 onClick={() => requestSort("avgPlacement")}
               >
-                <p className="p-0 text-sm md:text-base mb-0 text-left py-2 text-[#fff]">
+                <p className="p-0 text-sm my-auto md:text-[16px] text-left">
                   {others.avgRank}
                   <span className="ml-2">
                     {sortConfig?.key === "avgPlacement" ? (
@@ -190,7 +190,7 @@ const ProjectItems = () => {
                 className={`cursor-pointer ${sortConfig?.key === "tops" ? "bg-[#000000]" : ""}`}
                 onClick={() => requestSort("tops")}
               >
-                <p className="p-0 text-sm md:text-base mb-0 text-left py-2 text-[#fff]">
+                <p className="p-0 text-sm my-auto md:text-[16px] text-left">
                   {others.top4}
                   <span className="ml-2">
                     {sortConfig?.key === "tops" ? (
@@ -207,7 +207,7 @@ const ProjectItems = () => {
                 className={`cursor-pointer ${sortConfig?.key === "wins" ? "bg-[#000000]" : ""}`}
                 onClick={() => requestSort("wins")}
               >
-                <p className="p-0 text-sm md:text-base mb-0 text-left py-2 text-[#fff]">
+                <p className="p-0 text-sm my-auto md:text-[16px] text-left">
                   {others.winPercentage}
                   <span className="ml-2">
                     {sortConfig?.key === "wins" ? (
@@ -224,7 +224,7 @@ const ProjectItems = () => {
                 className={`cursor-pointer ${sortConfig?.key === "pickRate" ? "bg-[#000000]" : ""}`}
                 onClick={() => requestSort("pickRate")}
               >
-                <p className="p-0 text-sm md:text-base mb-0 text-left py-2 text-[#fff]">
+                <p className="p-0 text-sm my-auto md:text-[16px] text-left">
                   {others?.pickPercentage}
                   <span className="ml-2">
                     {sortConfig?.key === "pickRate" ? (
@@ -241,7 +241,7 @@ const ProjectItems = () => {
                 className={`cursor-pointer ${sortConfig?.key === "plays" ? "bg-[#000000]" : ""}`}
                 onClick={() => requestSort("plays")}
               >
-                <p className="p-0 text-sm md:text-base mb-0 text-left py-2 text-[#fff]">
+                <p className="p-0 text-sm my-auto md:text-[16px] text-left">
                   {others?.played}
                   <span className="ml-2">
                     {sortConfig?.key === "plays" ? (
@@ -255,17 +255,17 @@ const ProjectItems = () => {
                 </p>
               </th>
               <th>
-                <p className="p-0 text-sm md:text-base mb-0 text-left py-2 text-[#fff]">
+                <p className="p-0 text-sm my-auto md:text-[16px] text-left">
                   {others?.threeStarsPercentage}
                 </p>
               </th>
               <th>
-                <p className="p-0 text-sm md:text-base mb-0 text-left py-2 text-[#fff]">
+                <p className="p-0 text-sm my-auto md:text-[16px] text-left">
                   {others?.threeStarsRank}
                 </p>
               </th>
               <th className="rounded-r-lg">
-                <p className="p-0 text-sm md:text-base mb-0 text-left py-2 text-[#fff]">
+                <p className="p-0 text-sm my-auto md:text-[16px] text-left">
                   {others?.recommended} {others.items}
                 </p>
               </th>
@@ -290,6 +290,7 @@ const ProjectItems = () => {
                             imgStyle="w-[68px] md:w-[84px]"
                             identificationImageStyle="w=[16px] md:w-[32px]"
                             textStyle="text-[10px] md:text-[16px] hidden"
+                            forces={forces}
                           />
                           <p className="p-0 text-left text-sm md:text-xl mb-0 ml-2 text-[#fff]">
                             {
@@ -359,10 +360,12 @@ const ProjectItems = () => {
                             (item) =>
                               item && (
                                 <>
-                                  <img
+                                  <Image
                                     src={item}
-                                    className="w-12 md:w-16 mr-2"
                                     alt="icon"
+                                    width={80}
+                                    height={80}
+                                    className="w-12 md:w-16 mr-2"
                                     data-tooltip-id={item}
                                   />
                                   <ReactTltp

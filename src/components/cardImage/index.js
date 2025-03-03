@@ -1,9 +1,11 @@
+import Image from "next/image";
 import ReactTltp from "../tooltip/ReactTltp";
 const CardImage = ({
   src,
   imgStyle = "w-[48px] md:w-[96px]",
   identificationImageStyle = "w=[16px] md:w-[32px]",
   textStyle = "text-[10px] md:text-[16px]",
+  forces,
 }) => {
   return (
     <div className="inline-flex flex-col items-center">
@@ -14,13 +16,21 @@ const CardImage = ({
               className="relative inline-flex rounded-[5px] border-1"
               data-tooltip-id={src?.key}
             >
-              <img
+              <Image
                 src={src?.cardImage}
+                alt={"champion"}
                 // style={imgStyle}
+                height={80}
+                width={80}
                 className={`object-cover object-center rounded-[5px] ${imgStyle}`}
               />
-              <img
-                src={src?.identificationImageUrl}
+              <Image
+                src={
+                  forces?.find((force) => force.key === src?.variant)?.imageUrl
+                }
+                alt={"force"}
+                height={20}
+                width={20}
                 className={`absolute -top-[6px] -right-[6px] w-[20px] md:w-[30px] ${identificationImageStyle}`}
               />
               {/* <div className="absolute bottom-0 w-full bg-gradient-to-r from-[#1a1b3110] via-[#1a1b31] to-[#1a1b3110] bg-opacity-50">

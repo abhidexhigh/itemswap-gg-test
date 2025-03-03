@@ -1,17 +1,10 @@
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import CardImage from "src/components/cardImage";
-import { Tooltip } from "react-tooltip";
-import nextArrowIcon from "@assets/images/icons/next-arrow.png";
-import ProjectCard from "../TraitsTrendsCard/TraitsTrendsCard";
-import ProjectItemsStyleWrapper from "./TraitsTrendsItems.style";
-import projectsData from "@assets/data/projects/dataV6";
-import indianWeapon from "@assets/image/items/weapons/indian weapon.png";
-import TraitTooltip from "src/components/tooltip/TraitTooltip";
 import "react-tooltip/dist/react-tooltip.css";
-import GirlCrush from "@assets/image/traits/GirlCrush.svg";
 import TrendFilters from "src/components/trendFilters";
 import { FaSortAmountDownAlt, FaSortAmountUp } from "react-icons/fa";
 import MetaDeckTraits from "../../../../data/trends/MetaDeckTraits.json";
@@ -88,6 +81,7 @@ const ProjectItems = () => {
   } = Comps;
   const { champions } = data?.refs;
   const { traits } = data?.refs;
+  const { forces } = data?.refs;
 
   const handleButtonClick = (button) => {
     if (button === "All") {
@@ -116,7 +110,7 @@ const ProjectItems = () => {
   return (
     // <ProjectItemsStyleWrapper>
     <>
-      <div className="container md:!max-w-[80%] 2xl:!max-w-[80%] pt-2">
+      <div className="container md:!max-w-[80%] 2xl:!max-w-[80%] px-0 pt-2">
         <div className="flex justify-between items-center">
           <TrendFilters
             buttons={["All", "Bronze", "Silver", "Gold", "Prismatic"]}
@@ -136,14 +130,14 @@ const ProjectItems = () => {
           <div>
             <table className="w-[900px] md:w-full table-auto border-separate border-spacing-y-2">
               <tr className="bg-[#1a1b31]">
-                <th className="th1 rounded-l-lg">
-                  <p className="p-0 text-md text-center mb-0">#</p>
+                <th className="rounded-l-lg">
+                  <p className="p-0 text-sm !mx-2 my-2 md:text-[14px]">#</p>
                 </th>
                 <th
                   className={`cursor-pointer ${sortConfig?.key === "key" ? "" : ""}`}
                   onClick={() => requestSort("key")}
                 >
-                  <p className="p-0 text-sm md:text-base mb-0 text-left py-2">
+                  <p className="cursor-pointer mb-0">
                     {others?.traits}
                     <span className="ml-2">
                       {sortConfig?.key === "key" ? (
@@ -160,7 +154,7 @@ const ProjectItems = () => {
                   className={`cursor-pointer ${sortConfig?.key === "avgPlacement" ? "" : ""}`}
                   onClick={() => requestSort("avgPlacement")}
                 >
-                  <p className="p-0 text-sm md:text-base mb-0 text-left py-2">
+                  <p className="cursor-pointer mb-0">
                     {others?.avgRank}
                     <span className="ml-2">
                       {sortConfig?.key === "avgPlacement" ? (
@@ -177,7 +171,7 @@ const ProjectItems = () => {
                   className={`cursor-pointer ${sortConfig?.key === "tops" ? "" : ""}`}
                   onClick={() => requestSort("tops")}
                 >
-                  <p className="p-0 text-sm md:text-base mb-0 text-left py-2">
+                  <p className="cursor-pointer mb-0">
                     {others?.top4}
                     <span className="ml-2">
                       {sortConfig?.key === "tops" ? (
@@ -194,7 +188,7 @@ const ProjectItems = () => {
                   className={`cursor-pointer ${sortConfig?.key === "wins" ? "" : ""}`}
                   onClick={() => requestSort("wins")}
                 >
-                  <p className="p-0 text-sm md:text-base mb-0 text-left py-2">
+                  <p className="cursor-pointer mb-0">
                     {others?.winPercentage}
                     <span className="ml-2">
                       {sortConfig?.key === "wins" ? (
@@ -211,7 +205,7 @@ const ProjectItems = () => {
                   className={`cursor-pointer ${sortConfig?.key === "pickRate" ? "" : ""}`}
                   onClick={() => requestSort("pickRate")}
                 >
-                  <p className="p-0 text-sm md:text-base mb-0 text-left py-2">
+                  <p className="cursor-pointer mb-0">
                     {others?.pickPercentage}
                     <span className="ml-2">
                       {sortConfig?.key === "pickRate" ? (
@@ -228,7 +222,7 @@ const ProjectItems = () => {
                   className={`cursor-pointer ${sortConfig?.key === "plays" ? "" : ""}`}
                   onClick={() => requestSort("plays")}
                 >
-                  <p className="p-0 text-sm md:text-base mb-0 text-left py-2">
+                  <p className="cursor-pointer mb-0">
                     {others?.played}
                     <span className="ml-2">
                       {sortConfig?.key === "plays" ? (
@@ -242,7 +236,7 @@ const ProjectItems = () => {
                   </p>
                 </th>
                 <th className="th10 rounded-r-lg">
-                  <p className="p-0 text-sm md:text-base mb-0 text-center py-2">
+                  <p className="p-0 text-sm !mx-2 my-2 md:text-[16px]">
                     {others?.top3} {others?.champions}
                   </p>
                 </th>
@@ -252,10 +246,10 @@ const ProjectItems = () => {
                   <td className="rounded-l-lg">
                     <div className="text-center">{index + 1}</div>
                   </td>
-                  <td>
+                  <td className="py-2">
                     <div>
                       <div className="flex justify-start items-center">
-                        <img
+                        <Image
                           src={
                             traits
                               ?.find((trait) => trait?.key === metaTrait?.key)
@@ -263,6 +257,8 @@ const ProjectItems = () => {
                                 (tier) => tier?.tier == metaTrait?.tier
                               )?.imageUrl
                           }
+                          width={80}
+                          height={80}
                           className="w-20 md:w-20 mr-2"
                           alt="icon"
                           data-tooltip-id={metaTrait?.key}
@@ -310,32 +306,32 @@ const ProjectItems = () => {
                       </div>
                     </div>
                   </td>
-                  <td>
+                  <td className="py-2">
                     <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
                       #{metaTrait?.avgPlacement}
                     </p>
                   </td>
-                  <td>
+                  <td className="py-2">
                     <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
                       {((metaTrait?.tops * 100) / metaTrait?.plays).toFixed(2)}%
                     </p>
                   </td>
-                  <td>
+                  <td className="py-2">
                     <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
                       {((metaTrait?.wins * 100) / metaTrait?.plays).toFixed(2)}%
                     </p>
                   </td>
-                  <td>
+                  <td className="py-2">
                     <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
                       {(metaTrait?.pickRate * 100).toFixed(2)}%
                     </p>
                   </td>
-                  <td>
+                  <td className="py-2">
                     <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
                       {metaTrait?.plays.toLocaleString("en-US")}
                     </p>
                   </td>
-                  <td className="rounded-r-lg">
+                  <td className="rounded-r-lg py-2">
                     <div className="flex justify-center items-center gap-1 md:gap-2">
                       {metaTrait?.traitChampionStats
                         ?.slice(0, 3)
@@ -348,6 +344,7 @@ const ProjectItems = () => {
                               imgStyle="w-[72px] md:w-[84px]"
                               identificationImageStyle="w=[16px] md:w-[32px]"
                               textStyle="text-[10px] md:text-[12px]"
+                              forces={forces}
                             />
                           </>
                         ))}

@@ -25,6 +25,7 @@ const ProjectItems = () => {
   } = Comps;
   const { champions } = data?.refs;
   const { items } = data?.refs;
+  const { forces } = data?.refs;
   const { metaDeckItemStats } = metaDeckItems.metaDeckItem;
   console.log("metaDeckItemStats", metaDeckItemStats);
 
@@ -126,8 +127,8 @@ const ProjectItems = () => {
             />
           </div>
         </div>
-        <div className="projects-row">
-          <div className="overflow-x-scroll md:overflow-x-hidden">
+        <div className="projects-row overflow-auto md:overflow-hidden">
+          <div>
             <table className="w-[900px] md:w-full border-separate border-spacing-y-2">
               <tr className="bg-[#1a1b31]">
                 <th className=" rounded-l-lg">
@@ -256,19 +257,19 @@ const ProjectItems = () => {
                       <td className="ml-2 rounded-l-lg">
                         <div className="text-center">{index + 1}</div>
                       </td>
-                      <td>
+                      <td className="py-2">
                         <div>
                           <div className="flex justify-start items-center">
                             <>
                               <Image
                                 alt="Item Image"
-                                width={100}
-                                height={100}
+                                width={80}
+                                height={80}
                                 src={
                                   items.find((i) => i.key === item.key)
                                     ?.imageUrl
                                 }
-                                className="w-16 md:w-20 mr-1 !border !border-[#ffffff60] rounded-md"
+                                className="w-[68px] md:w-[84px] mr-1 !border !border-[#ffffff60] rounded-md"
                                 data-tooltip-id={`${items.find((i) => i.key === item.key)?.key}}`}
                               />
                               <ReactTltp
@@ -288,8 +289,8 @@ const ProjectItems = () => {
                                     <>
                                       <Image
                                         alt="Item Image"
-                                        width={100}
-                                        height={100}
+                                        width={80}
+                                        height={80}
                                         src={
                                           items.find((i) => i.key === comp)
                                             .imageUrl
@@ -315,32 +316,32 @@ const ProjectItems = () => {
                           </div>
                         </div>
                       </td>
-                      <td>
+                      <td className="py-2">
                         <p className="p-0 text-sm  md:text-[16px] mb-0 text-[#fff]">
                           #{item?.avgPlacement}
                         </p>
                       </td>
-                      <td>
+                      <td className="py-2">
                         <p className="p-0 text-sm  md:text-[16px] mb-0 text-[#fff]">
                           {((item?.tops * 100) / item?.plays).toFixed(2)}%
                         </p>
                       </td>
-                      <td>
+                      <td className="py-2">
                         <p className="p-0 text-sm  md:text-[16px] mb-0 text-[#fff]">
                           {((item?.wins * 100) / item?.plays).toFixed(2)}%
                         </p>
                       </td>
-                      <td>
+                      <td className="py-2">
                         <p className="p-0 text-sm  md:text-[16px] mb-0 text-[#fff]">
                           {(item?.pickRate * 100).toFixed(2)}%
                         </p>
                       </td>
-                      <td>
+                      <td className="py-2">
                         <p className="p-0 text-sm  md:text-[16px] mb-0 text-[#fff]">
                           {item?.plays.toLocaleString("en-US")}
                         </p>
                       </td>
-                      <td>
+                      <td className="py-2">
                         <div className="flex justify-start items-center">
                           {item?.itemSynergyStats
                             ?.slice(0, 3)
@@ -348,8 +349,8 @@ const ProjectItems = () => {
                               <>
                                 <Image
                                   alt="Item Image"
-                                  width={100}
-                                  height={100}
+                                  width={80}
+                                  height={80}
                                   src={
                                     items.find((i) => i.key === synergy?.key)
                                       ?.imageUrl
@@ -374,7 +375,7 @@ const ProjectItems = () => {
                             ))}
                         </div>
                       </td>
-                      <td className="rounded-r-lg">
+                      <td className="rounded-r-lg py-2">
                         <div className="flex justify-start items-center gap-1 md:gap-2">
                           {item?.itemChampionStats
                             ?.slice(0, 3)
@@ -389,6 +390,7 @@ const ProjectItems = () => {
                                   imgStyle="w-[48px] md:w-[84px]"
                                   identificationImageStyle="w=[16px] md:w-[32px]"
                                   textStyle="text-[10px] md:text-[16px]"
+                                  forces={forces}
                                 />
                               </>
                             ))}

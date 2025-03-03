@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import "react-tooltip/dist/react-tooltip.css";
@@ -100,17 +101,15 @@ const ProjectItems = () => {
           <div>
             <table className="w-full border-separate border-spacing-y-2">
               <thead>
-                <tr className=" bg-[#222231]">
-                  <th className="th1 !rounded-l-lg">
-                    <p className="p-0 text-base text-[#fff] !mx-2 py-2 mb-0">
-                      #{" "}
-                    </p>
+                <tr className=" bg-[#1a1b31]">
+                  <th className="!rounded-l-lg">
+                    <p className="p-0 text-sm !mx-2 my-2 md:text-[14px]"># </p>
                   </th>
                   <th
                     className={` cursor-pointer`}
                     onClick={() => requestSort("key")}
                   >
-                    <p className="p-0 text-base text-[#fff] !mx- py-2 mb-0 text-left">
+                    <p className="p-0 text-sm my-auto md:text-[16px] text-left">
                       {others?.augment}
                       <span className="ml-2">
                         {sortConfig?.key === "key" ? (
@@ -127,7 +126,7 @@ const ProjectItems = () => {
                     className={` cursor-pointer`}
                     onClick={() => requestSort("avgPlacement")}
                   >
-                    <p className="p-0 text-base text-[#fff] !mx- py-2 mb-0 text-left">
+                    <p className="p-0 text-sm my-auto md:text-[16px] text-left">
                       {others?.avgPlacement}
                       <span className="ml-2">
                         {sortConfig?.key === "avgPlacement" ? (
@@ -144,7 +143,7 @@ const ProjectItems = () => {
                     className={` cursor-pointer`}
                     onClick={() => requestSort("roundOnePickRate")}
                   >
-                    <p className="p-0 text-base text-[#fff] !mx- py-2 mb-0 text-left">
+                    <p className="p-0 text-sm my-auto md:text-[16px] text-left">
                       {others?.firstPick}
                       <span className="ml-2">
                         {sortConfig?.key === "roundOnePickRate" ? (
@@ -161,7 +160,7 @@ const ProjectItems = () => {
                     className={` cursor-pointer`}
                     onClick={() => requestSort("roundTwoPickRate")}
                   >
-                    <p className="p-0 text-base text-[#fff] !mx- py-2 mb-0 text-left">
+                    <p className="p-0 text-sm my-auto md:text-[16px] text-left">
                       {others?.secondPick}
                       <span className="ml-2">
                         {sortConfig?.key === "roundTwoPickRate" ? (
@@ -178,7 +177,7 @@ const ProjectItems = () => {
                     className={` cursor-pointer`}
                     onClick={() => requestSort("roundThreePickRate")}
                   >
-                    <p className="p-0 text-base text-[#fff] !mx- py-2 mb-0 text-left">
+                    <p className="p-0 text-sm my-auto md:text-[16px] text-left">
                       {others?.thirdPick}
                       <span className="ml-2">
                         {sortConfig?.key === "roundThreePickRate" ? (
@@ -195,7 +194,7 @@ const ProjectItems = () => {
                     className={` cursor-pointer`}
                     onClick={() => requestSort("tops")}
                   >
-                    <p className="p-0 text-base text-[#fff] !mx- py-2 mb-0 text-left">
+                    <p className="p-0 text-sm my-auto md:text-[16px] text-left">
                       {others?.top4}
                       <span className="ml-2">
                         {sortConfig?.key === "tops" ? (
@@ -212,7 +211,7 @@ const ProjectItems = () => {
                     className={` cursor-pointer`}
                     onClick={() => requestSort("wins")}
                   >
-                    <p className="p-0 text-base text-[#fff] !mx- py-2 mb-0 text-left">
+                    <p className="p-0 text-sm my-auto md:text-[16px] text-left">
                       {others?.winPercentage}
                       <span className="ml-2">
                         {sortConfig?.key === "wins" ? (
@@ -229,7 +228,7 @@ const ProjectItems = () => {
                     className={` cursor-pointer`}
                     onClick={() => requestSort("pickRate")}
                   >
-                    <p className="p-0 text-base text-[#fff] !mx- py-2 mb-0 text-left">
+                    <p className="p-0 text-sm my-auto md:text-[16px] text-left">
                       {others?.pickPercentage}
                       <span className="ml-2">
                         {sortConfig?.key === "pickRate" ? (
@@ -246,7 +245,7 @@ const ProjectItems = () => {
                     className={` cursor-pointer !rounded-r-lg`}
                     onClick={() => requestSort("plays")}
                   >
-                    <p className="p-0 text-base text-[#fff] !mx- py-2 mb-0 text-left">
+                    <p className="p-0 text-sm my-auto md:text-[16px] text-left">
                       {others?.played}
                       <span className="ml-2">
                         {sortConfig?.key === "plays" ? (
@@ -284,7 +283,7 @@ const ProjectItems = () => {
                         <td>
                           <div>
                             <div className="flex justify-start items-center">
-                              <img
+                              <Image
                                 src={
                                   augments.find(
                                     (augment) =>
@@ -294,8 +293,10 @@ const ProjectItems = () => {
                                       ]
                                   )?.imageUrl
                                 }
-                                className="w-10 md:w-16 h-10 md:h-16 mr-1"
                                 alt="icon"
+                                width={80}
+                                height={80}
+                                className="w-10 md:w-16 h-10 md:h-16 mr-1"
                                 data-tooltip-id={item?.key}
                               />
                               <ReactTltp
