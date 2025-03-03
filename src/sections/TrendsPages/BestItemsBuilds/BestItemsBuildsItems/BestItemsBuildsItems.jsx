@@ -10,9 +10,6 @@ const ProjectItems = () => {
   const { t } = useTranslation();
   const others = t("others");
   const { metaDeckChampionStats } = BestItemsBuilds;
-  console.log("metaDeckChampionStats", metaDeckChampionStats);
-  const { data } = projectsData;
-  const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Tier 1"); // [Tier 1, Tier 2, Tier 3, Tier 4, Tier 5
   return (
     // <ProjectItemsStyleWrapper>

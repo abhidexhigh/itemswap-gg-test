@@ -1,4 +1,5 @@
 import { Fragment, useState } from "react";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
@@ -19,10 +20,9 @@ const TierCard = ({ cost, itemsData }) => {
     },
   } = Comps;
 
-  const { metaDecks } = data?.metaDeckList;
   const { champions } = data?.refs;
   const { items } = data?.refs;
-  const { traits } = data?.refs;
+  const { forces } = data?.refs;
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   return (
     <Fragment>
@@ -49,6 +49,7 @@ const TierCard = ({ cost, itemsData }) => {
                               imgStyle="w-[112px] md:w-[96px]"
                               identificationImageStyle="w-[42px] md:w-[30px]"
                               textStyle="text-[10px] md:text-[16px]"
+                              forces={forces}
                             />
                           </div>
                         </div>
@@ -59,10 +60,13 @@ const TierCard = ({ cost, itemsData }) => {
                             className="relative overflow-hidden w-[62px] md:w-[44px]"
                             data-tooltip-id={item}
                           >
-                            <img
+                            <Image
                               src={
                                 items?.find((i) => i?.key === item)?.imageUrl
                               }
+                              alt={"item"}
+                              width={48}
+                              height={48}
                               className=" border-[1px] rounded-lg border-[#ffffff60]"
                             />
                           </div>
@@ -124,11 +128,14 @@ const TierCard = ({ cost, itemsData }) => {
                                     className="relative overflow-hidden"
                                     data-tooltip-id={item}
                                   >
-                                    <img
+                                    <Image
                                       src={
                                         items?.find((i) => i?.key === item)
                                           ?.imageUrl
                                       }
+                                      alt={"item"}
+                                      width={48}
+                                      height={48}
                                       className="w-[56px] md:w-[44px]"
                                     />
                                   </div>
