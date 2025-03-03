@@ -7,7 +7,7 @@ import CardImage from "src/components/cardImage";
 import "react-tooltip/dist/react-tooltip.css";
 import TrendFilters from "src/components/trendFilters";
 import { FaSortAmountDownAlt, FaSortAmountUp } from "react-icons/fa";
-import metaDeckTraitStats from "../../../../data/newData/MetaDeckTraits.json";
+import metaDeckTraitStats from "../../../../data/newData/metaDeckTraits.json";
 import Comps from "../../../../data/compsNew.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 
