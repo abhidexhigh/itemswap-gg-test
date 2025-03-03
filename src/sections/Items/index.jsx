@@ -5,7 +5,7 @@ import "../../../i18n";
 import ItemsStyleWrapper from "./Items.style.js";
 import Set10Tabs from "../set10Tabs/index.js";
 import { FaPlus, FaEquals } from "react-icons/fa";
-import itemsData from "./items2.json";
+import itemsData from "./items.json";
 import ItemTable from "./ItemTable.jsx";
 import itemsData1 from "../../data/newData/items.json";
 import ReactTltp from "src/components/tooltip/ReactTltp.jsx";
