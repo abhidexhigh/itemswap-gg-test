@@ -47,28 +47,28 @@ const menuData = [
   //   title: "Comps",
   //   url: "/comps",
   // },
-  {
-    id: "2ZYYU",
-    title: "SET",
-    url: "#",
-    subMenus: [
-      {
-        id: "0300T",
-        title: "Champions",
-        url: `/champions/${getRandomChampionKey()}`,
-      },
-      {
-        id: "4XZ00",
-        title: "Traits",
-        url: "/traits",
-      },
-      {
-        id: "43X1V",
-        title: "Items",
-        url: "/items",
-      },
-    ],
-  },
+  // {
+  //   id: "2ZYYU",
+  //   title: "SET",
+  //   url: "#",
+  //   subMenus: [
+  //     {
+  //       id: "0300T",
+  //       title: "Champions",
+  //       url: `/champions/${getRandomChampionKey()}`,
+  //     },
+  //     {
+  //       id: "4XZ00",
+  //       title: "Traits",
+  //       url: "/traits",
+  //     },
+  //     {
+  //       id: "43X1V",
+  //       title: "Items",
+  //       url: "/items",
+  //     },
+  //   ],
+  // },
   {
     id: "435U5",
     title: "Trends",
