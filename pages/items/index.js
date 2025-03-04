@@ -19,7 +19,7 @@ export default function IGORankingPage() {
         {metamaskModal && <MetamaskModal />}
         <Header />
         {/* <PageHeader currentPage="ITEMS" pageTitle="ITEMS" /> */}
-        <div className="h-[120px] md:h-[360px]" />
+        <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
         <Items />
         <Footer />
       </Layout>

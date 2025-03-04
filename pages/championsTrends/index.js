@@ -23,7 +23,7 @@ export default function ChampionsTrends() {
           currentPage="CHAMPIONS TRENDS"
           pageTitle="CHAMPIONS TRENDS"
         /> */}
-        <div className="md:h-[360px]" />
+        <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
         <TrendsNav selected={"championsTrends"} />
         {/* <div className="bg-transparent-20"></div> */}
         <ProjectsList />

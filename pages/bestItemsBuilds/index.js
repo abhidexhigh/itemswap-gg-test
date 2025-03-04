@@ -24,7 +24,7 @@ export default function ItemsTrends() {
           pageTitle="BEST ITEMS BUILDS"
         /> */}
         {/* <TrendsNav selected="bestItemsBuilds" /> */}
-        <div className="h-[120px] md:h-[360px]" />
+        <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
         <TrendsNav selected="bestItemsBuilds" />
         {/* <div className="bg-transparent-20"></div> */}
         <BestItemsBuildsList />

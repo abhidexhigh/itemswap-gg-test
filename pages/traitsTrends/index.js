@@ -20,7 +20,7 @@ export default function ChampionsTrends() {
         {metamaskModal && <MetamaskModal />}
         <Header />
         {/* <PageHeader currentPage="TRAITS TRENDS" pageTitle="TRAITS TRENDS" /> */}
-        <div className="h-[120px] md:h-[360px]" />
+        <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
         <TrendsNav selected={"traitsTrends"} />
         {/* <div className="bg-transparent-20"></div> */}
         <TraitsTrends />

@@ -19,7 +19,7 @@ export default function User() {
         {metamaskModal && <MetamaskModal />}
         <Header />
         {/* <PageHeader currentPage="Traits" pageTitle="Traits" /> */}
-        <div className="md:h-[360px]" />
+        <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
         <Champions />
         <Footer />
       </Layout>

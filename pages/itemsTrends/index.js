@@ -20,7 +20,7 @@ export default function ItemsTrends() {
         {metamaskModal && <MetamaskModal />}
         <Header />
         {/* <PageHeader currentPage="ITEMS TRENDS" pageTitle="ITEMS TRENDS" /> */}
-        <div className="h-[120px] md:h-[360px]" />
+        <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
         <TrendsNav selected="itemsTrends" />
         {/* <div className="bg-transparent-20"></div> */}
         <ItemsTrendsList />

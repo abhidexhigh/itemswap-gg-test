@@ -23,7 +23,7 @@ export default function ItemsTrends() {
         {metamaskModal && <MetamaskModal />}
         <Header />
         {/* <PageHeader currentPage="META TRENDS" pageTitle="META TRENDS" /> */}
-        <div className="h-[120px] md:h-[360px]" />
+        <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
         {/* <Set10Tabs
           tabs={tabs}
           activeTab={activeTab}
