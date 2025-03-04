@@ -1,8 +1,18 @@
 import { createGlobalStyle } from "styled-components";
 
 const banners = [
-  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1740715898/WebPage_Comb_Champions_Resize_wcta8k.png",
-  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1740723201/WebPage_Comb_Champions_Archer_Resize_xmtutl.png",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741077303/Champions_Webpage_BONE_DRAGON_mezyio.webp",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741077303/Champions_Webpage_Witch_pmiraz.webp",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741077302/Champions_Webpage_Elemental_Dragon_nbierd.webp",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741077301/Champions_Webpage_Western_Dragon_x5xoiv.webp",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741077282/Champions_Webpage_Vampire_nxxcbf.webp",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741077270/Champions_Webpage_Valkyrie_wnreue.webp",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741077269/Champions_Webpage_Succubus_pqguqq.webp",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741077268/Champions_Webpage_NineTail_emsygp.webp",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741077268/Champions_Webpage_Phoenix_fdj6z9.webp",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741077268/Champions_Webpage_Fairy_Dragon_mmmexo.webp",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741077307/Champions_Webpage_Magic_Archer_Resize_nghsgn.webp",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741077306/Champions_Webpage_Eastern_dragon_t57yn6.webp",
   //   "https://res.cloudinary.com/dg0cmj6su/image/upload/v1726810714/1_2_r8m96x.webp",
   //   "https://res.cloudinary.com/dg0cmj6su/image/upload/v1726810714/3_f9btc3.webp",
   //   "https://res.cloudinary.com/dg0cmj6su/image/upload/v1726810713/5_2_gkjoxb.webp",

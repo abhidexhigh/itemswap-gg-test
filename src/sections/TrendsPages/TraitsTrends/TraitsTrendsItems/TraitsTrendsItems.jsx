@@ -236,7 +236,7 @@ const ProjectItems = () => {
                   </p>
                 </th>
                 <th className="th10 rounded-r-lg">
-                  <p className="p-0 text-sm !mx-2 my-2 md:text-[16px]">
+                  <p className="p-0 text-sm text-center !mx-2 my-2 md:text-[16px]">
                     {others?.top3} {others?.champions}
                   </p>
                 </th>

@@ -5,7 +5,7 @@ import "../../../../../i18n";
 import "react-tooltip/dist/react-tooltip.css";
 import TrendFilters from "src/components/trendFilters";
 import { FaSortAmountDownAlt, FaSortAmountUp } from "react-icons/fa";
-import metaDeckItems from "./metaDeckItems.json";
+import metaDeckItemStats from "../../../../data/newData/metaDeckItems.json";
 import Comps from "../../../../data/compsNew.json";
 import Forces from "../../../../data/newData/force.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
@@ -26,8 +26,6 @@ const ProjectItems = () => {
   const { champions } = data?.refs;
   const { items } = data?.refs;
   const { forces } = data?.refs;
-  const { metaDeckItemStats } = metaDeckItems.metaDeckItem;
-  console.log("metaDeckItemStats", metaDeckItemStats);
 
   const [metaDeckItemStatsData, setMetaDeckItemStatsData] =
     useState(metaDeckItemStats);
@@ -352,24 +350,20 @@ const ProjectItems = () => {
                                   width={80}
                                   height={80}
                                   src={
-                                    items.find((i) => i.key === synergy?.key)
+                                    items.find((i) => i.key === synergy)
                                       ?.imageUrl
                                   }
                                   className="w-12 md:w-14 mr-2 !border !border-[#ffffff60] rounded-md"
                                   data-tooltip-id={`${
-                                    items.find((i) => i.key === synergy?.key)
-                                      ?.key
+                                    items.find((i) => i.key === synergy)?.key
                                   }_${w}`}
                                 />
                                 <ReactTltp
                                   variant="item"
                                   id={`${
-                                    items.find((i) => i.key === synergy?.key)
-                                      ?.key
+                                    items.find((i) => i.key === synergy)?.key
                                   }_${w}`}
-                                  content={items.find(
-                                    (i) => i.key === synergy?.key
-                                  )}
+                                  content={items.find((i) => i.key === synergy)}
                                 />
                               </>
                             ))}
@@ -384,7 +378,7 @@ const ProjectItems = () => {
                                 <CardImage
                                   src={{
                                     ...champions.find(
-                                      (champ) => champ.key === champion.key
+                                      (champ) => champ.key === champion
                                     ),
                                   }}
                                   imgStyle="w-[48px] md:w-[84px]"

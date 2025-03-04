@@ -5,7 +5,7 @@ import "../../../../../i18n";
 import "react-tooltip/dist/react-tooltip.css";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import { FaSortAmountDownAlt, FaSortAmountUp } from "react-icons/fa";
-import metaDeckChampions from "./metaDeckChampions.json";
+import metaDeckChampionsStats from "../../../../data/newData/metaDeckChampions.json";
 import Comps from "../../../../data/compsNew.json";
 import CardImage from "src/components/cardImage";
 import TrendFilters from "src/components/trendFilters";
@@ -13,8 +13,6 @@ import TrendFilters from "src/components/trendFilters";
 const ProjectItems = () => {
   const { t } = useTranslation();
   const others = t("others");
-  const metaDeckChampionsStats =
-    metaDeckChampions.metaDeckChampion.metaDeckChampionStats;
 
   const [metaDeckChampionsStatsData, setMetaDeckChampionsStatsData] = useState(
     metaDeckChampionsStats
@@ -329,18 +327,12 @@ const ProjectItems = () => {
                     </td>
                     <td className="py-2">
                       <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
-                        {(
-                          champion?.championTierStats?.[2]?.pickRate * 100
-                        ).toFixed(2)}
-                        %
+                        {(champion?.threeStarPercentage * 100).toFixed(2)}%
                       </p>
                     </td>
                     <td className="py-2">
                       <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
-                        #
-                        {(champion?.championTierStats?.[2]?.avgPlacement).toFixed(
-                          2
-                        )}
+                        #{(champion?.threeStarRank).toFixed(2)}
                       </p>
                     </td>
                     <td className="rounded-r-lg">
@@ -365,7 +357,7 @@ const ProjectItems = () => {
                                     alt="icon"
                                     width={80}
                                     height={80}
-                                    className="w-12 md:w-16 mr-2"
+                                    className="w-12 md:w-16 mr-2 rounded-lg shadow-md !border !border-[#ffffff50]"
                                     data-tooltip-id={item}
                                   />
                                   <ReactTltp
