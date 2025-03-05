@@ -26,6 +26,12 @@ const TrendsNav = ({ selected }) => {
             Meta Trends
           </option>
           <option
+            value="recentDecks"
+            selected={selected === "recentDecks" ? "selected" : null}
+          >
+            Recent #1 Decks
+          </option>
+          <option
             value="championsTrends"
             selected={selected === "championsTrends" ? "selected" : null}
           >
@@ -72,6 +78,18 @@ const TrendsNav = ({ selected }) => {
               } inline-block w-full p-3 border-r border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
             >
               {others?.metaTrends}
+            </Link>
+          </li>
+          <li className="w-full text-nowrap">
+            <Link
+              href="/recentDecks"
+              className={`${
+                selected === "recentDecks"
+                  ? "active text-gray-900 !bg-gray-100 hover:text-black border-r"
+                  : "hover:text-white"
+              } inline-block w-full p-3 border-r border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
+            >
+              {others?.recentDecks}
             </Link>
           </li>
           <li className="w-full text-nowrap">

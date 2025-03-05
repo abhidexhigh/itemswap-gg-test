@@ -4,10 +4,11 @@ import "../../../../../i18n";
 import React, { useState } from "react";
 import Image from "next/image";
 import { Tooltip } from "react-tooltip";
+import moment from "moment";
 import TraitTooltip from "src/components/tooltip/TraitTooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import GirlCrush from "@assets/image/traits/GirlCrush.svg";
-import MetaTrendsCard from "../MetaTrendsCard/MetaTrendsCard";
+import RecentDecksCard from "../RecentDecksCard/RecentDecksCard";
 import augment from "@assets/image/augments/1.png";
 import arrowRight from "@assets/image/icons/arrow-right.svg";
 import { PiEye } from "react-icons/pi";
@@ -15,6 +16,8 @@ import { PiEyeClosed } from "react-icons/pi";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import Comps from "../../../../data/compsNew.json";
+import RecentDecksHistory from "../../../../data/newData/recentDecksHistory.json";
+import MatchHistory from "../../../../data/user/matchHistory.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
@@ -62,7 +65,8 @@ const ProjectItems = () => {
       },
     },
   } = Comps;
-  const { metaDecks } = data?.metaDeckList;
+  const { metaDecks } = RecentDecksHistory;
+  console.log("Meta Decks", metaDecks);
   const { champions } = data?.refs;
   const { items } = data?.refs;
   const { traits } = data?.refs;
@@ -333,7 +337,7 @@ const ProjectItems = () => {
                   >
                     <div className="flex flex-col py-[4px] lg:px-[5px]">
                       {/* <div className="grid grid-cols-1 gap-[6px] sm:grid-cols-3 lg:min-h-[220px] lg:grid-cols-5"> */}
-                      <MetaTrendsCard
+                      <RecentDecksCard
                         itemCount={13}
                         championsByCost={groupedArray}
                         setSelectedChampion={(key) =>
@@ -341,10 +345,10 @@ const ProjectItems = () => {
                         }
                         forces={forces}
                       />
-                      {/* <MetaTrendsCard cost="Cost 2" itemCount={13} />
-                        <MetaTrendsCard cost="Cost 3" itemCount={13} />
-                        <MetaTrendsCard cost="Cost 4" itemCount={13} />
-                        <MetaTrendsCard cost="Cost 5" itemCount={8} /> */}
+                      {/* <RecentDecksCard cost="Cost 2" itemCount={13} />
+                        <RecentDecksCard cost="Cost 3" itemCount={13} />
+                        <RecentDecksCard cost="Cost 4" itemCount={13} />
+                        <RecentDecksCard cost="Cost 5" itemCount={8} /> */}
                       {/* </div> */}
                     </div>
                     {/* <div className="absolute bottom-0 left-0 w-full sm:hidden">
@@ -629,10 +633,37 @@ const ProjectItems = () => {
                     }}
                   >
                     <header className="relative flex md:flex-col justify-between items-end bg-[#1a1b30] py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px]">
-                      <div className="inline-flex flex-col flex-wrap gap-[8px] md:flex-row md:items-center md:gap-[4px]">
-                        <strong className="text-[26px] font-semibold leading-none text-[#ffffff]">
-                          {metaDeck?.name}
-                        </strong>
+                      <div className="inline-flex flex-col flex-wrap gap-[8px] md:flex-row md:items-center md:gap-3">
+                        <div
+                          className={`rounded-lg !border-[#ffffff40] !border p-2 py-0 shadow-lg ${metaDeck?.placement == 1 ? "text-[#3aedbd] !border-[#3aedbd]" : metaDeck?.placement == 2 ? "text-[#FBDB51] !border-[#FBDB51]" : metaDeck?.placement == 3 ? "text-[#6eccff] !border-[#6eccff]" : "text-[#ffffff]"}`}
+                        >
+                          <div className="text-3xl p-2">
+                            {metaDeck?.placement}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-x-2">
+                          <div className="relative">
+                            <Image
+                              src={metaDeck?.imageUrl}
+                              alt="Image"
+                              width={80}
+                              height={80}
+                              className="w-16 relative"
+                            />
+                            {/* <div className="absolute bottom-0 right-0 px-2 rounded-full bg-[#444]">
+                              {metaDeck?.level}
+                            </div> */}
+                          </div>
+                          <div className="flex flex-col">
+                            <div className="-mb-1 text-lg">
+                              {metaDeck?.name}
+                            </div>
+                            <div className="-mb-1 font-normal text-sm">
+                              {moment(metaDeck?.dateTime).fromNow()} •{" "}
+                              {metaDeck?.duration}
+                            </div>
+                          </div>
+                        </div>
                         <span className="flex justify-center items-center">
                           {metaDeck?.deck?.forces?.map((force, i) => (
                             <>
@@ -735,7 +766,26 @@ const ProjectItems = () => {
                         // }}
                       >
                         <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#27282E90] py-[16px] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6">
-                          <div className="mb-[16px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[80%] lg:flex-shrink-0">
+                          <div className="flex items-center gap-x-8">
+                            <div className="hidden md:flex md:flex-col justify-center gap-[2px] lg:py-[8px]">
+                              {metaDeck?.deck?.augments.map((augment, i) => (
+                                <div className="flex justify-center items-center md:w-[64px] relative">
+                                  <Image
+                                    alt="Image"
+                                    width={80}
+                                    height={80}
+                                    src={
+                                      augments?.find((a) => a.key === augment)
+                                        .imageUrl
+                                    }
+                                    className="w-[64px] md:w-[86px]"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="mb-[16px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[93%] lg:flex-shrink-0">
                             <div className="flex flex-wrap justify-center lg:justify-center gap-2 w-full">
                               {metaDeck?.deck?.champions
                                 // ?.slice(0, 8)
@@ -851,262 +901,7 @@ const ProjectItems = () => {
                                 ))}
                             </div>
                           </div>
-                          <div className="mb-[12px] grid w-full grid-cols-3 md:grip-cols-4 gap-[12px] sm:w-auto md:mb-0 md:!flex md:items-center">
-                            <div className="md:!hidden flex h-[98px] flex-col justify-between rounded-[4px] bg-[#1D1D1D] py-[12px] sm:w-[126px] sm:px-[6px] lg:w-[130px]">
-                              <div className="flex justify-center gap-[2px]">
-                                <span className="text-[12px] leading-none text-[#999]">
-                                  Best Augments
-                                </span>
-                                <div>
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 13 13"
-                                    width="13"
-                                    height="13"
-                                    fill="currentColor"
-                                    color="#999"
-                                  >
-                                    <path d="M6.5.688C3.29.688.687 3.313.687 6.5A5.811 5.811 0 0 0 6.5 12.313c3.188 0 5.813-2.602 5.813-5.813C12.313 3.312 9.687.687 6.5.687Zm0 10.5A4.671 4.671 0 0 1 1.812 6.5 4.686 4.686 0 0 1 6.5 1.812 4.701 4.701 0 0 1 11.188 6.5 4.686 4.686 0 0 1 6.5 11.188Zm0-7.922a.975.975 0 0 0-.984.984c0 .563.421.984.984.984.54 0 .984-.421.984-.984a.99.99 0 0 0-.984-.984Zm1.313 5.953v-.563c0-.14-.141-.281-.282-.281H7.25V6.031c0-.14-.14-.281-.281-.281h-1.5a.285.285 0 0 0-.282.281v.563a.27.27 0 0 0 .282.281h.281v1.5h-.281a.285.285 0 0 0-.282.281v.563a.27.27 0 0 0 .282.281H7.53c.14 0 .282-.117.282-.281Z"></path>
-                                  </svg>
-                                </div>
-                              </div>
-                              <div className="flex justify-center gap-[2px] lg:py-[8px] lg:px-[6px]">
-                                {metaDeck?.deck?.augments.map((augment, i) => (
-                                  <div className="flex justify-center items-center relative">
-                                    <Image
-                                      alt="Image"
-                                      width={80}
-                                      height={80}
-                                      src={
-                                        augments?.find((a) => a.key === augment)
-                                          .imageUrl
-                                      }
-                                      className=""
-                                    />
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                            {/* This is a navigation button which is hidden on Medium Screen */}
-                            <div className="hidden md:hidden h-[98px] flex-col justify-between rounded-[4px] bg-[#1D1D1D] py-[12px] sm:w-[126px]">
-                              <p className="flex justify-center gap-[4px] text-center text-[12px] leading-none m-0">
-                                <span className="text-[#999]">AvgPl.</span>{" "}
-                                <span className="text-white">#3.06</span>
-                              </p>
-                              <div className="flex justify-center">
-                                <div className="inline-flex h-[50px] gap-[6px]">
-                                  <div className="inline-flex h-[50px] gap-[6px]">
-                                    <div className="flex w-[4px] flex-col-reverse bg-[#2D2F37]">
-                                      <div
-                                        className="w-full"
-                                        style={{
-                                          backgroundColor: "rgb(17, 178, 136)",
-                                          height: "100%",
-                                        }}
-                                      ></div>
-                                    </div>
-                                    <div className="flex w-[4px] flex-col-reverse bg-[#2D2F37]">
-                                      <div
-                                        className="w-full"
-                                        style={{
-                                          backgroundColor: "rgb(32, 122, 199)",
-                                          height: "82.7%",
-                                        }}
-                                      ></div>
-                                    </div>
-                                    <div className="flex w-[4px] flex-col-reverse bg-[#2D2F37]">
-                                      <div
-                                        className="w-full"
-                                        style={{
-                                          backgroundColor: "rgb(32, 122, 199)",
-                                          height: "62.3%",
-                                        }}
-                                      ></div>
-                                    </div>
-                                    <div className="flex w-[4px] flex-col-reverse bg-[#2D2F37]">
-                                      <div
-                                        className="w-full"
-                                        style={{
-                                          backgroundColor: "rgb(32, 122, 199)",
-                                          height: "43.9%",
-                                        }}
-                                      ></div>
-                                    </div>
-                                    <div className="flex w-[4px] flex-col-reverse bg-[#2D2F37]">
-                                      <div
-                                        className="w-full"
-                                        style={{
-                                          backgroundColor: "rgb(160, 160, 160)",
-                                          height: "34.8%",
-                                        }}
-                                      ></div>
-                                    </div>
-                                    <div className="flex w-[4px] flex-col-reverse bg-[#2D2F37]">
-                                      <div
-                                        className="w-full"
-                                        style={{
-                                          backgroundColor: "rgb(160, 160, 160)",
-                                          height: "25.3%",
-                                        }}
-                                      ></div>
-                                    </div>
-                                    <div className="flex w-[4px] flex-col-reverse bg-[#2D2F37]">
-                                      <div
-                                        className="w-full"
-                                        style={{
-                                          backgroundColor: "rgb(160, 160, 160)",
-                                          height: "17.4%",
-                                        }}
-                                      ></div>
-                                    </div>
-                                    <div className="flex w-[4px] flex-col-reverse bg-[#2D2F37]">
-                                      <div
-                                        className="w-full"
-                                        style={{
-                                          backgroundColor: "rgb(160, 160, 160)",
-                                          height: "8.9%",
-                                        }}
-                                      ></div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            {/* <div
-                              id="chart"
-                              className="md:hidden md:-mt-[20px] bg-[#1d1d1d] md:-z-10"
-                            >
-                              <Chart
-                                options={options}
-                                series={series}
-                                type="bar"
-                                height={20}
-                              />
-                            </div> */}
-                            <div className="flex w-full flex-col justify-between rounded-[4px] bg-[#1D1D1D] pt-[10px] pb-1">
-                              <div
-                                style={{
-                                  width: "113px",
-                                  height: "75px",
-                                }}
-                                className="md:hidden mx-auto"
-                              >
-                                <MyBarChartComponent height={80} width={100} />
-                                <p className="text-center mb-0 text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
-                                  Avg Ranking
-                                </p>
-                              </div>
-                            </div>
-                            <div className="hidden md:flex md:flex-col justify-center gap-[2px] lg:py-[8px]">
-                              {metaDeck?.deck?.augments.map((augment, i) => (
-                                <div className="flex justify-center items-center md:w-[64px] relative">
-                                  <Image
-                                    alt="Image"
-                                    width={80}
-                                    height={80}
-                                    src={
-                                      augments?.find((a) => a.key === augment)
-                                        .imageUrl
-                                    }
-                                    className="w-[64px] md:w-[86px]"
-                                  />
-                                </div>
-                              ))}
-                            </div>
-                            {/* This is a navigation button which is hidden on Medium Screen */}
-                            <div className="flex flex-col">
-                              <div className="flex w-full flex-col h-full justify-between rounded-[4px] bg-[#1D1D1D] pt-[10px] pb-1 px-[16px] sm:px-[18px]">
-                                <dl className="flex justify-between">
-                                  <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
-                                    {others?.top4}
-                                  </dt>
-                                  <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-white">
-                                    <span>65.3%</span>
-                                  </dd>
-                                </dl>
-                                <dl className="flex justify-between">
-                                  <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
-                                    {others?.winPercentage}
-                                  </dt>
-                                  <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-white">
-                                    <span>26.6%</span>
-                                  </dd>
-                                </dl>
-                                <dl className="flex justify-between">
-                                  <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
-                                    {others?.pickPercentage}
-                                  </dt>
-                                  <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-white">
-                                    <span>0.39%</span>
-                                  </dd>
-                                </dl>
-                                <dl className="flex justify-between">
-                                  <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
-                                    {others?.avgPlacement}
-                                  </dt>
-                                  <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-white">
-                                    <span>4.52</span>
-                                  </dd>
-                                </dl>
 
-                                <div
-                                  style={{
-                                    width: "150px",
-                                    height: "80px",
-                                    // margin: "10px",
-                                  }}
-                                  className="hidden md:block mt-2 mx-auto"
-                                >
-                                  <MyBarChartComponent height={70} width={80} />
-                                  <p className="text-center mb-0 text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
-                                    Avg Ranking
-                                  </p>
-                                </div>
-                              </div>
-                              <div className="hidden justify-center gap-[2px] lg:py-[8px]">
-                                {Array(3)
-                                  .fill()
-                                  .map((_, i) => (
-                                    <div className="flex justify-center items-center relative">
-                                      <Image
-                                        alt="Image"
-                                        width={20}
-                                        height={20}
-                                        src={augment.src}
-                                        className="w-[64px]"
-                                      />
-                                    </div>
-                                  ))}
-                              </div>
-                              {/* <div
-                                id="chart"
-                                className="hidden md:block md:-mt-[20px] bg-[#1d1d1d] md:-z-10"
-                              >
-                                <Chart
-                                  options={options}
-                                  series={series}
-                                  type="bar"
-                                  height={20}
-                                />
-                              </div> */}
-                            </div>
-                            {/* This is a navigation button which is hidden for now */}
-                            <div className="ml-[26px] hidden items-center justify-center">
-                              <a
-                                target="_blank"
-                                className="hidden flex-shrink-0 cursor-pointer lg:inline-flex"
-                                href="#"
-                              >
-                                <Image
-                                  alt="Image"
-                                  width={20}
-                                  height={20}
-                                  src={arrowRight.src}
-                                />
-                              </a>
-                            </div>
-                            {/* This is a navigation button which is hidden for now */}
-                          </div>
                           <div className="hidden flex w-full flex-col items-center lg:hidden">
                             <a
                               target="_blank"
