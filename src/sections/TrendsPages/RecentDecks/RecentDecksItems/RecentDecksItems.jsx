@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { useTranslation } from "react-i18next";
+import Link from "next/link";
 import "../../../../../i18n";
 import React, { useState } from "react";
 import Image from "next/image";
@@ -626,7 +627,7 @@ const ProjectItems = () => {
               <div>
                 {compsData?.map((metaDeck, i) => (
                   <div
-                    className="flex flex-col gap-[1px] border border-[#323232] bg-[#323232] mb-4"
+                    className="flex flex-col gap-[1px] border border-[#323232] bg-[#323232] mb-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ease-in-out"
                     style={{
                       background: "rgba(0, 0, 0, 0.2)",
                       backdropFilter: "blur(2px)",
@@ -641,7 +642,10 @@ const ProjectItems = () => {
                             {metaDeck?.placement}
                           </div>
                         </div>
-                        <div className="flex items-center gap-x-2">
+                        <Link
+                          href={`/user/${metaDeck?.puuid}/${metaDeck?.key}`}
+                          className="flex items-center gap-x-2"
+                        >
                           <div className="relative">
                             <Image
                               src={metaDeck?.imageUrl}
@@ -663,7 +667,7 @@ const ProjectItems = () => {
                               {metaDeck?.duration}
                             </div>
                           </div>
-                        </div>
+                        </Link>
                         <span className="flex justify-center items-center">
                           {metaDeck?.deck?.forces?.map((force, i) => (
                             <>

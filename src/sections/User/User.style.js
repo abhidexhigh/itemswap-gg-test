@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const ChampionsStyleWrapper = styled.div`
-  padding: 80px 0 100px;
+  padding: 40px 0 100px;
   // background: #090a1a;
   backdrop-filter: blur(30px);
 

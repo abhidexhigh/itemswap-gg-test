@@ -57,58 +57,54 @@
         ],
         "units": [
           {
-            "key": "Karna",
-            "items": [],
-            "rarity": 1,
-            "tier": 1
+            "key": "Rhiannon",
+            "coreRank": 1,
+            "items": ["TenguYoroi", "Wygar", "Aegis"]
           },
           {
-            "key": "Fiorella",
-            "items": [],
-            "rarity": 2,
-            "tier": 1
+            "key": "Helga",
+            "coreRank": 5,
+            "items": ["Sword", "Kavacha", "Osirian"]
           },
           {
-            "key": "Keres",
-            "items": ["KoreanBow"],
-            "rarity": 2,
-            "tier": 2
+            "key": "Arina",
+            "coreRank": 2,
+            "items": ["Nandaka", "Eaglewing", "Bayan"]
           },
           {
-            "key": "Aello",
-            "items": ["HextechGunblade", "IndianArmor"],
-            "rarity": 4,
-            "tier": 2
+            "key": "Durin",
+            "coreRank": 3,
+            "items": ["RuyiBang", "Frostguard", "RedHorn"]
           },
           {
-            "key": "Daji",
-            "items": ["VikingHelmet", "JapaneseArmor", "VikingWeapon"],
-            "rarity": 4,
-            "tier": 2
-          },
-          {
-            "key": "Hecate",
-            "items": [],
-            "rarity": 4,
-            "tier": 2
+            "key": "Cerberus",
+            "coreRank": 1,
+            "items": ["Excalibur", "Excalibur", "Eaglewing"]
           },
           {
             "key": "Tamamo",
-            "items": ["ChineseWeapon", "GreekArmor", "KoreanHelmet"],
-            "rarity": 4,
-            "tier": 2
+            "coreRank": 6,
+            "items": ["Vesta", "Aegis", "Wygar"]
           },
           {
-            "key": "Oinari",
-            "items": ["NativeAmericanWeapon", "KoreanHelmet"],
-            "rarity": 4,
-            "tier": 2
+            "key": "Nergal",
+            "coreRank": 10,
+            "items": ["Jingong", "Helmet", "JinJia"]
           },
           {
-            "key": "Kazuha",
-            "items": ["GreekHelmet", "ChineseArmor"],
-            "rarity": 6,
-            "tier": 1
+            "key": "Inugami",
+            "coreRank": 2,
+            "items": ["Frostguard", "KoreanBow", "WoodenWand"]
+          },
+          {
+            "key": "Grommash",
+            "coreRank": 8,
+            "items": ["Wygar", "Simurgh", "Kiriti"]
+          },
+          {
+            "key": "Ahriman",
+            "coreRank": 1,
+            "items": ["Nightfang", "Bloodaxe", "Kavacha"]
           }
         ],
         "augments": ["LevelSpins", "BattleRegen", "LootDrop"]
@@ -199,7 +195,7 @@
             "tier": 1
           },
           {
-            "key": "HuliJing",
+            "key": "Aetheria",
             "items": ["JapaneseHelmet", "VikingWeapon", "EnglandArmor"],
             "rarity": 6,
             "tier": 2
@@ -276,76 +272,54 @@
         ],
         "units": [
           {
-            "key": "Pyra",
-            "items": [],
-            "rarity": 0,
-            "tier": 2
+            "key": "Shesha",
+            "coreRank": 2,
+            "items": ["Kunee", "Kiriti", "LeaderArmor"]
           },
           {
-            "key": "Meliae",
-            "items": ["NativeAmericanArmor"],
-            "rarity": 0,
-            "tier": 2
+            "key": "Shinigami",
+            "coreRank": 4,
+            "items": ["ScaleHelmet", "Osirian", "EyeOfRa"]
           },
           {
-            "key": "Elysia",
-            "items": [],
-            "rarity": 1,
-            "tier": 2
+            "key": "Grimgor",
+            "coreRank": 5,
+            "items": ["Simurgh", "Evalach", "Kaminari"]
           },
           {
-            "key": "Seraphina",
-            "items": [],
-            "rarity": 1,
-            "tier": 1
+            "key": "Orphne",
+            "coreRank": 2,
+            "items": ["Bayan", "Raikiri", "Gladius"]
           },
           {
-            "key": "Keres",
-            "items": ["ChineseArmor", "ChineseArmor", "Artifact_WitsEnd"],
-            "rarity": 1,
-            "tier": 3
+            "key": "Tiamat",
+            "coreRank": 9,
+            "items": ["EyeOfRa", "Darius", "Raikiri"]
           },
           {
-            "key": "Nergal",
-            "items": ["12PortalEmblemItem"],
-            "rarity": 2,
-            "tier": 2
+            "key": "Nordri",
+            "coreRank": 3,
+            "items": ["SilverBullet", "Bayan", "Cloak"]
           },
           {
-            "key": "Ravana",
-            "items": [],
-            "rarity": 2,
-            "tier": 2
+            "key": "Zarok",
+            "coreRank": 3,
+            "items": ["Kiriti", "Pendragon’sCrown", "Kunee"]
           },
           {
-            "key": "Hecate",
-            "items": ["PersianArmor", "WarmogsArmor", "VikingWeapon"],
-            "rarity": 4,
-            "tier": 2
+            "key": "Karna",
+            "coreRank": 10,
+            "items": ["Simurgh", "Evalach", "Kaminari"]
           },
           {
-            "key": "Hestial",
-            "items": ["GreekArmor", "GreekHelmet", "VikingWeapon"],
-            "rarity": 4,
-            "tier": 2
+            "key": "Aello",
+            "coreRank": 10,
+            "items": ["ScaleHelmet", "Osirian", "EyeOfRa"]
           },
           {
-            "key": "Rhiannon",
-            "items": ["GreekArmor"],
-            "rarity": 4,
-            "tier": 2
-          },
-          {
-            "key": "Aetheria",
-            "items": [],
-            "rarity": 6,
-            "tier": 1
-          },
-          {
-            "key": "Merope",
-            "items": [],
-            "rarity": 9,
-            "tier": 1
+            "key": "Alberich",
+            "coreRank": 7,
+            "items": ["Raikiri", "Stormhorn", "Jingong"]
           }
         ],
         "augments": ["QuickStart", "FreeShoping", "ItemCycle"]
@@ -447,7 +421,7 @@
             "tier": 1
           },
           {
-            "key": "HuliJing",
+            "key": "Meliae",
             "items": [],
             "rarity": 6,
             "tier": 1

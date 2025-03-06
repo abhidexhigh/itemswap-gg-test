@@ -27,7 +27,6 @@ const ProjectItems = () => {
     if (button === "All") {
       setAugmentsStatsData(augmentStats);
     } else {
-      console.log(augmentStats[0], button);
       setAugmentsStatsData(
         augmentStats.filter(
           (augment) => augment.tier.toLowerCase() === button.toLowerCase()

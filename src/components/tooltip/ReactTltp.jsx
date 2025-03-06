@@ -148,6 +148,39 @@ const ReactTltp = ({ variant = "", content, id }) => {
         </div>
       </Tooltip>
     );
+  } else if (variant === "otherTraits") {
+    return (
+      <Tooltip
+        id={id}
+        delayShow={500}
+        style={{
+          zIndex: 9999,
+          backgroundColor: "black",
+          border: "1px solid #000000 !important",
+          borderRadius: "4px",
+        }}
+      >
+        <div className="max-w-[300px] z-50 text-[#fff] bg-black">
+          <div className="flex text-lg justify-start items-center gap-x-2">
+            {"Traits"}
+          </div>
+          <div className="text-[12px] font-light mb-2">{content?.desc}</div>
+          <div className="grid grid-cols-4 justify-center items-center gap-x-4">
+            {content?.map((trait) => (
+              <div className="">
+                <img
+                  src={traits?.find((t) => t?.key === trait?.name)?.imageUrl}
+                  className="w-14"
+                />
+                <div className="text-sm text-center font-light">
+                  {trait?.name}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Tooltip>
+    );
   } else if (variant === "augment") {
     return (
       <Tooltip

@@ -6,7 +6,6 @@ const TrendFilters = ({ buttons, dropdown1, dropdown2, onButtonClick }) => {
   const { t } = useTranslation();
   const others = t("others");
   const [selectedBtn, setSelectedBtn] = useState(buttons[0]);
-  console.log("Buttons", buttons);
 
   const handleButtonClick = (button) => {
     setSelectedBtn(button);

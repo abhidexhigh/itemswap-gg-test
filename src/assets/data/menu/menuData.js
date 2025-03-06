@@ -80,6 +80,11 @@ const menuData = [
         url: "/metaTrends",
       },
       {
+        id: "U662W",
+        title: "Recent Decks",
+        url: "/recentDecks",
+      },
+      {
         id: "VT0WW",
         title: "Items Trends",
         url: "/itemsTrends",
