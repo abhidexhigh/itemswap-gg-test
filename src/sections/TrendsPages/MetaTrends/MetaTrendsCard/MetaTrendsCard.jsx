@@ -133,15 +133,17 @@ const MetaTrendsCard = ({
                 </div>
                 {champions &&
                   champions.length > 0 &&
-                  getRandomCharacters(champions).map((champion, j) => (
-                    <MetaTrendsItem
-                      key={j}
-                      champion={champion}
-                      setSelectedChampion={setSelectedChampion}
-                      index={j}
-                      forces={forces}
-                    />
-                  ))}
+                  getRandomCharacters(champions)
+                    .sort((a, b) => a.type.localeCompare(b.type))
+                    .map((champion, j) => (
+                      <MetaTrendsItem
+                        key={j}
+                        champion={champion}
+                        setSelectedChampion={setSelectedChampion}
+                        index={j}
+                        forces={forces}
+                      />
+                    ))}
               </div>
             </div>
           </>
