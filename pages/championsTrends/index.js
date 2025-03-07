@@ -24,10 +24,14 @@ export default function ChampionsTrends() {
           pageTitle="CHAMPIONS TRENDS"
         /> */}
         <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
-        <TrendsNav selected={"championsTrends"} />
-        {/* <div className="bg-transparent-20"></div> */}
-        <ProjectsList />
-        <Footer />
+        <div className="backdrop-blur-md">
+          <div className="container">
+            <TrendsNav selected={"championsTrends"} />
+            {/* <div className="bg-transparent-20"></div> */}
+            <ProjectsList />
+            <Footer />
+          </div>
+        </div>
       </Layout>
     </Fragment>
   );

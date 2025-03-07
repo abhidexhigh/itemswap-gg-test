@@ -276,7 +276,7 @@ const ProjectItems = () => {
   return (
     // <ProjectItemsStyleWrapper>
     <>
-      <div className="container md:!max-w-[100%] 2xl:!max-w-[90%]">
+      <div className="">
         {/* <br />
         <TrendFilters
           dropdown1={["v14.2", "v14.1"]}
@@ -296,7 +296,7 @@ const ProjectItems = () => {
         <div className="projects-row md pt-3">
           <div>
             {/* TABS START */}
-            <div className="!py-2 lg:flex lg:items-center md:ml-[104px] 2xl:ml-[200px]">
+            <div className="!py-2 lg:flex lg:items-center md:ml-[104px]">
               <div
                 className="inline-flex shadow-sm rounded-md overflow-hidden mx-1 !bg-[#222231] !border !border-[#ffffff90]"
                 role="group"

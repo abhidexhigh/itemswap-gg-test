@@ -190,7 +190,7 @@ button {
 
 @media only screen and (min-width: 1200px) {
   .container {
-    max-width: 1200px;
+    max-width: 1460px;
   }
 }
 

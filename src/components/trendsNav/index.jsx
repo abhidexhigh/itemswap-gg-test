@@ -13,7 +13,7 @@ const TrendsNav = ({ selected }) => {
 
   return (
     <div className="">
-      <div className="md:hidden mx-2">
+      <div className="lg:hidden mx-2">
         <select
           id="tabs"
           className="!bg-[#27282f] 1text-[#fff] border border-gray-300 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 px-2 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 h-[75px] text-[19px]"
@@ -67,7 +67,7 @@ const TrendsNav = ({ selected }) => {
       </div>
       <br />
       <div className="container md:!max-w-[90%] bg-[#222231] px-0 rounded-lg !border !border-[#ffffff70] md:!mx-auto">
-        <ul className="hidden text-md font-medium text-center text-gray-500 shadow sm:flex">
+        <ul className="hidden text-md font-medium text-center text-gray-500 shadow lg:flex lg:overflow-x-scroll scrollbar-none">
           <li className="w-full text-nowrap">
             <Link
               href="/metaTrends"
@@ -75,7 +75,7 @@ const TrendsNav = ({ selected }) => {
                 selected === "metaTrends"
                   ? "active text-gray-900 !bg-gray-100 hover:text-black border-r rounded-l-lg"
                   : "hover:text-white"
-              } inline-block w-full p-3 border-r border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
+              } inline-block w-full p-3 border-r text-xs lg:text-base border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
             >
               {others?.metaTrends}
             </Link>
@@ -87,7 +87,7 @@ const TrendsNav = ({ selected }) => {
                 selected === "recentDecks"
                   ? "active text-gray-900 !bg-gray-100 hover:text-black border-r"
                   : "hover:text-white"
-              } inline-block w-full p-3 border-r border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
+              } inline-block w-full p-3 border-r text-xs lg:text-base border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
             >
               {others?.recentDecks}
             </Link>
@@ -99,7 +99,7 @@ const TrendsNav = ({ selected }) => {
                 selected === "championsTrends"
                   ? "active text-gray-900 !bg-gray-100 hover:text-black border-r"
                   : "hover:text-white"
-              } inline-block w-full p-3 border-r border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
+              } inline-block w-full p-3 border-r text-xs lg:text-base border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
             >
               {others?.championsTrends}
             </Link>
@@ -111,7 +111,7 @@ const TrendsNav = ({ selected }) => {
                 selected === "itemsTrends"
                   ? "active text-gray-900 !bg-gray-100 hover:text-black border-r"
                   : "hover:text-white"
-              } inline-block w-full p-3 border-r border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
+              } inline-block w-full p-3 border-r text-xs lg:text-base border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
             >
               {others?.itemsTrends}
             </Link>
@@ -123,7 +123,7 @@ const TrendsNav = ({ selected }) => {
                 selected === "traitsTrends"
                   ? "active text-gray-900 !bg-gray-100 hover:text-black border-r"
                   : "hover:text-white"
-              } inline-block w-full p-3 border-r border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
+              } inline-block w-full p-3 border-r text-xs lg:text-base border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
             >
               {others?.traitsTrends}
             </Link>
@@ -135,7 +135,7 @@ const TrendsNav = ({ selected }) => {
                 selected === "augmentsTrends"
                   ? "active text-gray-900 !bg-gray-100 hover:text-black border-r"
                   : "hover:text-white"
-              } inline-block w-full p-3 border-r border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
+              } inline-block w-full p-3 border-r text-xs lg:text-base border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
             >
               {others.augmentsTrends}
             </Link>
@@ -147,7 +147,7 @@ const TrendsNav = ({ selected }) => {
                 selected === "bestItemsBuilds"
                   ? "active text-gray-900 !bg-gray-100 hover:text-black border-r rounded-r-lg"
                   : "hover:text-white"
-              } inline-block w-full p-3 border-r border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
+              } inline-block w-full p-3 border-r text-xs lg:text-base border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
             >
               {others?.bestItemsBuilds}
             </Link>

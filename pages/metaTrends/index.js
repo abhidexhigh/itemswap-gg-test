@@ -23,11 +23,15 @@ export default function ItemsTrends() {
         {metamaskModal && <MetamaskModal />}
         <Header />
         <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
-        {/* <PageHeader currentPage="META TRENDS" pageTitle="META TRENDS" /> */}
-        <TrendsNav selected="metaTrends" />
-        {/* <div className="bg-transparent-20"></div> */}
-        <MetaTrends />
-        <Footer />
+        <div className="backdrop-blur-md">
+          <div className="container">
+            {/* <PageHeader currentPage="META TRENDS" pageTitle="META TRENDS" /> */}
+            <TrendsNav selected="metaTrends" />
+            {/* <div className="bg-transparent-20"></div> */}
+            <MetaTrends />
+            <Footer />
+          </div>
+        </div>
       </Layout>
     </Fragment>
   );

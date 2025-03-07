@@ -107,10 +107,10 @@ const ProjectItems = () => {
 
   return (
     // <ProjectItemsStyleWrapper>
-    <div className="container md:!max-w-[80%] 2xl:!max-w-[80%] px-0 pt-2">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center">
-          <h1 className="text-[#fff] text-lg md:text-xl font-bold mb-0">
+    <div className="">
+      <div className="md:flex md:justify-between md:items-center">
+        <div className="flex items-center mx-auto md:!ml-0 md:!mr-0 justify-center md:justify-start">
+          <h1 className="text-[#fff] hidden md:block text-lg md:text-xl font-bold mb-0">
             Cost
           </h1>
           <TrendFilters
@@ -118,12 +118,12 @@ const ProjectItems = () => {
             onButtonClick={handleButtonClick}
           />
         </div>
-        <div>
+        <div className="px-2">
           <input
             type="text"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
-            className="bg-[#222231] text-[#fff] border-[#ffffff80] border-[1px] rounded-[4px] hover:border-[#ffffff60] hover:shadow-lg transition-all duration-300 ease-in-out w-[200px] h-[40px] px-[10px] text-[16px] placeholder-[#fff] placeholder-[16px] mt-[10px] md:mt-0"
+            className="bg-[#222231] w-full text-[#fff] border-[#ffffff80] border-[1px] rounded-[4px] hover:border-[#ffffff60] hover:shadow-lg transition-all duration-300 ease-in-out md:w-[200px] h-[40px] px-[10px] text-[16px] placeholder-[#fff] placeholder-[16px] md:mt-0"
             placeholder="Search..."
           />
         </div>

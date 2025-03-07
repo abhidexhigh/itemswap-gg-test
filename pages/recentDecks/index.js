@@ -21,12 +21,14 @@ export default function ItemsTrends() {
         {walletModalvisibility && <WalletModal />}
         {metamaskModal && <MetamaskModal />}
         <Header />
-        <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
-        {/* <PageHeader currentPage="META TRENDS" pageTitle="META TRENDS" /> */}
-        <TrendsNav selected="recentDecks" />
-        {/* <div className="bg-transparent-20"></div> */}
-        <RecentDecks />
-        <Footer />
+        <div className="container">
+          <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
+          {/* <PageHeader currentPage="META TRENDS" pageTitle="META TRENDS" /> */}
+          <TrendsNav selected="recentDecks" />
+          {/* <div className="bg-transparent-20"></div> */}
+          <RecentDecks />
+          <Footer />
+        </div>
       </Layout>
     </Fragment>
   );
