@@ -67,7 +67,7 @@ const TrendsNav = ({ selected }) => {
       </div>
       <br />
       <div className="container md:!max-w-[90%] bg-[#222231] px-0 rounded-lg !border !border-[#ffffff70] md:!mx-auto">
-        <ul className="hidden text-md font-medium text-center text-gray-500 shadow lg:flex lg:overflow-x-scroll scrollbar-none">
+        <ul className="hidden text-md font-medium text-center text-gray-500 shadow lg:flex">
           <li className="w-full text-nowrap">
             <Link
               href="/metaTrends"
