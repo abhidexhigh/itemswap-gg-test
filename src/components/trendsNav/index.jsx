@@ -12,7 +12,7 @@ const TrendsNav = ({ selected }) => {
   };
 
   return (
-    <div className="">
+    <>
       <div className="lg:hidden mx-2">
         <select
           id="tabs"
@@ -65,8 +65,7 @@ const TrendsNav = ({ selected }) => {
           <option>Germany</option>
         </select>
       </div>
-      <br />
-      <div className="container md:!max-w-[90%] bg-[#222231] px-0 rounded-lg !border !border-[#ffffff70] md:!mx-auto">
+      <div className="bg-[#222231] rounded-lg !border !border-[#ffffff70]">
         <ul className="hidden text-md font-medium text-center text-gray-500 shadow lg:flex">
           <li className="w-full text-nowrap">
             <Link
@@ -154,7 +153,7 @@ const TrendsNav = ({ selected }) => {
           </li>
         </ul>
       </div>
-    </div>
+    </>
   );
 };
 

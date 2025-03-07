@@ -34,9 +34,8 @@ const RecentDecksCard = ({
     <div className="rounded-[4px]">
       <div className="grid grid-cols-1 m-2">
         {championsByCost?.map((champions, i) => (
-          <React.Fragment key={i}>
-            {/* Mobile header remains unchanged */}
-            <header className="flex md:hidden flex-col bg-[#1a1b30] mb-2 !mx-3">
+          <>
+            <header className="flex lg:hidden flex-col bg-[#1a1b30] mb-2 !mx-3">
               <h5 className="flex justify-center items-center h-[30px] gap-[4px] m-1">
                 <span
                   width="12"
@@ -71,16 +70,14 @@ const RecentDecksCard = ({
                 </span>
               </h5>
             </header>
-
             <div className="mx-auto w-full">
               <div
-                className="grid gap-2 justify-items-center"
+                className="flex items-center flex-wrap mb-2 justify-center rounded-tl-none rounded-tr-none"
                 style={{
-                  gridTemplateColumns: "repeat(auto-fit, minmax(80px, 1fr))",
-                  width: "100%",
+                  gap: "8px",
                 }}
               >
-                <div className="hidden md:flex items-center">
+                <div className="hidden lg:flex items-center">
                   <Image
                     src={coinIcons[i]}
                     className="w-8 md:w-10 2xl:w-12"
@@ -89,19 +86,20 @@ const RecentDecksCard = ({
                     height={48}
                   />
                 </div>
-
-                {champions?.length > 0 &&
+                {champions &&
+                  champions.length > 0 &&
                   getRandomCharacters(champions).map((champion, j) => (
                     <RecentDecksItem
-                      key={`${i}-${j}`}
+                      key={j}
                       champion={champion}
                       setSelectedChampion={setSelectedChampion}
+                      index={j}
                       forces={forces}
                     />
                   ))}
               </div>
             </div>
-          </React.Fragment>
+          </>
         ))}
       </div>
     </div>

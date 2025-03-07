@@ -39,53 +39,8 @@ const Header = () => {
 
   return (
     <NavWrapper className="gamfi_header sticky" id="navbar">
-      <div className="container 2xl:!max-w-[90%] mx-auto">
+      <div className="container mx-auto">
         {/* Main Menu Start */}
-        <Link
-          href={"https://itemswap-guild-test.vercel.app/champions"}
-          className="absolute left-5 hidden md:block top-4 cursor-pointer transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105"
-        >
-          <motion.video
-            autoPlay
-            muted
-            loop
-            className="w-24 2xl:w-28 rounded-lg shadow-lg"
-            animate={{
-              scale: [1, 1.1, 1], // Zoom in & out effect
-              rotate: [0, 1, -1, 0], // Slight rotation
-            }}
-            transition={{
-              duration: 3, // Smooth animation duration
-              repeat: Infinity, // Loop animation
-              ease: "easeInOut",
-            }}
-          >
-            <source
-              src="https://res.cloudinary.com/dg0cmj6su/video/upload/v1740742060/TFT_SIZE_u2kvc9.webm"
-              type="video/mp4"
-            />
-            Your browser does not support the video tag.
-          </motion.video>
-
-          {/* Text with pulsing glow effect */}
-          <motion.p
-            className="absolute left-1/2 top-1/2 mb-0 -translate-x-1/2 -translate-y-1/2 font-medium text-white 2xl:text-xl"
-            animate={{
-              textShadow: [
-                "0px 0px 5px rgba(255, 255, 255, 0.5)",
-                "0px 0px 15px rgba(255, 255, 255, 0.8)",
-                "0px 0px 5px rgba(255, 255, 255, 0.5)",
-              ],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            RPG
-          </motion.p>
-        </Link>
         <div className="gamfi_menu_sect">
           <div className="gamfi_menu_left_sect mx-auto">
             <div className="logo">
@@ -154,6 +109,51 @@ const Header = () => {
               <button className="menu_btn" onClick={() => handleMobileMenu()}>
                 <MdNotes />
               </button>
+              <Link
+                href={"https://itemswap-guild-test.vercel.app/champions"}
+                className="hidden md:block relative hover:text-inherit cursor-pointer transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105"
+              >
+                <motion.video
+                  autoPlay
+                  muted
+                  loop
+                  className="w-24 2xl:w-28 rounded-lg shadow-lg"
+                  animate={{
+                    scale: [1, 1.1, 1], // Zoom in & out effect
+                    rotate: [0, 1, -1, 0], // Slight rotation
+                  }}
+                  transition={{
+                    duration: 3, // Smooth animation duration
+                    repeat: Infinity, // Loop animation
+                    ease: "easeInOut",
+                  }}
+                >
+                  <source
+                    src="https://res.cloudinary.com/dg0cmj6su/video/upload/v1740742060/TFT_SIZE_u2kvc9.webm"
+                    type="video/mp4"
+                  />
+                  Your browser does not support the video tag.
+                </motion.video>
+
+                {/* Text with pulsing glow effect */}
+                <motion.p
+                  className="absolute left-1/2 top-1/2 mb-0 -translate-x-1/2 -translate-y-1/2 font-medium text-white 2xl:text-xl"
+                  animate={{
+                    textShadow: [
+                      "0px 0px 5px rgba(255, 255, 255, 0.5)",
+                      "0px 0px 15px rgba(255, 255, 255, 0.8)",
+                      "0px 0px 5px rgba(255, 255, 255, 0.5)",
+                    ],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  RPG
+                </motion.p>
+              </Link>
               <LanguageSwitcher />
               <Link
                 href={"https://itemswap-guild-test.vercel.app/champions"}

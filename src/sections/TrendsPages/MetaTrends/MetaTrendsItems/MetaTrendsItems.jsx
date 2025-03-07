@@ -408,7 +408,8 @@ const ProjectItems = () => {
                               }}
                             >
                               <ReactTltp
-                                content={trait?.name}
+                                variant="trait"
+                                content={trait}
                                 id={trait?.imageUrl}
                               />
                               <div
@@ -455,13 +456,13 @@ const ProjectItems = () => {
                                 handleFilterChange("force", trait?.key);
                               }}
                             >
-                              <ReactTltp
+                              {/* <ReactTltp
                                 content={trait?.name}
                                 id={trait?.key}
-                              />
+                              /> */}
                               <div
                                 className="relative"
-                                data-tooltip-id={trait?.key}
+                                // data-tooltip-id={trait?.key}
                               >
                                 <div
                                   className={`relative w-[96px] h-[96px]`}
@@ -549,7 +550,8 @@ const ProjectItems = () => {
                                 }}
                               >
                                 <ReactTltp
-                                  content={item?.name}
+                                  variant="item"
+                                  content={item}
                                   id={item?.key}
                                 />
                                 <div
@@ -558,10 +560,6 @@ const ProjectItems = () => {
                                 >
                                   <div
                                     className={`relative w-[44px] md:w-[84px] h-[44px] md:h-[84px]`}
-                                    // style={{
-                                    //   backgroundImage: `url(${itemBg.src})`,
-                                    //   backgroundSize: "cover",
-                                    // }}
                                   >
                                     <Image
                                       alt="Image"
@@ -882,6 +880,14 @@ const ProjectItems = () => {
                                           .imageUrl
                                       }
                                       className=""
+                                      data-tooltip-id={augment}
+                                    />
+                                    <ReactTltp
+                                      variant="augment"
+                                      content={augments?.find(
+                                        (a) => a.key === augment
+                                      )}
+                                      id={augment}
                                     />
                                   </div>
                                 ))}
@@ -1009,6 +1015,14 @@ const ProjectItems = () => {
                                         .imageUrl
                                     }
                                     className="w-[64px] md:w-[86px]"
+                                    data-tooltip-id={augment}
+                                  />
+                                  <ReactTltp
+                                    variant="augment"
+                                    content={augments?.find(
+                                      (a) => a.key === augment
+                                    )}
+                                    id={augment}
                                   />
                                 </div>
                               ))}

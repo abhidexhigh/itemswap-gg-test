@@ -413,7 +413,8 @@ const ProjectItems = () => {
                               }}
                             >
                               <ReactTltp
-                                content={trait?.name}
+                                variant="trait"
+                                content={trait}
                                 id={trait?.imageUrl}
                               />
                               <div
@@ -554,7 +555,8 @@ const ProjectItems = () => {
                                 }}
                               >
                                 <ReactTltp
-                                  content={item?.name}
+                                  variant="item"
+                                  content={item}
                                   id={item?.key}
                                 />
                                 <div
@@ -783,6 +785,14 @@ const ProjectItems = () => {
                                         .imageUrl
                                     }
                                     className="w-[64px] md:w-[86px]"
+                                    data-tooltip-id={augment}
+                                  />
+                                  <ReactTltp
+                                    variant="augment"
+                                    content={augments?.find(
+                                      (a) => a.key === augment
+                                    )}
+                                    id={augment}
                                   />
                                 </div>
                               ))}

@@ -21,35 +21,35 @@ const LeaderboardItemsAll = ({ leaderboardData }) => {
         <table className="color-[#212529] table-fixed w-full">
           <thead className="border-x border-[#36394420]">
             <tr className="border-t-0 table-row border-b border-[#88888850]">
-              <th className="hidden md:table-cell w-[40px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-bold whitespace-nowrap text-center text-[16px]">
+              <th className="hidden md:table-cell w-[40px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]">
                 Rank
               </th>
-              <th className="hidden md:table-cell w-[30px] py-0 px-[0.25em] h-[60px] md:w-[70px] text-[#fff] font-bold whitespace-nowrap text-center text-[16px]"></th>
-              <th className="py-0 px-[0.25em] h-[60px] text-[#fff] font-bold whitespace-nowrap text-center text-[16px]">
+              <th className="hidden md:table-cell w-[30px] py-0 px-[0.25em] h-[60px] md:w-[70px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]"></th>
+              <th className="py-0 px-[0.25em] h-[60px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]">
                 Name
               </th>
-              <th className="w-[40px] py-0 px-[0.25em] h-[60px] md:w-[170px] text-[#fff] font-bold whitespace-nowrap text-center text-[16px]">
+              <th className="w-[40px] py-0 px-[0.25em] h-[60px] md:w-[160px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]">
                 Tier
               </th>
-              <th className="w-[70px] py-0 px-[0.25em] h-[60px] md:w-[100px] text-[#fff] font-bold whitespace-nowrap text-center text-[16px]">
+              <th className="w-[70px] py-0 px-[0.25em] h-[60px] md:w-[120px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]">
                 <div className="w-full h-full flex justify-center items-center">
                   <img src={orderDesc.src} className="mr-[5px]" />
                   LP
                 </div>
               </th>
-              <th className="hidden md:table-cell w-[40px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-bold whitespace-nowrap text-center text-[16px]">
+              <th className="hidden md:table-cell w-[40px] py-0 px-[0.25em] h-[60px] md:w-[120px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]">
                 WinRate
               </th>
-              <th className="hidden md:table-cell w-[40px] py-0 px-[0.25em] h-[60px] md:w-[70px] text-[#fff] font-bold whitespace-nowrap text-center text-[16px]">
+              <th className="hidden md:table-cell w-[40px] py-0 px-[0.25em] h-[60px] md:w-[120px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]">
                 TOP4%
               </th>
-              <th className="hidden md:table-cell w-[35px] py-0 px-[0.25em] h-[60px] md:w-[70px] text-[#fff] font-bold whitespace-nowrap text-center text-[16px]">
+              <th className="hidden md:table-cell w-[35px] py-0 px-[0.25em] h-[60px] md:w-[120px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]">
                 Games
               </th>
-              <th className="w-[40px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-bold whitespace-nowrap text-center text-[16px]">
+              <th className="w-[40px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]">
                 Wins
               </th>
-              <th className="w-[40px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-bold whitespace-nowrap text-center text-[16px]">
+              <th className="w-[40px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]">
                 TOP4
               </th>
             </tr>
@@ -83,12 +83,12 @@ const LeaderboardItemsAll = ({ leaderboardData }) => {
                   />
                   <a
                     href="#"
-                    className="inline-flex align-middle break-words text-[16px]"
+                    className="inline-flex align-middle break-words text-[20px]"
                   >
                     {data?.gameName}
                   </a>
                 </td>
-                <td className="w-[40px] py-0 px-[0.25em] h-[60px] md:w-[170px] text-[#fff] font-extralight whitespace-nowrap text-[12px] text-center">
+                <td className="w-[40px] py-0 px-[0.25em] h-[60px] md:w-[170px] text-[#fff] font-extralight whitespace-nowrap text-[12px] text-left">
                   {console.log(
                     Emblems?.find(
                       (emblem) =>
@@ -105,29 +105,29 @@ const LeaderboardItemsAll = ({ leaderboardData }) => {
                     }
                     className="w-[40px] h-[40px] sticky md:inline"
                   />
-                  <span className="font-light hidden md:inline text-[16px] ml-2">
+                  <span className="font-light hidden md:inline text-[20px] ml-2">
                     {data?.tier}
                   </span>
                   <span className="font-light block md:hidden">C</span>
                 </td>
-                <td className="w-[60px] py-0 px-[0.25em] h-[60px] md:w-[100px] text-[#fff] font-extralight whitespace-nowrap text-center text-[16px]">
+                <td className="w-[60px] py-0 px-[0.25em] h-[60px] md:w-[100px] text-[#fff] font-extralight whitespace-nowrap text-center text-[20px]">
                   <div className="w-full h-full flex justify-center items-center">
                     {data?.summonerLevel} LP
                   </div>
                 </td>
-                <td className="hidden md:table-cell w-[40px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-extralight whitespace-nowrap text-center text-[16px]">
+                <td className="hidden md:table-cell w-[40px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-extralight whitespace-nowrap text-center text-[20px]">
                   {((data?.wins * 100) / data?.plays).toFixed(2)}%
                 </td>
-                <td className="hidden md:table-cell w-[40px] py-0 px-[0.25em] h-[60px] md:w-[60px] text-[#fff] font-extralight whitespace-nowrap text-center text-[16px]">
+                <td className="hidden md:table-cell w-[40px] py-0 px-[0.25em] h-[60px] md:w-[60px] text-[#fff] font-extralight whitespace-nowrap text-center text-[20px]">
                   {((data?.tops * 100) / data?.plays).toFixed(2)}%
                 </td>
-                <td className="hidden md:table-cell w-[35px] py-0 px-[0.25em] h-[60px] md:w-[64px] text-[#fff] font-extralight whitespace-nowrap text-center text-[16px]">
+                <td className="hidden md:table-cell w-[35px] py-0 px-[0.25em] h-[60px] md:w-[64px] text-[#fff] font-extralight whitespace-nowrap text-center text-[20px]">
                   {data?.plays}
                 </td>
-                <td className="w-[30px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-extralight whitespace-nowrap text-center text-[16px]">
+                <td className="w-[30px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-extralight whitespace-nowrap text-center text-[20px]">
                   {data?.wins}
                 </td>
-                <td className="w-[40px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-extralight whitespace-nowrap text-center text-[16px]">
+                <td className="w-[40px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-extralight whitespace-nowrap text-center text-[20px]">
                   {data?.tops}
                 </td>
               </tr>

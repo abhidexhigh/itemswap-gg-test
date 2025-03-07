@@ -38,7 +38,7 @@ const FooterBottom = () => {
           </div>
           <div className="scrollup text-center">
             <Link href="#">
-              <VscChevronUp />
+              <VscChevronUp className="mx-auto" />
             </Link>
           </div>
         </div>

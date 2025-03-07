@@ -20,7 +20,11 @@ export default function User() {
         <Header />
         {/* <PageHeader currentPage="Traits" pageTitle="Traits" /> */}
         <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
-        <Champions />
+        <div className="backdrop-blur-md">
+          <div className="container">
+            <Champions />
+          </div>
+        </div>
         <Footer />
       </Layout>
     </Fragment>

@@ -107,7 +107,7 @@ const User = () => {
 
   return (
     <ChampionsStyleWrapper>
-      <div className="container md:!max-w-[95%]">
+      <div className="">
         <div className="flex flex-col md:flex-row md:gap-2.5">
           <div className="md:w-4/12 w-full p-4 bg-glass">
             <div>

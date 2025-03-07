@@ -110,7 +110,7 @@ const ProjectItems = () => {
   return (
     // <ProjectItemsStyleWrapper>
     <>
-      <div className="container md:!max-w-[80%] 2xl:!max-w-[80%] px-0 pt-2">
+      <div className="pt-2">
         <div className="flex justify-between items-center">
           <TrendFilters
             buttons={["All", "Bronze", "Silver", "Gold", "Prismatic"]}

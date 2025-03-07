@@ -21,9 +21,13 @@ export default function ItemsTrends() {
         <Header />
         {/* <PageHeader currentPage="AUGMENTS TRENDS" pageTitle="AUGMENTS TRENDS" /> */}
         <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
-        <TrendsNav selected="augmentsTrends" />
-        {/* <div className="bg-transparent-20"></div> */}
-        <AugmentsTrendsList />
+        <div className="backdrop-blur-md">
+          <div className="container">
+            <TrendsNav selected="augmentsTrends" />
+            {/* <div className="bg-transparent-20"></div> */}
+            <AugmentsTrendsList />
+          </div>
+        </div>
         <Footer />
       </Layout>
     </Fragment>

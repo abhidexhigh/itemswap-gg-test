@@ -9,7 +9,7 @@ export const SectionTitle = ({ title, subtitle, isCenter, ...props }) => {
   return (
     <SectionTitleStyle {...props} className="section_title">
       {subtitle && (
-        <span className="subtitle">
+        <span className="subtitle !flex !justify-center !mx-auto">
           {isCenter ? (
             <img src={sectionTitleShapeleft.src} alt="section title shape" />
           ) : (

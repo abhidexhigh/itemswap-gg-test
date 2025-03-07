@@ -212,7 +212,7 @@ const MatchHistory = ({
 
                         {/* Participant Info Column (25%) */}
                         <td
-                          style={{ width: "15%" }}
+                          style={{ width: "13%" }}
                           className="align-middle p-2"
                         >
                           <div className="flex items-center gap-x-2">
@@ -238,7 +238,7 @@ const MatchHistory = ({
 
                         {/* Augments & Traits Column (15%) */}
                         <td
-                          style={{ width: "15%" }}
+                          style={{ width: "13%" }}
                           className="align-middle p-2"
                         >
                           <div className="flex flex-col gap-y-1 -z-10">
@@ -297,7 +297,7 @@ const MatchHistory = ({
 
                         {/* Units & Items Column (50%) */}
                         <td
-                          style={{ width: "60%" }}
+                          // style={{ width: "60%" }}
                           className="align-middle p-2"
                         >
                           <div className="flex flex-wrap items-center gap-x-1">

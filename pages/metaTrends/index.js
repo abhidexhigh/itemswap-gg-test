@@ -29,9 +29,9 @@ export default function ItemsTrends() {
             <TrendsNav selected="metaTrends" />
             {/* <div className="bg-transparent-20"></div> */}
             <MetaTrends />
-            <Footer />
           </div>
         </div>
+        <Footer />
       </Layout>
     </Fragment>
   );

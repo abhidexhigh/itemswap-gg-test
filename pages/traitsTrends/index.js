@@ -21,9 +21,13 @@ export default function ChampionsTrends() {
         <Header />
         {/* <PageHeader currentPage="TRAITS TRENDS" pageTitle="TRAITS TRENDS" /> */}
         <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
-        <TrendsNav selected={"traitsTrends"} />
-        {/* <div className="bg-transparent-20"></div> */}
-        <TraitsTrends />
+        <div className="backdrop-blur-md">
+          <div className="container">
+            <TrendsNav selected={"traitsTrends"} />
+            {/* <div className="bg-transparent-20"></div> */}
+            <TraitsTrends />
+          </div>
+        </div>
         <Footer />
       </Layout>
     </Fragment>

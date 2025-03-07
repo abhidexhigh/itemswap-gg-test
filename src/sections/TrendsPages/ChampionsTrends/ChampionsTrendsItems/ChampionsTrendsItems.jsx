@@ -107,7 +107,7 @@ const ProjectItems = () => {
 
   return (
     // <ProjectItemsStyleWrapper>
-    <div className="">
+    <div className="pt-2">
       <div className="md:flex md:justify-between md:items-center">
         <div className="flex items-center mx-auto md:!ml-0 md:!mr-0 justify-center md:justify-start">
           <h1 className="text-[#fff] hidden md:block text-lg md:text-xl font-bold mb-0">

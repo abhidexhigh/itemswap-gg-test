@@ -29,9 +29,9 @@ export default function ChampionsTrends() {
             <TrendsNav selected={"championsTrends"} />
             {/* <div className="bg-transparent-20"></div> */}
             <ProjectsList />
-            <Footer />
           </div>
         </div>
+        <Footer />
       </Layout>
     </Fragment>
   );

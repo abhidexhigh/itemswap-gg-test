@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-
 import React from "react";
 import ReactApexChart from "react-apexcharts";
 
@@ -11,12 +10,20 @@ const ZoneGraph = ({ activeZone, seriesData }) => {
       toolbar: {
         show: false, // Hides the toolbar, including the export menu
       },
+      dropShadow: {
+        enabled: true,
+        top: 5,
+        left: 0,
+        blur: 5,
+        opacity: 0.2,
+      },
     },
     plotOptions: {
       bar: {
         horizontal: false,
         columnWidth: "55%",
         endingShape: "rounded",
+        borderRadius: 5, // Added border radius to the bar's top section
       },
     },
     dataLabels: {
@@ -38,7 +45,7 @@ const ZoneGraph = ({ activeZone, seriesData }) => {
         "Iron",
       ],
       lines: {
-        show: false, // Optionally hide the x-axis lines if desired
+        show: false,
       },
       labels: {
         style: {
@@ -63,11 +70,22 @@ const ZoneGraph = ({ activeZone, seriesData }) => {
       },
     },
     fill: {
-      opacity: 1,
+      type: "gradient",
+      gradient: {
+        shade: "light",
+        type: "vertical",
+        shadeIntensity: 0.3,
+        gradientToColors: ["#a29bfe"],
+        inverseColors: false,
+        opacityFrom: 1,
+        opacityTo: 1,
+        stops: [0, 100],
+      },
     },
-    colors: ["#FFF"], // Setting the bars' color to white
+    colors: ["#8884d8"],
     grid: {
-      show: false, // Hides the grid lines (including horizontal lines)
+      borderColor: "#555",
+      strokeDashArray: 4,
     },
     tooltip: {
       theme: "dark",
@@ -84,90 +102,9 @@ const ZoneGraph = ({ activeZone, seriesData }) => {
     },
   });
 
-  // const [options, setOptions] = React.useState({
-  //   chart: {
-  //     type: "bar",
-  //     height: 350,
-  //     toolbar: {
-  //       show: false, // Hides the toolbar, including the export menu
-  //     },
-  //   },
-  //   plotOptions: {
-  //     bar: {
-  //       horizontal: false,
-  //       columnWidth: "55%",
-  //       endingShape: "rounded",
-  //     },
-  //   },
-  //   dataLabels: {
-  //     enabled: false,
-  //   },
-  //   stroke: {
-  //     show: true,
-  //     width: 2,
-  //     colors: ["transparent"],
-  //   },
-  //   xaxis: {
-  //     categories: [
-  //       "Master",
-  //       "Diamond",
-  //       "Platinum",
-  //       "Gold",
-  //       "Silver",
-  //       "Bronze",
-  //       "Iron",
-  //     ],
-  //     lines: {
-  //       show: false, // Optionally hide the x-axis lines if desired
-  //     },
-  //     labels: {
-  //       style: {
-  //         colors: "white",
-  //         fontSize: "16px",
-  //       },
-  //     },
-  //   },
-  //   yaxis: {
-  //     title: {
-  //       text: "% (Percentage of Players)",
-  //       style: {
-  //         color: "white",
-  //         fontSize: "16px",
-  //       },
-  //     },
-  //     labels: {
-  //       style: {
-  //         colors: "white",
-  //         fontSize: "14px",
-  //       },
-  //     },
-  //   },
-  //   fill: {
-  //     opacity: 1,
-  //   },
-  //   colors: ["#FFF"], // Setting the bars' color to white
-  //   grid: {
-  //     show: false, // Hides the grid lines (including horizontal lines)
-  //   },
-  //   tooltip: {
-  //     theme: "dark",
-  //     style: {
-  //       backgroundColor: "#000",
-  //       color: "#fff",
-  //       fontSize: "16px",
-  //     },
-  //     y: {
-  //       formatter: function (val) {
-  //         return "" + val + "%";
-  //       },
-  //     },
-  //   },
-  // });
-
   const [series, setSeries] = React.useState([
     {
       name: "Players",
-      // Generate random numbers for the graph
       data: seriesData,
     },
   ]);

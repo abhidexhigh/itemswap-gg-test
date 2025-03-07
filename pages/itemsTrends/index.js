@@ -21,9 +21,13 @@ export default function ItemsTrends() {
         <Header />
         {/* <PageHeader currentPage="ITEMS TRENDS" pageTitle="ITEMS TRENDS" /> */}
         <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
-        <TrendsNav selected="itemsTrends" />
-        {/* <div className="bg-transparent-20"></div> */}
-        <ItemsTrendsList />
+        <div className="backdrop-blur-md">
+          <div className="container">
+            <TrendsNav selected="itemsTrends" />
+            {/* <div className="bg-transparent-20"></div> */}
+            <ItemsTrendsList />
+          </div>
+        </div>
         <Footer />
       </Layout>
     </Fragment>
