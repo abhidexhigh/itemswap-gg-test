@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
+import { motion } from "framer-motion";
 import { useRouter } from "next/router";
-import { IoMdArrowRoundBack } from "react-icons/io";
+import { MdKeyboardDoubleArrowDown } from "react-icons/md";
 import Link from "next/link.js";
+import { GiBattleGear } from "react-icons/gi";
 import ChampionsStyleWrapper from "./User.style.js";
 import Comps from "../../data/compsNew.json";
 import PlayerInfo from "../../data/user/playerInfo.json";
@@ -13,6 +14,23 @@ import CardImage from "src/components/cardImage/index.js";
 import MatchHistory from "./MatchHistory.jsx";
 import TrendFilters from "src/components/trendFilters/index.js";
 import Loader from "src/components/loader/index.js";
+
+// Array of objects for recent 20 matches with rank and average data
+// Rank should be between random number between 1-8
+// Average should be between 1-5 in decimal
+
+const recentMatchesDataGenerator = () => {
+  const recentMatches = [];
+  for (let i = 0; i < 20; i++) {
+    recentMatches.push({
+      rank: Math.floor(Math.random() * 8) + 1,
+      average: (Math.random() * 5).toFixed(2),
+    });
+  }
+  return recentMatches;
+};
+
+const recentMatches = recentMatchesDataGenerator();
 
 const User = () => {
   const router = useRouter();
@@ -150,7 +168,7 @@ const User = () => {
               <br />
               <div className="flex flex-col items-center">
                 <div className="grid gap-3 grid-cols-4">
-                  <div className="font-montserrat font-medium flex flex-col items-center bg-[#222231] p-[11px] rounded-md w-[74px] lg:w-[80px]">
+                  <div className="font-montserrat font-medium flex flex-col items-center !border !border-[#ffffff40] shadow-md bg-[#222231] p-[11px] rounded-md w-[74px] lg:w-[80px]">
                     <div className="flex items-center pb-[5px] leading-none text-[25px] font-semibold">
                       <div>{seasonStats?.top4}</div>
                     </div>
@@ -158,7 +176,7 @@ const User = () => {
                       Top 4
                     </div>
                   </div>
-                  <div className="font-montserrat font-medium flex flex-col items-center bg-[#222231] p-[11px] rounded-md w-[74px] lg:w-[80px]">
+                  <div className="font-montserrat font-medium flex flex-col items-center !border !border-[#ffffff40] shadow-md bg-[#222231] p-[11px] rounded-md w-[74px] lg:w-[80px]">
                     <div className="flex items-center pb-[5px] leading-none text-[25px] font-semibold">
                       <div>
                         {(
@@ -171,7 +189,7 @@ const User = () => {
                       Top 4%
                     </div>
                   </div>
-                  <div className="font-montserrat font-medium flex flex-col items-center bg-[#222231] p-[11px] rounded-md w-[74px] lg:w-[80px]">
+                  <div className="font-montserrat font-medium flex flex-col items-center !border !border-[#ffffff40] shadow-md bg-[#222231] p-[11px] rounded-md w-[74px] lg:w-[80px]">
                     <div className="flex items-center pb-[5px] leading-none text-[25px] font-semibold">
                       <div>{seasonStats?.win}</div>
                     </div>
@@ -179,7 +197,7 @@ const User = () => {
                       Won
                     </div>
                   </div>
-                  <div className="font-montserrat font-medium flex flex-col items-center bg-[#222231] p-[11px] rounded-md w-[74px] lg:w-[80px]">
+                  <div className="font-montserrat font-medium flex flex-col items-center !border !border-[#ffffff40] shadow-md bg-[#222231] p-[11px] rounded-md w-[74px] lg:w-[80px]">
                     <div className="flex items-center pb-[5px] leading-none text-[25px] font-semibold">
                       <div>
                         {(
@@ -198,10 +216,12 @@ const User = () => {
           </div>
           <div className="md:w-8/12 w-full md:p-6 bg-glass">
             <div>
-              <div className="min-w-[20rem] rounded-[0.6rem] [box-shadow:rgba(21,_11,_37,_0.5)_0px_2px_10px_0px] relative grid grid-cols-[calc(100%_-_var(--team-comps-items-size))_var(--team-comps-items-size)] max-w-[86rem] w-full">
+              <div className="min-w-[20rem] rounded-[0.6rem] relative grid grid-cols-[calc(100%_-_var(--team-comps-items-size))_var(--team-comps-items-size)] max-w-[86rem] w-full">
                 <div className="">
-                  <header className="tracking-[0.025rem] uppercase relative flex justify-between items-center px-[1.2rem] py-[0.6rem]">
-                    Performance Overview
+                  <header className="tracking-[0.025rem] bg-gradient-to-r from-[#22223100] via-[#222231] to-[#22223100] uppercase relative flex justify-between items-center px-[1.2rem] py-[0.6rem]">
+                    <span className="text-center mx-auto !text-white">
+                      Performance Overview
+                    </span>
                   </header>
                   <div className="tracking-[0.025rem] pt-[1.2rem] px-[1.2rem] pb-[1.6rem] flex items-center flex-wrap -mx-[0.6rem] -my-[0.4rem]">
                     <div className="relative flex items-center flex-col flex-[1_0_auto] mx-[6px] my-[4px] rounded-lg w-[8.8rem] h-[8.8rem] p-[1.2rem] bg-[#222231] justify-end">
@@ -275,11 +295,8 @@ const User = () => {
                 </div>
               </div>
               <br />
-              <div className="min-w-[20rem] rounded-[0.6rem] !border-[#ffffff40] !border [box-shadow:rgba(21,_11,_37,_0.5)_0px_2px_10px_0px] hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 ease-in-out relative grid grid-cols-[calc(100%_-_var(--team-comps-items-size))_var(--team-comps-items-size)] max-w-[86rem] w-full bg-[#222231]">
-                <Link
-                  href={`/user/${user}`}
-                  className="flex flex-col items-center py-3 hover:text-inherit"
-                >
+              <div className="min-w-[20rem] rounded-[0.6rem] !border-[#ffffff40] !border [box-shadow:rgba(21,_11,_37,_0.5)_0px_2px_10px_0px] relative grid grid-cols-[calc(100%_-_var(--team-comps-items-size))_var(--team-comps-items-size)] max-w-[86rem] w-full bg-[#222231]">
+                <div className="flex flex-col items-center py-3 hover:text-inherit">
                   <header className="flex items-end text-xl font-montserrat font-medium leading-none pb-2">
                     <div>Recent 20 Matches</div>
                     <div className="pl-[4px] pb-[1px] text-base leading-none">
@@ -287,38 +304,54 @@ const User = () => {
                       (Ranked)
                     </div>
                   </header>
-                  <div className="px-2 flex flex-col sm:flex-row items-start sm:items-center">
+                  <div className="px-2 flex flex-col sm:flex-row items-start sm:items-center gap-x-4">
                     <div className="grid gap-[5px] grid-cols-10">
-                      {Array(20)
-                        .fill(0)
-                        .map((_, i) => (
-                          <div>
-                            <p className="border !border-solid !border-gray-300 !rounded-md px-1 mb-0 text-center">
-                              {i + 1}
+                      {recentMatches.map((match, i) => (
+                        <div>
+                          <div
+                            className={`rounded-xl rounded-tl-none bg-gradient-to-r from-[#FDF496] to-[#6D4600] p-[1px] ${match?.rank == 1 ? "text-[#FDF496] from-[#FDF496] to-[#6D4600]" : match?.rank == 2 ? "text-[#ab70eb] from-[#ab70eb] to-[#6607cb]" : match?.rank == 3 ? "text-[#ef884b] from-[#ef884b] to-[#92480c]" : "text-[#70cfeb] from-[#70cfeb] to-[#0c90b6]"}`}
+                          >
+                            <p
+                              className={`rounded-xl rounded-tl-none px-2 mb-0 text-center bg-[#222231]`}
+                            >
+                              {match.rank}
                             </p>
                           </div>
-                        ))}
+                        </div>
+                      ))}
                     </div>
-                    <div className="flex justify-evenly items-center pt-3 md:!pt-0 sm:pl-5 w-full sm:w-auto gap-[10px]">
-                      <div className="font-montserrat flex flex-col items-center bg-[#ffffff0d] py-[10px] rounded-md w-[66px]">
+                    <Link href={`/user/${user}`} className="hover:text-inherit">
+                      <div
+                        className="font-montserrat flex flex-col items-center bg-[#5e56f7a7] hover:!border-2 hover:-translate-y-0.5 border-[#8884d8] !border shadow-lg hover:shadow-xl transition-all ease-in-out duration-300 justify-center rounded-md w-[66px] h-[66px]"
+                        data-tooltip-id="allMatches"
+                        data-tooltip-content="All Matches"
+                      >
+                        <div className="flex items-center font-semibold mb-0 css-kvo27r">
+                          All
+                        </div>
+                      </div>
+                      <ReactTltp id="allMatches" />
+                    </Link>
+                    <div className="flex justify-evenly items-center pt-3 md:!pt-0 w-full sm:w-auto gap-[10px]">
+                      <div className="font-montserrat flex flex-col items-center bg-[#ffffff0d] py-[5px] rounded-md w-[66px] !border !border-[#ffffff40] shadow-xl">
                         <div className="flex items-center font-semibold pb-[4px] css-kvo27r">
                           <div>4.60</div>
                         </div>
                         <div className="text-[15px]">Avg.</div>
                       </div>
-                      <div className="font-montserrat flex flex-col items-center bg-[#ffffff0d] py-[10px] rounded-md w-[66px]">
+                      <div className="font-montserrat flex flex-col items-center bg-[#ffffff0d] py-[5px] rounded-md w-[66px] !border !border-[#ffffff40] shadow-xl">
                         <div className="flex items-center font-semibold pb-[4px] css-kvo27r">
                           <div>10</div>
                         </div>
                         <div className="text-[15px]">Top 4</div>
                       </div>
-                      <div className="font-montserrat flex flex-col items-center bg-[#ffffff0d] py-[10px] rounded-md w-[66px]">
+                      <div className="font-montserrat flex flex-col items-center bg-[#ffffff0d] py-[5px] rounded-md w-[66px] !border !border-[#ffffff40] shadow-xl">
                         <div className="flex items-center font-semibold pb-[4px] css-kvo27r">
                           <div>1</div>
                         </div>
                         <div className="text-[15px]">Won</div>
                       </div>
-                      <div className="font-montserrat flex flex-col items-center bg-[#ffffff0d] py-[10px] rounded-md w-[66px]">
+                      <div className="font-montserrat flex flex-col items-center bg-[#ffffff0d] py-[5px] rounded-md w-[66px] !border !border-[#ffffff40] shadow-xl">
                         <div className="flex items-center font-semibold pb-[4px] css-kvo27r">
                           <div>0</div>
                         </div>
@@ -326,6 +359,19 @@ const User = () => {
                       </div>
                     </div>
                   </div>
+                </div>
+                <Link href={`/user/${user}`} className="hover:text-inherit">
+                  <motion.div
+                    animate={{ y: [0, -6, 0] }}
+                    transition={{
+                      duration: 1,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    className="p-1 absolute -bottom-8 left-1/2 -translate-x-1/2 rounded-full"
+                  >
+                    <MdKeyboardDoubleArrowDown className="text-2xl !text-white" />
+                  </motion.div>
                 </Link>
               </div>
             </div>

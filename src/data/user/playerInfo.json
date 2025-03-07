@@ -165,58 +165,54 @@
         ],
         "units": [
           {
-            "key": "Rei",
-            "items": [],
-            "rarity": 2,
-            "tier": 1
+            "key": "Shesha",
+            "coreRank": 2,
+            "items": ["Kunee", "Kiriti", "LeaderArmor"]
           },
           {
-            "key": "Tamamo",
-            "items": ["EgyptianHelmet", "PersianArmor", "IndianWeapon"],
-            "rarity": 4,
-            "tier": 1
+            "key": "Shinigami",
+            "coreRank": 4,
+            "items": ["ScaleHelmet", "Osirian", "EyeOfRa"]
           },
           {
-            "key": "Fuma",
-            "items": ["GreekHelmet", "PersianWeapon", "ChineseArmor"],
-            "rarity": 4,
-            "tier": 1
+            "key": "Grimgor",
+            "coreRank": 5,
+            "items": ["Simurgh", "Evalach", "Kaminari"]
           },
           {
-            "key": "Morwen",
-            "items": ["GreekHelmet", "EnglandArmor", "GreekMagicWeapon"],
-            "rarity": 4,
-            "tier": 2
+            "key": "Orphne",
+            "coreRank": 2,
+            "items": ["Bayan", "Raikiri", "Gladius"]
           },
           {
-            "key": "Celaeno",
-            "items": ["KoreanHelmet"],
-            "rarity": 6,
-            "tier": 1
+            "key": "Tiamat",
+            "coreRank": 9,
+            "items": ["EyeOfRa", "Darius", "Raikiri"]
           },
           {
-            "key": "Aetheria",
-            "items": ["JapaneseHelmet", "VikingWeapon", "EnglandArmor"],
-            "rarity": 6,
-            "tier": 2
+            "key": "Nordri",
+            "coreRank": 3,
+            "items": ["SilverBullet", "Bayan", "Cloak"]
           },
           {
-            "key": "Miho",
-            "items": [],
-            "rarity": 6,
-            "tier": 1
+            "key": "Zarok",
+            "coreRank": 3,
+            "items": ["Kiriti", "Pendragon’sCrown", "Kunee"]
           },
           {
-            "key": "Aetheria",
-            "items": ["JapaneseWeapon"],
-            "rarity": 6,
-            "tier": 1
+            "key": "Karna",
+            "coreRank": 10,
+            "items": ["Simurgh", "Evalach", "Kaminari"]
           },
           {
-            "key": "Merope",
-            "items": [],
-            "rarity": 9,
-            "tier": 1
+            "key": "Aello",
+            "coreRank": 10,
+            "items": ["ScaleHelmet", "Osirian", "EyeOfRa"]
+          },
+          {
+            "key": "Alberich",
+            "coreRank": 7,
+            "items": ["Raikiri", "Stormhorn", "Jingong"]
           }
         ],
         "augments": ["FixedIncome", "LastHope", "IllusoryDash"]

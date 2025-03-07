@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import moment from "moment";
+import Image from "next/image";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import CardImage from "../../components/cardImage";
 import ReactTltp from "../../components/tooltip/ReactTltp";
@@ -131,9 +132,8 @@ const MatchHistory = ({
                                   }
                                 />
                                 <ReactTltp
-                                  content={
-                                    items?.find((i) => i?.key === item)?.name
-                                  }
+                                  variant="item"
+                                  content={items?.find((i) => i?.key === item)}
                                   id={
                                     items?.find((i) => i?.key === item)
                                       ?.imageUrl
@@ -267,16 +267,29 @@ const MatchHistory = ({
                               {participant?.traits
                                 ?.slice(0, 2)
                                 ?.map((trait, i) => (
-                                  <img
-                                    src={
-                                      traits
-                                        ?.find((t) => t.key === trait.name)
-                                        ?.tiers.find(
-                                          (tier) => tier.min >= trait.numUnits
-                                        )?.imageUrl
-                                    }
-                                    className="w-10"
-                                  />
+                                  <>
+                                    <Image
+                                      src={
+                                        traits
+                                          ?.find((t) => t.key === trait.name)
+                                          ?.tiers.find(
+                                            (tier) => tier.min >= trait.numUnits
+                                          )?.imageUrl
+                                      }
+                                      alt={trait.name}
+                                      width={40}
+                                      height={40}
+                                      className="w-10"
+                                      data-tooltip-id={trait.name}
+                                    />
+                                    <ReactTltp
+                                      variant="trait"
+                                      content={traits?.find(
+                                        (t) => t.key === trait.name
+                                      )}
+                                      id={trait.name}
+                                    />
+                                  </>
                                 ))}
                               <div
                                 className="w-8 h-8 bg-[#00000040] rounded-full !border !border-[#ffffff20] shadow-md hover:shadow-lg hover:-translate-y-[1px] cursor-pointer transition-all ease-in-out duration-300 flex items-center justify-center"
@@ -327,10 +340,10 @@ const MatchHistory = ({
                                         }
                                       />
                                       <ReactTltp
-                                        content={
-                                          items?.find((i) => i.key === item)
-                                            ?.name
-                                        }
+                                        variant="item"
+                                        content={items?.find(
+                                          (i) => i.key === item
+                                        )}
                                         id={
                                           items?.find((i) => i.key === item)
                                             ?.imageUrl
