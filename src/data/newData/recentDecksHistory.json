@@ -1,0 +1,876 @@
+{
+  "metaDecks": [
+    {
+      "key": "EUW1_7058136434",
+      "deckKey": "2EFDAF4E9EF689EB7BEF052984576E3D",
+      "puuid": "utO1XuevMEUIAfv1G0_Q7wsAZ3gneviUQ3QZoOh5yGurx4iRmLgrE29pJkfwJeEgRI7aZxCc_Foe7g",
+      "name": "EmptyBrain29",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741170701/pngtree-video-game-character-icon-for-gamer-graphics-illustration-vector-png-image_15944189_xigomc.png",
+      "tag": "EUW",
+      "lastRound": 40,
+      "playersEliminated": 2,
+      "totalDamageToPlayers": 150,
+      "dateTime": 1722616934929,
+      "duration": "32:40",
+      "level": 8,
+      "plays": 4456,
+      "pickRate": 17.96926115,
+      "winRate": 14.424968,
+      "topRate": 13.57059852,
+      "placement": 6,
+      "deck": {
+        "augments": ["SavageMomentum", "WhirlwindofChaos", "PowerGrowth"],
+        "champions": [
+          {
+            "key": "Rhiannon",
+            "coreRank": 1,
+            "items": ["TenguYoroi", "Wygar", "Aegis"]
+          },
+          {
+            "key": "Helga",
+            "coreRank": 5,
+            "items": ["Sword", "Kavacha", "Osirian"]
+          },
+          {
+            "key": "Arina",
+            "coreRank": 2,
+            "items": ["Nandaka", "Eaglewing", "Bayan"]
+          },
+          {
+            "key": "Durin",
+            "coreRank": 3,
+            "items": ["RuyiBang", "Frostguard", "RedHorn"]
+          },
+          {
+            "key": "Cerberus",
+            "coreRank": 1,
+            "items": ["Excalibur", "Excalibur", "Eaglewing"]
+          },
+          {
+            "key": "Tamamo",
+            "coreRank": 6,
+            "items": ["Vesta", "Aegis", "Wygar"]
+          },
+          {
+            "key": "Nergal",
+            "coreRank": 10,
+            "items": ["Jingong", "Helmet", "JinJia"]
+          },
+          {
+            "key": "Inugami",
+            "coreRank": 2,
+            "items": ["Frostguard", "KoreanBow", "WoodenWand"]
+          },
+          {
+            "key": "Grommash",
+            "coreRank": 8,
+            "items": ["Wygar", "Simurgh", "Kiriti"]
+          },
+          {
+            "key": "Ahriman",
+            "coreRank": 1,
+            "items": ["Nightfang", "Bloodaxe", "Kavacha"]
+          }
+        ],
+        "traits": [
+          {
+            "key": "Chaos",
+            "numUnits": 6
+          },
+          {
+            "key": "WildRush",
+            "numUnits": 7
+          },
+          {
+            "key": "Druid",
+            "numUnits": 8
+          },
+          {
+            "key": "Blockbuster",
+            "numUnits": 6
+          }
+        ],
+        "forces": [
+          {
+            "key": "Light",
+            "numUnits": 4
+          },
+          {
+            "key": "Fire",
+            "numUnits": 3
+          },
+          {
+            "key": "Water",
+            "numUnits": 1
+          },
+          {
+            "key": "Dark",
+            "numUnits": 1
+          }
+        ]
+      }
+    },
+    {
+      "key": "EUW1_7058218518",
+      "deckKey": "506F7210B55B5B95602057313E59482D",
+      "puuid": "utO1XuevMEUIAfv1G0_Q7wsAZ3gneviUQ3QZoOh5yGurx4iRmLgrE29pJkfwJeEgRI7aZxCc_Foe7g",
+      "name": "Guardian",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741170701/pngtree-video-game-character-icon-for-gamer-graphics-illustration-vector-png-image_15944189_xigomc.png",
+      "tag": "EUW",
+      "lastRound": 40,
+      "playersEliminated": 2,
+      "totalDamageToPlayers": 150,
+      "dateTime": 1722616934929,
+      "duration": "32:40",
+      "level": 8,
+      "plays": 7555,
+      "pickRate": 14.70514453,
+      "winRate": 22.2576108,
+      "topRate": 17.74271787,
+      "placement": 10,
+      "deck": {
+        "augments": ["SealoftheBlockbuster", "FreeShoping", "LevelBoost"],
+        "champions": [
+          {
+            "key": "Vespera",
+            "coreRank": 7,
+            "items": ["Cloak", "Jingong", "RuyiBang"]
+          },
+          {
+            "key": "Fafnir",
+            "coreRank": 2,
+            "items": ["Helmet", "Sword", "WoodenBow"]
+          },
+          {
+            "key": "Leizu",
+            "coreRank": 4,
+            "items": ["Vesta", "Aegis", "Wygar"]
+          },
+          {
+            "key": "Varcolac",
+            "coreRank": 10,
+            "items": ["Pendragon’sCrown", "ScaleHelmet", "KoreanBow"]
+          },
+          {
+            "key": "Yama",
+            "coreRank": 1,
+            "items": ["LeaderArmor", "SilverBullet", "WizardHat"]
+          },
+          {
+            "key": "Tian Long",
+            "coreRank": 2,
+            "items": ["Sword", "Kavacha", "Osirian"]
+          },
+          {
+            "key": "Podarge",
+            "coreRank": 1,
+            "items": ["Stormhorn", "EyeOfRa", "Vesta"]
+          },
+          {
+            "key": "Garmr",
+            "coreRank": 2,
+            "items": ["Gladius", "Gladius", "Simurgh"]
+          },
+          {
+            "key": "Aurora",
+            "coreRank": 8,
+            "items": ["Nandaka", "Eaglewing", "Bayan"]
+          },
+          {
+            "key": "Tatsu",
+            "coreRank": 9,
+            "items": ["WoodenWand", "PlateArmor", "Aetheris"]
+          }
+        ],
+        "traits": [
+          {
+            "key": "Guardian",
+            "numUnits": 5
+          },
+          {
+            "key": "Druid",
+            "numUnits": 7
+          },
+          {
+            "key": "Druid",
+            "numUnits": 8
+          },
+          {
+            "key": "Blockbuster",
+            "numUnits": 10
+          },
+          {
+            "key": "Fury",
+            "numUnits": 5
+          }
+        ],
+        "forces": [
+          {
+            "key": "Dark",
+            "numUnits": 1
+          },
+          {
+            "key": "Light",
+            "numUnits": 1
+          },
+          {
+            "key": "Storm",
+            "numUnits": 4
+          }
+        ]
+      }
+    },
+    {
+      "key": "EUW1_7057670579",
+      "deckKey": "7D1EEF02413E7232712BFDDEBD238798",
+      "puuid": "utO1XuevMEUIAfv1G0_Q7wsAZ3gneviUQ3QZoOh5yGurx4iRmLgrE29pJkfwJeEgRI7aZxCc_Foe7g",
+      "name": "GirlCrush",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741170701/pngtree-video-game-character-icon-for-gamer-graphics-illustration-vector-png-image_15944189_xigomc.png",
+      "tag": "EUW",
+      "lastRound": 40,
+      "playersEliminated": 2,
+      "totalDamageToPlayers": 150,
+      "dateTime": 1722616934929,
+      "duration": "32:40",
+      "level": 8,
+      "plays": 7711,
+      "pickRate": 15.59636597,
+      "winRate": 24.6571614,
+      "topRate": 27.43989692,
+      "placement": 5,
+      "deck": {
+        "augments": ["SpectralShift", "LevelSpins", "SpecialRandomizer"],
+        "champions": [
+          {
+            "key": "Shesha",
+            "coreRank": 2,
+            "items": ["Kunee", "Kiriti", "LeaderArmor"]
+          },
+          {
+            "key": "Shinigami",
+            "coreRank": 4,
+            "items": ["ScaleHelmet", "Osirian", "EyeOfRa"]
+          },
+          {
+            "key": "Grimgor",
+            "coreRank": 5,
+            "items": ["Simurgh", "Evalach", "Kaminari"]
+          },
+          {
+            "key": "Orphne",
+            "coreRank": 2,
+            "items": ["Bayan", "Raikiri", "Gladius"]
+          },
+          {
+            "key": "Tiamat",
+            "coreRank": 9,
+            "items": ["EyeOfRa", "Darius", "Raikiri"]
+          },
+          {
+            "key": "Nordri",
+            "coreRank": 3,
+            "items": ["SilverBullet", "Bayan", "Cloak"]
+          },
+          {
+            "key": "Zarok",
+            "coreRank": 3,
+            "items": ["Kiriti", "Pendragon’sCrown", "Kunee"]
+          },
+          {
+            "key": "Karna",
+            "coreRank": 10,
+            "items": ["Simurgh", "Evalach", "Kaminari"]
+          },
+          {
+            "key": "Aello",
+            "coreRank": 10,
+            "items": ["ScaleHelmet", "Osirian", "EyeOfRa"]
+          },
+          {
+            "key": "Alberich",
+            "coreRank": 7,
+            "items": ["Raikiri", "Stormhorn", "Jingong"]
+          }
+        ],
+        "traits": [
+          {
+            "key": "GirlCrush",
+            "numUnits": 10
+          },
+          {
+            "key": "Blockbuster",
+            "numUnits": 6
+          },
+          {
+            "key": "Guardian",
+            "numUnits": 2
+          },
+          {
+            "key": "WildRush",
+            "numUnits": 8
+          },
+          {
+            "key": "Druid",
+            "numUnits": 5
+          }
+        ],
+        "forces": [
+          {
+            "key": "Fire",
+            "numUnits": 2
+          },
+          {
+            "key": "Dark",
+            "numUnits": 2
+          },
+          {
+            "key": "Water",
+            "numUnits": 4
+          }
+        ]
+      }
+    },
+    {
+      "key": "EUW1_7056875719",
+      "deckKey": "E394E1AD3EA84FE64D77B7AA06EC2538",
+      "puuid": "utO1XuevMEUIAfv1G0_Q7wsAZ3gneviUQ3QZoOh5yGurx4iRmLgrE29pJkfwJeEgRI7aZxCc_Foe7g",
+      "name": "Blockbuster",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741170701/pngtree-video-game-character-icon-for-gamer-graphics-illustration-vector-png-image_15944189_xigomc.png",
+      "tag": "EUW",
+      "lastRound": 40,
+      "playersEliminated": 2,
+      "totalDamageToPlayers": 150,
+      "dateTime": 1722616934929,
+      "duration": "32:40",
+      "level": 8,
+      "plays": 7647,
+      "pickRate": 12.91301956,
+      "winRate": 17.95465678,
+      "topRate": 19.21719889,
+      "placement": 6,
+      "deck": {
+        "augments": [
+          "Berserker’sWrath",
+          "CinematicMasterpiece",
+          "SpectralShift"
+        ],
+        "champions": [
+          {
+            "key": "Morgana",
+            "coreRank": 9,
+            "items": ["JinJia", "RedHorn", "Sekhem"]
+          },
+          {
+            "key": "Nicothoe",
+            "coreRank": 9,
+            "items": ["Gladius", "Gladius", "Simurgh"]
+          },
+          {
+            "key": "Yamata",
+            "coreRank": 8,
+            "items": ["Aetheris", "WizardHat", "Nightfang"]
+          },
+          {
+            "key": "Akane",
+            "coreRank": 6,
+            "items": ["Nightfang", "Bloodaxe", "Kavacha"]
+          },
+          {
+            "key": "Yuki Onna",
+            "coreRank": 1,
+            "items": ["Sekhem", "Aetheris", "EagleBonnet"]
+          },
+          {
+            "key": "Ravana",
+            "coreRank": 10,
+            "items": ["Osirian", "Nandaka", "Nandaka"]
+          },
+          {
+            "key": "Zhuque",
+            "coreRank": 10,
+            "items": ["Stormhorn", "EyeOfRa", "Vesta"]
+          },
+          {
+            "key": "Callista",
+            "coreRank": 2,
+            "items": ["Aetheris", "WizardHat", "Nightfang"]
+          },
+          {
+            "key": "Merlin",
+            "coreRank": 10,
+            "items": ["Sekhem", "Aetheris", "EagleBonnet"]
+          },
+          {
+            "key": "Yumi",
+            "coreRank": 10,
+            "items": ["Kunee", "Kiriti", "LeaderArmor"]
+          }
+        ],
+        "traits": [
+          {
+            "key": "Blockbuster",
+            "numUnits": 9
+          },
+          {
+            "key": "Mirage",
+            "numUnits": 4
+          },
+          {
+            "key": "Fury",
+            "numUnits": 6
+          },
+          {
+            "key": "WildRush",
+            "numUnits": 2
+          }
+        ],
+        "forces": [
+          {
+            "key": "Storm",
+            "numUnits": 2
+          },
+          {
+            "key": "Dark",
+            "numUnits": 2
+          },
+          {
+            "key": "Light",
+            "numUnits": 2
+          },
+          {
+            "key": "Water",
+            "numUnits": 1
+          }
+        ]
+      }
+    },
+    {
+      "key": "EUW1_7058136434",
+      "deckKey": "2A5B98C270265F639E74FAE8BCE81006",
+      "puuid": "utO1XuevMEUIAfv1G0_Q7wsAZ3gneviUQ3QZoOh5yGurx4iRmLgrE29pJkfwJeEgRI7aZxCc_Foe7g",
+      "name": "WildRush",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741170701/pngtree-video-game-character-icon-for-gamer-graphics-illustration-vector-png-image_15944189_xigomc.png",
+      "tag": "EUW",
+      "lastRound": 40,
+      "playersEliminated": 2,
+      "totalDamageToPlayers": 150,
+      "dateTime": 1722616934929,
+      "duration": "32:40",
+      "level": 8,
+      "plays": 1075,
+      "pickRate": 16.23883621,
+      "winRate": 24.46228291,
+      "topRate": 24.84256695,
+      "placement": 9,
+      "deck": {
+        "augments": [
+          "CinematicMasterpiece",
+          "HealthyBoost",
+          "FearlessVanguard"
+        ],
+        "champions": [
+          {
+            "key": "Lamia",
+            "coreRank": 5,
+            "items": ["Kavacha", "TenguYoroi", "Sword"]
+          },
+          {
+            "key": "Gorgon",
+            "coreRank": 7,
+            "items": ["Evalach", "Nightfang", "Evalach"]
+          },
+          {
+            "key": "Leviathan",
+            "coreRank": 3,
+            "items": ["Aegis", "RuyiBang", "GayaArmor"]
+          },
+          {
+            "key": "Lyra",
+            "coreRank": 3,
+            "items": ["WoodenBow", "JinJia", "SilverBullet"]
+          },
+          {
+            "key": "Ignatius",
+            "coreRank": 5,
+            "items": ["Eaglewing", "WoodenWand", "PlateArmor"]
+          },
+          {
+            "key": "Jormungandr",
+            "coreRank": 7,
+            "items": ["EagleBonnet", "Cloak", "Bloodaxe"]
+          },
+          {
+            "key": "Maximus",
+            "coreRank": 7,
+            "items": ["Bayan", "Raikiri", "Gladius"]
+          },
+          {
+            "key": "Gulmok",
+            "coreRank": 8,
+            "items": ["Evalach", "Nightfang", "Evalach"]
+          },
+          {
+            "key": "Jujak",
+            "coreRank": 5,
+            "items": ["Jingong", "Helmet", "JinJia"]
+          },
+          {
+            "key": "Eclipse",
+            "coreRank": 2,
+            "items": ["Kavacha", "TenguYoroi", "Sword"]
+          }
+        ],
+        "traits": [
+          {
+            "key": "WildRush",
+            "numUnits": 2
+          },
+          {
+            "key": "Chaos",
+            "numUnits": 5
+          },
+          {
+            "key": "GirlCrush",
+            "numUnits": 3
+          }
+        ],
+        "forces": [
+          {
+            "key": "Water",
+            "numUnits": 3
+          },
+          {
+            "key": "Storm",
+            "numUnits": 2
+          },
+          {
+            "key": "Fire",
+            "numUnits": 4
+          },
+          {
+            "key": "Light",
+            "numUnits": 2
+          }
+        ]
+      }
+    },
+    {
+      "key": "EUW1_7058136434",
+      "deckKey": "211A62F7EDCDC23D58A25EEB76D06D8D",
+      "puuid": "utO1XuevMEUIAfv1G0_Q7wsAZ3gneviUQ3QZoOh5yGurx4iRmLgrE29pJkfwJeEgRI7aZxCc_Foe7g",
+      "name": "Druid",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741170701/pngtree-video-game-character-icon-for-gamer-graphics-illustration-vector-png-image_15944189_xigomc.png",
+      "tag": "EUW",
+      "lastRound": 40,
+      "playersEliminated": 2,
+      "totalDamageToPlayers": 150,
+      "dateTime": 1722616934929,
+      "duration": "32:40",
+      "level": 8,
+      "plays": 7086,
+      "pickRate": 19.33884961,
+      "winRate": 11.84847037,
+      "topRate": 25.63392157,
+      "placement": 9,
+      "deck": {
+        "augments": ["Director'sPrecision", "LastHope", "PhantomReflex"],
+        "champions": [
+          {
+            "key": "Huli Jing",
+            "coreRank": 9,
+            "items": ["Bloodaxe", "Vesta", "Galea"]
+          },
+          {
+            "key": "Sepulcris",
+            "coreRank": 3,
+            "items": ["PlateArmor", "Galea", "Darius"]
+          },
+          {
+            "key": "Elysia",
+            "coreRank": 10,
+            "items": ["Kiriti", "Pendragon’sCrown", "Kunee"]
+          },
+          {
+            "key": "Seraphina",
+            "coreRank": 7,
+            "items": ["Darius", "Kaminari", "TenguYoroi"]
+          },
+          {
+            "key": "Casimir",
+            "coreRank": 6,
+            "items": ["EagleBonnet", "Cloak", "Bloodaxe"]
+          },
+          {
+            "key": "Keres",
+            "coreRank": 6,
+            "items": ["LeaderArmor", "SilverBullet", "WizardHat"]
+          },
+          {
+            "key": "Morgoth",
+            "coreRank": 5,
+            "items": ["WoodenBow", "JinJia", "SilverBullet"]
+          },
+          {
+            "key": "Sindri",
+            "coreRank": 7,
+            "items": ["Aegis", "RuyiBang", "GayaArmor"]
+          },
+          {
+            "key": "Meliae",
+            "coreRank": 4,
+            "items": ["TenguYoroi", "Wygar", "Aegis"]
+          },
+          {
+            "key": "Pesta",
+            "coreRank": 8,
+            "items": ["KoreanBow", "Sekhem", "Excalibur"]
+          }
+        ],
+        "traits": [
+          {
+            "key": "Druid",
+            "numUnits": 7
+          },
+          {
+            "key": "Guardian",
+            "numUnits": 5
+          },
+          {
+            "key": "Blockbuster",
+            "numUnits": 2
+          }
+        ],
+        "forces": [
+          {
+            "key": "Light",
+            "numUnits": 1
+          },
+          {
+            "key": "Fire",
+            "numUnits": 4
+          },
+          {
+            "key": "Storm",
+            "numUnits": 4
+          },
+          {
+            "key": "Water",
+            "numUnits": 2
+          }
+        ]
+      }
+    },
+    {
+      "key": "EUW1_7058136434",
+      "deckKey": "D7A61F64A94A4AF67C58DDC3B0F70713",
+      "puuid": "utO1XuevMEUIAfv1G0_Q7wsAZ3gneviUQ3QZoOh5yGurx4iRmLgrE29pJkfwJeEgRI7aZxCc_Foe7g",
+      "name": "Fury",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741170701/pngtree-video-game-character-icon-for-gamer-graphics-illustration-vector-png-image_15944189_xigomc.png",
+      "tag": "EUW",
+      "lastRound": 40,
+      "playersEliminated": 2,
+      "totalDamageToPlayers": 150,
+      "dateTime": 1722616934929,
+      "duration": "32:40",
+      "level": 8,
+      "plays": 8100,
+      "pickRate": 12.91742958,
+      "winRate": 27.81116657,
+      "topRate": 25.47495628,
+      "placement": 9,
+      "deck": {
+        "augments": ["LevelBoost", "LuckyDrop", "Protector’sOath"],
+        "champions": [
+          {
+            "key": "Oinari",
+            "coreRank": 2,
+            "items": ["Galea", "GayaArmor", "Frostguard"]
+          },
+          {
+            "key": "Vritra",
+            "coreRank": 10,
+            "items": ["Wygar", "Simurgh", "Kiriti"]
+          },
+          {
+            "key": "Ao Guang",
+            "coreRank": 9,
+            "items": ["Osirian", "Nandaka", "Nandaka"]
+          },
+          {
+            "key": "Lumina",
+            "coreRank": 4,
+            "items": ["Frostguard", "KoreanBow", "WoodenWand"]
+          },
+          {
+            "key": "Celaeno",
+            "coreRank": 2,
+            "items": ["RedHorn", "WoodenBow", "ScaleHelmet"]
+          },
+          {
+            "key": "Artemis",
+            "coreRank": 1,
+            "items": ["EyeOfRa", "Darius", "Raikiri"]
+          },
+          {
+            "key": "Eitri",
+            "coreRank": 5,
+            "items": ["Excalibur", "Excalibur", "Eaglewing"]
+          },
+          {
+            "key": "Kiyohime",
+            "coreRank": 3,
+            "items": ["RedHorn", "WoodenBow", "ScaleHelmet"]
+          },
+          {
+            "key": "Kaliya",
+            "coreRank": 9,
+            "items": ["Darius", "Kaminari", "TenguYoroi"]
+          },
+          {
+            "key": "Garou",
+            "coreRank": 6,
+            "items": ["Sekhem", "Aetheris", "EagleBonnet"]
+          }
+        ],
+        "traits": [
+          {
+            "key": "Fury",
+            "numUnits": 2
+          },
+          {
+            "key": "GirlCrush",
+            "numUnits": 4
+          },
+          {
+            "key": "Chaos",
+            "numUnits": 8
+          },
+          {
+            "key": "Mirage",
+            "numUnits": 6
+          }
+        ],
+        "forces": [
+          {
+            "key": "Dark",
+            "numUnits": 4
+          },
+          {
+            "key": "Fire",
+            "numUnits": 1
+          },
+          {
+            "key": "Light",
+            "numUnits": 4
+          }
+        ]
+      }
+    },
+    {
+      "key": "EUW1_7058136434",
+      "deckKey": "AEC50635AD5A0A7B1051168C746DBA50",
+      "puuid": "utO1XuevMEUIAfv1G0_Q7wsAZ3gneviUQ3QZoOh5yGurx4iRmLgrE29pJkfwJeEgRI7aZxCc_Foe7g",
+      "name": "Mirage",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1741170701/pngtree-video-game-character-icon-for-gamer-graphics-illustration-vector-png-image_15944189_xigomc.png",
+      "tag": "EUW",
+      "lastRound": 40,
+      "playersEliminated": 2,
+      "totalDamageToPlayers": 150,
+      "dateTime": 1722616934929,
+      "duration": "32:40",
+      "level": 8,
+      "plays": 5612,
+      "pickRate": 29.65909591,
+      "winRate": 18.20419177,
+      "topRate": 15.75606265,
+      "placement": 8,
+      "deck": {
+        "augments": ["FeralCovenant", "BoxOfficeSmash", "RageborneFury"],
+        "champions": [
+          {
+            "key": "Aquarius",
+            "coreRank": 7,
+            "items": ["KoreanBow", "Sekhem", "Excalibur"]
+          },
+          {
+            "key": "Azog",
+            "coreRank": 9,
+            "items": ["SilverBullet", "Bayan", "Cloak"]
+          },
+          {
+            "key": "Daji",
+            "coreRank": 7,
+            "items": ["GayaArmor", "Kunee", "Pendragon’sCrown"]
+          },
+          {
+            "key": "Rei",
+            "coreRank": 3,
+            "items": ["WoodenWand", "PlateArmor", "Aetheris"]
+          },
+          {
+            "key": "Astarok",
+            "coreRank": 7,
+            "items": ["Raikiri", "Stormhorn", "Jingong"]
+          },
+          {
+            "key": "Anastasia",
+            "coreRank": 9,
+            "items": ["Cloak", "Jingong", "RuyiBang"]
+          },
+          {
+            "key": "Ragnar",
+            "coreRank": 5,
+            "items": ["Kaminari", "LeaderArmor", "Stormhorn"]
+          },
+          {
+            "key": "Hermes",
+            "coreRank": 9,
+            "items": ["Bloodaxe", "Vesta", "Galea"]
+          },
+          {
+            "key": "Seiryu",
+            "coreRank": 1,
+            "items": ["Galea", "GayaArmor", "Frostguard"]
+          },
+          {
+            "key": "Siren",
+            "coreRank": 7,
+            "items": ["Jingong", "Helmet", "JinJia"]
+          }
+        ],
+        "traits": [
+          {
+            "key": "Mirage",
+            "numUnits": 5
+          },
+          {
+            "key": "Fury",
+            "numUnits": 10
+          },
+          {
+            "key": "GirlCrush",
+            "numUnits": 7
+          },
+          {
+            "key": "Chaos",
+            "numUnits": 10
+          }
+        ],
+        "forces": [
+          {
+            "key": "Fire",
+            "numUnits": 1
+          },
+          {
+            "key": "Light",
+            "numUnits": 1
+          },
+          {
+            "key": "Dark",
+            "numUnits": 3
+          }
+        ]
+      }
+    }
+  ]
+}
