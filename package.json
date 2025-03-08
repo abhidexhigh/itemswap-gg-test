@@ -43,7 +43,6 @@
     "recharts": "^2.15.1",
     "styled-components": "^5.3.6",
     "swiper": "^11.2.5",
-    "tailwind-scrollbar": "^4.0.1",
     "three": "^0.168.0"
   },
   "devDependencies": {
