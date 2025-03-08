@@ -88,15 +88,17 @@ const RecentDecksCard = ({
                 </div>
                 {champions &&
                   champions.length > 0 &&
-                  getRandomCharacters(champions).map((champion, j) => (
-                    <RecentDecksItem
-                      key={j}
-                      champion={champion}
-                      setSelectedChampion={setSelectedChampion}
-                      index={j}
-                      forces={forces}
-                    />
-                  ))}
+                  getRandomCharacters(champions)
+                    .sort((a, b) => a.type.localeCompare(b.type))
+                    .map((champion, j) => (
+                      <RecentDecksItem
+                        key={j}
+                        champion={champion}
+                        setSelectedChampion={setSelectedChampion}
+                        index={j}
+                        forces={forces}
+                      />
+                    ))}
               </div>
             </div>
           </>

@@ -67,7 +67,6 @@ const ProjectItems = () => {
     },
   } = Comps;
   const { metaDecks } = RecentDecksHistory;
-  console.log("Meta Decks", metaDecks);
   const { champions } = data?.refs;
   const { items } = data?.refs;
   const { traits } = data?.refs;
@@ -75,27 +74,50 @@ const ProjectItems = () => {
   const { forces } = data?.refs;
   const [compsData, setCompsData] = useState(metaDecks);
 
+  // Fisher-Yates shuffle function to randomize an array in-place
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  // Group champions by type
+  const championsByType = {};
+  champions.forEach((champion) => {
+    if (!championsByType[champion.type]) {
+      championsByType[champion.type] = [];
+    }
+    championsByType[champion.type].push(champion);
+  });
+
+  // For each type, shuffle the group and keep only 2 champions
+  const filteredChampions = [];
+  for (const type in championsByType) {
+    const group = championsByType[type];
+    // Shuffle a copy of the group array to avoid modifying the original
+    const selected = shuffle([...group]).slice(0, 2);
+    // Add the selected champions back to the final array
+    filteredChampions.push(...selected);
+  }
+
   const handleFilterChange = (type, key) => {
-    console.log("Type", type, key);
     if (type === "trait") {
       if (selectedTrait === key) {
-        console.log("hi");
         setSelectedTrait(null);
         setCompsData(metaDecks);
       } else {
         setSelectedTrait(key);
-        console.log(metaDecks);
         const filteredTraits = metaDecks.filter((deck) =>
           deck.deck.traits.some((trait) => trait.key === key)
         );
-        console.log("Trait", key, selectedTrait, filteredTraits);
         setCompsData(filteredTraits);
       }
       setSelectedChampion(null);
       setSelectedItem(null);
     } else if (type === "force") {
       if (selectedTrait === key) {
-        console.log("hi");
         setSelectedTrait(null);
         setCompsData(metaDecks);
       } else {
@@ -105,7 +127,6 @@ const ProjectItems = () => {
             (force) => force.key.toLowerCase() === key.toLowerCase()
           )
         );
-        // console.log("Trait", key, selectedTrait, filteredTraits);
         setCompsData(filteredTraits);
       }
       setSelectedChampion(null);
@@ -143,7 +164,7 @@ const ProjectItems = () => {
   };
 
   // Function to arrange champions by cost start
-  const groupedByCost = champions.reduce((acc, champion) => {
+  const groupedByCost = filteredChampions.reduce((acc, champion) => {
     const { cost } = champion;
     if (!acc[cost]) {
       acc[cost] = [];

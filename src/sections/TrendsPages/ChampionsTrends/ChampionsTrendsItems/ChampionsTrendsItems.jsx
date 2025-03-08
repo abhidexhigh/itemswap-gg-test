@@ -118,7 +118,7 @@ const ProjectItems = () => {
             onButtonClick={handleButtonClick}
           />
         </div>
-        <div className="px-2">
+        <div className="mb-2 md:mb-0 px-2">
           <input
             type="text"
             value={searchValue}
@@ -145,9 +145,9 @@ const ProjectItems = () => {
       /> */}
       <div className="projects-row overflow-auto md:overflow-hidden">
         <div>
-          <table className="w-[900px] md:w-full border-separate border-spacing-y-2">
+          <table className="w-[900px] md:w-full lg:border-separate lg:border-spacing-y-2">
             <tr className="bg-[#1a1b31]">
-              <th className="rounded-l-lg">
+              <th className="lg:rounded-l-lg">
                 <p className="p-0 text-sm !mx-2 my-2 md:text-[14px]">#</p>
               </th>
               <th
@@ -262,7 +262,7 @@ const ProjectItems = () => {
                   {others?.threeStarsRank}
                 </p>
               </th>
-              <th className="rounded-r-lg">
+              <th className="lg:rounded-r-lg">
                 <p className="p-0 text-sm my-auto md:text-[16px] text-left">
                   {others?.recommended} {others.items}
                 </p>
@@ -275,10 +275,10 @@ const ProjectItems = () => {
                     className="m-2 bg-[#1a1b31] hover:bg-[#292a4ae0]"
                     key={index}
                   >
-                    <td className="ml-2 rounded-l-lg">
+                    <td className="ml-2 lg:rounded-l-lg">
                       <div className="text-center">{index + 1}</div>
                     </td>
-                    <td className="py-2">
+                    <td className="py-0.5 md:py-2">
                       <div>
                         <div className="flex justify-start items-center">
                           <CardImage
@@ -300,42 +300,42 @@ const ProjectItems = () => {
                         </div>
                       </div>
                     </td>
-                    <td className="py-2">
+                    <td className="py-0.5 md:py-2">
                       <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
                         #{champion?.avgPlacement}
                       </p>
                     </td>
-                    <td className="py-2">
+                    <td className="py-0.5 md:py-2">
                       <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
                         {((champion?.tops * 100) / champion?.plays).toFixed(2)}%
                       </p>
                     </td>
-                    <td className="py-2">
+                    <td className="py-0.5 md:py-2">
                       <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
                         {((champion?.wins * 100) / champion?.plays).toFixed(2)}%
                       </p>
                     </td>
-                    <td className="py-2">
+                    <td className="py-0.5 md:py-2">
                       <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
                         {(champion?.pickRate * 100).toFixed(2)}%
                       </p>
                     </td>
-                    <td className="py-2">
+                    <td className="py-0.5 md:py-2">
                       <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
                         {champion?.plays.toLocaleString("en-US")}
                       </p>
                     </td>
-                    <td className="py-2">
+                    <td className="py-0.5 md:py-2">
                       <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
                         {(champion?.threeStarPercentage * 100).toFixed(2)}%
                       </p>
                     </td>
-                    <td className="py-2">
+                    <td className="py-0.5 md:py-2">
                       <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
                         #{(champion?.threeStarRank).toFixed(2)}
                       </p>
                     </td>
-                    <td className="rounded-r-lg">
+                    <td className="lg:rounded-r-lg">
                       <div className="flex justify-start items-center">
                         {champions
                           .find((champ) => champ.key === champion.key)
