@@ -128,9 +128,9 @@ const ProjectItems = () => {
         </div>
         <div className="projects-row overflow-auto md:overflow-hidden">
           <div>
-            <table className="w-[900px] md:w-full table-auto border-separate border-spacing-y-2">
+            <table className="w-[900px] md:w-full table-auto md:border-separate md:border-spacing-y-2">
               <tr className="bg-[#1a1b31]">
-                <th className="rounded-l-lg">
+                <th className="md:rounded-l-lg">
                   <p className="p-0 text-sm !mx-2 my-2 md:text-[14px]">#</p>
                 </th>
                 <th
@@ -235,7 +235,7 @@ const ProjectItems = () => {
                     </span>
                   </p>
                 </th>
-                <th className="th10 rounded-r-lg">
+                <th className="th10 md:rounded-r-lg">
                   <p className="p-0 text-sm text-center !mx-2 my-2 md:text-[16px]">
                     {others?.top3} {others?.champions}
                   </p>
@@ -243,7 +243,7 @@ const ProjectItems = () => {
               </tr>
               {metaDeckTraitStatsData.map((metaTrait, index) => (
                 <tr className="m-2 bg-[#1a1b31] hover:bg-[#292a4ae0]">
-                  <td className="rounded-l-lg">
+                  <td className="md:rounded-l-lg">
                     <div className="text-center">{index + 1}</div>
                   </td>
                   <td className="py-2">
@@ -331,7 +331,7 @@ const ProjectItems = () => {
                       {metaTrait?.plays.toLocaleString("en-US")}
                     </p>
                   </td>
-                  <td className="rounded-r-lg py-2">
+                  <td className="md:rounded-r-lg py-2">
                     <div className="flex justify-center items-center gap-1 md:gap-2">
                       {metaTrait?.traitChampionStats
                         ?.slice(0, 3)

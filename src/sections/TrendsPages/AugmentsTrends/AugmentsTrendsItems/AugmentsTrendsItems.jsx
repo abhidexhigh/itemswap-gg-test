@@ -98,10 +98,10 @@ const ProjectItems = () => {
         </div>
         <div className="projects-row overflow-auto md:overflow-hidden">
           <div>
-            <table className="w-full border-separate border-spacing-y-2">
+            <table className="w-full md:border-separate md:border-spacing-y-2">
               <thead>
                 <tr className=" bg-[#1a1b31]">
-                  <th className="!rounded-l-lg">
+                  <th className="md:!rounded-l-lg">
                     <p className="p-0 text-sm !mx-2 my-2 md:text-[14px]"># </p>
                   </th>
                   <th
@@ -241,7 +241,7 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={` cursor-pointer !rounded-r-lg`}
+                    className={` cursor-pointer md:!rounded-r-lg`}
                     onClick={() => requestSort("plays")}
                   >
                     <p className="p-0 text-sm my-auto md:text-[16px] text-left">
@@ -276,7 +276,7 @@ const ProjectItems = () => {
                         item.key?.split("_")[item?.key?.split("_").length - 1]
                     )?.key && (
                       <tr className="m-2 hover:bg-[#292a4ae0] border-[1px] border-[#ffffff50]">
-                        <td className="ml-2 !rounded-l-lg">
+                        <td className="ml-2 md:!rounded-l-lg">
                           <div className="text-center text-lg">{index + 1}</div>
                         </td>
                         <td>
@@ -376,7 +376,7 @@ const ProjectItems = () => {
                             {(item?.pickRate * 100).toFixed(2)}%
                           </p>
                         </td>
-                        <td className="!rounded-r-lg">
+                        <td className="md:!rounded-r-lg">
                           <p className="p-0 text-xs md:text-lg text-[#fff] mb-0">
                             {item?.plays.toLocaleString("en-US")}
                           </p>

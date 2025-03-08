@@ -127,9 +127,9 @@ const ProjectItems = () => {
         </div>
         <div className="projects-row overflow-auto md:overflow-hidden">
           <div>
-            <table className="w-[900px] md:w-full border-separate border-spacing-y-2">
+            <table className="w-[900px] md:w-full md:border-separate md:border-spacing-y-2">
               <tr className="bg-[#1a1b31]">
-                <th className=" rounded-l-lg">
+                <th className="md:rounded-l-lg">
                   <p className="p-0 text-sm !mx-2 my-2 md:text-[14px]">#</p>
                 </th>
                 <th>
@@ -239,7 +239,7 @@ const ProjectItems = () => {
                     {others?.synergy} {others?.items}
                   </p>
                 </th>
-                <th className="text-center rounded-r-lg">
+                <th className="text-center md:rounded-r-lg">
                   <p className="p-0 text-sm !mx-2 my-2 md:text-[16px]">
                     {others?.top3} {others?.champions}
                   </p>
@@ -252,7 +252,7 @@ const ProjectItems = () => {
                       className="m-2 bg-[#1a1b31] hover:bg-[#292a4ae0]"
                       key={index}
                     >
-                      <td className="ml-2 rounded-l-lg">
+                      <td className="ml-2 md:rounded-l-lg">
                         <div className="text-center">{index + 1}</div>
                       </td>
                       <td className="py-2">
@@ -369,7 +369,7 @@ const ProjectItems = () => {
                             ))}
                         </div>
                       </td>
-                      <td className="rounded-r-lg py-2">
+                      <td className="md:rounded-r-lg py-2">
                         <div className="flex justify-start items-center gap-1 md:gap-2">
                           {item?.itemChampionStats
                             ?.slice(0, 3)
