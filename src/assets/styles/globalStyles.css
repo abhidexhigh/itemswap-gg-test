@@ -1,0 +1,214 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@font-face {
+  font-family: 'CeraPro';
+  src: url('/fonts/cerapro/CERAPRO-BOLD.ttf') format('truetype');
+  font-weight: 700;
+  /* Bold */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'CeraPro';
+  src: url('/fonts/cerapro/CERAPRO-MEDIUM.ttf') format('truetype');
+  font-weight: 500;
+  /* Medium */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'CeraPro';
+  src: url('/fonts/cerapro/CERAPRO-MEDIUMITALIC.ttf') format('truetype');
+  font-weight: 500;
+  /* Medium */
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'CeraPro';
+  src: url('/fonts/cerapro/CERAPRO-REGULAR.ttf') format('truetype');
+  font-weight: 400;
+  /* Regular */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'CeraPro';
+  src: url('/fonts/cerapro/CERAPRO-REGULARITALIC.ttf') format('truetype');
+  font-weight: 400;
+  /* Regular */
+  font-style: italic;
+}
+
+  .bg-glass {
+    background: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(2px);
+  }
+
+  .bg-transparent-20 {
+    height: 30px;
+      margin-top: 0px;
+      margin-bottom: -24px;
+      background-image: linear-gradient(90deg, rgba(36, 34, 62, 0.8) 0%, rgba(27, 26, 50, 0.8) 40%, rgba(27, 26, 50, 0.8) 60%, rgba(36, 34, 62, 0.8) 100%);
+  }
+
+.th1 {
+  /* @apply text-2xl; */
+  width: 60px;
+  @apply ml-2
+}
+
+/* .th2 {
+  width: 60px;
+} */
+
+.th3 {
+  width: 80px;
+}
+
+.th4 {
+  width: 80px;
+}
+
+.th5 {
+  width: 80px;
+}
+
+.th6 {
+  width: 80px;
+}
+
+.th7 {
+  width: 80px;
+}
+
+.th8 {
+  width: 80px;
+}
+
+.th9 {
+  width: 80px;
+}
+
+.th10 {
+  width: auto;
+}
+
+td {
+    @apply pt-3 pb-3;
+}
+
+.tr-hover {
+    background: radial-gradient(circle,
+                rgba(96, 79, 169, 0.58) -7%,
+                #1e1f35 30%);
+}
+
+erqDAs .react-tabs .react-tabs__tab {
+  position: relative;
+}
+
+.erqDAs .react-tabs__tab {
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.erqDAs .react-tabs .react-tabs__tab.react-tabs__tab--selected::before {
+  width: 100%;
+}
+
+.erqDAs .react-tabs .react-tabs__tab::before {
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  width: 0px;
+  height: 2px;
+  background: rgb(109, 74, 254);
+  content: "";
+  transition: all 0.4s ease-in-out 0s;
+}
+
+.erqDAs .item_sorting_list button,
+.erqDAs .react-tabs__tab button {
+  color: rgba(255, 255, 255, 0.7);
+  background: transparent;
+  font-family: "CeraPro", sans-serif;
+  position: relative;
+  text-transform: uppercase;
+  padding: 18px 28px;
+  transition: all 0.4s ease 0s;
+}
+
+/* .card {
+  position: relative;
+  width: 200px;
+  height: 250px;
+  border-radius: 14px;
+  z-index: 1111;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 6px #141414, -2px -2px 6px #0c0c0c;
+    background: #1b1a1aa6;
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(192, 192, 192, 0.3);
+} */
+
+.bg {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 190px;
+  height: 240px;
+  z-index: 2;
+  /* background: rgba(53, 52, 52, 0.95); */
+  background-image: url("https: //media.discordapp.net/attachments/1257269915614842990/1257269982795005962/New_Card_Iron_Frame.png?ex=6683cb6a&is=668279ea&hm=ead8508f289d68b7aee940558aaf69ef8397bf445c361fc9ff891460459a5731&=&format=webp&quality=lossless&width=876&height=1038");
+  /* backdrop-filter: blur(24px); */
+  /* border-radius: 10px;
+  overflow: hidden;
+  outline: 2px solid white; */
+}
+
+.blob {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: #ff0000;
+  opacity: 1;
+  filter: blur(12px);
+  animation: blob-bounce 5s infinite ease;
+}
+
+@keyframes blob-bounce {
+  0% {
+    transform: translate(-100%, -100%) translate3d(0, 0, 0);
+  }
+
+  25% {
+    transform: translate(-100%, -100%) translate3d(100%, 0, 0);
+  }
+
+  50% {
+    transform: translate(-100%, -100%) translate3d(100%, 100%, 0);
+  }
+
+  75% {
+    transform: translate(-100%, -100%) translate3d(0, 100%, 0);
+  }
+
+  100% {
+    transform: translate(-100%, -100%) translate3d(0, 0, 0);
+  }
+}

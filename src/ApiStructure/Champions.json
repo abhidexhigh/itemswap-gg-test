@@ -1,0 +1,58 @@
+{
+        "data": {
+          "season": "set11",
+          "champions": [
+            {
+              "key": "Dummy",
+              "ingameKey": null,
+              "name": "Dummy",
+              "imageUrl": "//cdn.lolchess.gg/upload/images/champions/Dummy_1689746192-tft_trainingdummy_donothing.png",
+              "traits": [],
+              "isHiddenGuide": true,
+              "isHiddenLanding": true,
+              "cost": [0, -1, -1],
+              "health": [625, 1125, 2025.0000000000002],
+              "attackDamage": [50, 75, 113],
+              "damagePerSecond": [10, 15, 23],
+              "attackRange": 0,
+              "attackSpeed": 0.2,
+              "armor": 30,
+              "magicalResistance": 30,
+              "skill": {
+                "name": "Training Dummy",
+                "imageUrl": "//cdn.lolchess.gg/upload/images/champion-skills/Dummy_1701222575-Dummy_1689746192-tft_trainingdummy_donothing.png",
+                "desc": "Use on a champion to spawn a movable target dummy nearby. Cannot be used in combat.",
+                "startingMana": 0,
+                "skillMana": 0,
+                "stats": []
+              },
+              "tags": ["hidden_guide", "hidden_landing"]
+            },
+            {
+              "key": "Voidspawn",
+              "ingameKey": null,
+              "name": "Voidspawn",
+              "imageUrl": "//cdn.lolchess.gg/upload/images/champions/Voidspawn_1712215958-VoidRemora.png",
+              "traits": [],
+              "isHiddenGuide": true,
+              "isHiddenLanding": true,
+              "cost": [0, -1, -1],
+              "health": [1000, 1800, 3240],
+              "attackDamage": [80, 120, 180],
+              "damagePerSecond": [60, 90, 135],
+              "attackRange": 1,
+              "attackSpeed": 0.75,
+              "armor": 30,
+              "magicalResistance": 30,
+              "skill": {
+                "name": "Voidborn",
+                "imageUrl": "//cdn.lolchess.gg/upload/images/champion-skills/Voidspawn_1712215709-voidspawn_squarefixed.png",
+                "desc": "The Voidspawn gains bonus Health and Attack Damage based on the current Stage.",
+                "startingMana": 0,
+                "skillMana": 0,
+                "stats": []
+              }
+            }
+          ]
+        }
+      }
