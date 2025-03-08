@@ -22,7 +22,7 @@ export default function IGORankingPage() {
         {metamaskModal && <MetamaskModal />}
         <Header />
         {/* <PageHeader currentPage="Traits" pageTitle="Traits" /> */}
-        <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
+        <div className="h-[360px] md:h-[360px] 2xl:h-[420px]" />
         {/* <Set10Tabs
           tabs={tabs}
           activeTab={activeTab}

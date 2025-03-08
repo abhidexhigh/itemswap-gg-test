@@ -20,7 +20,7 @@ export default function ItemsTrends() {
         {metamaskModal && <MetamaskModal />}
         <Header />
         {/* <PageHeader currentPage="ITEMS TRENDS" pageTitle="ITEMS TRENDS" /> */}
-        <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
+        <div className="h-[360px] md:h-[360px] 2xl:h-[420px]" />
         <div className="backdrop-blur-md">
           <div className="container">
             <TrendsNav selected="itemsTrends" />

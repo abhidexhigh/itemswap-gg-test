@@ -347,7 +347,7 @@ const NavWrapper = styled.nav`
       width: 180px;
       .logo {
         img {
-          width: 200px;
+          // width: 200px;
         }
       }
     }

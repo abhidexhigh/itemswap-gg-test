@@ -26,7 +26,7 @@ const TrendFilters = ({ buttons, dropdown1, dropdown2, onButtonClick }) => {
     //   width: "fit-content",
     // }}
     >
-      <div className="!py-2 lg:flex lg:items-center">
+      <div className="!py-2 lg:flex lg:items-center w-fit mx-auto">
         <div
           className="inline-flex shadow-sm rounded-md mx-1 !bg-[#222231] !border !border-[#ffffff90]"
           role="group"

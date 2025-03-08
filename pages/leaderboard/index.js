@@ -17,7 +17,7 @@ export default function IGORankingPage() {
         {walletModalvisibility && <WalletModal />}
         {metamaskModal && <MetamaskModal />}
         <Header />
-        <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
+        <div className="h-[360px] md:h-[360px] 2xl:h-[420px]" />
         <LeaderboardSection />
         <Footer />
       </Layout>

@@ -111,17 +111,17 @@ const ProjectItems = () => {
     // <ProjectItemsStyleWrapper>
     <>
       <div className="pt-2">
-        <div className="flex justify-between items-center">
+        <div className="md:flex md:justify-between md:items-center">
           <TrendFilters
             buttons={["All", "Bronze", "Silver", "Gold", "Prismatic"]}
             onButtonClick={handleButtonClick}
           />
-          <div>
+          <div className="mb-2 md:mb-0 px-2">
             <input
               type="text"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
-              className="bg-[#222231] text-[#fff] border-[#ffffff80] border-[1px] rounded-[4px] hover:border-[#ffffff60] hover:shadow-lg transition-all duration-300 ease-in-out w-[200px] h-[40px] px-[10px] text-[16px] placeholder-[#fff] placeholder-[16px] mt-[10px] md:mt-0"
+              className="bg-[#222231] w-full text-[#fff] border-[#ffffff80] border-[1px] rounded-[4px] hover:border-[#ffffff60] hover:shadow-lg transition-all duration-300 ease-in-out md:w-[200px] h-[40px] px-[10px] text-[16px] placeholder-[#fff] placeholder-[16px] md:mt-0"
               placeholder="Search..."
             />
           </div>

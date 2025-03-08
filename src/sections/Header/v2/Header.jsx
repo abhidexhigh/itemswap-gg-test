@@ -50,7 +50,7 @@ const Header = () => {
                     "https://res.cloudinary.com/dg0cmj6su/image/upload/v1740650877/ArmyDragone_text_copy_kelovj.png"
                   }
                   alt="ItemSwap logo"
-                  className="w-36 mt-2"
+                  className="w-28 md:w-36 mt-2"
                 />
               </a>
             </div>

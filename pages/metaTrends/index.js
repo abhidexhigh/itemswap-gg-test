@@ -22,7 +22,7 @@ export default function ItemsTrends() {
         {walletModalvisibility && <WalletModal />}
         {metamaskModal && <MetamaskModal />}
         <Header />
-        <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
+        <div className="h-[360px] md:h-[360px] 2xl:h-[420px]" />
         <div className="backdrop-blur-md">
           <div className="container">
             {/* <PageHeader currentPage="META TRENDS" pageTitle="META TRENDS" /> */}

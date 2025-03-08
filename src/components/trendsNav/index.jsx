@@ -95,7 +95,92 @@ const TrendsNav = ({ selected }) => {
       <div className="bg-[#222231] rounded-lg !border !border-[#ffffff70]">
         {/* Desktop View (keep your original desktop code here) */}
         <div className="hidden lg:block">
-          {/* ... existing desktop code ... */}
+          <ul className="text-md font-medium text-center text-gray-500 shadow lg:flex">
+            <li className="w-full text-nowrap">
+              <Link
+                href="/metaTrends"
+                className={`${
+                  selected === "metaTrends"
+                    ? "active text-gray-900 !bg-gray-100 hover:text-black border-r rounded-l-lg"
+                    : "hover:text-white"
+                } inline-block w-full p-3 border-r text-xs lg:text-base border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
+              >
+                {others?.metaTrends}
+              </Link>
+            </li>
+            <li className="w-full text-nowrap">
+              <Link
+                href="/recentDecks"
+                className={`${
+                  selected === "recentDecks"
+                    ? "active text-gray-900 !bg-gray-100 hover:text-black border-r"
+                    : "hover:text-white"
+                } inline-block w-full p-3 border-r text-xs lg:text-base border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
+              >
+                {others?.recentDecks}
+              </Link>
+            </li>
+            <li className="w-full text-nowrap">
+              <Link
+                href="/championsTrends"
+                className={`${
+                  selected === "championsTrends"
+                    ? "active text-gray-900 !bg-gray-100 hover:text-black border-r"
+                    : "hover:text-white"
+                } inline-block w-full p-3 border-r text-xs lg:text-base border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
+              >
+                {others?.championsTrends}
+              </Link>
+            </li>
+            <li className="w-full text-nowrap">
+              <Link
+                href="/itemsTrends"
+                className={`${
+                  selected === "itemsTrends"
+                    ? "active text-gray-900 !bg-gray-100 hover:text-black border-r"
+                    : "hover:text-white"
+                } inline-block w-full p-3 border-r text-xs lg:text-base border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
+              >
+                {others?.itemsTrends}
+              </Link>
+            </li>
+            <li className="w-full text-nowrap">
+              <Link
+                href="/traitsTrends"
+                className={`${
+                  selected === "traitsTrends"
+                    ? "active text-gray-900 !bg-gray-100 hover:text-black border-r"
+                    : "hover:text-white"
+                } inline-block w-full p-3 border-r text-xs lg:text-base border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
+              >
+                {others?.traitsTrends}
+              </Link>
+            </li>
+            <li className="w-full text-nowrap">
+              <Link
+                href="/augmentsTrends"
+                className={`${
+                  selected === "augmentsTrends"
+                    ? "active text-gray-900 !bg-gray-100 hover:text-black border-r"
+                    : "hover:text-white"
+                } inline-block w-full p-3 border-r text-xs lg:text-base border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
+              >
+                {others.augmentsTrends}
+              </Link>
+            </li>
+            <li className="w-full text-nowrap">
+              <Link
+                href="/bestItemsBuilds"
+                className={`${
+                  selected === "bestItemsBuilds"
+                    ? "active text-gray-900 !bg-gray-100 hover:text-black border-r rounded-r-lg"
+                    : "hover:text-white"
+                } inline-block w-full p-3 border-r text-xs lg:text-base border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
+              >
+                {others?.bestItemsBuilds}
+              </Link>
+            </li>
+          </ul>
         </div>
 
         {/* Mobile View */}
@@ -105,8 +190,8 @@ const TrendsNav = ({ selected }) => {
             spaceBetween={10}
             slidesPerView={"auto"}
             navigation={{
-              prevEl: ".swiper-button-prev",
-              nextEl: ".swiper-button-next",
+              prevEl: ".meta-prev",
+              nextEl: ".meta-next",
             }}
             className="tabs-swiper"
             onSwiper={(swiper) => setSwiperInstance(swiper)}
@@ -117,7 +202,7 @@ const TrendsNav = ({ selected }) => {
                 <Link
                   href={tab.href}
                   className={`
-              inline-block px-4 py-2.5 text-sm border border-[#ffffff14] rounded-lg
+              inline-block px-3 py-2.5 text-base border border-[#ffffff14] rounded-lg
               whitespace-nowrap
               ${
                 selected === tab.id
@@ -139,7 +224,7 @@ const TrendsNav = ({ selected }) => {
           </div>
         </div>
       </div>
-      <div className="bg-[#222231] rounded-lg !border !border-[#ffffff70] hidden lg:block">
+      {/* <div className="bg-[#222231] rounded-lg !border !border-[#ffffff70] hidden lg:block">
         <ul className="text-md font-medium text-center text-gray-500 shadow lg:flex">
           <li className="w-full text-nowrap">
             <Link
@@ -226,7 +311,7 @@ const TrendsNav = ({ selected }) => {
             </Link>
           </li>
         </ul>
-      </div>
+      </div> */}
     </>
   );
 };

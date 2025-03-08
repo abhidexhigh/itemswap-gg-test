@@ -23,7 +23,7 @@ export default function ItemsTrends() {
           currentPage="BEST ITEMS BUILDS"
           pageTitle="BEST ITEMS BUILDS"
         /> */}
-        <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
+        <div className="h-[360px] md:h-[360px] 2xl:h-[420px]" />
         <div className="backdrop-blur-md">
           <div className="container">
             <TrendsNav selected="bestItemsBuilds" />

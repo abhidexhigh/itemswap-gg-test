@@ -20,7 +20,7 @@ export default function ChampionsTrends() {
         {metamaskModal && <MetamaskModal />}
         <Header />
         {/* <PageHeader currentPage="Patch Notes" pageTitle="Guide" /> */}
-        <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
+        <div className="h-[360px] md:h-[360px] 2xl:h-[420px]" />
         <GuidesNav selected={"patchNotes"} />
         <PatchNotes />
         <Footer />

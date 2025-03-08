@@ -23,7 +23,7 @@ export default function ChampionsTrends() {
           currentPage="CHAMPIONS TRENDS"
           pageTitle="CHAMPIONS TRENDS"
         /> */}
-        <div className="h-[120px] md:h-[360px] 2xl:h-[420px]" />
+        <div className="h-[360px] md:h-[360px] 2xl:h-[420px]" />
         <div className="backdrop-blur-md">
           <div className="container px-0 md:px-3">
             <TrendsNav selected={"championsTrends"} />
