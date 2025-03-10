@@ -26,7 +26,9 @@ export default function ChampionsTrends() {
         <div className="h-[360px] md:h-[360px] 2xl:h-[420px]" />
         <div className="backdrop-blur-md">
           <div className="container px-0 md:px-3">
-            <TrendsNav selected={"championsTrends"} />
+            <div className="sticky top-14 z-50">
+              <TrendsNav selected={"championsTrends"} />
+            </div>
             {/* <div className="bg-transparent-20"></div> */}
             <ProjectsList />
           </div>

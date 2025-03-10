@@ -107,8 +107,8 @@ const ProjectItems = () => {
 
   return (
     // <ProjectItemsStyleWrapper>
-    <div className="pt-2">
-      <div className="md:flex md:justify-between md:items-center">
+    <div className="pt-2 bg-[#1a1b31]">
+      <div className="md:flex md:justify-between md:items-center sticky bg-[#1a1b31] top-[100px] pb-2.5 z-50">
         <div className="flex items-center mx-auto md:!ml-0 md:!mr-0 justify-center md:justify-start">
           <h1 className="text-[#fff] hidden md:block text-lg md:text-xl font-bold mb-0">
             Cost
@@ -118,7 +118,7 @@ const ProjectItems = () => {
             onButtonClick={handleButtonClick}
           />
         </div>
-        <div className="mb-2 md:mb-0 px-2">
+        <div className="mb-2 md:mb-0 px-4">
           <input
             type="text"
             value={searchValue}
@@ -148,14 +148,16 @@ const ProjectItems = () => {
           <table className="w-[900px] md:w-full lg:border-separate lg:border-spacing-y-2">
             <tr className="bg-[#1a1b31]">
               <th className="lg:rounded-l-lg">
-                <p className="p-0 text-sm !mx-2 my-2 md:text-[14px]">#</p>
+                <p className="p-0 text-base !mx-2 my-2 md:text-[14px]">
+                  {others.rank}
+                </p>
               </th>
               <th
                 className={`cursor-pointer ${sortConfig?.key === "key" ? "bg-[#000000]" : ""}`}
                 onClick={() => requestSort("key")}
               >
-                <p className="p-0 text-sm my-auto md:text-[16px] text-left">
-                  {others.champion}
+                <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                  {others.champions}
                   <span className="ml-2">
                     {sortConfig?.key === "key" ? (
                       sortConfig.direction === "ascending" ? (
@@ -171,7 +173,7 @@ const ProjectItems = () => {
                 className={`cursor-pointer ${sortConfig?.key === "avgPlacement" ? "bg-[#000000]" : ""}`}
                 onClick={() => requestSort("avgPlacement")}
               >
-                <p className="p-0 text-sm my-auto md:text-[16px] text-left">
+                <p className="p-0 text-base my-auto md:text-[16px] text-left">
                   {others.avgRank}
                   <span className="ml-2">
                     {sortConfig?.key === "avgPlacement" ? (
@@ -188,7 +190,7 @@ const ProjectItems = () => {
                 className={`cursor-pointer ${sortConfig?.key === "tops" ? "bg-[#000000]" : ""}`}
                 onClick={() => requestSort("tops")}
               >
-                <p className="p-0 text-sm my-auto md:text-[16px] text-left">
+                <p className="p-0 text-base my-auto md:text-[16px] text-left">
                   {others.top4}
                   <span className="ml-2">
                     {sortConfig?.key === "tops" ? (
@@ -205,7 +207,7 @@ const ProjectItems = () => {
                 className={`cursor-pointer ${sortConfig?.key === "wins" ? "bg-[#000000]" : ""}`}
                 onClick={() => requestSort("wins")}
               >
-                <p className="p-0 text-sm my-auto md:text-[16px] text-left">
+                <p className="p-0 text-base my-auto md:text-[16px] text-left">
                   {others.winPercentage}
                   <span className="ml-2">
                     {sortConfig?.key === "wins" ? (
@@ -222,7 +224,7 @@ const ProjectItems = () => {
                 className={`cursor-pointer ${sortConfig?.key === "pickRate" ? "bg-[#000000]" : ""}`}
                 onClick={() => requestSort("pickRate")}
               >
-                <p className="p-0 text-sm my-auto md:text-[16px] text-left">
+                <p className="p-0 text-base my-auto md:text-[16px] text-left">
                   {others?.pickPercentage}
                   <span className="ml-2">
                     {sortConfig?.key === "pickRate" ? (
@@ -239,7 +241,7 @@ const ProjectItems = () => {
                 className={`cursor-pointer ${sortConfig?.key === "plays" ? "bg-[#000000]" : ""}`}
                 onClick={() => requestSort("plays")}
               >
-                <p className="p-0 text-sm my-auto md:text-[16px] text-left">
+                <p className="p-0 text-base my-auto md:text-[16px] text-left">
                   {others?.played}
                   <span className="ml-2">
                     {sortConfig?.key === "plays" ? (
@@ -253,17 +255,17 @@ const ProjectItems = () => {
                 </p>
               </th>
               <th>
-                <p className="p-0 text-sm my-auto md:text-[16px] text-left">
+                <p className="p-0 text-base my-auto md:text-[16px] text-left">
                   {others?.threeStarsPercentage}
                 </p>
               </th>
               <th>
-                <p className="p-0 text-sm my-auto md:text-[16px] text-left">
+                <p className="p-0 text-base my-auto md:text-[16px] text-left">
                   {others?.threeStarsRank}
                 </p>
               </th>
               <th className="lg:rounded-r-lg">
-                <p className="p-0 text-sm my-auto md:text-[16px] text-left">
+                <p className="p-0 text-base my-auto md:text-[16px] text-left">
                   {others?.recommended} {others.items}
                 </p>
               </th>
@@ -278,7 +280,7 @@ const ProjectItems = () => {
                     <td className="ml-2 lg:rounded-l-lg">
                       <div className="text-center">{index + 1}</div>
                     </td>
-                    <td className="py-0.5 md:py-2">
+                    <td className="py-1 md:py-2">
                       <div>
                         <div className="flex justify-start items-center">
                           <CardImage
@@ -290,7 +292,7 @@ const ProjectItems = () => {
                             textStyle="text-[10px] md:text-[16px] hidden"
                             forces={forces}
                           />
-                          <p className="p-0 text-left text-sm md:text-xl mb-0 ml-2 text-[#fff]">
+                          <p className="p-0 text-left text-base md:text-xl mb-0 ml-2 text-[#fff]">
                             {
                               champions.find(
                                 (champ) => champ.key === champion.key
@@ -301,37 +303,37 @@ const ProjectItems = () => {
                       </div>
                     </td>
                     <td className="py-0.5 md:py-2">
-                      <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
+                      <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
                         #{champion?.avgPlacement}
                       </p>
                     </td>
                     <td className="py-0.5 md:py-2">
-                      <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
+                      <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
                         {((champion?.tops * 100) / champion?.plays).toFixed(2)}%
                       </p>
                     </td>
                     <td className="py-0.5 md:py-2">
-                      <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
+                      <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
                         {((champion?.wins * 100) / champion?.plays).toFixed(2)}%
                       </p>
                     </td>
                     <td className="py-0.5 md:py-2">
-                      <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
+                      <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
                         {(champion?.pickRate * 100).toFixed(2)}%
                       </p>
                     </td>
                     <td className="py-0.5 md:py-2">
-                      <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
+                      <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
                         {champion?.plays.toLocaleString("en-US")}
                       </p>
                     </td>
                     <td className="py-0.5 md:py-2">
-                      <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
+                      <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
                         {(champion?.threeStarPercentage * 100).toFixed(2)}%
                       </p>
                     </td>
                     <td className="py-0.5 md:py-2">
-                      <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
+                      <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
                         #{(champion?.threeStarRank).toFixed(2)}
                       </p>
                     </td>

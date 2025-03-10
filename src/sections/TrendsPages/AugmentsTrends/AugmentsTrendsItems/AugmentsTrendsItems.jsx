@@ -102,13 +102,15 @@ const ProjectItems = () => {
               <thead>
                 <tr className=" bg-[#1a1b31]">
                   <th className="md:!rounded-l-lg">
-                    <p className="p-0 text-sm !mx-2 my-2 md:text-[14px]"># </p>
+                    <p className="p-0 text-base !mx-2 my-2 md:text-[14px]">
+                      {others.rank}
+                    </p>
                   </th>
                   <th
-                    className={` cursor-pointer`}
+                    className={`cursor-pointer pr-40 md:pr-0`}
                     onClick={() => requestSort("key")}
                   >
-                    <p className="p-0 text-sm my-auto md:text-[16px] text-left">
+                    <p className="p-0 text-base my-auto md:text-[16px] text-left">
                       {others?.augment}
                       <span className="ml-2">
                         {sortConfig?.key === "key" ? (
@@ -122,10 +124,10 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={` cursor-pointer`}
+                    className={`cursor-pointer px-3 md:px-0`}
                     onClick={() => requestSort("avgPlacement")}
                   >
-                    <p className="p-0 text-sm my-auto md:text-[16px] text-left">
+                    <p className="p-0 text-base my-auto md:text-[16px] text-left">
                       {others?.avgPlacement}
                       <span className="ml-2">
                         {sortConfig?.key === "avgPlacement" ? (
@@ -139,10 +141,10 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={` cursor-pointer`}
+                    className={` cursor-pointer px-3 md:px-0`}
                     onClick={() => requestSort("roundOnePickRate")}
                   >
-                    <p className="p-0 text-sm my-auto md:text-[16px] text-left">
+                    <p className="p-0 text-base my-auto md:text-[16px] text-left">
                       {others?.firstPick}
                       <span className="ml-2">
                         {sortConfig?.key === "roundOnePickRate" ? (
@@ -156,10 +158,10 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={` cursor-pointer`}
+                    className={` cursor-pointer px-3 md:px-0`}
                     onClick={() => requestSort("roundTwoPickRate")}
                   >
-                    <p className="p-0 text-sm my-auto md:text-[16px] text-left">
+                    <p className="p-0 text-base my-auto md:text-[16px] text-left">
                       {others?.secondPick}
                       <span className="ml-2">
                         {sortConfig?.key === "roundTwoPickRate" ? (
@@ -173,10 +175,10 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={` cursor-pointer`}
+                    className={` cursor-pointer px-3 md:px-0`}
                     onClick={() => requestSort("roundThreePickRate")}
                   >
-                    <p className="p-0 text-sm my-auto md:text-[16px] text-left">
+                    <p className="p-0 text-base my-auto md:text-[16px] text-left">
                       {others?.thirdPick}
                       <span className="ml-2">
                         {sortConfig?.key === "roundThreePickRate" ? (
@@ -190,10 +192,10 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={` cursor-pointer`}
+                    className={` cursor-pointer px-3 md:px-0`}
                     onClick={() => requestSort("tops")}
                   >
-                    <p className="p-0 text-sm my-auto md:text-[16px] text-left">
+                    <p className="p-0 text-base my-auto md:text-[16px] text-left">
                       {others?.top4}
                       <span className="ml-2">
                         {sortConfig?.key === "tops" ? (
@@ -207,10 +209,10 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={` cursor-pointer`}
+                    className={` cursor-pointer px-3 md:px-0`}
                     onClick={() => requestSort("wins")}
                   >
-                    <p className="p-0 text-sm my-auto md:text-[16px] text-left">
+                    <p className="p-0 text-base my-auto md:text-[16px] text-left">
                       {others?.winPercentage}
                       <span className="ml-2">
                         {sortConfig?.key === "wins" ? (
@@ -224,10 +226,10 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={` cursor-pointer`}
+                    className={` cursor-pointer px-3 md:px-0`}
                     onClick={() => requestSort("pickRate")}
                   >
-                    <p className="p-0 text-sm my-auto md:text-[16px] text-left">
+                    <p className="p-0 text-base my-auto md:text-[16px] text-left">
                       {others?.pickPercentage}
                       <span className="ml-2">
                         {sortConfig?.key === "pickRate" ? (
@@ -241,10 +243,10 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={` cursor-pointer md:!rounded-r-lg`}
+                    className={` cursor-pointer px-3 md:px-0 md:!rounded-r-lg`}
                     onClick={() => requestSort("plays")}
                   >
-                    <p className="p-0 text-sm my-auto md:text-[16px] text-left">
+                    <p className="p-0 text-base my-auto md:text-[16px] text-left">
                       {others?.played}
                       <span className="ml-2">
                         {sortConfig?.key === "plays" ? (
@@ -275,7 +277,7 @@ const ProjectItems = () => {
                         augment.key ===
                         item.key?.split("_")[item?.key?.split("_").length - 1]
                     )?.key && (
-                      <tr className="m-2 hover:bg-[#292a4ae0] border-[1px] border-[#ffffff50]">
+                      <tr className="m-2 hover:bg-[#292a4ae0] md:border-[1px] md:border-[#ffffff50]">
                         <td className="ml-2 md:!rounded-l-lg">
                           <div className="text-center text-lg">{index + 1}</div>
                         </td>
@@ -295,7 +297,7 @@ const ProjectItems = () => {
                                 alt="icon"
                                 width={80}
                                 height={80}
-                                className="w-10 md:w-16 h-10 md:h-16 mr-1"
+                                className="w-16 md:w-16 mr-1"
                                 data-tooltip-id={item?.key}
                               />
                               <ReactTltp
@@ -326,22 +328,22 @@ const ProjectItems = () => {
                           </div>
                         </td>
                         <td>
-                          <p className="p-0 text-xs md:text-lg text-[#fff] mb-0">
+                          <p className="p-0 text-base md:text-lg text-[#fff] mb-0">
                             #{item?.avgPlacement.toFixed(2)}
                           </p>
                         </td>
                         <td>
-                          <p className="p-0 text-xs md:text-lg text-[#fff] mb-0">
+                          <p className="p-0 text-base md:text-lg text-[#fff] mb-0">
                             {item?.roundOnePickRate.toFixed(2)}%
                           </p>
                         </td>
                         <td>
-                          <p className="p-0 text-xs md:text-lg text-[#fff] mb-0">
+                          <p className="p-0 text-base md:text-lg text-[#fff] mb-0">
                             {item?.roundTwoPickRate.toFixed(2)}%
                           </p>
                         </td>
                         <td>
-                          <p className="p-0 text-xs md:text-lg text-[#fff] mb-0">
+                          <p className="p-0 text-base md:text-lg text-[#fff] mb-0">
                             {item?.roundThreePickRate.toFixed(2)}%
                           </p>
                         </td>
@@ -354,7 +356,7 @@ const ProjectItems = () => {
                               ),
                             ]?.map((roundStat) => (
                               <td>
-                                <p className="p-0 text-xs md:text-lg text-[#fff] mb-0">
+                                <p className="p-0 text-base md:text-lg text-[#fff] mb-0">
                                   {roundStat?.avgPlacement
                                     ? roundStat?.avgPlacement.toFixed(2) + "%"
                                     : "-"}
@@ -362,22 +364,22 @@ const ProjectItems = () => {
                               </td>
                             ))} */}
                         <td>
-                          <p className="p-0 text-xs md:text-lg text-[#fff] mb-0">
+                          <p className="p-0 text-base md:text-lg text-[#fff] mb-0">
                             {((item?.tops * 100) / item?.plays).toFixed(2)}%
                           </p>
                         </td>
                         <td>
-                          <p className="p-0 text-xs md:text-lg text-[#fff] mb-0">
+                          <p className="p-0 text-base md:text-lg text-[#fff] mb-0">
                             {((item?.wins * 100) / item?.plays).toFixed(2)}%
                           </p>
                         </td>
                         <td>
-                          <p className="p-0 text-xs md:text-lg text-[#fff] mb-0">
+                          <p className="p-0 text-base md:text-lg text-[#fff] mb-0">
                             {(item?.pickRate * 100).toFixed(2)}%
                           </p>
                         </td>
                         <td className="md:!rounded-r-lg">
-                          <p className="p-0 text-xs md:text-lg text-[#fff] mb-0">
+                          <p className="p-0 text-base md:text-lg text-[#fff] mb-0">
                             {item?.plays.toLocaleString("en-US")}
                           </p>
                         </td>

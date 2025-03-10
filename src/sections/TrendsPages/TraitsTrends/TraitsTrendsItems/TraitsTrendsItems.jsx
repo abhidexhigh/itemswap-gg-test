@@ -131,7 +131,9 @@ const ProjectItems = () => {
             <table className="w-[900px] md:w-full table-auto md:border-separate md:border-spacing-y-2">
               <tr className="bg-[#1a1b31]">
                 <th className="md:rounded-l-lg">
-                  <p className="p-0 text-sm !mx-2 my-2 md:text-[14px]">#</p>
+                  <p className="p-0 text-sm !mx-2 my-2 md:text-[14px]">
+                    {others.rank}
+                  </p>
                 </th>
                 <th
                   className={`cursor-pointer ${sortConfig?.key === "key" ? "" : ""}`}

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useModal } from "src/utils/ModalContext";
 import { motion } from "framer-motion";
 import {
-  MdNotes,
+  MdMenu,
   MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
@@ -42,7 +42,8 @@ const Header = () => {
       <div className="container mx-auto">
         {/* Main Menu Start */}
         <div className="gamfi_menu_sect">
-          <div className="gamfi_menu_left_sect mx-auto">
+          <div className="gamfi_menu_right_sect gamfi_v1_menu_right_sect !w-1/4 md:!w-1/2"></div>
+          <div className="gamfi_menu_left_sect mx-auto !justify-center">
             <div className="logo">
               <a href="http://itemswap-guild-test.vercel.app/">
                 <img
@@ -55,7 +56,7 @@ const Header = () => {
               </a>
             </div>
           </div>
-          <div className="gamfi_menu_right_sect gamfi_v1_menu_right_sect">
+          <div className="gamfi_menu_right_sect gamfi_v1_menu_right_sect !w-1/4 md:!w-1/2">
             <div className="gamfi_menu_list">
               <ul>
                 {/* <li>
@@ -106,8 +107,9 @@ const Header = () => {
               </ul>
             </div>
             <div className="gamfi_menu_btns">
+              <LanguageSwitcher />
               <button className="menu_btn" onClick={() => handleMobileMenu()}>
-                <MdNotes />
+                <MdMenu />
               </button>
               <Link
                 href={"https://itemswap-guild-test.vercel.app/champions"}
@@ -154,10 +156,9 @@ const Header = () => {
                   RPG
                 </motion.p>
               </Link>
-              <LanguageSwitcher />
               <Link
                 href={"https://itemswap-guild-test.vercel.app/champions"}
-                className="relative md:hidden cursor-pointer transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105"
+                className="relative hidden cursor-pointer transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105"
               >
                 <motion.video
                   autoPlay

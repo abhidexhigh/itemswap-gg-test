@@ -37,7 +37,7 @@ const NavWrapper = styled.nav`
     display: flex;
     align-items: center;
     width: 100%;
-    height: 64px;
+    height: 56px;
     transition: all 0.3s;
     z-index: 12;
 

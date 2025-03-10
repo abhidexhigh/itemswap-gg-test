@@ -130,11 +130,13 @@ const ProjectItems = () => {
             <table className="w-[900px] md:w-full md:border-separate md:border-spacing-y-2">
               <tr className="bg-[#1a1b31]">
                 <th className="md:rounded-l-lg">
-                  <p className="p-0 text-sm !mx-2 my-2 md:text-[14px]">#</p>
+                  <p className="p-0 text-base !mx-2 my-2 md:text-[14px]">
+                    {others.rank}
+                  </p>
                 </th>
                 <th>
                   <p
-                    className={`cursor-pointer mb-0`}
+                    className={`cursor-pointer mb-0 text-base`}
                     onClick={() => requestSort("key")}
                   >
                     {others?.items}
@@ -149,7 +151,7 @@ const ProjectItems = () => {
                     </span>
                   </p>
                 </th>
-                <th cla>
+                <th>
                   <p
                     className={`cursor-pointer mb-0`}
                     onClick={() => requestSort("avgPlacement")}
@@ -166,7 +168,7 @@ const ProjectItems = () => {
                     </span>
                   </p>
                 </th>
-                <th className="">
+                <th className="md:px-2">
                   <p
                     className={`cursor-pointer mb-0`}
                     onClick={() => requestSort("tops")}
@@ -183,7 +185,7 @@ const ProjectItems = () => {
                     </span>
                   </p>
                 </th>
-                <th className="">
+                <th className="md:px-2">
                   <p
                     className={`cursor-pointer mb-0`}
                     onClick={() => requestSort("wins")}
@@ -200,7 +202,7 @@ const ProjectItems = () => {
                     </span>
                   </p>
                 </th>
-                <th className="">
+                <th className="md:px-2 !pr-4">
                   <p
                     className={`cursor-pointer mb-0`}
                     onClick={() => requestSort("pickRate")}
@@ -217,7 +219,7 @@ const ProjectItems = () => {
                     </span>
                   </p>
                 </th>
-                <th className="">
+                <th className="md:px-2">
                   <p
                     className={`cursor-pointer mb-0`}
                     onClick={() => requestSort("plays")}
@@ -235,12 +237,12 @@ const ProjectItems = () => {
                   </p>
                 </th>
                 <th className="">
-                  <p className="p-0 text-sm !mx-2 my-2 md:text-[16px]">
+                  <p className="p-0 text-base !mx-2 my-2 md:text-[16px]">
                     {others?.synergy} {others?.items}
                   </p>
                 </th>
                 <th className="text-center md:rounded-r-lg">
-                  <p className="p-0 text-sm !mx-2 my-2 md:text-[16px]">
+                  <p className="p-0 text-base !mx-2 my-2 md:text-[16px]">
                     {others?.top3} {others?.champions}
                   </p>
                 </th>
@@ -277,7 +279,7 @@ const ProjectItems = () => {
                               />
                             </>
                             <div className="ml-2">
-                              <p className="p-0 !text-sm mb-2 md:!text-[16px] text-[#fff]">
+                              <p className="p-0 !text-base mb-2 md:!text-[16px] text-[#fff]">
                                 {items.find((i) => i.key === item.key)?.name}
                               </p>
                               <div className="flex items-center">
@@ -315,27 +317,27 @@ const ProjectItems = () => {
                         </div>
                       </td>
                       <td className="py-2">
-                        <p className="p-0 text-sm  md:text-[16px] mb-0 text-[#fff]">
+                        <p className="p-0 text-base  md:text-[16px] mb-0 text-[#fff]">
                           #{item?.avgPlacement}
                         </p>
                       </td>
                       <td className="py-2">
-                        <p className="p-0 text-sm  md:text-[16px] mb-0 text-[#fff]">
+                        <p className="p-0 text-base  md:text-[16px] mb-0 text-[#fff]">
                           {((item?.tops * 100) / item?.plays).toFixed(2)}%
                         </p>
                       </td>
                       <td className="py-2">
-                        <p className="p-0 text-sm  md:text-[16px] mb-0 text-[#fff]">
+                        <p className="p-0 text-base  md:text-[16px] mb-0 text-[#fff]">
                           {((item?.wins * 100) / item?.plays).toFixed(2)}%
                         </p>
                       </td>
                       <td className="py-2">
-                        <p className="p-0 text-sm  md:text-[16px] mb-0 text-[#fff]">
+                        <p className="p-0 text-base  md:text-[16px] mb-0 text-[#fff]">
                           {(item?.pickRate * 100).toFixed(2)}%
                         </p>
                       </td>
                       <td className="py-2">
-                        <p className="p-0 text-sm  md:text-[16px] mb-0 text-[#fff]">
+                        <p className="p-0 text-base  md:text-[16px] mb-0 text-[#fff]">
                           {item?.plays.toLocaleString("en-US")}
                         </p>
                       </td>
