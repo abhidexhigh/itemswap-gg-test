@@ -42,8 +42,8 @@ const Header = () => {
       <div className="container mx-auto">
         {/* Main Menu Start */}
         <div className="gamfi_menu_sect">
-          <div className="gamfi_menu_right_sect gamfi_v1_menu_right_sect !w-1/4 md:!w-1/2"></div>
-          <div className="gamfi_menu_left_sect mx-auto !justify-center">
+          <div className="gamfi_menu_right_sect gamfi_v1_menu_right_sect !w-1/4 md:!w-1/2 md:!hidden "></div>
+          <div className="gamfi_menu_left_sect mx-auto !justify-center md:!justify-start">
             <div className="logo">
               <a href="http://itemswap-guild-test.vercel.app/">
                 <img
@@ -56,7 +56,7 @@ const Header = () => {
               </a>
             </div>
           </div>
-          <div className="gamfi_menu_right_sect gamfi_v1_menu_right_sect !w-1/4 md:!w-1/2">
+          <div className="gamfi_menu_right_sect gamfi_v1_menu_right_sect !w-1/4 md:!w-[80%]">
             <div className="gamfi_menu_list">
               <ul>
                 {/* <li>

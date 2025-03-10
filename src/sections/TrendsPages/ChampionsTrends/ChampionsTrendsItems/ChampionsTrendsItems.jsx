@@ -108,7 +108,7 @@ const ProjectItems = () => {
   return (
     // <ProjectItemsStyleWrapper>
     <div className="pt-2 bg-[#1a1b31] md:bg-transparent">
-      <div className="md:flex md:justify-between md:items-center sticky bg-[#1a1b31] md:bg-transparent top-[100px] pb-2.5 z-50">
+      <div className="md:flex md:justify-between md:items-center bg-[#1a1b31] md:bg-transparent pb-2.5">
         <div className="flex items-center mx-auto md:!ml-0 md:!mr-0 justify-center md:justify-start">
           <h1 className="text-[#fff] hidden md:block text-lg md:text-xl font-bold mb-0">
             Cost
@@ -144,132 +144,134 @@ const ProjectItems = () => {
         ]}
       /> */}
       <div className="projects-row overflow-auto md:overflow-hidden">
-        <div>
-          <table className="w-[900px] md:w-full lg:border-separate lg:border-spacing-y-2">
-            <tr className="bg-[#1a1b31]">
-              <th className="lg:rounded-l-lg">
-                <p className="p-0 text-base !mx-2 my-2 md:text-[14px]">
-                  {others.rank}
-                </p>
-              </th>
-              <th
-                className={`cursor-pointer ${sortConfig?.key === "key" ? "bg-[#000000]" : ""}`}
-                onClick={() => requestSort("key")}
-              >
-                <p className="p-0 text-base my-auto md:text-[16px] text-left">
-                  {others.champions}
-                  <span className="ml-2">
-                    {sortConfig?.key === "key" ? (
-                      sortConfig.direction === "ascending" ? (
-                        <FaSortAmountUp />
-                      ) : (
-                        <FaSortAmountDownAlt />
-                      )
-                    ) : null}
-                  </span>
-                </p>
-              </th>
-              <th
-                className={`cursor-pointer ${sortConfig?.key === "avgPlacement" ? "bg-[#000000]" : ""}`}
-                onClick={() => requestSort("avgPlacement")}
-              >
-                <p className="p-0 text-base my-auto md:text-[16px] text-left">
-                  {others.avgRank}
-                  <span className="ml-2">
-                    {sortConfig?.key === "avgPlacement" ? (
-                      sortConfig.direction === "ascending" ? (
-                        <FaSortAmountUp />
-                      ) : (
-                        <FaSortAmountDownAlt />
-                      )
-                    ) : null}
-                  </span>
-                </p>
-              </th>
-              <th
-                className={`cursor-pointer ${sortConfig?.key === "tops" ? "bg-[#000000]" : ""}`}
-                onClick={() => requestSort("tops")}
-              >
-                <p className="p-0 text-base my-auto md:text-[16px] text-left">
-                  {others.top4}
-                  <span className="ml-2">
-                    {sortConfig?.key === "tops" ? (
-                      sortConfig.direction === "ascending" ? (
-                        <FaSortAmountUp />
-                      ) : (
-                        <FaSortAmountDownAlt />
-                      )
-                    ) : null}
-                  </span>
-                </p>
-              </th>
-              <th
-                className={`cursor-pointer ${sortConfig?.key === "wins" ? "bg-[#000000]" : ""}`}
-                onClick={() => requestSort("wins")}
-              >
-                <p className="p-0 text-base my-auto md:text-[16px] text-left">
-                  {others.winPercentage}
-                  <span className="ml-2">
-                    {sortConfig?.key === "wins" ? (
-                      sortConfig.direction === "ascending" ? (
-                        <FaSortAmountUp />
-                      ) : (
-                        <FaSortAmountDownAlt />
-                      )
-                    ) : null}
-                  </span>
-                </p>
-              </th>
-              <th
-                className={`cursor-pointer ${sortConfig?.key === "pickRate" ? "bg-[#000000]" : ""}`}
-                onClick={() => requestSort("pickRate")}
-              >
-                <p className="p-0 text-base my-auto md:text-[16px] text-left">
-                  {others?.pickPercentage}
-                  <span className="ml-2">
-                    {sortConfig?.key === "pickRate" ? (
-                      sortConfig.direction === "ascending" ? (
-                        <FaSortAmountUp />
-                      ) : (
-                        <FaSortAmountDownAlt />
-                      )
-                    ) : null}
-                  </span>
-                </p>
-              </th>
-              <th
-                className={`cursor-pointer ${sortConfig?.key === "plays" ? "bg-[#000000]" : ""}`}
-                onClick={() => requestSort("plays")}
-              >
-                <p className="p-0 text-base my-auto md:text-[16px] text-left">
-                  {others?.played}
-                  <span className="ml-2">
-                    {sortConfig?.key === "plays" ? (
-                      sortConfig.direction === "ascending" ? (
-                        <FaSortAmountUp />
-                      ) : (
-                        <FaSortAmountDownAlt />
-                      )
-                    ) : null}
-                  </span>
-                </p>
-              </th>
-              <th>
-                <p className="p-0 text-base my-auto md:text-[16px] text-left">
-                  {others?.threeStarsPercentage}
-                </p>
-              </th>
-              <th>
-                <p className="p-0 text-base my-auto md:text-[16px] text-left">
-                  {others?.threeStarsRank}
-                </p>
-              </th>
-              <th className="lg:rounded-r-lg">
-                <p className="p-0 text-base my-auto md:text-[16px] text-left">
-                  {others?.recommended} {others.items}
-                </p>
-              </th>
-            </tr>
+        <div className="h-[800px] overflow-auto">
+          <table className="w-[900px] md:w-full relative lg:border-separate lg:border-spacing-y-2">
+            <thead className="sticky top-0 z-50">
+              <tr className="bg-[#1a1b31]">
+                <th className="lg:rounded-l-lg">
+                  <p className="p-0 text-base !mx-2 my-2 md:text-[14px]">
+                    {others.rank}
+                  </p>
+                </th>
+                <th
+                  className={`cursor-pointer ${sortConfig?.key === "key" ? "bg-[#000000]" : ""}`}
+                  onClick={() => requestSort("key")}
+                >
+                  <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                    {others.champions}
+                    <span className="ml-2">
+                      {sortConfig?.key === "key" ? (
+                        sortConfig.direction === "ascending" ? (
+                          <FaSortAmountUp />
+                        ) : (
+                          <FaSortAmountDownAlt />
+                        )
+                      ) : null}
+                    </span>
+                  </p>
+                </th>
+                <th
+                  className={`cursor-pointer ${sortConfig?.key === "avgPlacement" ? "bg-[#000000]" : ""}`}
+                  onClick={() => requestSort("avgPlacement")}
+                >
+                  <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                    {others.avgRank}
+                    <span className="ml-2">
+                      {sortConfig?.key === "avgPlacement" ? (
+                        sortConfig.direction === "ascending" ? (
+                          <FaSortAmountUp />
+                        ) : (
+                          <FaSortAmountDownAlt />
+                        )
+                      ) : null}
+                    </span>
+                  </p>
+                </th>
+                <th
+                  className={`cursor-pointer ${sortConfig?.key === "tops" ? "bg-[#000000]" : ""}`}
+                  onClick={() => requestSort("tops")}
+                >
+                  <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                    {others.top4}
+                    <span className="ml-2">
+                      {sortConfig?.key === "tops" ? (
+                        sortConfig.direction === "ascending" ? (
+                          <FaSortAmountUp />
+                        ) : (
+                          <FaSortAmountDownAlt />
+                        )
+                      ) : null}
+                    </span>
+                  </p>
+                </th>
+                <th
+                  className={`cursor-pointer ${sortConfig?.key === "wins" ? "bg-[#000000]" : ""}`}
+                  onClick={() => requestSort("wins")}
+                >
+                  <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                    {others.winPercentage}
+                    <span className="ml-2">
+                      {sortConfig?.key === "wins" ? (
+                        sortConfig.direction === "ascending" ? (
+                          <FaSortAmountUp />
+                        ) : (
+                          <FaSortAmountDownAlt />
+                        )
+                      ) : null}
+                    </span>
+                  </p>
+                </th>
+                <th
+                  className={`cursor-pointer ${sortConfig?.key === "pickRate" ? "bg-[#000000]" : ""}`}
+                  onClick={() => requestSort("pickRate")}
+                >
+                  <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                    {others?.pickPercentage}
+                    <span className="ml-2">
+                      {sortConfig?.key === "pickRate" ? (
+                        sortConfig.direction === "ascending" ? (
+                          <FaSortAmountUp />
+                        ) : (
+                          <FaSortAmountDownAlt />
+                        )
+                      ) : null}
+                    </span>
+                  </p>
+                </th>
+                <th
+                  className={`cursor-pointer ${sortConfig?.key === "plays" ? "bg-[#000000]" : ""}`}
+                  onClick={() => requestSort("plays")}
+                >
+                  <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                    {others?.played}
+                    <span className="ml-2">
+                      {sortConfig?.key === "plays" ? (
+                        sortConfig.direction === "ascending" ? (
+                          <FaSortAmountUp />
+                        ) : (
+                          <FaSortAmountDownAlt />
+                        )
+                      ) : null}
+                    </span>
+                  </p>
+                </th>
+                <th>
+                  <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                    {others?.threeStarsPercentage}
+                  </p>
+                </th>
+                <th>
+                  <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                    {others?.threeStarsRank}
+                  </p>
+                </th>
+                <th className="lg:rounded-r-lg">
+                  <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                    {others?.recommended} {others.items}
+                  </p>
+                </th>
+              </tr>
+            </thead>
             {metaDeckChampionsStatsData.map(
               (champion, index) =>
                 champions.find((champ) => champ.key === champion.key)?.key && (
