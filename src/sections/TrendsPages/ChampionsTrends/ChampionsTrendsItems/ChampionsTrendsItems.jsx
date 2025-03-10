@@ -107,8 +107,8 @@ const ProjectItems = () => {
 
   return (
     // <ProjectItemsStyleWrapper>
-    <div className="pt-2 bg-[#1a1b31]">
-      <div className="md:flex md:justify-between md:items-center sticky bg-[#1a1b31] top-[100px] pb-2.5 z-50">
+    <div className="pt-2 bg-[#1a1b31] md:bg-transparent">
+      <div className="md:flex md:justify-between md:items-center sticky bg-[#1a1b31] md:bg-transparent top-[100px] pb-2.5 z-50">
         <div className="flex items-center mx-auto md:!ml-0 md:!mr-0 justify-center md:justify-start">
           <h1 className="text-[#fff] hidden md:block text-lg md:text-xl font-bold mb-0">
             Cost
