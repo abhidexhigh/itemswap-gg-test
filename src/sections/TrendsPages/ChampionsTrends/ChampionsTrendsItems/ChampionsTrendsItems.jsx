@@ -9,6 +9,7 @@ import metaDeckChampionsStats from "../../../../data/newData/metaDeckChampions.j
 import Comps from "../../../../data/compsNew.json";
 import CardImage from "src/components/cardImage";
 import TrendFilters from "src/components/trendFilters";
+import ScrollableTable from "src/utils/ScrollableTable";
 
 const ProjectItems = () => {
   const { t } = useTranslation();
@@ -144,7 +145,7 @@ const ProjectItems = () => {
         ]}
       /> */}
       <div className="projects-row overflow-auto md:overflow-hidden">
-        <div className="h-[800px] overflow-auto">
+        <ScrollableTable>
           <table className="w-[900px] md:w-full relative lg:border-separate lg:border-spacing-y-2">
             <thead className="sticky top-0 z-50">
               <tr className="bg-[#1a1b31]">
@@ -380,7 +381,7 @@ const ProjectItems = () => {
                 )
             )}
           </table>
-        </div>
+        </ScrollableTable>
       </div>
     </div>
     // </ProjectItemsStyleWrapper>

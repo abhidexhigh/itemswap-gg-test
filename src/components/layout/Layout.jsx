@@ -1,5 +1,6 @@
 import Head from "next/head";
 import favIcon from "@assets/images/fav.png";
+import GoToTopButton from "../goToTop/GoToTopButton";
 const Layout = ({ children }) => {
   return (
     <>
@@ -11,7 +12,10 @@ const Layout = ({ children }) => {
         {/* responsive tag */}
         <meta httpEquiv="x-ua-compatible" content="ie=edge" />
       </Head>
-      <main>{children}</main>
+      <main>
+        {children}
+        <GoToTopButton />
+      </main>
     </>
   );
 };
