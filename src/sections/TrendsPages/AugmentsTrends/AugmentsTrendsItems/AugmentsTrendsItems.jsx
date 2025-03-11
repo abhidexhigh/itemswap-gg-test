@@ -10,6 +10,7 @@ import { FaSortAmountUp, FaSortAmountDownAlt } from "react-icons/fa";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import metaDeckAugments from "../../../../data/newData/metaDeckAugments.json";
 import augments from "../../../../data/newData/augments.json";
+import ScrollableTable from "src/utils/ScrollableTable";
 
 const ProjectItems = () => {
   const { t } = useTranslation();
@@ -80,8 +81,8 @@ const ProjectItems = () => {
 
   return (
     <>
-      <div className="pt-2">
-        <div className="md:flex md:justify-between md:items-center">
+      <div className="pt-2 bg-[#1a1b31] md:bg-transparent">
+        <div className="md:flex md:justify-between md:items-center bg-[#1a1b31] md:bg-transparent">
           <TrendFilters
             buttons={["All", "Silver", "Gold", "Prismatic"]}
             onButtonClick={handleButtonClick}
@@ -97,7 +98,7 @@ const ProjectItems = () => {
           </div>
         </div>
         <div className="projects-row overflow-auto md:overflow-hidden">
-          <div>
+          <ScrollableTable>
             <table className="w-full md:border-separate md:border-spacing-y-2">
               <thead>
                 <tr className=" bg-[#1a1b31]">
@@ -388,7 +389,7 @@ const ProjectItems = () => {
                 )}
               </tbody>
             </table>
-          </div>
+          </ScrollableTable>
         </div>
       </div>
     </>

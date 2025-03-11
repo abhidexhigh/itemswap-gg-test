@@ -129,21 +129,6 @@ const ProjectItems = () => {
           />
         </div>
       </div>
-      {/* <TrendFilters
-        dropdown1={["v14.2", "v14.1"]}
-        dropdown2={[
-          "All Ranks",
-          "Iron",
-          "Bronze",
-          "Silver",
-          "Gold",
-          "Platinum",
-          "Diamond",
-          "Master",
-          "Grandmaster",
-          "Challenger",
-        ]}
-      /> */}
       <div className="projects-row overflow-auto md:overflow-hidden">
         <ScrollableTable>
           <table className="w-[900px] md:w-full relative lg:border-separate lg:border-spacing-y-2">

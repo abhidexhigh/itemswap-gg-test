@@ -10,6 +10,7 @@ import { FaSortAmountDownAlt, FaSortAmountUp } from "react-icons/fa";
 import metaDeckTraitStats from "../../../../data/newData/metaDeckTraits.json";
 import Comps from "../../../../data/compsNew.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
+import ScrollableTable from "src/utils/ScrollableTable";
 
 const ProjectItems = () => {
   const { t } = useTranslation();
@@ -110,8 +111,8 @@ const ProjectItems = () => {
   return (
     // <ProjectItemsStyleWrapper>
     <>
-      <div className="pt-2">
-        <div className="md:flex md:justify-between md:items-center">
+      <div className="pt-2 bg-[#1a1b31] md:bg-transparent">
+        <div className="md:flex md:justify-between md:items-center bg-[#1a1b31] md:bg-transparent">
           <TrendFilters
             buttons={["All", "Bronze", "Silver", "Gold", "Prismatic"]}
             onButtonClick={handleButtonClick}
@@ -128,160 +129,161 @@ const ProjectItems = () => {
         </div>
         <div className="projects-row overflow-auto md:overflow-hidden">
           <div>
-            <table className="w-[900px] md:w-full table-auto md:border-separate md:border-spacing-y-2">
-              <tr className="bg-[#1a1b31]">
-                <th className="md:rounded-l-lg">
-                  <p className="p-0 text-sm !mx-2 my-2 md:text-[14px]">
-                    {others.rank}
-                  </p>
-                </th>
-                <th
-                  className={`cursor-pointer ${sortConfig?.key === "key" ? "" : ""}`}
-                  onClick={() => requestSort("key")}
-                >
-                  <p className="cursor-pointer mb-0">
-                    {others?.traits}
-                    <span className="ml-2">
-                      {sortConfig?.key === "key" ? (
-                        sortConfig.direction === "ascending" ? (
-                          <FaSortAmountUp />
-                        ) : (
-                          <FaSortAmountDownAlt />
-                        )
-                      ) : null}
-                    </span>
-                  </p>
-                </th>
-                <th
-                  className={`cursor-pointer ${sortConfig?.key === "avgPlacement" ? "" : ""}`}
-                  onClick={() => requestSort("avgPlacement")}
-                >
-                  <p className="cursor-pointer mb-0">
-                    {others?.avgRank}
-                    <span className="ml-2">
-                      {sortConfig?.key === "avgPlacement" ? (
-                        sortConfig.direction === "ascending" ? (
-                          <FaSortAmountUp />
-                        ) : (
-                          <FaSortAmountDownAlt />
-                        )
-                      ) : null}
-                    </span>
-                  </p>
-                </th>
-                <th
-                  className={`cursor-pointer ${sortConfig?.key === "tops" ? "" : ""}`}
-                  onClick={() => requestSort("tops")}
-                >
-                  <p className="cursor-pointer mb-0">
-                    {others?.top4}
-                    <span className="ml-2">
-                      {sortConfig?.key === "tops" ? (
-                        sortConfig.direction === "ascending" ? (
-                          <FaSortAmountUp />
-                        ) : (
-                          <FaSortAmountDownAlt />
-                        )
-                      ) : null}
-                    </span>
-                  </p>
-                </th>
-                <th
-                  className={`cursor-pointer ${sortConfig?.key === "wins" ? "" : ""}`}
-                  onClick={() => requestSort("wins")}
-                >
-                  <p className="cursor-pointer mb-0">
-                    {others?.winPercentage}
-                    <span className="ml-2">
-                      {sortConfig?.key === "wins" ? (
-                        sortConfig.direction === "ascending" ? (
-                          <FaSortAmountUp />
-                        ) : (
-                          <FaSortAmountDownAlt />
-                        )
-                      ) : null}
-                    </span>
-                  </p>
-                </th>
-                <th
-                  className={`cursor-pointer ${sortConfig?.key === "pickRate" ? "" : ""}`}
-                  onClick={() => requestSort("pickRate")}
-                >
-                  <p className="cursor-pointer mb-0">
-                    {others?.pickPercentage}
-                    <span className="ml-2">
-                      {sortConfig?.key === "pickRate" ? (
-                        sortConfig.direction === "ascending" ? (
-                          <FaSortAmountUp />
-                        ) : (
-                          <FaSortAmountDownAlt />
-                        )
-                      ) : null}
-                    </span>
-                  </p>
-                </th>
-                <th
-                  className={`cursor-pointer ${sortConfig?.key === "plays" ? "" : ""}`}
-                  onClick={() => requestSort("plays")}
-                >
-                  <p className="cursor-pointer mb-0">
-                    {others?.played}
-                    <span className="ml-2">
-                      {sortConfig?.key === "plays" ? (
-                        sortConfig.direction === "ascending" ? (
-                          <FaSortAmountUp />
-                        ) : (
-                          <FaSortAmountDownAlt />
-                        )
-                      ) : null}
-                    </span>
-                  </p>
-                </th>
-                <th className="th10 md:rounded-r-lg">
-                  <p className="p-0 text-sm text-center !mx-2 my-2 md:text-[16px]">
-                    {others?.top3} {others?.champions}
-                  </p>
-                </th>
-              </tr>
-              {metaDeckTraitStatsData.map((metaTrait, index) => (
-                <tr className="m-2 bg-[#1a1b31] hover:bg-[#292a4ae0]">
-                  <td className="md:rounded-l-lg">
-                    <div className="text-center">{index + 1}</div>
-                  </td>
-                  <td className="py-2">
-                    <div>
-                      <div className="flex justify-start items-center">
-                        <Image
-                          src={
-                            traits
-                              ?.find((trait) => trait?.key === metaTrait?.key)
-                              ?.tiers?.find(
-                                (tier) => tier?.tier == metaTrait?.tier
-                              )?.imageUrl
-                          }
-                          width={80}
-                          height={80}
-                          className="w-20 md:w-20 mr-2"
-                          alt="icon"
-                          data-tooltip-id={metaTrait?.key}
-                        />
-                        <ReactTltp
-                          variant="trait"
-                          id={metaTrait?.key}
-                          content={traits?.find(
-                            (trait) => trait?.key === metaTrait?.key
-                          )}
-                        />
-                        <div>
-                          <p className="p-0 !text-md md:!text-xl text-[#fff] mb-0">
-                            {
-                              traits?.find(
-                                (trait) => trait?.key === metaTrait?.key
-                              )?.name
+            <ScrollableTable>
+              <table className="w-[900px] md:w-full table-auto md:border-separate md:border-spacing-y-2">
+                <tr className="bg-[#1a1b31]">
+                  <th className="md:rounded-l-lg">
+                    <p className="p-0 text-sm !mx-2 my-2 md:text-[14px]">
+                      {others.rank}
+                    </p>
+                  </th>
+                  <th
+                    className={`cursor-pointer ${sortConfig?.key === "key" ? "" : ""}`}
+                    onClick={() => requestSort("key")}
+                  >
+                    <p className="cursor-pointer mb-0">
+                      {others?.traits}
+                      <span className="ml-2">
+                        {sortConfig?.key === "key" ? (
+                          sortConfig.direction === "ascending" ? (
+                            <FaSortAmountUp />
+                          ) : (
+                            <FaSortAmountDownAlt />
+                          )
+                        ) : null}
+                      </span>
+                    </p>
+                  </th>
+                  <th
+                    className={`cursor-pointer ${sortConfig?.key === "avgPlacement" ? "" : ""}`}
+                    onClick={() => requestSort("avgPlacement")}
+                  >
+                    <p className="cursor-pointer mb-0">
+                      {others?.avgRank}
+                      <span className="ml-2">
+                        {sortConfig?.key === "avgPlacement" ? (
+                          sortConfig.direction === "ascending" ? (
+                            <FaSortAmountUp />
+                          ) : (
+                            <FaSortAmountDownAlt />
+                          )
+                        ) : null}
+                      </span>
+                    </p>
+                  </th>
+                  <th
+                    className={`cursor-pointer ${sortConfig?.key === "tops" ? "" : ""}`}
+                    onClick={() => requestSort("tops")}
+                  >
+                    <p className="cursor-pointer mb-0">
+                      {others?.top4}
+                      <span className="ml-2">
+                        {sortConfig?.key === "tops" ? (
+                          sortConfig.direction === "ascending" ? (
+                            <FaSortAmountUp />
+                          ) : (
+                            <FaSortAmountDownAlt />
+                          )
+                        ) : null}
+                      </span>
+                    </p>
+                  </th>
+                  <th
+                    className={`cursor-pointer ${sortConfig?.key === "wins" ? "" : ""}`}
+                    onClick={() => requestSort("wins")}
+                  >
+                    <p className="cursor-pointer mb-0">
+                      {others?.winPercentage}
+                      <span className="ml-2">
+                        {sortConfig?.key === "wins" ? (
+                          sortConfig.direction === "ascending" ? (
+                            <FaSortAmountUp />
+                          ) : (
+                            <FaSortAmountDownAlt />
+                          )
+                        ) : null}
+                      </span>
+                    </p>
+                  </th>
+                  <th
+                    className={`cursor-pointer ${sortConfig?.key === "pickRate" ? "" : ""}`}
+                    onClick={() => requestSort("pickRate")}
+                  >
+                    <p className="cursor-pointer mb-0">
+                      {others?.pickPercentage}
+                      <span className="ml-2">
+                        {sortConfig?.key === "pickRate" ? (
+                          sortConfig.direction === "ascending" ? (
+                            <FaSortAmountUp />
+                          ) : (
+                            <FaSortAmountDownAlt />
+                          )
+                        ) : null}
+                      </span>
+                    </p>
+                  </th>
+                  <th
+                    className={`cursor-pointer ${sortConfig?.key === "plays" ? "" : ""}`}
+                    onClick={() => requestSort("plays")}
+                  >
+                    <p className="cursor-pointer mb-0">
+                      {others?.played}
+                      <span className="ml-2">
+                        {sortConfig?.key === "plays" ? (
+                          sortConfig.direction === "ascending" ? (
+                            <FaSortAmountUp />
+                          ) : (
+                            <FaSortAmountDownAlt />
+                          )
+                        ) : null}
+                      </span>
+                    </p>
+                  </th>
+                  <th className="th10 md:rounded-r-lg">
+                    <p className="p-0 text-sm text-center !mx-2 my-2 md:text-[16px]">
+                      {others?.top3} {others?.champions}
+                    </p>
+                  </th>
+                </tr>
+                {metaDeckTraitStatsData.map((metaTrait, index) => (
+                  <tr className="m-2 bg-[#1a1b31] hover:bg-[#292a4ae0]">
+                    <td className="md:rounded-l-lg">
+                      <div className="text-center">{index + 1}</div>
+                    </td>
+                    <td className="py-2">
+                      <div>
+                        <div className="flex justify-start items-center">
+                          <Image
+                            src={
+                              traits
+                                ?.find((trait) => trait?.key === metaTrait?.key)
+                                ?.tiers?.find(
+                                  (tier) => tier?.tier == metaTrait?.tier
+                                )?.imageUrl
                             }
-                          </p>
-                          <p className="m-0 text-xs font-extralight">
-                            {/* <div className="text-center">
+                            width={80}
+                            height={80}
+                            className="w-20 md:w-20 mr-2"
+                            alt="icon"
+                            data-tooltip-id={metaTrait?.key}
+                          />
+                          <ReactTltp
+                            variant="trait"
+                            id={metaTrait?.key}
+                            content={traits?.find(
+                              (trait) => trait?.key === metaTrait?.key
+                            )}
+                          />
+                          <div>
+                            <p className="p-0 !text-md md:!text-xl text-[#fff] mb-0">
+                              {
+                                traits?.find(
+                                  (trait) => trait?.key === metaTrait?.key
+                                )?.name
+                              }
+                            </p>
+                            <p className="m-0 text-xs font-extralight">
+                              {/* <div className="text-center">
                               {Object.entries(
                                 traits?.find(
                                   (trait) => trait?.key === metaTrait?.key
@@ -303,58 +305,65 @@ const ProjectItems = () => {
                                 </span>
                               ))}
                             </div> */}
-                          </p>
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="py-2">
-                    <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
-                      #{metaTrait?.avgPlacement}
-                    </p>
-                  </td>
-                  <td className="py-2">
-                    <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
-                      {((metaTrait?.tops * 100) / metaTrait?.plays).toFixed(2)}%
-                    </p>
-                  </td>
-                  <td className="py-2">
-                    <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
-                      {((metaTrait?.wins * 100) / metaTrait?.plays).toFixed(2)}%
-                    </p>
-                  </td>
-                  <td className="py-2">
-                    <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
-                      {(metaTrait?.pickRate * 100).toFixed(2)}%
-                    </p>
-                  </td>
-                  <td className="py-2">
-                    <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
-                      {metaTrait?.plays.toLocaleString("en-US")}
-                    </p>
-                  </td>
-                  <td className="md:rounded-r-lg py-2">
-                    <div className="flex justify-center items-center gap-1 md:gap-2">
-                      {metaTrait?.traitChampionStats
-                        ?.slice(0, 3)
-                        ?.map((champion) => (
-                          <>
-                            <CardImage
-                              src={champions?.find(
-                                (champ) => champ?.key === champion
-                              )}
-                              imgStyle="w-[72px] md:w-[84px]"
-                              identificationImageStyle="w=[16px] md:w-[32px]"
-                              textStyle="text-[10px] md:text-[12px]"
-                              forces={forces}
-                            />
-                          </>
-                        ))}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </table>
+                    </td>
+                    <td className="py-2">
+                      <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
+                        #{metaTrait?.avgPlacement}
+                      </p>
+                    </td>
+                    <td className="py-2">
+                      <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
+                        {((metaTrait?.tops * 100) / metaTrait?.plays).toFixed(
+                          2
+                        )}
+                        %
+                      </p>
+                    </td>
+                    <td className="py-2">
+                      <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
+                        {((metaTrait?.wins * 100) / metaTrait?.plays).toFixed(
+                          2
+                        )}
+                        %
+                      </p>
+                    </td>
+                    <td className="py-2">
+                      <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
+                        {(metaTrait?.pickRate * 100).toFixed(2)}%
+                      </p>
+                    </td>
+                    <td className="py-2">
+                      <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
+                        {metaTrait?.plays.toLocaleString("en-US")}
+                      </p>
+                    </td>
+                    <td className="md:rounded-r-lg py-2">
+                      <div className="flex justify-center items-center gap-1 md:gap-2">
+                        {metaTrait?.traitChampionStats
+                          ?.slice(0, 3)
+                          ?.map((champion) => (
+                            <>
+                              <CardImage
+                                src={champions?.find(
+                                  (champ) => champ?.key === champion
+                                )}
+                                imgStyle="w-[72px] md:w-[84px]"
+                                identificationImageStyle="w=[16px] md:w-[32px]"
+                                textStyle="text-[10px] md:text-[12px]"
+                                forces={forces}
+                              />
+                            </>
+                          ))}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </table>
+            </ScrollableTable>
           </div>
         </div>
       </div>

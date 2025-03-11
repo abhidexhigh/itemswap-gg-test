@@ -46,8 +46,8 @@ const TierCard = ({ cost, itemsData }) => {
                               src={champions?.find(
                                 (c) => c?.key === champion?.key
                               )}
-                              imgStyle="w-[112px] md:w-[96px]"
-                              identificationImageStyle="w-[42px] md:w-[30px]"
+                              imgStyle="w-[96px] md:w-[96px]"
+                              identificationImageStyle="w-[36px] md:w-[30px]"
                               textStyle="text-[10px] md:text-[16px]"
                               forces={forces}
                             />
@@ -65,9 +65,9 @@ const TierCard = ({ cost, itemsData }) => {
                                 items?.find((i) => i?.key === item)?.imageUrl
                               }
                               alt={"item"}
-                              width={48}
-                              height={48}
-                              className=" border-[1px] rounded-lg border-[#ffffff60]"
+                              width={30}
+                              height={30}
+                              className="w-full border-[1px] rounded-lg border-[#ffffff60]"
                             />
                           </div>
                           <ReactTltp
@@ -134,8 +134,8 @@ const TierCard = ({ cost, itemsData }) => {
                                           ?.imageUrl
                                       }
                                       alt={"item"}
-                                      width={48}
-                                      height={48}
+                                      width={30}
+                                      height={30}
                                       className="w-[56px] md:w-[44px]"
                                     />
                                   </div>
@@ -153,7 +153,7 @@ const TierCard = ({ cost, itemsData }) => {
                           <td
                             className={`w-[52px] text-center py-[6px] text-[14px] ${item?.avgPlacement < 4 ? "text-yellow-200" : "text-[#fff]"}`}
                           >
-                            #{item?.avgPlacement}
+                            #{item?.avgPlacement.toFixed(2)}
                           </td>
                           <td className="w-[52px] text-center py-[6px] text-[14px] text-[#fff]">
                             {(item?.pickRate * 100).toFixed(2)}%

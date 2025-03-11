@@ -10,6 +10,7 @@ import Comps from "../../../../data/compsNew.json";
 import Forces from "../../../../data/newData/force.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
+import ScrollableTable from "src/utils/ScrollableTable";
 
 const ProjectItems = () => {
   const { t } = useTranslation();
@@ -109,8 +110,8 @@ const ProjectItems = () => {
   return (
     // <ProjectItemsStyleWrapper>
     <>
-      <div className="pt-2">
-        <div className="md:flex md:justify-between md:items-center">
+      <div className="pt-2 bg-[#1a1b31] md:bg-transparent">
+        <div className="md:flex md:justify-between md:items-center bg-[#1a1b31] md:bg-transparent">
           <TrendFilters
             buttons={["All", "Normal", "Radiant"]}
             onButtonClick={handleButtonClick}
@@ -126,7 +127,7 @@ const ProjectItems = () => {
           </div>
         </div>
         <div className="projects-row overflow-auto md:overflow-hidden">
-          <div>
+          <ScrollableTable>
             <table className="w-[900px] md:w-full md:border-separate md:border-spacing-y-2">
               <tr className="bg-[#1a1b31]">
                 <th className="md:rounded-l-lg">
@@ -396,7 +397,8 @@ const ProjectItems = () => {
                   )
               )}
             </table>
-            {/* <Tooltip
+          </ScrollableTable>
+          {/* <Tooltip
               id="my-tooltip"
               effect="solid"
               style={{
@@ -420,7 +422,6 @@ const ProjectItems = () => {
                 rangeFilled={70}
               />
             </Tooltip> */}
-          </div>
         </div>
       </div>
     </>

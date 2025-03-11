@@ -3,92 +3,84 @@ import { useRef, useEffect, useState } from "react";
 export default function ScrollableTable({ children }) {
   const scrollRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [direction, setDirection] = useState(null); // To dynamically set overflow direction
 
-  // Detect mobile screen
+  // Detect if mobile based on screen width
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768); // Mobile/tablet breakpoint
-
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     checkMobile();
+
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Handle touch scroll on mobile
+  // Handle touch detection and direction lock
   useEffect(() => {
-    if (!isMobile) return; // Only apply on mobile
+    if (!isMobile) return;
 
     const scrollElement = scrollRef.current;
     let startX = 0;
     let startY = 0;
-    let lockedDirection = null;
+    let locked = false; // To lock once direction is detected
 
     const onTouchStart = (e) => {
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
-      lockedDirection = null; // Reset direction on new touch
+      locked = false; // Reset lock for new gesture
+      setDirection(null); // Reset direction on new gesture
     };
 
     const onTouchMove = (e) => {
       const currentX = e.touches[0].clientX;
       const currentY = e.touches[0].clientY;
-      const diffX = currentX - startX;
-      const diffY = currentY - startY;
+      const diffX = Math.abs(currentX - startX);
+      const diffY = Math.abs(currentY - startY);
 
-      // Lock direction once user starts moving
-      if (!lockedDirection) {
-        lockedDirection =
-          Math.abs(diffX) > Math.abs(diffY) ? "horizontal" : "vertical";
-      }
-
-      const atTop = scrollElement.scrollTop === 0;
-      const atBottom =
-        scrollElement.scrollHeight - scrollElement.scrollTop ===
-        scrollElement.clientHeight;
-      const atLeft = scrollElement.scrollLeft === 0;
-      const atRight =
-        scrollElement.scrollWidth - scrollElement.scrollLeft ===
-        scrollElement.clientWidth;
-
-      let shouldPrevent = false;
-
-      if (lockedDirection === "vertical") {
-        // Scrolling up and at top OR scrolling down and at bottom — allow parent scroll
-        if ((diffY > 0 && atTop) || (diffY < 0 && atBottom)) {
-          shouldPrevent = false;
-        } else {
-          scrollElement.scrollTop -= diffY; // Scroll table
-          startY = currentY; // Reset for smoothness
-          shouldPrevent = true;
-        }
-      } else if (lockedDirection === "horizontal") {
-        // Scrolling right and at left OR scrolling left and at right — allow parent scroll
-        if ((diffX > 0 && atLeft) || (diffX < 0 && atRight)) {
-          shouldPrevent = false;
-        } else {
-          scrollElement.scrollLeft -= diffX; // Scroll table
-          startX = currentX; // Reset for smoothness
-          shouldPrevent = true;
+      if (!locked) {
+        // Lock to first significant move direction
+        if (diffX > 10 || diffY > 10) {
+          if (diffX > diffY) {
+            setDirection("horizontal"); // Lock to horizontal
+          } else {
+            setDirection("vertical"); // Lock to vertical
+          }
+          locked = true;
         }
       }
+    };
 
-      if (shouldPrevent) e.preventDefault(); // Only block when we are not at the edge
+    const onTouchEnd = () => {
+      // Optional: Reset direction after touch ends (if you want to unlock)
+      // setDirection(null); // Uncomment if you want to unlock after gesture ends
     };
 
     scrollElement.addEventListener("touchstart", onTouchStart, {
-      passive: false,
+      passive: true,
     });
-    scrollElement.addEventListener("touchmove", onTouchMove, {
-      passive: false,
-    });
+    scrollElement.addEventListener("touchmove", onTouchMove, { passive: true });
+    scrollElement.addEventListener("touchend", onTouchEnd, { passive: true });
 
     return () => {
       scrollElement.removeEventListener("touchstart", onTouchStart);
       scrollElement.removeEventListener("touchmove", onTouchMove);
+      scrollElement.removeEventListener("touchend", onTouchEnd);
     };
   }, [isMobile]);
 
   return (
-    <div ref={scrollRef} className="h-[800px] overflow-auto">
+    <div
+      ref={scrollRef}
+      className={`h-[800px] scroll-smooth ${
+        // Dynamically control overflow based on locked direction
+        isMobile
+          ? direction === "horizontal"
+            ? "overflow-x-auto overflow-y-hidden"
+            : direction === "vertical"
+              ? "overflow-y-auto overflow-x-hidden"
+              : "overflow-auto"
+          : "overflow-auto"
+      }`}
+    >
       {children}
     </div>
   );
