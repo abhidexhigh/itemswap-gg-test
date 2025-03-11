@@ -6,7 +6,7 @@ export default function ScrollableTable({ children }) {
 
   // Detect mobile screen
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768); // Adjust width for mobile/tablet breakpoint
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768); // Mobile/tablet breakpoint
 
     checkMobile();
     window.addEventListener("resize", checkMobile);
@@ -25,32 +25,53 @@ export default function ScrollableTable({ children }) {
     const onTouchStart = (e) => {
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
-      lockedDirection = null; // Reset direction on each new touch
+      lockedDirection = null; // Reset direction on new touch
     };
 
     const onTouchMove = (e) => {
-      const diffX = e.touches[0].clientX - startX;
-      const diffY = e.touches[0].clientY - startY;
+      const currentX = e.touches[0].clientX;
+      const currentY = e.touches[0].clientY;
+      const diffX = currentX - startX;
+      const diffY = currentY - startY;
 
-      // Lock direction if not decided yet
+      // Lock direction once user starts moving
       if (!lockedDirection) {
         lockedDirection =
           Math.abs(diffX) > Math.abs(diffY) ? "horizontal" : "vertical";
       }
 
-      // If horizontal is locked, prevent vertical
-      if (lockedDirection === "horizontal") {
-        scrollElement.scrollLeft -= diffX; // Scrolling horizontally
-        startX = e.touches[0].clientX; // Reset startX for smoothness
-        e.preventDefault(); // Prevent vertical scroll
+      const atTop = scrollElement.scrollTop === 0;
+      const atBottom =
+        scrollElement.scrollHeight - scrollElement.scrollTop ===
+        scrollElement.clientHeight;
+      const atLeft = scrollElement.scrollLeft === 0;
+      const atRight =
+        scrollElement.scrollWidth - scrollElement.scrollLeft ===
+        scrollElement.clientWidth;
+
+      let shouldPrevent = false;
+
+      if (lockedDirection === "vertical") {
+        // Scrolling up and at top OR scrolling down and at bottom — allow parent scroll
+        if ((diffY > 0 && atTop) || (diffY < 0 && atBottom)) {
+          shouldPrevent = false;
+        } else {
+          scrollElement.scrollTop -= diffY; // Scroll table
+          startY = currentY; // Reset for smoothness
+          shouldPrevent = true;
+        }
+      } else if (lockedDirection === "horizontal") {
+        // Scrolling right and at left OR scrolling left and at right — allow parent scroll
+        if ((diffX > 0 && atLeft) || (diffX < 0 && atRight)) {
+          shouldPrevent = false;
+        } else {
+          scrollElement.scrollLeft -= diffX; // Scroll table
+          startX = currentX; // Reset for smoothness
+          shouldPrevent = true;
+        }
       }
 
-      // If vertical is locked, prevent horizontal
-      if (lockedDirection === "vertical") {
-        scrollElement.scrollTop -= diffY; // Scrolling vertically
-        startY = e.touches[0].clientY; // Reset startY for smoothness
-        e.preventDefault(); // Prevent horizontal scroll
-      }
+      if (shouldPrevent) e.preventDefault(); // Only block when we are not at the edge
     };
 
     scrollElement.addEventListener("touchstart", onTouchStart, {
