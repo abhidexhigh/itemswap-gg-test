@@ -67,6 +67,9 @@ const TierCard = ({ cost, itemsData }) => {
                               alt={"item"}
                               width={30}
                               height={30}
+                              loading="lazy"
+                              placeholder="blur"
+                              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"
                               className="w-full border-[1px] rounded-lg border-[#ffffff60]"
                             />
                           </div>
@@ -99,69 +102,74 @@ const TierCard = ({ cost, itemsData }) => {
                       {isAccordionOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
                     </button>
                   </div>
-                  <table
-                    className={`w-full table-fixed border-collapse mb-4 ${
-                      isAccordionOpen !== cost + "" + index ? "hidden" : ""
-                    }`}
-                  >
-                    <thead className="table-row-group w-full text-[11px] font-[400]">
-                      <tr className="text-center text-[14px] font-[400]">
-                        <th className="pt-[5.25px] pr-0 pb-[5.25px] pl-[5px] text-center bg-[#27282e] text-[#d0d0d0] whitespace-nowrap mt-1">
-                          Best Items
-                        </th>
-                        <th className="pt-[5.25px] pr-0 pb-[5.25px] text-center bg-[#27282e] text-[#d0d0d0] whitespace-nowrap w-[22%]">
-                          Avg
-                        </th>
-                        <th className="pt-[5.25px] pr-0 pb-[5.25px] pl-[5px] text-center bg-[#27282e] text-[#d0d0d0] whitespace-nowrap w-[22%]">
-                          Pick%
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="table-row-group w-full text-[11px] font-[400]">
-                      {champion?.championItemPairStats.map((item, index) => (
-                        <tr className="text-center text-[11px] shadow-lg shadow-red-950 rounded-md font-[400]">
-                          <td className="pt-[4px] pr-0 pb-[4px] pl-[5px] text-left text-[#d0d0d0] whitespace-nowrap">
-                            <div className="flex justify-start items-center gap-[4px]">
-                              {item?.keys.map((item) => (
-                                <div className="rounded-lg overflow-hidden border-[1px] border-[#ffffff60]">
-                                  <div
-                                    className="relative overflow-hidden"
-                                    data-tooltip-id={item}
-                                  >
-                                    <Image
-                                      src={
-                                        items?.find((i) => i?.key === item)
-                                          ?.imageUrl
-                                      }
-                                      alt={"item"}
-                                      width={30}
-                                      height={30}
-                                      className="w-[56px] md:w-[44px]"
+                  {isAccordionOpen === cost + "" + index && (
+                    <table
+                      className={`w-full table-fixed border-collapse mb-4 ${
+                        isAccordionOpen !== cost + "" + index ? "hidden" : ""
+                      }`}
+                    >
+                      <thead className="table-row-group w-full text-[11px] font-[400]">
+                        <tr className="text-center text-[14px] font-[400]">
+                          <th className="pt-[5.25px] pr-0 pb-[5.25px] pl-[5px] text-center bg-[#27282e] text-[#d0d0d0] whitespace-nowrap mt-1">
+                            Best Items
+                          </th>
+                          <th className="pt-[5.25px] pr-0 pb-[5.25px] text-center bg-[#27282e] text-[#d0d0d0] whitespace-nowrap w-[22%]">
+                            Avg
+                          </th>
+                          <th className="pt-[5.25px] pr-0 pb-[5.25px] pl-[5px] text-center bg-[#27282e] text-[#d0d0d0] whitespace-nowrap w-[22%]">
+                            Pick%
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="table-row-group w-full text-[11px] font-[400]">
+                        {champion?.championItemPairStats.map((item, index) => (
+                          <tr className="text-center text-[11px] shadow-lg shadow-red-950 rounded-md font-[400]">
+                            <td className="pt-[4px] pr-0 pb-[4px] pl-[5px] text-left text-[#d0d0d0] whitespace-nowrap">
+                              <div className="flex justify-start items-center gap-[4px]">
+                                {item?.keys.map((item) => (
+                                  <div className="rounded-lg overflow-hidden border-[1px] border-[#ffffff60]">
+                                    <div
+                                      className="relative overflow-hidden"
+                                      data-tooltip-id={item}
+                                    >
+                                      <Image
+                                        src={
+                                          items?.find((i) => i?.key === item)
+                                            ?.imageUrl
+                                        }
+                                        alt={"item"}
+                                        width={30}
+                                        height={30}
+                                        loading="lazy"
+                                        placeholder="blur"
+                                        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"
+                                        className="w-[56px] md:w-[44px]"
+                                      />
+                                    </div>
+                                    <ReactTltp
+                                      variant="item"
+                                      id={item}
+                                      content={items?.find(
+                                        (i) => i?.key === item
+                                      )}
                                     />
                                   </div>
-                                  <ReactTltp
-                                    variant="item"
-                                    id={item}
-                                    content={items?.find(
-                                      (i) => i?.key === item
-                                    )}
-                                  />
-                                </div>
-                              ))}
-                            </div>
-                          </td>
-                          <td
-                            className={`w-[52px] text-center py-[6px] text-[14px] ${item?.avgPlacement < 4 ? "text-yellow-200" : "text-[#fff]"}`}
-                          >
-                            #{item?.avgPlacement.toFixed(2)}
-                          </td>
-                          <td className="w-[52px] text-center py-[6px] text-[14px] text-[#fff]">
-                            {(item?.pickRate * 100).toFixed(2)}%
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                                ))}
+                              </div>
+                            </td>
+                            <td
+                              className={`w-[52px] text-center py-[6px] text-[14px] ${item?.avgPlacement < 4 ? "text-yellow-200" : "text-[#fff]"}`}
+                            >
+                              #{item?.avgPlacement.toFixed(2)}
+                            </td>
+                            <td className="w-[52px] text-center py-[6px] text-[14px] text-[#fff]">
+                              {(item?.pickRate * 100).toFixed(2)}%
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
                 </td>
               </tr>
             ))}
