@@ -658,39 +658,41 @@ const ProjectItems = () => {
                   >
                     <header className="relative flex md:flex-col justify-between items-end bg-[#1a1b30] py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px]">
                       <div className="inline-flex flex-col flex-wrap gap-[8px] md:flex-row md:items-center md:gap-3">
-                        <div
-                          className={`rounded-lg !border-[#ffffff40] !border p-2 py-0 shadow-lg ${metaDeck?.placement == 1 ? "text-[#3aedbd] !border-[#3aedbd]" : metaDeck?.placement == 2 ? "text-[#FBDB51] !border-[#FBDB51]" : metaDeck?.placement == 3 ? "text-[#6eccff] !border-[#6eccff]" : "text-[#ffffff]"}`}
-                        >
-                          <div className="text-3xl p-2">
-                            {metaDeck?.placement}
+                        <div className="flex items-center gap-x-2">
+                          <div
+                            className={`rounded-lg !border-[#ffffff40] !border p-2 py-0 shadow-lg ${metaDeck?.placement == 1 ? "text-[#3aedbd] !border-[#3aedbd]" : metaDeck?.placement == 2 ? "text-[#FBDB51] !border-[#FBDB51]" : metaDeck?.placement == 3 ? "text-[#6eccff] !border-[#6eccff]" : "text-[#ffffff]"}`}
+                          >
+                            <div className="text-xl md:text-3xl p-2">
+                              {metaDeck?.placement}
+                            </div>
                           </div>
-                        </div>
-                        <Link
-                          href={`/user/${metaDeck?.puuid}/${metaDeck?.key}`}
-                          className="flex items-center gap-x-2"
-                        >
-                          <div className="relative">
-                            <Image
-                              src={metaDeck?.imageUrl}
-                              alt="Image"
-                              width={80}
-                              height={80}
-                              className="w-16 relative"
-                            />
-                            {/* <div className="absolute bottom-0 right-0 px-2 rounded-full bg-[#444]">
+                          <Link
+                            href={`/user/${metaDeck?.puuid}/${metaDeck?.key}`}
+                            className="flex items-center gap-x-2"
+                          >
+                            <div className="relative">
+                              <Image
+                                src={metaDeck?.imageUrl}
+                                alt="Image"
+                                width={80}
+                                height={80}
+                                className="w-16 relative"
+                              />
+                              {/* <div className="absolute bottom-0 right-0 px-2 rounded-full bg-[#444]">
                               {metaDeck?.level}
                             </div> */}
-                          </div>
-                          <div className="flex flex-col">
-                            <div className="-mb-1 text-lg">
-                              {metaDeck?.name}
                             </div>
-                            <div className="-mb-1 font-normal text-sm">
-                              {moment(metaDeck?.dateTime).fromNow()} •{" "}
-                              {metaDeck?.duration}
+                            <div className="flex flex-col">
+                              <div className="-mb-1 text-lg">
+                                {metaDeck?.name}
+                              </div>
+                              <div className="-mb-1 font-normal text-sm">
+                                {moment(metaDeck?.dateTime).fromNow()} •{" "}
+                                {metaDeck?.duration}
+                              </div>
                             </div>
-                          </div>
-                        </Link>
+                          </Link>
+                        </div>
                         <span className="flex justify-center items-center">
                           {metaDeck?.deck?.forces?.map((force, i) => (
                             <>

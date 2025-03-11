@@ -113,10 +113,12 @@ const ProjectItems = () => {
     <>
       <div className="pt-2 bg-[#1a1b31] md:bg-transparent">
         <div className="md:flex md:justify-between md:items-center bg-[#1a1b31] md:bg-transparent">
-          <TrendFilters
-            buttons={["All", "Bronze", "Silver", "Gold", "Prismatic"]}
-            onButtonClick={handleButtonClick}
-          />
+          <div className="w-[350px] mx-auto overflow-x-scroll md:overflow-auto md:w-auto">
+            <TrendFilters
+              buttons={["All", "Bronze", "Silver", "Gold", "Prismatic"]}
+              onButtonClick={handleButtonClick}
+            />
+          </div>
           <div className="mb-2 md:mb-0 px-2">
             <input
               type="text"
