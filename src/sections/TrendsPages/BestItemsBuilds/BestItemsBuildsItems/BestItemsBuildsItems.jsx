@@ -5,54 +5,40 @@ import projectsData from "@assets/data/projects/dataV6";
 import "react-tooltip/dist/react-tooltip.css";
 import TierContent from "./TierContent";
 import BestItemsBuilds from "../../../../data/newData/bestItemsBuilds.json";
+import ProjectCardStyleWrapper from "./BestItemsBuildsItems.style";
 
 const ProjectItems = () => {
   const { t } = useTranslation();
   const others = t("others");
   const { metaDeckChampionStats } = BestItemsBuilds;
   const [activeTab, setActiveTab] = useState("Tier 1"); // [Tier 1, Tier 2, Tier 3, Tier 4, Tier 5
+
   return (
-    // <ProjectItemsStyleWrapper>
-    <>
-      <div className="pt-2">
-        {/* <TrendFilters
-          dropdown1={["v14.2", "v14.1"]}
-          dropdown2={[
-            "All Ranks",
-            "Iron",
-            "Bronze",
-            "Silver",
-            "Gold",
-            "Platinum",
-            "Diamond",
-            "Master",
-            "Grandmaster",
-            "Challenger",
-          ]}
-        /> */}
+    <ProjectCardStyleWrapper>
+      <div className="pt-2 px-2 sm:px-4">
         <div className="projects-row overflow-auto md:overflow-hidden">
           <div>
             {/* TABS START */}
-            <div className="text-sm font-medium text-center text-gray-white border-b border-gray-200 md:hidden bg-[#222231]">
+            <div className="text-sm font-medium text-center text-white border-b border-gray-700 md:hidden bg-[#222231] rounded-t-lg shadow-lg">
               <ul className="flex flex-wrap -mb-px justify-between">
                 <li className="w-[20%]" onClick={() => setActiveTab("Tier 1")}>
                   <div
-                    className={`inline-block w-full py-2 text-base font-bold ${
+                    className={`inline-block w-full py-2 text-base font-bold transition-all duration-200 ${
                       activeTab === "Tier 1"
-                        ? "text-[#121212] border-b-2 border-blue-600 active bg-[#ffffff] rounded-lg"
-                        : "border-transparent"
-                    } border-b-2 rounded-t-lg hover:text-blue-500 hover:border-blue-500 cursor-pointer`}
+                        ? "text-[#121212] border-b-2 border-blue-600 active bg-[#ffffff] rounded-t-lg"
+                        : "border-transparent text-gray-300 hover:text-blue-400 hover:border-blue-400"
+                    } border-b-2 rounded-t-lg cursor-pointer`}
                   >
                     {others?.tier} 1
                   </div>
                 </li>
                 <li className="w-[20%]" onClick={() => setActiveTab("Tier 2")}>
                   <div
-                    className={`inline-block w-full py-2 text-base font-bold ${
+                    className={`inline-block w-full py-2 text-base font-bold transition-all duration-200 ${
                       activeTab === "Tier 2"
-                        ? "text-[#121212] border-b-2 border-blue-600 active bg-[#ffffff] rounded-lg"
-                        : "border-transparent"
-                    } border-b-2 rounded-t-lg hover:text-blue-500 hover:border-blue-500 cursor-pointer`}
+                        ? "text-[#121212] border-b-2 border-blue-600 active bg-[#ffffff] rounded-t-lg"
+                        : "border-transparent text-gray-300 hover:text-blue-400 hover:border-blue-400"
+                    } border-b-2 rounded-t-lg cursor-pointer`}
                     aria-current="page"
                   >
                     {others?.tier} 2
@@ -60,11 +46,11 @@ const ProjectItems = () => {
                 </li>
                 <li className="w-[20%]" onClick={() => setActiveTab("Tier 3")}>
                   <div
-                    className={`inline-block w-full py-2 text-base font-bold ${
+                    className={`inline-block w-full py-2 text-base font-bold transition-all duration-200 ${
                       activeTab === "Tier 3"
-                        ? "text-[#121212] border-b-2 border-blue-600 active bg-[#ffffff] rounded-lg"
-                        : "border-transparent"
-                    } border-b-2 rounded-t-lg hover:text-blue-500 hover:border-blue-500 cursor-pointer`}
+                        ? "text-[#121212] border-b-2 border-blue-600 active bg-[#ffffff] rounded-t-lg"
+                        : "border-transparent text-gray-300 hover:text-blue-400 hover:border-blue-400"
+                    } border-b-2 rounded-t-lg cursor-pointer`}
                     aria-current="page"
                   >
                     {others?.tier} 3
@@ -72,22 +58,22 @@ const ProjectItems = () => {
                 </li>
                 <li className="w-[20%]" onClick={() => setActiveTab("Tier 4")}>
                   <div
-                    className={`inline-block w-full py-2 text-base font-bold ${
+                    className={`inline-block w-full py-2 text-base font-bold transition-all duration-200 ${
                       activeTab === "Tier 4"
-                        ? "text-[#121212] border-b-2 border-blue-600 active bg-[#ffffff] rounded-lg"
-                        : "border-transparent"
-                    } border-b-2 rounded-t-lg hover:text-blue-500 hover:border-blue-500 cursor-pointer`}
+                        ? "text-[#121212] border-b-2 border-blue-600 active bg-[#ffffff] rounded-t-lg"
+                        : "border-transparent text-gray-300 hover:text-blue-400 hover:border-blue-400"
+                    } border-b-2 rounded-t-lg cursor-pointer`}
                   >
                     {others?.tier} 4
                   </div>
                 </li>
                 <li className="w-[20%]" onClick={() => setActiveTab("Tier 5")}>
                   <div
-                    className={`inline-block w-full py-2 text-base font-bold ${
+                    className={`inline-block w-full py-2 text-base font-bold transition-all duration-200 ${
                       activeTab === "Tier 5"
-                        ? "text-[#121212] border-b-2 border-blue-600 active bg-[#ffffff] rounded-lg"
-                        : "border-transparent"
-                    } border-b-2 rounded-t-lg hover:text-blue-500 hover:border-blue-500 cursor-pointer`}
+                        ? "text-[#121212] border-b-2 border-blue-600 active bg-[#ffffff] rounded-t-lg"
+                        : "border-transparent text-gray-300 hover:text-blue-400 hover:border-blue-400"
+                    } border-b-2 rounded-t-lg cursor-pointer`}
                   >
                     {others?.tier} 5
                   </div>
@@ -95,9 +81,9 @@ const ProjectItems = () => {
               </ul>
             </div>
             {/* TABS END */}
-            <div className="flex flex-col md:grid grid-cols-5 gap-2">
+            <div className="flex flex-col md:grid grid-cols-5 gap-3 mt-3">
               <div
-                className={`bg-slate-800 md:block !rounded-lg !border !border-[#ffffff50] ${
+                className={`bg-slate-800 md:block !rounded-lg !border !border-[#ffffff50] shadow-lg transition-all duration-300 hover:border-[#ffffff70] ${
                   activeTab === "Tier 1" ? "block" : "hidden"
                 }`}
               >
@@ -109,7 +95,7 @@ const ProjectItems = () => {
                 />
               </div>
               <div
-                className={`bg-slate-800 md:block !rounded-lg !border !border-[#ffffff50] ${
+                className={`bg-slate-800 md:block !rounded-lg !border !border-[#ffffff50] shadow-lg transition-all duration-300 hover:border-[#ffffff70] ${
                   activeTab === "Tier 2" ? "block" : "hidden"
                 }`}
               >
@@ -121,7 +107,7 @@ const ProjectItems = () => {
                 />
               </div>
               <div
-                className={`bg-slate-800 md:block !rounded-lg !border !border-[#ffffff50] ${
+                className={`bg-slate-800 md:block !rounded-lg !border !border-[#ffffff50] shadow-lg transition-all duration-300 hover:border-[#ffffff70] ${
                   activeTab === "Tier 3" ? "block" : "hidden"
                 }`}
               >
@@ -133,7 +119,7 @@ const ProjectItems = () => {
                 />
               </div>
               <div
-                className={`bg-slate-800 md:block !rounded-lg !border !border-[#ffffff50] ${
+                className={`bg-slate-800 md:block !rounded-lg !border !border-[#ffffff50] shadow-lg transition-all duration-300 hover:border-[#ffffff70] ${
                   activeTab === "Tier 4" ? "block" : "hidden"
                 }`}
               >
@@ -145,7 +131,7 @@ const ProjectItems = () => {
                 />
               </div>
               <div
-                className={`bg-slate-800 md:block !rounded-lg !border !border-[#ffffff50] ${
+                className={`bg-slate-800 md:block !rounded-lg !border !border-[#ffffff50] shadow-lg transition-all duration-300 hover:border-[#ffffff70] ${
                   activeTab === "Tier 5" ? "block" : "hidden"
                 }`}
               >
@@ -160,8 +146,7 @@ const ProjectItems = () => {
           </div>
         </div>
       </div>
-    </>
-    // </ProjectItemsStyleWrapper>
+    </ProjectCardStyleWrapper>
   );
 };
 

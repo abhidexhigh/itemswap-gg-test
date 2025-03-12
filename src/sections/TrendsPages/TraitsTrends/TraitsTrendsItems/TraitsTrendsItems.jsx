@@ -109,268 +109,257 @@ const ProjectItems = () => {
   }, [searchValue]);
 
   return (
-    // <ProjectItemsStyleWrapper>
     <>
-      <div className="pt-2 bg-[#1a1b31] md:bg-transparent">
-        <div className="md:flex md:justify-between md:items-center bg-[#1a1b31] md:bg-transparent">
-          <div className="w-[350px] mx-auto overflow-x-scroll md:overflow-auto md:w-auto">
+      <div className="pt-2 bg-[#1a1b31] md:bg-transparent w-full">
+        {/* Header section with filters and search */}
+        <div className="flex flex-col sm:flex-row justify-between items-center bg-[#1a1b31] md:bg-transparent pb-2.5 px-2 sm:px-4">
+          <div className="w-full sm:w-auto mb-3 sm:mb-0 overflow-x-auto sm:overflow-visible">
             <TrendFilters
               buttons={["All", "Bronze", "Silver", "Gold", "Prismatic"]}
               onButtonClick={handleButtonClick}
             />
           </div>
-          <div className="mb-2 md:mb-0 px-2">
+          <div className="w-full sm:w-auto px-4 sm:px-0">
             <input
               type="text"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
-              className="bg-[#222231] w-full text-[#fff] border-[#ffffff80] border-[1px] rounded-[4px] hover:border-[#ffffff60] hover:shadow-lg transition-all duration-300 ease-in-out md:w-[200px] h-[40px] px-[10px] text-[16px] placeholder-[#fff] placeholder-[16px] md:mt-0"
+              className="bg-[#222231] w-full text-[#fff] border-[#ffffff80] border-[1px] rounded-[4px] hover:border-[#ffffff60] hover:shadow-lg transition-all duration-300 ease-in-out sm:w-[180px] md:w-[200px] lg:w-[250px] h-[40px] px-[10px] text-[14px] sm:text-[16px] placeholder-[#fff]"
               placeholder="Search..."
             />
           </div>
         </div>
-        <div className="projects-row overflow-auto md:overflow-hidden">
+
+        {/* Table section */}
+        <div className="projects-row overflow-auto">
           <div>
             <ScrollableTable>
-              <table className="w-[900px] md:w-full table-auto md:border-separate md:border-spacing-y-2">
-                <tr className="bg-[#1a1b31]">
-                  <th className="md:rounded-l-lg">
-                    <p className="p-0 text-sm !mx-2 my-2 md:text-[14px]">
-                      {others.rank}
-                    </p>
-                  </th>
-                  <th
-                    className={`cursor-pointer ${sortConfig?.key === "key" ? "" : ""}`}
-                    onClick={() => requestSort("key")}
-                  >
-                    <p className="cursor-pointer mb-0">
-                      {others?.traits}
-                      <span className="ml-2">
-                        {sortConfig?.key === "key" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
-                      </span>
-                    </p>
-                  </th>
-                  <th
-                    className={`cursor-pointer ${sortConfig?.key === "avgPlacement" ? "" : ""}`}
-                    onClick={() => requestSort("avgPlacement")}
-                  >
-                    <p className="cursor-pointer mb-0">
-                      {others?.avgRank}
-                      <span className="ml-2">
-                        {sortConfig?.key === "avgPlacement" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
-                      </span>
-                    </p>
-                  </th>
-                  <th
-                    className={`cursor-pointer ${sortConfig?.key === "tops" ? "" : ""}`}
-                    onClick={() => requestSort("tops")}
-                  >
-                    <p className="cursor-pointer mb-0">
-                      {others?.top4}
-                      <span className="ml-2">
-                        {sortConfig?.key === "tops" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
-                      </span>
-                    </p>
-                  </th>
-                  <th
-                    className={`cursor-pointer ${sortConfig?.key === "wins" ? "" : ""}`}
-                    onClick={() => requestSort("wins")}
-                  >
-                    <p className="cursor-pointer mb-0">
-                      {others?.winPercentage}
-                      <span className="ml-2">
-                        {sortConfig?.key === "wins" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
-                      </span>
-                    </p>
-                  </th>
-                  <th
-                    className={`cursor-pointer ${sortConfig?.key === "pickRate" ? "" : ""}`}
-                    onClick={() => requestSort("pickRate")}
-                  >
-                    <p className="cursor-pointer mb-0">
-                      {others?.pickPercentage}
-                      <span className="ml-2">
-                        {sortConfig?.key === "pickRate" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
-                      </span>
-                    </p>
-                  </th>
-                  <th
-                    className={`cursor-pointer ${sortConfig?.key === "plays" ? "" : ""}`}
-                    onClick={() => requestSort("plays")}
-                  >
-                    <p className="cursor-pointer mb-0">
-                      {others?.played}
-                      <span className="ml-2">
-                        {sortConfig?.key === "plays" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
-                      </span>
-                    </p>
-                  </th>
-                  <th className="th10 md:rounded-r-lg">
-                    <p className="p-0 text-sm text-center !mx-2 my-2 md:text-[16px]">
-                      {others?.top3} {others?.champions}
-                    </p>
-                  </th>
-                </tr>
-                {metaDeckTraitStatsData.map((metaTrait, index) => (
-                  <tr className="m-2 bg-[#1a1b31] hover:bg-[#292a4ae0]">
-                    <td className="md:rounded-l-lg">
-                      <div className="text-center">{index + 1}</div>
-                    </td>
-                    <td className="py-2">
-                      <div>
-                        <div className="flex justify-start items-center">
-                          <Image
-                            src={
-                              traits
-                                ?.find((trait) => trait?.key === metaTrait?.key)
-                                ?.tiers?.find(
-                                  (tier) => tier?.tier == metaTrait?.tier
-                                )?.imageUrl
-                            }
-                            width={80}
-                            height={80}
-                            className="w-20 md:w-20 mr-2"
-                            alt="icon"
-                            data-tooltip-id={metaTrait?.key}
-                          />
-                          <ReactTltp
-                            variant="trait"
-                            id={metaTrait?.key}
-                            content={traits?.find(
-                              (trait) => trait?.key === metaTrait?.key
-                            )}
-                          />
-                          <div>
-                            <p className="p-0 !text-md md:!text-xl text-[#fff] mb-0">
-                              {
-                                traits?.find(
-                                  (trait) => trait?.key === metaTrait?.key
-                                )?.name
+              <table className="w-full min-w-[900px] relative lg:border-separate lg:border-spacing-y-2">
+                <thead className="sticky top-0 z-50">
+                  <tr className="bg-[#1a1b31]">
+                    <th className="lg:rounded-l-lg p-2">
+                      <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px]">
+                        {others.rank}
+                      </p>
+                    </th>
+                    <th
+                      className={`cursor-pointer p-2 ${sortConfig?.key === "key" ? "bg-[#000000]" : ""}`}
+                      onClick={() => requestSort("key")}
+                    >
+                      <p className="cursor-pointer mb-0 text-sm sm:text-base flex items-center">
+                        {others?.traits}
+                        <span className="ml-2">
+                          {sortConfig?.key === "key" ? (
+                            sortConfig.direction === "ascending" ? (
+                              <FaSortAmountUp />
+                            ) : (
+                              <FaSortAmountDownAlt />
+                            )
+                          ) : null}
+                        </span>
+                      </p>
+                    </th>
+                    <th
+                      className={`cursor-pointer p-2 ${sortConfig?.key === "avgPlacement" ? "bg-[#000000]" : ""}`}
+                      onClick={() => requestSort("avgPlacement")}
+                    >
+                      <p className="cursor-pointer mb-0 text-sm sm:text-base flex items-center">
+                        {others?.avgRank}
+                        <span className="ml-2">
+                          {sortConfig?.key === "avgPlacement" ? (
+                            sortConfig.direction === "ascending" ? (
+                              <FaSortAmountUp />
+                            ) : (
+                              <FaSortAmountDownAlt />
+                            )
+                          ) : null}
+                        </span>
+                      </p>
+                    </th>
+                    <th
+                      className={`cursor-pointer p-2 ${sortConfig?.key === "tops" ? "bg-[#000000]" : ""}`}
+                      onClick={() => requestSort("tops")}
+                    >
+                      <p className="cursor-pointer mb-0 text-sm sm:text-base flex items-center">
+                        {others?.top4}
+                        <span className="ml-2">
+                          {sortConfig?.key === "tops" ? (
+                            sortConfig.direction === "ascending" ? (
+                              <FaSortAmountUp />
+                            ) : (
+                              <FaSortAmountDownAlt />
+                            )
+                          ) : null}
+                        </span>
+                      </p>
+                    </th>
+                    <th
+                      className={`cursor-pointer p-2 ${sortConfig?.key === "wins" ? "bg-[#000000]" : ""}`}
+                      onClick={() => requestSort("wins")}
+                    >
+                      <p className="cursor-pointer mb-0 text-sm sm:text-base flex items-center">
+                        {others?.winPercentage}
+                        <span className="ml-2">
+                          {sortConfig?.key === "wins" ? (
+                            sortConfig.direction === "ascending" ? (
+                              <FaSortAmountUp />
+                            ) : (
+                              <FaSortAmountDownAlt />
+                            )
+                          ) : null}
+                        </span>
+                      </p>
+                    </th>
+                    <th
+                      className={`cursor-pointer p-2 ${sortConfig?.key === "pickRate" ? "bg-[#000000]" : ""}`}
+                      onClick={() => requestSort("pickRate")}
+                    >
+                      <p className="cursor-pointer mb-0 text-sm sm:text-base flex items-center">
+                        {others?.pickPercentage}
+                        <span className="ml-2">
+                          {sortConfig?.key === "pickRate" ? (
+                            sortConfig.direction === "ascending" ? (
+                              <FaSortAmountUp />
+                            ) : (
+                              <FaSortAmountDownAlt />
+                            )
+                          ) : null}
+                        </span>
+                      </p>
+                    </th>
+                    <th
+                      className={`cursor-pointer p-2 ${sortConfig?.key === "plays" ? "bg-[#000000]" : ""}`}
+                      onClick={() => requestSort("plays")}
+                    >
+                      <p className="cursor-pointer mb-0 text-sm sm:text-base flex items-center">
+                        {others?.played}
+                        <span className="ml-2">
+                          {sortConfig?.key === "plays" ? (
+                            sortConfig.direction === "ascending" ? (
+                              <FaSortAmountUp />
+                            ) : (
+                              <FaSortAmountDownAlt />
+                            )
+                          ) : null}
+                        </span>
+                      </p>
+                    </th>
+                    <th className="p-2 lg:rounded-r-lg">
+                      <p className="p-0 text-sm sm:text-base text-center !mx-2 my-2 md:text-[16px]">
+                        {others?.top3} {others?.champions}
+                      </p>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {metaDeckTraitStatsData.map((metaTrait, index) => (
+                    <tr
+                      className="m-2 bg-[#1a1b31] hover:bg-[#292a4ae0] transition-colors duration-200"
+                      key={index}
+                    >
+                      <td className="p-2 lg:rounded-l-lg">
+                        <div className="text-center text-base">{index + 1}</div>
+                      </td>
+                      <td className="p-2">
+                        <div>
+                          <div className="flex justify-start items-center">
+                            <Image
+                              src={
+                                traits
+                                  ?.find(
+                                    (trait) => trait?.key === metaTrait?.key
+                                  )
+                                  ?.tiers?.find(
+                                    (tier) => tier?.tier == metaTrait?.tier
+                                  )?.imageUrl
                               }
-                            </p>
-                            <p className="m-0 text-xs font-extralight">
-                              {/* <div className="text-center">
-                              {Object.entries(
-                                traits?.find(
-                                  (trait) => trait?.key === metaTrait?.key
-                                ).stats
-                              ).map(([key, value], index) => (
-                                <span
-                                  className={`py-1 rounded-full text-[#fff] text-sm ${key === traits?.find((trait) => trait?.key === metaTrait?.key)?.styles?.find((style) => style?.min)}`}
-                                >
-                                  {key}
-                                  {index <
-                                  Object.keys(
-                                    traits?.find(
-                                      (trait) => trait?.key === metaTrait?.key
-                                    ).stats
-                                  ).length -
-                                    1
-                                    ? "/"
-                                    : ""}
-                                </span>
-                              ))}
-                            </div> */}
-                            </p>
+                              width={80}
+                              height={80}
+                              className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 mr-2 rounded-md"
+                              alt="icon"
+                              data-tooltip-id={metaTrait?.key}
+                            />
+                            <ReactTltp
+                              variant="trait"
+                              id={metaTrait?.key}
+                              content={traits?.find(
+                                (trait) => trait?.key === metaTrait?.key
+                              )}
+                            />
+                            <div>
+                              <p className="p-0 text-base sm:text-lg md:text-xl text-[#fff] mb-0 truncate max-w-[120px] sm:max-w-full">
+                                {
+                                  traits?.find(
+                                    (trait) => trait?.key === metaTrait?.key
+                                  )?.name
+                                }
+                              </p>
+                              <p className="m-0 text-xs font-extralight">
+                                {/* Commented code removed for brevity */}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="py-2">
-                      <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
-                        #{metaTrait?.avgPlacement}
-                      </p>
-                    </td>
-                    <td className="py-2">
-                      <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
-                        {((metaTrait?.tops * 100) / metaTrait?.plays).toFixed(
-                          2
-                        )}
-                        %
-                      </p>
-                    </td>
-                    <td className="py-2">
-                      <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
-                        {((metaTrait?.wins * 100) / metaTrait?.plays).toFixed(
-                          2
-                        )}
-                        %
-                      </p>
-                    </td>
-                    <td className="py-2">
-                      <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
-                        {(metaTrait?.pickRate * 100).toFixed(2)}%
-                      </p>
-                    </td>
-                    <td className="py-2">
-                      <p className="p-0 text-left text-sm md:text-lg mb-0 text-[#fff]">
-                        {metaTrait?.plays.toLocaleString("en-US")}
-                      </p>
-                    </td>
-                    <td className="md:rounded-r-lg py-2">
-                      <div className="flex justify-center items-center gap-1 md:gap-2">
-                        {metaTrait?.traitChampionStats
-                          ?.slice(0, 3)
-                          ?.map((champion) => (
-                            <>
-                              <CardImage
-                                src={champions?.find(
-                                  (champ) => champ?.key === champion
-                                )}
-                                imgStyle="w-[72px] md:w-[84px]"
-                                identificationImageStyle="w=[16px] md:w-[32px]"
-                                textStyle="text-[10px] md:text-[12px]"
-                                forces={forces}
-                              />
-                            </>
-                          ))}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                      <td className="p-2">
+                        <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
+                          #{metaTrait?.avgPlacement}
+                        </p>
+                      </td>
+                      <td className="p-2">
+                        <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
+                          {((metaTrait?.tops * 100) / metaTrait?.plays).toFixed(
+                            2
+                          )}
+                          %
+                        </p>
+                      </td>
+                      <td className="p-2">
+                        <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
+                          {((metaTrait?.wins * 100) / metaTrait?.plays).toFixed(
+                            2
+                          )}
+                          %
+                        </p>
+                      </td>
+                      <td className="p-2">
+                        <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
+                          {(metaTrait?.pickRate * 100).toFixed(2)}%
+                        </p>
+                      </td>
+                      <td className="p-2">
+                        <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
+                          {metaTrait?.plays.toLocaleString("en-US")}
+                        </p>
+                      </td>
+                      <td className="p-2 lg:rounded-r-lg">
+                        <div className="flex flex-wrap justify-center items-center gap-1 md:gap-2">
+                          {metaTrait?.traitChampionStats
+                            ?.slice(0, 3)
+                            ?.map((champion, idx) => (
+                              <div key={idx}>
+                                <CardImage
+                                  src={champions?.find(
+                                    (champ) => champ?.key === champion
+                                  )}
+                                  imgStyle="w-[40px] sm:w-[60px] md:w-[84px]"
+                                  identificationImageStyle="w-[12px] sm:w-[16px] md:w-[32px]"
+                                  textStyle="text-[8px] sm:text-[10px] md:text-[12px]"
+                                  forces={forces}
+                                />
+                              </div>
+                            ))}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
               </table>
             </ScrollableTable>
           </div>
         </div>
       </div>
     </>
-    // </ProjectItemsStyleWrapper>
   );
 };
 

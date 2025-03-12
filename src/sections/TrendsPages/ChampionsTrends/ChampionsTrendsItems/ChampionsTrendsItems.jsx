@@ -107,43 +107,47 @@ const ProjectItems = () => {
   }, [searchValue]);
 
   return (
-    // <ProjectItemsStyleWrapper>
-    <div className="pt-2 bg-[#1a1b31] md:bg-transparent">
-      <div className="md:flex md:justify-between md:items-center bg-[#1a1b31] md:bg-transparent pb-2.5">
-        <div className="flex items-center mx-auto md:!ml-0 md:!mr-0 justify-center md:justify-start">
-          <h1 className="text-[#fff] hidden md:block text-lg md:text-xl font-bold mb-0">
+    <div className="pt-2 bg-[#1a1b31] md:bg-transparent w-full">
+      {/* Header section with filters and search */}
+      <div className="flex flex-col sm:flex-row justify-between items-center bg-[#1a1b31] md:bg-transparent pb-2.5 px-2 sm:px-4">
+        <div className="flex items-center w-full sm:w-auto mb-3 sm:mb-0">
+          <h1 className="text-[#fff] hidden md:block text-lg md:text-xl font-bold mb-0 mr-2">
             Cost
           </h1>
-          <TrendFilters
-            buttons={["All", "1", "2", "3", "4", "5"]}
-            onButtonClick={handleButtonClick}
-          />
+          <div className="w-full sm:w-auto">
+            <TrendFilters
+              buttons={["All", "1", "2", "3", "4", "5"]}
+              onButtonClick={handleButtonClick}
+            />
+          </div>
         </div>
-        <div className="mb-2 md:mb-0 px-4">
+        <div className="w-full sm:w-auto px-4 sm:px-0">
           <input
             type="text"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
-            className="bg-[#222231] w-full text-[#fff] border-[#ffffff80] border-[1px] rounded-[4px] hover:border-[#ffffff60] hover:shadow-lg transition-all duration-300 ease-in-out md:w-[200px] h-[40px] px-[10px] text-[16px] placeholder-[#fff] placeholder-[16px] md:mt-0"
+            className="bg-[#222231] w-full text-[#fff] border-[#ffffff80] border-[1px] rounded-[4px] hover:border-[#ffffff60] hover:shadow-lg transition-all duration-300 ease-in-out sm:w-[180px] md:w-[200px] lg:w-[250px] h-[40px] px-[10px] text-[14px] sm:text-[16px] placeholder-[#fff]"
             placeholder="Search..."
           />
         </div>
       </div>
-      <div className="projects-row overflow-auto md:overflow-hidden">
+
+      {/* Table section */}
+      <div className="projects-row overflow-auto">
         <ScrollableTable>
-          <table className="w-[900px] md:w-full relative lg:border-separate lg:border-spacing-y-2">
+          <table className="w-full min-w-[900px] relative lg:border-separate lg:border-spacing-y-2">
             <thead className="sticky top-0 z-50">
               <tr className="bg-[#1a1b31]">
-                <th className="lg:rounded-l-lg">
-                  <p className="p-0 text-base !mx-2 my-2 md:text-[14px]">
+                <th className="lg:rounded-l-lg p-2">
+                  <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px]">
                     {others.rank}
                   </p>
                 </th>
                 <th
-                  className={`cursor-pointer ${sortConfig?.key === "key" ? "bg-[#000000]" : ""}`}
+                  className={`cursor-pointer p-2 ${sortConfig?.key === "key" ? "bg-[#000000]" : ""}`}
                   onClick={() => requestSort("key")}
                 >
-                  <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
                     {others.champions}
                     <span className="ml-2">
                       {sortConfig?.key === "key" ? (
@@ -157,10 +161,10 @@ const ProjectItems = () => {
                   </p>
                 </th>
                 <th
-                  className={`cursor-pointer ${sortConfig?.key === "avgPlacement" ? "bg-[#000000]" : ""}`}
+                  className={`cursor-pointer p-2 ${sortConfig?.key === "avgPlacement" ? "bg-[#000000]" : ""}`}
                   onClick={() => requestSort("avgPlacement")}
                 >
-                  <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
                     {others.avgRank}
                     <span className="ml-2">
                       {sortConfig?.key === "avgPlacement" ? (
@@ -174,10 +178,10 @@ const ProjectItems = () => {
                   </p>
                 </th>
                 <th
-                  className={`cursor-pointer ${sortConfig?.key === "tops" ? "bg-[#000000]" : ""}`}
+                  className={`cursor-pointer p-2 ${sortConfig?.key === "tops" ? "bg-[#000000]" : ""}`}
                   onClick={() => requestSort("tops")}
                 >
-                  <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
                     {others.top4}
                     <span className="ml-2">
                       {sortConfig?.key === "tops" ? (
@@ -191,10 +195,10 @@ const ProjectItems = () => {
                   </p>
                 </th>
                 <th
-                  className={`cursor-pointer ${sortConfig?.key === "wins" ? "bg-[#000000]" : ""}`}
+                  className={`cursor-pointer p-2 ${sortConfig?.key === "wins" ? "bg-[#000000]" : ""}`}
                   onClick={() => requestSort("wins")}
                 >
-                  <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
                     {others.winPercentage}
                     <span className="ml-2">
                       {sortConfig?.key === "wins" ? (
@@ -208,10 +212,10 @@ const ProjectItems = () => {
                   </p>
                 </th>
                 <th
-                  className={`cursor-pointer ${sortConfig?.key === "pickRate" ? "bg-[#000000]" : ""}`}
+                  className={`cursor-pointer p-2 ${sortConfig?.key === "pickRate" ? "bg-[#000000]" : ""}`}
                   onClick={() => requestSort("pickRate")}
                 >
-                  <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
                     {others?.pickPercentage}
                     <span className="ml-2">
                       {sortConfig?.key === "pickRate" ? (
@@ -225,10 +229,10 @@ const ProjectItems = () => {
                   </p>
                 </th>
                 <th
-                  className={`cursor-pointer ${sortConfig?.key === "plays" ? "bg-[#000000]" : ""}`}
+                  className={`cursor-pointer p-2 ${sortConfig?.key === "plays" ? "bg-[#000000]" : ""}`}
                   onClick={() => requestSort("plays")}
                 >
-                  <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
                     {others?.played}
                     <span className="ml-2">
                       {sortConfig?.key === "plays" ? (
@@ -241,135 +245,144 @@ const ProjectItems = () => {
                     </span>
                   </p>
                 </th>
-                <th>
-                  <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                <th className="p-2">
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left">
                     {others?.threeStarsPercentage}
                   </p>
                 </th>
-                <th>
-                  <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                <th className="p-2">
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left">
                     {others?.threeStarsRank}
                   </p>
                 </th>
-                <th className="lg:rounded-r-lg">
-                  <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                <th className="lg:rounded-r-lg p-2">
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left">
                     {others?.recommended} {others.items}
                   </p>
                 </th>
               </tr>
             </thead>
-            {metaDeckChampionsStatsData.map(
-              (champion, index) =>
-                champions.find((champ) => champ.key === champion.key)?.key && (
-                  <tr
-                    className="m-2 bg-[#1a1b31] hover:bg-[#292a4ae0]"
-                    key={index}
-                  >
-                    <td className="ml-2 lg:rounded-l-lg">
-                      <div className="text-center">{index + 1}</div>
-                    </td>
-                    <td className="py-1 md:py-2">
-                      <div>
-                        <div className="flex justify-start items-center">
-                          <CardImage
-                            src={champions.find(
-                              (champ) => champ.key === champion.key
-                            )}
-                            imgStyle="w-[68px] md:w-[84px]"
-                            identificationImageStyle="w=[16px] md:w-[32px]"
-                            textStyle="text-[10px] md:text-[16px] hidden"
-                            forces={forces}
-                          />
-                          <p className="p-0 text-left text-base md:text-xl mb-0 ml-2 text-[#fff]">
-                            {
-                              champions.find(
+            <tbody>
+              {metaDeckChampionsStatsData.map(
+                (champion, index) =>
+                  champions.find((champ) => champ.key === champion.key)
+                    ?.key && (
+                    <tr
+                      className="m-2 bg-[#1a1b31] hover:bg-[#292a4ae0] transition-colors duration-200"
+                      key={index}
+                    >
+                      <td className="p-2 lg:rounded-l-lg">
+                        <div className="text-center text-base">{index + 1}</div>
+                      </td>
+                      <td className="p-2">
+                        <div>
+                          <div className="flex justify-start items-center">
+                            <CardImage
+                              src={champions.find(
                                 (champ) => champ.key === champion.key
-                              )?.key
-                            }
-                          </p>
+                              )}
+                              imgStyle="w-[50px] sm:w-[60px] md:w-[84px]"
+                              identificationImageStyle="w-[16px] sm:w-[24px] md:w-[32px]"
+                              textStyle="text-[10px] md:text-[16px] hidden"
+                              forces={forces}
+                            />
+                            <p className="p-0 text-left text-base sm:text-base md:text-xl mb-0 ml-2 text-[#fff] truncate max-w-[80px] sm:max-w-full">
+                              {
+                                champions.find(
+                                  (champ) => champ.key === champion.key
+                                )?.key
+                              }
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="py-0.5 md:py-2">
-                      <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-                        #{champion?.avgPlacement}
-                      </p>
-                    </td>
-                    <td className="py-0.5 md:py-2">
-                      <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-                        {((champion?.tops * 100) / champion?.plays).toFixed(2)}%
-                      </p>
-                    </td>
-                    <td className="py-0.5 md:py-2">
-                      <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-                        {((champion?.wins * 100) / champion?.plays).toFixed(2)}%
-                      </p>
-                    </td>
-                    <td className="py-0.5 md:py-2">
-                      <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-                        {(champion?.pickRate * 100).toFixed(2)}%
-                      </p>
-                    </td>
-                    <td className="py-0.5 md:py-2">
-                      <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-                        {champion?.plays.toLocaleString("en-US")}
-                      </p>
-                    </td>
-                    <td className="py-0.5 md:py-2">
-                      <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-                        {(champion?.threeStarPercentage * 100).toFixed(2)}%
-                      </p>
-                    </td>
-                    <td className="py-0.5 md:py-2">
-                      <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-                        #{(champion?.threeStarRank).toFixed(2)}
-                      </p>
-                    </td>
-                    <td className="lg:rounded-r-lg">
-                      <div className="flex justify-start items-center">
-                        {champions
-                          .find((champ) => champ.key === champion.key)
-                          ?.recommendItems.map(
-                            (item) =>
-                              items.find(
-                                (i) =>
-                                  i.key ===
-                                  item?.split("_")[item?.split("_").length - 1]
-                              )?.imageUrl
-                            // item?.split("_")[item?.split("_").length - 1]
-                          )
-                          .map(
-                            (item) =>
-                              item && (
-                                <>
-                                  <Image
-                                    src={item}
-                                    alt="icon"
-                                    width={80}
-                                    height={80}
-                                    className="w-12 md:w-16 mr-2 rounded-lg shadow-md !border !border-[#ffffff50]"
-                                    data-tooltip-id={item}
-                                  />
-                                  <ReactTltp
-                                    variant="item"
-                                    id={item}
-                                    content={items.find(
-                                      (i) => i.imageUrl === item
-                                    )}
-                                  />
-                                </>
-                              )
+                      </td>
+                      <td className="p-2">
+                        <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
+                          #{champion?.avgPlacement}
+                        </p>
+                      </td>
+                      <td className="p-2">
+                        <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
+                          {((champion?.tops * 100) / champion?.plays).toFixed(
+                            2
                           )}
-                      </div>
-                    </td>
-                  </tr>
-                )
-            )}
+                          %
+                        </p>
+                      </td>
+                      <td className="p-2">
+                        <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
+                          {((champion?.wins * 100) / champion?.plays).toFixed(
+                            2
+                          )}
+                          %
+                        </p>
+                      </td>
+                      <td className="p-2">
+                        <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
+                          {(champion?.pickRate * 100).toFixed(2)}%
+                        </p>
+                      </td>
+                      <td className="p-2">
+                        <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
+                          {champion?.plays.toLocaleString("en-US")}
+                        </p>
+                      </td>
+                      <td className="p-2">
+                        <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
+                          {(champion?.threeStarPercentage * 100).toFixed(2)}%
+                        </p>
+                      </td>
+                      <td className="p-2">
+                        <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
+                          #{(champion?.threeStarRank).toFixed(2)}
+                        </p>
+                      </td>
+                      <td className="p-2 lg:rounded-r-lg">
+                        <div className="flex flex-wrap justify-start items-center gap-1">
+                          {champions
+                            .find((champ) => champ.key === champion.key)
+                            ?.recommendItems.map(
+                              (item) =>
+                                items.find(
+                                  (i) =>
+                                    i.key ===
+                                    item?.split("_")[
+                                      item?.split("_").length - 1
+                                    ]
+                                )?.imageUrl
+                            )
+                            .map(
+                              (item) =>
+                                item && (
+                                  <div key={item} className="relative">
+                                    <Image
+                                      src={item}
+                                      alt="icon"
+                                      width={80}
+                                      height={80}
+                                      className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 rounded-lg shadow-md !border !border-[#ffffff50]"
+                                      data-tooltip-id={item}
+                                    />
+                                    <ReactTltp
+                                      variant="item"
+                                      id={item}
+                                      content={items.find(
+                                        (i) => i.imageUrl === item
+                                      )}
+                                    />
+                                  </div>
+                                )
+                            )}
+                        </div>
+                      </td>
+                    </tr>
+                  )
+              )}
+            </tbody>
           </table>
         </ScrollableTable>
       </div>
     </div>
-    // </ProjectItemsStyleWrapper>
   );
 };
 

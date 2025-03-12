@@ -2,11 +2,13 @@ import styled from "styled-components";
 
 const ProjectCardStyleWrapper = styled.div`
   background: #090b1a;
-  padding: 170px 0 90px;
+  padding: 0;
+  position: relative;
 
   .section_title {
     margin-bottom: 50px;
   }
+
   .menu-list {
     font-family: "CeraPro", sans-serif;
     padding-left: 40px;
@@ -58,10 +60,12 @@ const ProjectCardStyleWrapper = styled.div`
       }
     }
   }
-  .tabs-row {
+
+  .projects-row {
     row-gap: 30px;
     transition: all 0.4s;
   }
+
   .react-tabs__tab-list {
     display: flex;
     align-items: center;
@@ -80,91 +84,92 @@ const ProjectCardStyleWrapper = styled.div`
     align-items: center;
   }
 
-  .item_sorting_list button,
-  .react-tabs__tab button {
-    color: rgba(255, 255, 255, 0.7);
-    background: transparent;
-    font-family: "CeraPro", sans-serif;
-    position: relative;
-    text-transform: uppercase;
-    padding: 18px 28px;
-    transition: all 0.4s;
+  /* Mobile Tabs */
+  .text-sm.font-medium.text-center {
+    ul {
+      li {
+        div {
+          font-weight: 600;
+          transition: all 0.3s ease;
 
-    &:hover {
-      color: #ffffff;
-    }
-  }
-
-  .react-tabs__tab {
-    border-right: 1px solid rgba(255, 255, 255, 0.08);
-    button {
-    }
-  }
-
-  .item_sorting_list {
-    display: flex;
-    align-items: center;
-    button {
-      position: relative;
-      font-family: "inter", sans-serif;
-      text-transform: capitalize;
-      position: relative;
-      border-left: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 18px 40px;
-      display: flex;
-      align-items: center;
-      column-gap: 20px;
-      img {
-        height: 14px;
-        width: 14px;
-        transition: all 0.3s;
-      }
-      &:hover {
-        .sub-menu {
-          display: block;
-          top: 59px;
-        }
-        img {
-          transform: rotate(180deg);
-        }
-      }
-      .sub-menu {
-        transition: all 0.4s;
-        display: none;
-        position: absolute;
-        top: 45px;
-        left: 0;
-        z-index: 1111;
-        background: #222231;
-        width: 100%;
-        li {
-          display: flex;
-          align-items: center;
-          font-size: 90%;
-          column-gap: 5px;
-          padding: 18px 28px;
-          transition: all 0.4s;
           &:hover {
             color: #ffffff;
           }
 
-          img {
-            width: 20px;
-            height: 20px;
+          &.active {
+            background: linear-gradient(to bottom, #f0f9ff, #ffffff);
+            color: #121212;
+            font-weight: 700;
           }
-        }
-        li + li {
-          border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
       }
     }
   }
 
-  @media only screen and (max-width: 991px) {
+  /* Tier Cards */
+  .bg-slate-800 {
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  /* Champion Rows */
+  tr.bg-[#1e293b] {
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #283548;
+    }
+
+    td {
+      .flex.pt-\\[8px\\] {
+        align-items: center;
+
+        button {
+          transition: color 0.2s ease;
+
+          &:hover {
+            color: #3b82f6;
+          }
+        }
+      }
+    }
+  }
+
+  /* Item Images */
+  .relative.overflow-hidden {
+    img {
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  /* Table Styling */
+  table {
+    width: 100%;
+
+    thead tr th {
+      font-weight: 600;
+      color: #d0d0d0;
+    }
+
+    tbody tr {
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+    }
   }
 
   @media only screen and (max-width: 991px) {
-    padding-bottom: 110px;
+    padding-bottom: 30px;
+
     .menu-list {
       li {
         font-size: 14px;
@@ -173,58 +178,18 @@ const ProjectCardStyleWrapper = styled.div`
         }
       }
     }
-    .react-tabs__tab {
-      font-size: 14px;
-      button {
-        padding: 17px 12px;
-      }
-    }
-
-    .item_sorting_list {
-      button {
-        padding: 17px 30px;
-        font-size: 14px;
-      }
-    }
   }
+
   @media only screen and (max-width: 767px) {
-    padding-top: 200px;
+    padding-top: 20px;
+
     .section_title {
       margin-bottom: 35px;
     }
 
-    .react-tabs__tab-list {
-      flex-direction: column;
-      align-items: flex-start;
-      top: -390px;
-    }
-
-    .tab_btn_wrapper {
-      width: 100%;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .react-tabs__tab {
-      width: 33.33%;
-      border: none;
-    }
-
-    .item_sorting_list {
-      width: 100%;
-      button {
-        width: 50%;
-        border: none;
-        justify-content: space-between;
-      }
-
-      button + button {
-        border-left: 1px solid rgba(255, 255, 255, 0.08);
-      }
-    }
-
     .menu-list {
       padding-left: 10px;
-      margin-bottom: 60px;
+      margin-bottom: 20px;
       li {
         width: 100% !important;
       }
@@ -232,13 +197,28 @@ const ProjectCardStyleWrapper = styled.div`
         margin-top: 15px;
       }
     }
+
+    .text-sm.font-medium.text-center {
+      ul {
+        li {
+          div {
+            font-size: 14px;
+            padding: 8px 4px;
+          }
+        }
+      }
+    }
   }
 
-  @media only screen and (max-width: 375px) {
-    .item_sorting_list {
-      button {
-        padding: 17px 19px;
-        font-size: 13px;
+  @media only screen and (max-width: 575px) {
+    .text-sm.font-medium.text-center {
+      ul {
+        li {
+          div {
+            font-size: 12px;
+            padding: 6px 2px;
+          }
+        }
       }
     }
   }
