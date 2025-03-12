@@ -23,7 +23,19 @@ const TierCard = ({ cost, itemsData }) => {
   const { champions } = data?.refs;
   const { items } = data?.refs;
   const { forces } = data?.refs;
-  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
+  const [openAccordions, setOpenAccordions] = useState(new Set());
+
+  const toggleAccordion = (accordionId) => {
+    setOpenAccordions((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(accordionId)) {
+        newSet.delete(accordionId);
+      } else {
+        newSet.add(accordionId);
+      }
+      return newSet;
+    });
+  };
 
   return (
     <Fragment>
@@ -88,24 +100,20 @@ const TierCard = ({ cost, itemsData }) => {
 
                     <button
                       className="flex-shrink-0 text-white hover:text-blue-400 transition-colors duration-300 bg-[#1a1a2e] hover:bg-[#252547] rounded-full w-10 h-10 flex items-center justify-center"
-                      onClick={() =>
-                        isAccordionOpen === cost + "" + index
-                          ? setIsAccordionOpen(null)
-                          : setIsAccordionOpen(cost + "" + index)
-                      }
+                      onClick={() => toggleAccordion(cost + "" + index)}
                     >
-                      {isAccordionOpen === cost + "" + index ? (
+                      {openAccordions.has(cost + "" + index) ? (
                         <IoIosArrowUp className="text-xl" />
                       ) : (
                         <IoIosArrowDown className="text-xl" />
                       )}
                     </button>
                   </div>
-                  {isAccordionOpen === cost + "" + index && (
+                  {openAccordions.has(cost + "" + index) && (
                     <div className="transition-all duration-500 ease-in-out transform origin-top">
                       <table
-                        className={`w-full table-fixed border-collapse mb-4 ${
-                          isAccordionOpen !== cost + "" + index ? "hidden" : ""
+                        className={`w-full table-fixed border-collapse ${
+                          !openAccordions.has(cost + "" + index) ? "hidden" : ""
                         }`}
                       >
                         <thead className="table-row-group w-full text-[11px] font-[400]">
@@ -182,6 +190,16 @@ const TierCard = ({ cost, itemsData }) => {
                           )}
                         </tbody>
                       </table>
+                      <div
+                        className="w-full hover:text-blue-400 transition-colors duration-300 bg-[#1a1a2e] text-center hover:bg-[#252547] rounded-full flex items-center justify-center"
+                        onClick={() => toggleAccordion(cost + "" + index)}
+                      >
+                        {openAccordions.has(cost + "" + index) ? (
+                          <IoIosArrowUp className="text-xl" />
+                        ) : (
+                          <IoIosArrowDown className="text-xl" />
+                        )}
+                      </div>
                     </div>
                   )}
                 </td>

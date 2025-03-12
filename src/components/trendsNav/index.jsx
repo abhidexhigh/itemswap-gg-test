@@ -189,6 +189,8 @@ const TrendsNav = ({ selected }) => {
             modules={[Navigation]}
             spaceBetween={10}
             slidesPerView={"auto"}
+            speed={800}
+            cssMode={true}
             navigation={{
               prevEl: ".meta-prev",
               nextEl: ".meta-next",

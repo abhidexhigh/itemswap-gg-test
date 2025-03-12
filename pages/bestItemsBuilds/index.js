@@ -25,8 +25,10 @@ export default function ItemsTrends() {
         /> */}
         <div className="h-[360px] md:h-[360px] 2xl:h-[420px]" />
         <div className="backdrop-blur-md">
-          <div className="container">
-            <TrendsNav selected="bestItemsBuilds" />
+          <div className="container px-0 md:px-3">
+            <div className="sticky top-14 z-50">
+              <TrendsNav selected="bestItemsBuilds" />
+            </div>
             {/* <div className="bg-transparent-20"></div> */}
             <BestItemsBuildsList />
           </div>

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import "react-tooltip/dist/react-tooltip.css";
 import TrendFilters from "src/components/trendFilters";
-import { FaSortAmountDownAlt, FaSortAmountUp } from "react-icons/fa";
+import { HiArrowSmUp, HiArrowSmDown } from "react-icons/hi";
 import metaDeckItemStats from "../../../../data/newData/metaDeckItems.json";
 import Comps from "../../../../data/compsNew.json";
 import Forces from "../../../../data/newData/force.json";
@@ -35,6 +35,26 @@ const ProjectItems = () => {
     direction: "ascending",
   });
   const [searchValue, setSearchValue] = useState("");
+
+  // Add getCellClass function to highlight sorted column cells
+  const getCellClass = (key) => {
+    if (sortConfig.key === key) {
+      return "bg-[#222240] text-[#fff]";
+    }
+    return "";
+  };
+
+  // Add renderSortIcon function for consistent icon rendering
+  const renderSortIcon = (key) => {
+    if (sortConfig.key === key) {
+      return sortConfig.direction === "ascending" ? (
+        <HiArrowSmUp className="text-lg" />
+      ) : (
+        <HiArrowSmDown className="text-lg" />
+      );
+    }
+    return null;
+  };
 
   useEffect(() => {
     let sortedData = [...metaDeckItemStats];
@@ -73,7 +93,6 @@ const ProjectItems = () => {
   }, [metaDeckItemStats, sortConfig]);
 
   const requestSort = (key) => {
-    console.log("key", key);
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
       direction = "descending";
@@ -85,7 +104,6 @@ const ProjectItems = () => {
     if (button === "All") {
       setMetaDeckItemStatsData(metaDeckItemStats);
     } else {
-      console.log("button", button, metaDeckItemStats);
       setMetaDeckItemStatsData(
         metaDeckItemStats.filter((item) =>
           items
@@ -111,8 +129,8 @@ const ProjectItems = () => {
     <>
       <div className="pt-2 bg-[#1a1b31] md:bg-transparent w-full">
         {/* Header section with filters and search */}
-        <div className="flex flex-col sm:flex-row justify-between items-center bg-[#1a1b31] md:bg-transparent pb-2.5 px-2 sm:px-4">
-          <div className="w-full sm:w-auto mb-3 sm:mb-0">
+        <div className="flex flex-col sm:flex-row justify-between items-center bg-[#1a1b31] md:bg-transparent px-2 sm:px-4 mb-2.5 md:mb-0">
+          <div className="w-full sm:w-auto sm:mb-0">
             <TrendFilters
               buttons={["All", "Normal", "Radiant"]}
               onButtonClick={handleButtonClick}
@@ -134,132 +152,86 @@ const ProjectItems = () => {
           <ScrollableTable>
             <table className="w-full min-w-[900px] relative lg:border-separate lg:border-spacing-y-2">
               <thead className="sticky top-0 z-50">
-                <tr className="bg-[#1a1b31]">
-                  <th className="lg:rounded-l-lg p-2">
+                <tr className="bg-[#0f0f1e]">
+                  <th className="lg:rounded-l-lg p-2 font-semibold">
                     <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px]">
                       {others.rank}
                     </p>
                   </th>
-                  <th className="p-2">
-                    <p
-                      className={`cursor-pointer mb-0 text-sm sm:text-base flex items-center`}
-                      onClick={() => requestSort("key")}
-                    >
-                      {others?.items}
+                  <th
+                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "key" ? "bg-[#1e1e3a]" : ""}`}
+                    onClick={() => requestSort("key")}
+                  >
+                    <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
+                      {others.items}
+                      <span className="ml-2">{renderSortIcon("key")}</span>
+                    </p>
+                  </th>
+                  <th
+                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "avgPlacement" ? "bg-[#1e1e3a]" : ""}`}
+                    onClick={() => requestSort("avgPlacement")}
+                  >
+                    <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
+                      {others.avgRank}
                       <span className="ml-2">
-                        {sortConfig?.key === "key" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
+                        {renderSortIcon("avgPlacement")}
                       </span>
                     </p>
                   </th>
-                  <th className="p-2">
-                    <p
-                      className={`cursor-pointer mb-0 text-sm sm:text-base flex items-center`}
-                      onClick={() => requestSort("avgPlacement")}
-                    >
-                      {others?.avgRank}
-                      <span className="ml-2">
-                        {sortConfig?.key === "avgPlacement" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
-                      </span>
+                  <th
+                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "tops" ? "bg-[#1e1e3a]" : ""}`}
+                    onClick={() => requestSort("tops")}
+                  >
+                    <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
+                      {others.top4}
+                      <span className="ml-2">{renderSortIcon("tops")}</span>
                     </p>
                   </th>
-                  <th className="p-2">
-                    <p
-                      className={`cursor-pointer mb-0 text-sm sm:text-base flex items-center`}
-                      onClick={() => requestSort("tops")}
-                    >
-                      {others?.top4}
-                      <span className="ml-2">
-                        {sortConfig?.key === "tops" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
-                      </span>
+                  <th
+                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "wins" ? "bg-[#1e1e3a]" : ""}`}
+                    onClick={() => requestSort("wins")}
+                  >
+                    <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
+                      {others.winPercentage}
+                      <span className="ml-2">{renderSortIcon("wins")}</span>
                     </p>
                   </th>
-                  <th className="p-2">
-                    <p
-                      className={`cursor-pointer mb-0 text-sm sm:text-base flex items-center`}
-                      onClick={() => requestSort("wins")}
-                    >
-                      {others?.winPercentage}
-                      <span className="ml-2">
-                        {sortConfig?.key === "wins" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
-                      </span>
+                  <th
+                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "pickRate" ? "bg-[#1e1e3a]" : ""}`}
+                    onClick={() => requestSort("pickRate")}
+                  >
+                    <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
+                      {others.pickPercentage}
+                      <span className="ml-2">{renderSortIcon("pickRate")}</span>
                     </p>
                   </th>
-                  <th className="p-2">
-                    <p
-                      className={`cursor-pointer mb-0 text-sm sm:text-base flex items-center`}
-                      onClick={() => requestSort("pickRate")}
-                    >
-                      {others?.pickPercentage}
-                      <span className="ml-2">
-                        {sortConfig?.key === "pickRate" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
-                      </span>
+                  <th
+                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "plays" ? "bg-[#1e1e3a]" : ""}`}
+                    onClick={() => requestSort("plays")}
+                  >
+                    <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
+                      {others.played}
+                      <span className="ml-2">{renderSortIcon("plays")}</span>
                     </p>
                   </th>
-                  <th className="p-2">
-                    <p
-                      className={`cursor-pointer mb-0 text-sm sm:text-base flex items-center`}
-                      onClick={() => requestSort("plays")}
-                    >
-                      {others?.played}
-                      <span className="ml-2">
-                        {sortConfig?.key === "plays" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
-                      </span>
-                    </p>
-                  </th>
-                  <th className="p-2">
+                  <th className="p-2 font-semibold">
                     <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px]">
-                      {others?.synergy} {others?.items}
+                      {others.synergy} {others.items}
                     </p>
                   </th>
-                  <th className="text-center lg:rounded-r-lg p-2">
-                    <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px]">
-                      {others?.top3} {others?.champions}
+                  <th className="lg:rounded-r-lg p-2 font-semibold">
+                    <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px] text-center">
+                      {others.top3} {others.champions}
                     </p>
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="bg-[#1a1b31]">
                 {metaDeckItemStatsData.map(
                   (item, index) =>
                     items.find((i) => i.key === item.key)?.key && (
                       <tr
-                        className="m-2 bg-[#1a1b31] hover:bg-[#292a4ae0] transition-colors duration-200"
+                        className="m-2 hover:bg-[#292a4ae0] transition-colors duration-200 md:border-[1px] md:border-[#ffffff50]"
                         key={index}
                       >
                         <td className="p-2 lg:rounded-l-lg">
@@ -267,7 +239,7 @@ const ProjectItems = () => {
                             {index + 1}
                           </div>
                         </td>
-                        <td className="p-2">
+                        <td className={`p-2 ${getCellClass("key")}`}>
                           <div>
                             <div className="flex justify-start items-center">
                               <>
@@ -327,27 +299,27 @@ const ProjectItems = () => {
                             </div>
                           </div>
                         </td>
-                        <td className="p-2">
+                        <td className={`p-2 ${getCellClass("avgPlacement")}`}>
                           <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
                             #{item?.avgPlacement}
                           </p>
                         </td>
-                        <td className="p-2">
+                        <td className={`p-2 ${getCellClass("tops")}`}>
                           <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
                             {((item?.tops * 100) / item?.plays).toFixed(2)}%
                           </p>
                         </td>
-                        <td className="p-2">
+                        <td className={`p-2 ${getCellClass("wins")}`}>
                           <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
                             {((item?.wins * 100) / item?.plays).toFixed(2)}%
                           </p>
                         </td>
-                        <td className="p-2">
+                        <td className={`p-2 ${getCellClass("pickRate")}`}>
                           <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
                             {(item?.pickRate * 100).toFixed(2)}%
                           </p>
                         </td>
-                        <td className="p-2">
+                        <td className={`p-2 ${getCellClass("plays")}`}>
                           <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
                             {item?.plays.toLocaleString("en-US")}
                           </p>

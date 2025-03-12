@@ -74,7 +74,7 @@ const MatchHistory = ({
           >
             <div className="flex flex-col justify-between items-center bg-[#27282E] py-[16px] lg:flex-row lg:gap-[15px] lg:bg-transparent lg:py-[0px] xl:pr-[24px]">
               <div className="mb-[16px] lg:mb-0 lg:w-full lg:flex-shrink-0">
-                <div className="md:flex flex-wrap justify-between items-center gap-2 py-4">
+                <div className="md:flex flex-wrap justify-between items-center gap-2 py-2">
                   <div className="md:w-[5%] flex items-center justify-center relative flex-col ml-5">
                     <div className="relative flex flex-col justify-center items-center rounded-[20px] mx-auto">
                       <p className="mb-0 font-bold text-[36px] leading-none">
@@ -112,7 +112,7 @@ const MatchHistory = ({
                             src={champions?.find(
                               (champion) => champion?.key === unit?.key
                             )}
-                            imgStyle="w-[68px] md:w-[112px]"
+                            imgStyle="w-[68px] md:w-24"
                             identificationImageStyle="w=[16px] md:w-[32px]"
                             textStyle="text-[10px] md:text-[16px]"
                             forces={forces}

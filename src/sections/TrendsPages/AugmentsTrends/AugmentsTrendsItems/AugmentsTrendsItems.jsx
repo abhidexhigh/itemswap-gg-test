@@ -5,8 +5,7 @@ import "../../../../../i18n";
 import "react-tooltip/dist/react-tooltip.css";
 import GirlCrush from "@assets/image/traits/GirlCrush.svg";
 import TrendFilters from "src/components/trendFilters";
-import { BsSortDown, BsSortUp } from "react-icons/bs";
-import { FaSortAmountUp, FaSortAmountDownAlt } from "react-icons/fa";
+import { HiArrowSmUp, HiArrowSmDown } from "react-icons/hi";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import metaDeckAugments from "../../../../data/newData/metaDeckAugments.json";
 import augments from "../../../../data/newData/augments.json";
@@ -23,6 +22,13 @@ const ProjectItems = () => {
     direction: "ascending",
   });
   const [searchValue, setSearchValue] = useState("");
+
+  const getCellClass = (key) => {
+    if (sortConfig.key === key) {
+      return "bg-[#222240] text-[#fff]";
+    }
+    return "";
+  };
 
   const handleButtonClick = (button) => {
     if (button === "All") {
@@ -79,12 +85,23 @@ const ProjectItems = () => {
     );
   }, [searchValue]);
 
+  const renderSortIcon = (key) => {
+    if (sortConfig.key === key) {
+      return sortConfig.direction === "ascending" ? (
+        <HiArrowSmUp className="text-lg" />
+      ) : (
+        <HiArrowSmDown className="text-lg" />
+      );
+    }
+    return null;
+  };
+
   return (
     <>
       <div className="pt-2 bg-[#1a1b31] md:bg-transparent w-full">
         {/* Header section with filters and search */}
-        <div className="flex flex-col sm:flex-row justify-between items-center bg-[#1a1b31] md:bg-transparent pb-2.5 px-2 sm:px-4">
-          <div className="w-full sm:w-auto mb-3 sm:mb-0">
+        <div className="flex flex-col sm:flex-row justify-between items-center bg-[#1a1b31] md:bg-transparent px-2 sm:px-4 mb-2.5 md:mb-0">
+          <div className="w-full sm:w-auto sm:mb-0">
             <TrendFilters
               buttons={["All", "Silver", "Gold", "Prismatic"]}
               onButtonClick={handleButtonClick}
@@ -106,163 +123,99 @@ const ProjectItems = () => {
           <ScrollableTable>
             <table className="w-full min-w-[900px] relative lg:border-separate lg:border-spacing-y-2">
               <thead className="sticky top-0 z-50">
-                <tr className="bg-[#1a1b31]">
-                  <th className="lg:rounded-l-lg p-2">
+                <tr className="bg-[#0f0f1e]">
+                  <th className="lg:rounded-l-lg p-2 font-semibold">
                     <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px]">
                       {others.rank}
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 ${sortConfig?.key === "key" ? "bg-[#000000]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "key" ? "bg-[#1e1e3a]" : ""}`}
                     onClick={() => requestSort("key")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
                       {others?.augment}
-                      <span className="ml-2">
-                        {sortConfig?.key === "key" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
-                      </span>
+                      <span className="ml-2">{renderSortIcon("key")}</span>
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 ${sortConfig?.key === "avgPlacement" ? "bg-[#000000]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "avgPlacement" ? "bg-[#1e1e3a]" : ""}`}
                     onClick={() => requestSort("avgPlacement")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
                       {others?.avgPlacement}
                       <span className="ml-2">
-                        {sortConfig?.key === "avgPlacement" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
+                        {renderSortIcon("avgPlacement")}
                       </span>
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 ${sortConfig?.key === "roundOnePickRate" ? "bg-[#000000]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "roundOnePickRate" ? "bg-[#1e1e3a]" : ""}`}
                     onClick={() => requestSort("roundOnePickRate")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
                       {others?.firstPick}
                       <span className="ml-2">
-                        {sortConfig?.key === "roundOnePickRate" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
+                        {renderSortIcon("roundOnePickRate")}
                       </span>
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 ${sortConfig?.key === "roundTwoPickRate" ? "bg-[#000000]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "roundTwoPickRate" ? "bg-[#1e1e3a]" : ""}`}
                     onClick={() => requestSort("roundTwoPickRate")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
                       {others?.secondPick}
                       <span className="ml-2">
-                        {sortConfig?.key === "roundTwoPickRate" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
+                        {renderSortIcon("roundTwoPickRate")}
                       </span>
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 ${sortConfig?.key === "roundThreePickRate" ? "bg-[#000000]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "roundThreePickRate" ? "bg-[#1e1e3a]" : ""}`}
                     onClick={() => requestSort("roundThreePickRate")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
                       {others?.thirdPick}
                       <span className="ml-2">
-                        {sortConfig?.key === "roundThreePickRate" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
+                        {renderSortIcon("roundThreePickRate")}
                       </span>
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 ${sortConfig?.key === "tops" ? "bg-[#000000]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "tops" ? "bg-[#1e1e3a]" : ""}`}
                     onClick={() => requestSort("tops")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
                       {others?.top4}
-                      <span className="ml-2">
-                        {sortConfig?.key === "tops" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
-                      </span>
+                      <span className="ml-2">{renderSortIcon("tops")}</span>
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 ${sortConfig?.key === "wins" ? "bg-[#000000]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "wins" ? "bg-[#1e1e3a]" : ""}`}
                     onClick={() => requestSort("wins")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
                       {others?.winPercentage}
-                      <span className="ml-2">
-                        {sortConfig?.key === "wins" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
-                      </span>
+                      <span className="ml-2">{renderSortIcon("wins")}</span>
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 ${sortConfig?.key === "pickRate" ? "bg-[#000000]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "pickRate" ? "bg-[#1e1e3a]" : ""}`}
                     onClick={() => requestSort("pickRate")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
                       {others?.pickPercentage}
-                      <span className="ml-2">
-                        {sortConfig?.key === "pickRate" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
-                      </span>
+                      <span className="ml-2">{renderSortIcon("pickRate")}</span>
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 lg:rounded-r-lg ${sortConfig?.key === "plays" ? "bg-[#000000]" : ""}`}
+                    className={`cursor-pointer p-2 lg:rounded-r-lg font-semibold ${sortConfig?.key === "plays" ? "bg-[#1e1e3a]" : ""}`}
                     onClick={() => requestSort("plays")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
                       {others?.played}
-                      <span className="ml-2">
-                        {sortConfig?.key === "plays" ? (
-                          sortConfig.direction === "ascending" ? (
-                            <FaSortAmountUp />
-                          ) : (
-                            <FaSortAmountDownAlt />
-                          )
-                        ) : null}
-                      </span>
+                      <span className="ml-2">{renderSortIcon("plays")}</span>
                     </p>
                   </th>
                 </tr>
@@ -284,7 +237,7 @@ const ProjectItems = () => {
                             {index + 1}
                           </div>
                         </td>
-                        <td className="p-2">
+                        <td className={`p-2 ${getCellClass("key")}`}>
                           <div>
                             <div className="flex justify-start items-center">
                               <Image
@@ -330,42 +283,50 @@ const ProjectItems = () => {
                             </div>
                           </div>
                         </td>
-                        <td className="p-2">
+                        <td className={`p-2 ${getCellClass("avgPlacement")}`}>
                           <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
                             #{item?.avgPlacement.toFixed(2)}
                           </p>
                         </td>
-                        <td className="p-2">
+                        <td
+                          className={`p-2 ${getCellClass("roundOnePickRate")}`}
+                        >
                           <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
                             {item?.roundOnePickRate.toFixed(2)}%
                           </p>
                         </td>
-                        <td className="p-2">
+                        <td
+                          className={`p-2 ${getCellClass("roundTwoPickRate")}`}
+                        >
                           <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
                             {item?.roundTwoPickRate.toFixed(2)}%
                           </p>
                         </td>
-                        <td className="p-2">
+                        <td
+                          className={`p-2 ${getCellClass("roundThreePickRate")}`}
+                        >
                           <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
                             {item?.roundThreePickRate.toFixed(2)}%
                           </p>
                         </td>
-                        <td className="p-2">
+                        <td className={`p-2 ${getCellClass("tops")}`}>
                           <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
                             {((item?.tops * 100) / item?.plays).toFixed(2)}%
                           </p>
                         </td>
-                        <td className="p-2">
+                        <td className={`p-2 ${getCellClass("wins")}`}>
                           <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
                             {((item?.wins * 100) / item?.plays).toFixed(2)}%
                           </p>
                         </td>
-                        <td className="p-2">
+                        <td className={`p-2 ${getCellClass("pickRate")}`}>
                           <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
                             {(item?.pickRate * 100).toFixed(2)}%
                           </p>
                         </td>
-                        <td className="p-2 lg:rounded-r-lg">
+                        <td
+                          className={`p-2 lg:rounded-r-lg ${getCellClass("plays")}`}
+                        >
                           <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
                             {item?.plays.toLocaleString("en-US")}
                           </p>

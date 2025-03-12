@@ -24,7 +24,9 @@ export default function ItemsTrends() {
         <div className="container">
           <div className="h-[360px] md:h-[360px] 2xl:h-[420px]" />
           {/* <PageHeader currentPage="META TRENDS" pageTitle="META TRENDS" /> */}
-          <TrendsNav selected="recentDecks" />
+          <div className="sticky top-14 z-50">
+            <TrendsNav selected="recentDecks" />
+          </div>
           {/* <div className="bg-transparent-20"></div> */}
           <RecentDecks />
           <Footer />

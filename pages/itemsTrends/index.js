@@ -23,7 +23,9 @@ export default function ItemsTrends() {
         <div className="h-[360px] md:h-[360px] 2xl:h-[420px]" />
         <div className="backdrop-blur-md">
           <div className="container px-0 md:px-3">
-            <TrendsNav selected="itemsTrends" />
+            <div className="sticky top-14 z-50">
+              <TrendsNav selected="itemsTrends" />
+            </div>
             {/* <div className="bg-transparent-20"></div> */}
             <ItemsTrendsList />
           </div>

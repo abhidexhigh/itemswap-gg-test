@@ -6,7 +6,7 @@ import "../../../../../i18n";
 import CardImage from "src/components/cardImage";
 import "react-tooltip/dist/react-tooltip.css";
 import TrendFilters from "src/components/trendFilters";
-import { FaSortAmountDownAlt, FaSortAmountUp } from "react-icons/fa";
+import { HiArrowSmUp, HiArrowSmDown } from "react-icons/hi";
 import metaDeckTraitStats from "../../../../data/newData/metaDeckTraits.json";
 import Comps from "../../../../data/compsNew.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
@@ -108,12 +108,32 @@ const ProjectItems = () => {
     }
   }, [searchValue]);
 
+  // Add getCellClass function to highlight sorted column cells
+  const getCellClass = (key) => {
+    if (sortConfig.key === key) {
+      return "bg-[#222240] text-[#fff]";
+    }
+    return "";
+  };
+
+  // Add renderSortIcon function for consistent icon rendering
+  const renderSortIcon = (key) => {
+    if (sortConfig.key === key) {
+      return sortConfig.direction === "ascending" ? (
+        <HiArrowSmUp className="text-lg" />
+      ) : (
+        <HiArrowSmDown className="text-lg" />
+      );
+    }
+    return null;
+  };
+
   return (
     <>
       <div className="pt-2 bg-[#1a1b31] md:bg-transparent w-full">
         {/* Header section with filters and search */}
-        <div className="flex flex-col sm:flex-row justify-between items-center bg-[#1a1b31] md:bg-transparent pb-2.5 px-2 sm:px-4">
-          <div className="w-full sm:w-auto mb-3 sm:mb-0 overflow-x-auto sm:overflow-visible">
+        <div className="flex flex-col sm:flex-row justify-between items-center bg-[#1a1b31] md:bg-transparent px-2 sm:px-4 mb-2.5 md:mb-0">
+          <div className="w-full sm:w-auto sm:mb-0 overflow-x-auto sm:overflow-visible">
             <TrendFilters
               buttons={["All", "Bronze", "Silver", "Gold", "Prismatic"]}
               onButtonClick={handleButtonClick}
@@ -136,131 +156,85 @@ const ProjectItems = () => {
             <ScrollableTable>
               <table className="w-full min-w-[900px] relative lg:border-separate lg:border-spacing-y-2">
                 <thead className="sticky top-0 z-50">
-                  <tr className="bg-[#1a1b31]">
-                    <th className="lg:rounded-l-lg p-2">
+                  <tr className="bg-[#0f0f1e]">
+                    <th className="lg:rounded-l-lg p-2 font-semibold">
                       <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px]">
                         {others.rank}
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 ${sortConfig?.key === "key" ? "bg-[#000000]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "key" ? "bg-[#1e1e3a]" : ""}`}
                       onClick={() => requestSort("key")}
                     >
-                      <p className="cursor-pointer mb-0 text-sm sm:text-base flex items-center">
-                        {others?.traits}
-                        <span className="ml-2">
-                          {sortConfig?.key === "key" ? (
-                            sortConfig.direction === "ascending" ? (
-                              <FaSortAmountUp />
-                            ) : (
-                              <FaSortAmountDownAlt />
-                            )
-                          ) : null}
-                        </span>
+                      <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
+                        {others.traits}
+                        <span className="ml-2">{renderSortIcon("key")}</span>
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 ${sortConfig?.key === "avgPlacement" ? "bg-[#000000]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "avgPlacement" ? "bg-[#1e1e3a]" : ""}`}
                       onClick={() => requestSort("avgPlacement")}
                     >
-                      <p className="cursor-pointer mb-0 text-sm sm:text-base flex items-center">
-                        {others?.avgRank}
+                      <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
+                        {others.avgRank}
                         <span className="ml-2">
-                          {sortConfig?.key === "avgPlacement" ? (
-                            sortConfig.direction === "ascending" ? (
-                              <FaSortAmountUp />
-                            ) : (
-                              <FaSortAmountDownAlt />
-                            )
-                          ) : null}
+                          {renderSortIcon("avgPlacement")}
                         </span>
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 ${sortConfig?.key === "tops" ? "bg-[#000000]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "tops" ? "bg-[#1e1e3a]" : ""}`}
                       onClick={() => requestSort("tops")}
                     >
-                      <p className="cursor-pointer mb-0 text-sm sm:text-base flex items-center">
-                        {others?.top4}
-                        <span className="ml-2">
-                          {sortConfig?.key === "tops" ? (
-                            sortConfig.direction === "ascending" ? (
-                              <FaSortAmountUp />
-                            ) : (
-                              <FaSortAmountDownAlt />
-                            )
-                          ) : null}
-                        </span>
+                      <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
+                        {others.top4}
+                        <span className="ml-2">{renderSortIcon("tops")}</span>
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 ${sortConfig?.key === "wins" ? "bg-[#000000]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "wins" ? "bg-[#1e1e3a]" : ""}`}
                       onClick={() => requestSort("wins")}
                     >
-                      <p className="cursor-pointer mb-0 text-sm sm:text-base flex items-center">
-                        {others?.winPercentage}
-                        <span className="ml-2">
-                          {sortConfig?.key === "wins" ? (
-                            sortConfig.direction === "ascending" ? (
-                              <FaSortAmountUp />
-                            ) : (
-                              <FaSortAmountDownAlt />
-                            )
-                          ) : null}
-                        </span>
+                      <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
+                        {others.winPercentage}
+                        <span className="ml-2">{renderSortIcon("wins")}</span>
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 ${sortConfig?.key === "pickRate" ? "bg-[#000000]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "pickRate" ? "bg-[#1e1e3a]" : ""}`}
                       onClick={() => requestSort("pickRate")}
                     >
-                      <p className="cursor-pointer mb-0 text-sm sm:text-base flex items-center">
-                        {others?.pickPercentage}
+                      <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
+                        {others.pickPercentage}
                         <span className="ml-2">
-                          {sortConfig?.key === "pickRate" ? (
-                            sortConfig.direction === "ascending" ? (
-                              <FaSortAmountUp />
-                            ) : (
-                              <FaSortAmountDownAlt />
-                            )
-                          ) : null}
+                          {renderSortIcon("pickRate")}
                         </span>
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 ${sortConfig?.key === "plays" ? "bg-[#000000]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "plays" ? "bg-[#1e1e3a]" : ""}`}
                       onClick={() => requestSort("plays")}
                     >
-                      <p className="cursor-pointer mb-0 text-sm sm:text-base flex items-center">
-                        {others?.played}
-                        <span className="ml-2">
-                          {sortConfig?.key === "plays" ? (
-                            sortConfig.direction === "ascending" ? (
-                              <FaSortAmountUp />
-                            ) : (
-                              <FaSortAmountDownAlt />
-                            )
-                          ) : null}
-                        </span>
+                      <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
+                        {others.played}
+                        <span className="ml-2">{renderSortIcon("plays")}</span>
                       </p>
                     </th>
-                    <th className="p-2 lg:rounded-r-lg">
-                      <p className="p-0 text-sm sm:text-base text-center !mx-2 my-2 md:text-[16px]">
-                        {others?.top3} {others?.champions}
-                      </p>
+                    <th className="p-2 font-semibold">
+                      {others.top3} {others.champions}
                     </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="bg-[#1a1b31]">
                   {metaDeckTraitStatsData.map((metaTrait, index) => (
                     <tr
-                      className="m-2 bg-[#1a1b31] hover:bg-[#292a4ae0] transition-colors duration-200"
+                      className="m-2 hover:bg-[#292a4ae0] transition-colors duration-200 md:border-[1px] md:border-[#ffffff50]"
                       key={index}
                     >
                       <td className="p-2 lg:rounded-l-lg">
                         <div className="text-center text-base">{index + 1}</div>
                       </td>
-                      <td className="p-2">
+                      <td className={`p-2 ${getCellClass("key")}`}>
                         <div>
                           <div className="flex justify-start items-center">
                             <Image
@@ -301,12 +275,12 @@ const ProjectItems = () => {
                           </div>
                         </div>
                       </td>
-                      <td className="p-2">
+                      <td className={`p-2 ${getCellClass("avgPlacement")}`}>
                         <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
                           #{metaTrait?.avgPlacement}
                         </p>
                       </td>
-                      <td className="p-2">
+                      <td className={`p-2 ${getCellClass("tops")}`}>
                         <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
                           {((metaTrait?.tops * 100) / metaTrait?.plays).toFixed(
                             2
@@ -314,7 +288,7 @@ const ProjectItems = () => {
                           %
                         </p>
                       </td>
-                      <td className="p-2">
+                      <td className={`p-2 ${getCellClass("wins")}`}>
                         <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
                           {((metaTrait?.wins * 100) / metaTrait?.plays).toFixed(
                             2
@@ -322,12 +296,12 @@ const ProjectItems = () => {
                           %
                         </p>
                       </td>
-                      <td className="p-2">
+                      <td className={`p-2 ${getCellClass("pickRate")}`}>
                         <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
                           {(metaTrait?.pickRate * 100).toFixed(2)}%
                         </p>
                       </td>
-                      <td className="p-2">
+                      <td className={`p-2 ${getCellClass("plays")}`}>
                         <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
                           {metaTrait?.plays.toLocaleString("en-US")}
                         </p>
