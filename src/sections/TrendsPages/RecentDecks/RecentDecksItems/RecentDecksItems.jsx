@@ -378,6 +378,7 @@ const ProjectItems = () => {
                           height={96}
                           src={trait?.imageUrl}
                           className="w-full h-full object-cover rounded-lg"
+                          data-tooltip-id={trait?.key}
                         />
                         {trait?.key === selectedTrait && (
                           <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
@@ -405,6 +406,11 @@ const ProjectItems = () => {
                       className="flex flex-col items-center gap-2 cursor-pointer group"
                       onClick={() => handleFilterChange("force", force?.key)}
                     >
+                      <ReactTltp
+                        variant="force"
+                        content={force}
+                        id={force?.imageUrl}
+                      />
                       <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
                         <Image
                           alt={force?.name}
@@ -412,6 +418,7 @@ const ProjectItems = () => {
                           height={96}
                           src={force?.imageUrl}
                           className="w-full h-full object-cover rounded-lg"
+                          data-tooltip-id={force?.key}
                         />
                         {force?.key === selectedTrait && (
                           <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
@@ -450,6 +457,7 @@ const ProjectItems = () => {
                         height={84}
                         src={item?.imageUrl}
                         className="w-full h-full object-contain  rounded-lg !border !border-[#ffffff20]"
+                        data-tooltip-id={item?.key}
                       />
                       {item?.key === selectedItem && (
                         <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">

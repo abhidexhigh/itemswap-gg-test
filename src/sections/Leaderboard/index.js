@@ -90,7 +90,7 @@ const Leaderboard = () => {
 
   return (
     <LeaderboardStyleWrapper>
-      <div className="container">
+      <div>
         {/* <ZoneTabs
           zones={zones}
           activeZone={activeZone}

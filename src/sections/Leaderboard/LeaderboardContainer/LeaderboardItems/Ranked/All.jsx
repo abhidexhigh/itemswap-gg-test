@@ -6,58 +6,57 @@ import Emblems from "../../../../../data/emblems.json";
 
 const LeaderboardItemsAll = ({ leaderboardData }) => {
   return (
-    <div
-      className=""
-      style={{
-        background: "rgba(0, 0, 0, 0.5)",
-        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-        backdropFilter: "blur(2px)",
-        border: "1px solid rgba(255, 255, 255, 0.3)",
-        borderTop: "0",
-        overflow: "auto",
-      }}
-    >
-      <div className="min-h-[500px] overflow-x-auto">
-        <table className="color-[#212529] table-fixed w-full">
-          <thead className="border-x border-[#36394420]">
-            <tr className="border-t-0 table-row border-b border-[#88888850]">
-              <th className="hidden md:table-cell w-[40px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]">
+    <div className="bg-[#1a1b2b] rounded-b-lg border border-t-0 border-[#ffffff4d]">
+      <div className="overflow-x-auto min-h-[500px]">
+        <table className="w-full min-w-[800px]">
+          <thead>
+            <tr className="bg-[#2a2a3a] text-white">
+              <th className="py-4 px-2 text-left font-medium text-xs sm:text-sm whitespace-nowrap">
                 Rank
               </th>
-              <th className="hidden md:table-cell w-[30px] py-0 px-[0.25em] h-[60px] md:w-[70px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]"></th>
-              <th className="py-0 px-[0.25em] h-[60px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]">
-                Name
+              <th className="py-4 px-2 text-left font-medium text-xs sm:text-sm whitespace-nowrap">
+                Change
               </th>
-              <th className="w-[40px] py-0 px-[0.25em] h-[60px] md:w-[160px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]">
+              <th className="py-4 px-2 text-left font-medium text-xs sm:text-sm whitespace-nowrap">
+                Player
+              </th>
+              <th className="py-4 px-2 text-left font-medium text-xs sm:text-sm whitespace-nowrap">
                 Tier
               </th>
-              <th className="w-[70px] py-0 px-[0.25em] h-[60px] md:w-[120px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]">
-                <div className="w-full h-full flex justify-center items-center">
-                  <img src={orderDesc.src} className="mr-[5px]" />
-                  LP
+              <th className="py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap">
+                <div className="flex items-center justify-center gap-1">
+                  <img
+                    src={orderDesc.src}
+                    className="w-3 h-3 sm:w-4 sm:h-4"
+                    alt="Sort"
+                  />
+                  <span>Rating</span>
                 </div>
               </th>
-              <th className="hidden md:table-cell w-[40px] py-0 px-[0.25em] h-[60px] md:w-[120px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]">
-                WinRate
+              <th className="py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap">
+                Win Rate
               </th>
-              <th className="hidden md:table-cell w-[40px] py-0 px-[0.25em] h-[60px] md:w-[120px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]">
-                TOP4%
+              <th className="py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap">
+                Top 4
               </th>
-              <th className="hidden md:table-cell w-[35px] py-0 px-[0.25em] h-[60px] md:w-[120px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]">
+              <th className="py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap">
                 Games
               </th>
-              <th className="w-[40px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]">
+              <th className="py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap">
                 Wins
               </th>
-              <th className="w-[40px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-bold whitespace-nowrap text-center text-[20px]">
+              <th className="py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap">
                 TOP4
               </th>
             </tr>
           </thead>
-          <tbody className="border-x border-[#36394420]">
-            {leaderboardData?.map((data) => (
-              <tr className="border-t-0 table-row border-b border-[#88888850]">
-                <td className="hidden md:table-cell w-[40px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-extralight whitespace-nowrap text-center text-[12px]">
+          <tbody>
+            {leaderboardData?.map((data, index) => (
+              <tr
+                key={index}
+                className="border-b border-[#ffffff1a] hover:bg-[#2a2a3a] transition-colors duration-200"
+              >
+                <td className="py-4 px-2 text-center whitespace-nowrap">
                   {data?.position < 4 ? (
                     <img
                       src={
@@ -67,68 +66,80 @@ const LeaderboardItemsAll = ({ leaderboardData }) => {
                             ? "https://res.cloudinary.com/dg0cmj6su/image/upload/v1723283473/ico-rank-2_g1ozje.svg"
                             : "https://res.cloudinary.com/dg0cmj6su/image/upload/v1723283473/ico-rank-3_wgyren.svg"
                       }
-                      className="my-0 mx-auto w-[40px]"
+                      className="w-6 h-6 sm:w-8 sm:h-8 mx-auto"
+                      alt={`Rank ${data?.position}`}
                     />
                   ) : (
-                    <span className="text-[16px]">{data?.position}</span>
+                    <span className="text-white text-sm sm:text-base">
+                      {data?.position}
+                    </span>
                   )}
                 </td>
-                <td className="hidden md:table-cell w-[30px] py-0 px-[0.25em] h-[60px] md:w-[70px] text-[#fff] font-extralight whitespace-nowrap text-center text-[12px]">
+                <td className="py-4 px-2 text-center text-gray-400 whitespace-nowrap">
                   -
                 </td>
-                <td className="py-0 px-[0.25em] h-[60px] text-[#fff] font-extralight whitespace-nowrap text-left text-[12px]">
-                  <img
-                    src={data?.profileIconUrl}
-                    className="mr-[8px] w-[36px] h-[36px]  rounded-[50%] inline-block max-w-full"
-                  />
-                  <a
-                    href="#"
-                    className="inline-flex align-middle break-words text-[20px]"
-                  >
-                    {data?.gameName}
-                  </a>
-                </td>
-                <td className="w-[40px] py-0 px-[0.25em] h-[60px] md:w-[170px] text-[#fff] font-extralight whitespace-nowrap text-[12px] text-left">
-                  {console.log(
-                    Emblems?.find(
-                      (emblem) =>
-                        emblem?.tier?.toLowerCase() === data?.tier.toLowerCase()
-                    )
-                  )}
-                  <img
-                    src={
-                      Emblems?.find(
-                        (emblem) =>
-                          emblem?.tier?.toLowerCase() ===
-                          data?.tier.toLowerCase()
-                      )?.imageUrl
-                    }
-                    className="w-[40px] h-[40px] sticky md:inline"
-                  />
-                  <span className="font-light hidden md:inline text-[20px] ml-2">
-                    {data?.tier}
-                  </span>
-                  <span className="font-light block md:hidden">C</span>
-                </td>
-                <td className="w-[60px] py-0 px-[0.25em] h-[60px] md:w-[100px] text-[#fff] font-extralight whitespace-nowrap text-center text-[20px]">
-                  <div className="w-full h-full flex justify-center items-center">
-                    {data?.summonerLevel} LP
+                <td className="py-4 px-2 whitespace-nowrap">
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={data?.profileIconUrl}
+                      className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
+                      alt={data?.gameName}
+                    />
+                    <a
+                      href="#"
+                      className="text-white hover:text-[#ca9372] transition-colors duration-200 text-sm sm:text-base"
+                    >
+                      {data?.gameName}
+                    </a>
                   </div>
                 </td>
-                <td className="hidden md:table-cell w-[40px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-extralight whitespace-nowrap text-center text-[20px]">
-                  {((data?.wins * 100) / data?.plays).toFixed(2)}%
+                <td className="py-4 px-2 whitespace-nowrap">
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={
+                        Emblems?.find(
+                          (emblem) =>
+                            emblem?.tier?.toLowerCase() ===
+                            data?.tier.toLowerCase()
+                        )?.imageUrl
+                      }
+                      className="w-6 h-6 sm:w-8 sm:h-8"
+                      alt={data?.tier}
+                    />
+                    <span className="text-white text-sm sm:text-base">
+                      {data?.tier}
+                    </span>
+                  </div>
                 </td>
-                <td className="hidden md:table-cell w-[40px] py-0 px-[0.25em] h-[60px] md:w-[60px] text-[#fff] font-extralight whitespace-nowrap text-center text-[20px]">
-                  {((data?.tops * 100) / data?.plays).toFixed(2)}%
+                <td className="py-4 px-2 text-center whitespace-nowrap">
+                  <span className="text-white font-medium text-sm sm:text-base">
+                    {data?.summonerLevel} LP
+                  </span>
                 </td>
-                <td className="hidden md:table-cell w-[35px] py-0 px-[0.25em] h-[60px] md:w-[64px] text-[#fff] font-extralight whitespace-nowrap text-center text-[20px]">
-                  {data?.plays}
+                <td className="py-4 px-2 text-center whitespace-nowrap">
+                  <span className="text-white text-sm sm:text-base">
+                    {((data?.wins * 100) / data?.plays).toFixed(1)}%
+                  </span>
                 </td>
-                <td className="w-[30px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-extralight whitespace-nowrap text-center text-[20px]">
-                  {data?.wins}
+                <td className="py-4 px-2 text-center whitespace-nowrap">
+                  <span className="text-white text-sm sm:text-base">
+                    {((data?.tops * 100) / data?.plays).toFixed(1)}%
+                  </span>
                 </td>
-                <td className="w-[40px] py-0 px-[0.25em] h-[60px] md:w-[80px] text-[#fff] font-extralight whitespace-nowrap text-center text-[20px]">
-                  {data?.tops}
+                <td className="py-4 px-2 text-center whitespace-nowrap">
+                  <span className="text-white text-sm sm:text-base">
+                    {data?.plays}
+                  </span>
+                </td>
+                <td className="py-4 px-2 text-center whitespace-nowrap">
+                  <span className="text-white text-sm sm:text-base">
+                    {data?.wins}
+                  </span>
+                </td>
+                <td className="py-4 px-2 text-center whitespace-nowrap">
+                  <span className="text-white text-sm sm:text-base">
+                    {data?.tops}
+                  </span>
                 </td>
               </tr>
             ))}

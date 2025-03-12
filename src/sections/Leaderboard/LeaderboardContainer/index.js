@@ -19,54 +19,59 @@ const LeaderboardContainer = ({
   leaderboardData,
 }) => {
   return (
-    <>
-      <LeaderboardCard />
-      <LeaderboardItemsAll leaderboardData={leaderboardData} />
-    </>
-  );
-
-  return (
-    <>
-      <LeaderboardCard />
-      {activeCategory === "Ranked" && (
-        <>
-          {activeSubcategory === "All" && <LeaderboardItemsAll />}
-          {activeSubcategory === "Challenger" && <LeaderboardItemsChallanger />}
-          {activeSubcategory === "Grandmaster" && (
-            <LeaderboardItemsGrandmaster />
+    <div className="w-full max-w-[1200px] mx-auto sm:px-6 lg:px-8">
+      <div className="bg-[#1a1b2b] rounded-lg shadow-xl overflow-hidden">
+        <LeaderboardCard />
+        <div className="overflow-x-auto">
+          {activeCategory === "Ranked" && (
+            <>
+              {activeSubcategory === "All" && (
+                <LeaderboardItemsAll leaderboardData={leaderboardData} />
+              )}
+              {activeSubcategory === "Challenger" && (
+                <LeaderboardItemsChallanger />
+              )}
+              {activeSubcategory === "Grandmaster" && (
+                <LeaderboardItemsGrandmaster />
+              )}
+              {activeSubcategory === "Master" && <LeaderboardItemsMaster />}
+              {activeSubcategory === "Diamond" && <LeaderboardItemsDiamond />}
+              {activeSubcategory === "Emerald" && <LeaderboardItemsEmerald />}
+              {activeSubcategory === "Platinum" && <LeaderboardItemsPlatinum />}
+              {activeSubcategory === "Gold" && <LeaderboardItemsGold />}
+              {activeSubcategory === "Silver" && <LeaderboardItemsSilver />}
+              {activeSubcategory === "Bronze" && <LeaderboardItemsBronze />}
+              {activeSubcategory === "Iron" && <LeaderboardItemsIron />}
+            </>
           )}
-          {activeSubcategory === "Master" && <LeaderboardItemsMaster />}
-          {activeSubcategory === "Diamond" && <LeaderboardItemsDiamond />}
-          {activeSubcategory === "Emerald" && <LeaderboardItemsEmerald />}
-          {activeSubcategory === "Platinum" && <LeaderboardItemsPlatinum />}
-          {activeSubcategory === "Gold" && <LeaderboardItemsGold />}
-          {activeSubcategory === "Silver" && <LeaderboardItemsSilver />}
-          {activeSubcategory === "Bronze" && <LeaderboardItemsBronze />}
-          {activeSubcategory === "Iron" && <LeaderboardItemsIron />}
-        </>
-      )}
-      {activeCategory === "Hyper Roll" && (
-        <>{activeSubcategory === "All" && <LeaderboardItemsAllHyperRoll />}</>
-      )}
-      {activeCategory === "Double Up" && (
-        <>
-          {activeSubcategory === "All" && <LeaderboardItemsAll />}
-          {activeSubcategory === "Challenger" && <LeaderboardItemsChallanger />}
-          {activeSubcategory === "Grandmaster" && (
-            <LeaderboardItemsGrandmaster />
+          {activeCategory === "Hyper Roll" && (
+            <>
+              {activeSubcategory === "All" && <LeaderboardItemsAllHyperRoll />}
+            </>
           )}
-          {activeSubcategory === "Master" && <LeaderboardItemsMaster />}
-          {activeSubcategory === "Diamond" && <LeaderboardItemsDiamond />}
-          {activeSubcategory === "Emerald" && <LeaderboardItemsEmerald />}
-          {activeSubcategory === "Platinum" && <LeaderboardItemsPlatinum />}
-          {activeSubcategory === "Gold" && <LeaderboardItemsGold />}
-          {activeSubcategory === "Silver" && <LeaderboardItemsSilver />}
-          {activeSubcategory === "Bronze" && <LeaderboardItemsBronze />}
-          {activeSubcategory === "Iron" && <LeaderboardItemsIron />}
-        </>
-      )}
-      {activeCategory === "Set 3.5" && <Set3_5 />}
-    </>
+          {activeCategory === "Double Up" && (
+            <>
+              {activeSubcategory === "All" && <LeaderboardItemsAll />}
+              {activeSubcategory === "Challenger" && (
+                <LeaderboardItemsChallanger />
+              )}
+              {activeSubcategory === "Grandmaster" && (
+                <LeaderboardItemsGrandmaster />
+              )}
+              {activeSubcategory === "Master" && <LeaderboardItemsMaster />}
+              {activeSubcategory === "Diamond" && <LeaderboardItemsDiamond />}
+              {activeSubcategory === "Emerald" && <LeaderboardItemsEmerald />}
+              {activeSubcategory === "Platinum" && <LeaderboardItemsPlatinum />}
+              {activeSubcategory === "Gold" && <LeaderboardItemsGold />}
+              {activeSubcategory === "Silver" && <LeaderboardItemsSilver />}
+              {activeSubcategory === "Bronze" && <LeaderboardItemsBronze />}
+              {activeSubcategory === "Iron" && <LeaderboardItemsIron />}
+            </>
+          )}
+          {activeCategory === "Set 3.5" && <Set3_5 />}
+        </div>
+      </div>
+    </div>
   );
 };
 
