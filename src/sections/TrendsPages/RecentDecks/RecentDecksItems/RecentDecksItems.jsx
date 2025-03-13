@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import "../../../../../i18n";
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo, memo } from "react";
 import Image from "next/image";
 import { Tooltip } from "react-tooltip";
 import moment from "moment";
@@ -12,8 +12,7 @@ import GirlCrush from "@assets/image/traits/GirlCrush.svg";
 import RecentDecksCard from "../RecentDecksCard/RecentDecksCard";
 import augment from "@assets/image/augments/1.png";
 import arrowRight from "@assets/image/icons/arrow-right.svg";
-import { PiEye } from "react-icons/pi";
-import { PiEyeClosed } from "react-icons/pi";
+import { PiEye, PiEyeClosed } from "react-icons/pi";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import Comps from "../../../../data/compsNew.json";
@@ -25,37 +24,16 @@ import "chart.js/auto";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 const MyBarChartComponent = dynamic(() => import("./BarGraph"), { ssr: false });
 
-const ProjectItems = () => {
+const RecentDecksItems = () => {
   const { t } = useTranslation();
   const others = t("others");
-  const [selectedChampion, setSelectedChampion] = React.useState(null);
-  const [selectedTrait, setSelectedTrait] = React.useState(null);
-  const [selectedItem, setSelectedItem] = React.useState(null);
-  // const { data } = projectsData;
+  const [selectedChampion, setSelectedChampion] = useState(null);
+  const [selectedTrait, setSelectedTrait] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
   const [isClosed, setIsClosed] = useState({});
   const [height, setHeight] = useState("auto");
-  const [activeTab, setActiveTab] = useState("Champions"); // [Tier 1, Tier 2, Tier 3, Tier 4, Tier 5
+  const [activeTab, setActiveTab] = useState("Champions");
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
-
-  const chartData = {
-    labels: ["", "", "", "", "", "", "", "", ""],
-    datasets: [
-      {
-        label: "",
-        data: [12, 19, 3, 5, 2, 3, 7, 9, 8],
-        backgroundColor: "rgb(26 27 49)", // Uniform color for all bars
-        borderColor: "rgb(43 49 163)", // Uniform color for all bar borders
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const handleIsClosed = (event) => {
-    // Accessing the id of the clicked button
-    const buttonId = event.currentTarget.id;
-    // Updating the state
-    setIsClosed({ ...isClosed, [buttonId]: !isClosed[buttonId] });
-  };
 
   const {
     props: {
@@ -74,231 +52,205 @@ const ProjectItems = () => {
   const { forces } = data?.refs;
   const [compsData, setCompsData] = useState(metaDecks);
 
-  // Fisher-Yates shuffle function to randomize an array in-place
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
+  const shuffle = useCallback((array) => {
+    if (!array || !array.length) return [];
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
     }
-    return array;
-  }
+    return newArray;
+  }, []);
 
-  // Group champions by type
-  const championsByType = {};
-  champions.forEach((champion) => {
-    if (!championsByType[champion.type]) {
-      championsByType[champion.type] = [];
+  const { filteredChampions, groupedArray } = useMemo(() => {
+    if (!champions || !champions.length) {
+      return { filteredChampions: [], groupedArray: [] };
     }
-    championsByType[champion.type].push(champion);
-  });
 
-  // For each type, shuffle the group and keep only 2 champions
-  const filteredChampions = [];
-  for (const type in championsByType) {
-    const group = championsByType[type];
-    // Shuffle a copy of the group array to avoid modifying the original
-    const selected = shuffle([...group]).slice(0, 2);
-    // Add the selected champions back to the final array
-    filteredChampions.push(...selected);
-  }
-
-  const handleFilterChange = (type, key) => {
-    if (type === "trait") {
-      if (selectedTrait === key) {
-        setSelectedTrait(null);
-        setCompsData(metaDecks);
-      } else {
-        setSelectedTrait(key);
-        const filteredTraits = metaDecks.filter((deck) =>
-          deck.deck.traits.some((trait) => trait.key === key)
-        );
-        setCompsData(filteredTraits);
+    const championsByType = {};
+    champions.forEach((champion) => {
+      if (!championsByType[champion.type]) {
+        championsByType[champion.type] = [];
       }
-      setSelectedChampion(null);
-      setSelectedItem(null);
-    } else if (type === "force") {
-      if (selectedTrait === key) {
-        setSelectedTrait(null);
-        setCompsData(metaDecks);
-      } else {
-        setSelectedTrait(key);
-        const filteredTraits = metaDecks.filter((deck) =>
-          deck.deck.forces.some(
-            (force) => force.key.toLowerCase() === key.toLowerCase()
-          )
-        );
-        setCompsData(filteredTraits);
-      }
-      setSelectedChampion(null);
-      setSelectedItem(null);
-    } else if (type === "champion") {
-      if (selectedChampion === key) {
-        setSelectedChampion(null);
-        setCompsData(metaDecks);
-      } else {
-        setSelectedChampion(key);
-        const filteredChampions = metaDecks.filter((deck) =>
-          deck.deck.champions.some((champion) => champion.key === key)
-        );
-        setCompsData(filteredChampions);
-      }
-      setSelectedTrait(null);
-      setSelectedItem(null);
-    } else if (type === "item") {
-      if (selectedItem === key) {
-        setSelectedItem(null);
-        setCompsData(metaDecks);
-      } else {
-        setSelectedItem(key);
-        const filteredItems = metaDecks.filter((deck) =>
-          deck.deck.champions.some(
-            (champion) =>
-              champion.items && champion.items.some((item) => item === key)
-          )
-        );
-        setCompsData(filteredItems);
-      }
-      setSelectedChampion(null);
-      setSelectedTrait(null);
-    }
-  };
-
-  // Function to arrange champions by cost start
-  const groupedByCost = filteredChampions.reduce((acc, champion) => {
-    const { cost } = champion;
-    if (!acc[cost]) {
-      acc[cost] = [];
-    }
-    acc[cost].push(champion);
-    return acc;
-  }, {});
-  const groupedArray = Object.values(groupedByCost);
-
-  // if (selectedChampion !== null) {
-  groupedArray.forEach((subArray) => {
-    // Traverse through each object in the sub-array
-    subArray.forEach((champion) => {
-      // Check if the key of the champion matches the selectedChampion
-      if (champion.key === selectedChampion) {
-        // Set the 'selected' property to true
-        champion.selected = true;
-      } else {
-        // Set the 'selected' property to false
-        champion.selected = false;
-      }
+      championsByType[champion.type].push(champion);
     });
-  });
-  // }
 
-  // Function to arrange champions by cost end
-  const filteredDecks = metaDecks.filter((deck) =>
-    deck.deck.champions.some((champion) => champion.key === selectedChampion)
+    const filtered = [];
+    for (const type in championsByType) {
+      const group = championsByType[type];
+      const selected = shuffle([...group]).slice(0, 2);
+      filtered.push(...selected);
+    }
+
+    const groupedByCost = filtered.reduce((acc, champion) => {
+      const { cost } = champion;
+      if (!acc[cost]) {
+        acc[cost] = [];
+      }
+      acc[cost].push(champion);
+      return acc;
+    }, {});
+
+    return {
+      filteredChampions: filtered,
+      groupedArray: Object.values(groupedByCost),
+    };
+  }, [champions, shuffle]);
+
+  useMemo(() => {
+    if (!groupedArray.length) return;
+
+    groupedArray.forEach((subArray) => {
+      subArray.forEach((champion) => {
+        champion.selected = champion.key === selectedChampion;
+      });
+    });
+  }, [groupedArray, selectedChampion]);
+
+  const handleFilterChange = useCallback(
+    (type, key) => {
+      if (!metaDecks) return;
+
+      if (type === "trait") {
+        if (selectedTrait === key) {
+          setSelectedTrait(null);
+          setCompsData(metaDecks);
+        } else {
+          setSelectedTrait(key);
+          const filteredTraits = metaDecks.filter((deck) =>
+            deck.deck.traits.some((trait) => trait.key === key)
+          );
+          setCompsData(filteredTraits);
+        }
+        setSelectedChampion(null);
+        setSelectedItem(null);
+      } else if (type === "force") {
+        if (selectedTrait === key) {
+          setSelectedTrait(null);
+          setCompsData(metaDecks);
+        } else {
+          setSelectedTrait(key);
+          const filteredTraits = metaDecks.filter((deck) =>
+            deck.deck.forces.some(
+              (force) => force.key.toLowerCase() === key.toLowerCase()
+            )
+          );
+          setCompsData(filteredTraits);
+        }
+        setSelectedChampion(null);
+        setSelectedItem(null);
+      } else if (type === "champion") {
+        if (selectedChampion === key) {
+          setSelectedChampion(null);
+          setCompsData(metaDecks);
+        } else {
+          setSelectedChampion(key);
+          const filteredChampions = metaDecks.filter((deck) =>
+            deck.deck.champions.some((champion) => champion.key === key)
+          );
+          setCompsData(filteredChampions);
+        }
+        setSelectedTrait(null);
+        setSelectedItem(null);
+      } else if (type === "item") {
+        if (selectedItem === key) {
+          setSelectedItem(null);
+          setCompsData(metaDecks);
+        } else {
+          setSelectedItem(key);
+          const filteredItems = metaDecks.filter((deck) =>
+            deck.deck.champions.some(
+              (champion) =>
+                champion.items && champion.items.some((item) => item === key)
+            )
+          );
+          setCompsData(filteredItems);
+        }
+        setSelectedChampion(null);
+        setSelectedTrait(null);
+      }
+    },
+    [metaDecks, selectedChampion, selectedItem, selectedTrait]
   );
 
-  const series = [
-    {
-      name: "Avg Rank",
-      data: [90, 80, 70, 60, 50, 40, 30, 20, 10],
-    },
-  ];
-  const options = {
-    chart: {
-      type: "bar",
-      height: 350,
-      toolbar: {
-        show: false, // This hides the menu button
+  const toggleHeight = useCallback(() => {
+    setHeight((previous) => (previous === "auto" ? "200px" : "auto"));
+  }, []);
+
+  const handleTabChange = useCallback((tab) => {
+    setActiveTab(tab);
+  }, []);
+
+  const handleIsClosed = useCallback((event) => {
+    const buttonId = event.currentTarget.id;
+    setIsClosed((prev) => ({ ...prev, [buttonId]: !prev[buttonId] }));
+  }, []);
+
+  const chartOptions = useMemo(
+    () => ({
+      chart: {
+        type: "bar",
+        height: 350,
+        toolbar: { show: false },
+        padding: { left: 0, right: 0, top: 0, bottom: 0 },
+        margin: { left: 0, right: 0, top: 0, bottom: 0 },
       },
-      padding: {
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
+      grid: { show: false },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          barHeight: "100%",
+          distributed: false,
+        },
       },
-      margin: {
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
+      dataLabels: { enabled: false },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ["transparent"],
       },
-    },
-    grid: {
-      show: false, // This hides the background grid lines
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        barHeight: "100%", // Makes bars fill the entire vertical space
-        distributed: false,
+      xaxis: {
+        labels: { show: false },
+        axisTicks: { show: false },
+        axisBorder: { show: false },
+        floating: true,
       },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    stroke: {
-      show: true,
-      width: 2,
-      colors: ["transparent"],
-    },
-    xaxis: {
-      labels: {
-        show: false, // Hides x-axis labels
+      yaxis: {
+        labels: { show: false },
+        axisTicks: { show: false },
+        axisBorder: { show: false },
+        floating: true,
       },
-      axisTicks: {
-        show: false, // Hides x-axis ticks
+      tooltip: {
+        custom: function ({ series, seriesIndex, dataPointIndex }) {
+          return (
+            '<div class="apexcharts-tooltip-series">' +
+            '<span class="apexcharts-tooltip-text-y-label">Avg Rank: </span>' +
+            '<span class="apexcharts-tooltip-text-y-value">' +
+            series[seriesIndex][dataPointIndex] +
+            "</span>" +
+            "</div>"
+          );
+        },
       },
-      axisBorder: {
-        show: false, // Hides x-axis line
+      fill: { opacity: 1 },
+    }),
+    []
+  );
+
+  const chartSeries = useMemo(
+    () => [
+      {
+        name: "Avg Rank",
+        data: [90, 80, 70, 60, 50, 40, 30, 20, 10],
       },
-      floating: true, // This ensures the axis doesn't take up space
-    },
-    yaxis: {
-      labels: {
-        show: false, // Hides y-axis labels
-      },
-      axisTicks: {
-        show: false, // Hides y-axis ticks
-      },
-      axisBorder: {
-        show: false, // Hides y-axis line
-      },
-      floating: true, // This ensures the axis doesn't take up space
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        barHeight: "100%", // Makes bars fill the entire vertical space
-        distributed: false,
-      },
-    },
-    tooltip: {
-      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-        return (
-          '<div class="apexcharts-tooltip-series">' +
-          '<span class="apexcharts-tooltip-text-y-label">Avg Rank: </span>' +
-          '<span class="apexcharts-tooltip-text-y-value">' +
-          series[seriesIndex][dataPointIndex] +
-          "</span>" +
-          "</div>"
-        );
-      },
-    },
-    fill: {
-      opacity: 1,
-    },
-    // tooltip: {
-    //   y: {
-    //     formatter: function (val) {
-    //       return "$ " + val + " thousands";
-    //     },
-    //   },
-    // },
-  };
+    ],
+    []
+  );
 
   return (
-    // <ProjectItemsStyleWrapper>
     <div className="mx-auto md:px-6 lg:px-8 py-6">
       <div className="space-y-6">
-        {/* Tabs Section */}
         <div className="flex justify-center md:justify-start">
           <div className="inline-flex rounded-lg overflow-hidden border border-[#ffffff20] bg-[#1a1b30]">
             <button
@@ -308,9 +260,9 @@ const ProjectItems = () => {
                   ? "bg-[#ffffff] text-[#1a1b30]"
                   : "text-white hover:bg-[#ffffff20]"
               }`}
-              onClick={() => setActiveTab("Champions")}
+              onClick={() => handleTabChange("Champions")}
             >
-              {others?.champions}
+              {others?.champions || "Champions"}
             </button>
             <button
               type="button"
@@ -319,9 +271,9 @@ const ProjectItems = () => {
                   ? "bg-[#ffffff] text-[#1a1b30]"
                   : "text-white hover:bg-[#ffffff20]"
               }`}
-              onClick={() => setActiveTab("Traits")}
+              onClick={() => handleTabChange("Traits")}
             >
-              {others?.traits}
+              {others?.traits || "Traits"}
             </button>
             <button
               type="button"
@@ -330,16 +282,14 @@ const ProjectItems = () => {
                   ? "bg-[#ffffff] text-[#1a1b30]"
                   : "text-white hover:bg-[#ffffff20]"
               }`}
-              onClick={() => setActiveTab("Items")}
+              onClick={() => handleTabChange("Items")}
             >
-              {others?.items}
+              {others?.items || "Items"}
             </button>
           </div>
         </div>
 
-        {/* Content Sections */}
         <div className="bg-[#1a1b30] md:bg-transparent rounded-lg shadow-lg">
-          {/* Champions Tab */}
           <div className={`${activeTab === "Champions" ? "block" : "hidden"}`}>
             <RecentDecksCard
               itemCount={13}
@@ -349,16 +299,12 @@ const ProjectItems = () => {
             />
           </div>
 
-          {/* Traits Tab */}
           <div
             className={`${activeTab === "Traits" ? "block" : "hidden"} p-3 md:p-6 bg-[#1a1b30] rounded-lg`}
           >
-            {/* Origins Section */}
             <div className="space-y-6">
               <div className="flex flex-col lg:flex-row items-center gap-4">
-                <div className="bg-[#27282E] p-3 rounded-lg text-white font-semibold text-center min-w-[100px]">
-                  {others?.origin}
-                </div>
+                <div className="text-[#ffffff]">{others?.origin}</div>
                 <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 w-full">
                   {traits?.map((trait, i) => (
                     <div
@@ -394,11 +340,8 @@ const ProjectItems = () => {
                 </div>
               </div>
 
-              {/* Forces Section */}
               <div className="flex flex-col lg:flex-row items-center gap-4">
-                <div className="bg-[#27282E] p-3 rounded-lg text-white font-semibold text-center min-w-[100px]">
-                  {others?.forces}
-                </div>
+                <div className="text-[#ffffff]">{others?.forces}</div>
                 <div className="grid grid-cols-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 w-full">
                   {forces?.map((force, i) => (
                     <div
@@ -436,7 +379,6 @@ const ProjectItems = () => {
             </div>
           </div>
 
-          {/* Items Tab */}
           <div
             className={`${activeTab === "Items" ? "block" : "hidden"} p-3 md:p-6 bg-[#1a1b30] rounded-lg`}
           >
@@ -474,53 +416,27 @@ const ProjectItems = () => {
           <div>
             {compsData?.map((metaDeck, i) => (
               <div
-                className="flex flex-col gap-[1px] border border-[#323232] bg-[#323232] mb-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ease-in-out"
+                key={`deck-${i}`}
+                className="flex flex-col gap-[1px] border border-[#323232] bg-[#323232] mb-4"
                 style={{
                   background: "rgba(0, 0, 0, 0.2)",
                   backdropFilter: "blur(2px)",
                 }}
               >
                 <header className="relative flex md:flex-col justify-between items-end bg-[#1a1b30] py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px]">
-                  <div className="inline-flex flex-col flex-wrap gap-[8px] md:flex-row md:items-center md:gap-3">
-                    <div className="flex items-center gap-x-2">
-                      <div
-                        className={`rounded-lg !border-[#ffffff40] !border p-2 py-0 shadow-lg ${metaDeck?.placement == 1 ? "text-[#3aedbd] !border-[#3aedbd]" : metaDeck?.placement == 2 ? "text-[#FBDB51] !border-[#FBDB51]" : metaDeck?.placement == 3 ? "text-[#6eccff] !border-[#6eccff]" : "text-[#ffffff]"}`}
-                      >
-                        <div className="text-xl md:text-3xl p-2">
-                          {metaDeck?.placement}
-                        </div>
-                      </div>
-                      <Link
-                        href={`/user/${metaDeck?.puuid}/${metaDeck?.key}`}
-                        className="flex items-center gap-x-2"
-                      >
-                        <div className="relative">
-                          <Image
-                            src={metaDeck?.imageUrl}
-                            alt="Image"
-                            width={80}
-                            height={80}
-                            className="w-16 relative"
-                          />
-                          {/* <div className="absolute bottom-0 right-0 px-2 rounded-full bg-[#444]">
-                              {metaDeck?.level}
-                            </div> */}
-                        </div>
-                        <div className="flex flex-col">
-                          <div className="-mb-1 text-lg">{metaDeck?.name}</div>
-                          <div className="-mb-1 font-normal text-sm">
-                            {moment(metaDeck?.dateTime).fromNow()} •{" "}
-                            {metaDeck?.duration}
-                          </div>
-                        </div>
-                      </Link>
-                    </div>
+                  <div className="inline-flex flex-col flex-wrap gap-[8px] md:flex-row md:items-center md:gap-[4px]">
+                    <strong className="text-[26px] font-semibold leading-none text-[#ffffff]">
+                      {metaDeck?.name}
+                    </strong>
                     <span className="flex justify-center items-center">
                       {metaDeck?.deck?.forces?.map((force, i) => (
-                        <>
-                          <div className="flex justify-center items-center bg-[#000] rounded-full mx-1 pr-2 border-[1px] border-[#ffffff50]">
+                        <div
+                          key={`force-${i}`}
+                          className="flex justify-center items-center bg-[#000] rounded-full mx-1 pr-2 border-[1px] border-[#ffffff50]"
+                        >
+                          {forces && (
                             <Image
-                              alt="Image"
+                              alt={force?.key || "Force"}
                               width={50}
                               height={50}
                               src={
@@ -528,71 +444,57 @@ const ProjectItems = () => {
                                   (t) =>
                                     t.key.toLowerCase() ===
                                     force?.key.toLowerCase()
-                                )?.imageUrl
+                                )?.imageUrl || ""
                               }
                               data-tooltip-id={force?.key}
                               className="w-[24px] h-[24px] md:w-[40px] md:h-[40px] mr-1"
                             />
-                            <ReactTltp content={force?.key} id={force?.key} />
-                            <span className="text-[18px]">
-                              {force?.numUnits}
-                            </span>
-                          </div>
-                        </>
+                          )}
+                          <ReactTltp content={force?.key} id={force?.key} />
+                          <span className="text-[18px]">{force?.numUnits}</span>
+                        </div>
                       ))}
                     </span>
                   </div>
                   <div className="inline-flex flex-shrink-0 gap-[22px] md:mt-0">
                     <div className="inline-flex flex-wrap">
-                      {metaDeck?.deck?.traits?.map((trait, i) => (
-                        <>
-                          {traits
-                            ?.find((t) => t.key === trait?.key)
-                            ?.tiers?.find((t) => t?.min >= trait?.numUnits)
-                            ?.imageUrl && (
-                            <div
-                              className="relative w-[30px] h-[30px] md:w-[56px] md:h-[56px]"
-                              // style={{
-                              //   backgroundImage: `url(${traitBg.src})`,
-                              //   width: "48px",
-                              //   height: "48px",
-                              // }}
-                            >
-                              <Image
-                                alt="Image"
-                                width={50}
-                                height={50}
-                                src={
-                                  traits
-                                    ?.find((t) => t.key === trait?.key)
-                                    ?.tiers?.find(
-                                      (t) => t?.min >= trait?.numUnits
-                                    )?.imageUrl
-                                }
-                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center w-[30px] md:w-[56px]"
-                                data-tooltip-id={
-                                  traits?.find((t) => t.key === trait?.key)?.key
-                                }
-                              />
-                              <ReactTltp
-                                variant="trait"
-                                id={
-                                  traits?.find((t) => t.key === trait?.key)?.key
-                                }
-                                content={{
-                                  ...traits?.find((t) => t.key === trait?.key),
-                                  numUnits: trait?.numUnits,
-                                }}
-                              />
-                            </div>
-                          )}
-                        </>
-                      ))}
+                      {metaDeck?.deck?.traits?.map((trait, i) => {
+                        const traitInfo = traits?.find(
+                          (t) => t.key === trait?.key
+                        );
+                        const tierInfo = traitInfo?.tiers?.find(
+                          (t) => t?.min >= trait?.numUnits
+                        );
+
+                        return tierInfo?.imageUrl ? (
+                          <div
+                            key={`trait-${i}`}
+                            className="relative w-[30px] h-[30px] md:w-[56px] md:h-[56px]"
+                          >
+                            <Image
+                              alt={traitInfo?.name || "Trait"}
+                              width={50}
+                              height={50}
+                              src={tierInfo?.imageUrl}
+                              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center w-[30px] md:w-[56px]"
+                              data-tooltip-id={traitInfo?.key}
+                            />
+                            <ReactTltp
+                              variant="trait"
+                              id={traitInfo?.key}
+                              content={{
+                                ...traitInfo,
+                                numUnits: trait?.numUnits,
+                              }}
+                            />
+                          </div>
+                        ) : null;
+                      })}
                     </div>
                     <div className="absolute right-[16px] top-[16px] inline-flex gap-[8px] lg:relative lg:right-[0px] lg:top-[0px]">
                       <button
                         className="inline-flex w-[16px] cursor-pointer items-center text-white"
-                        title="Hide"
+                        title={isClosed[i] ? "Show" : "Hide"}
                         id={i}
                         onClick={handleIsClosed}
                       >
@@ -601,49 +503,19 @@ const ProjectItems = () => {
                     </div>
                   </div>
                 </header>
-                <div className={`${isClosed[i] ? "hidden" : ""}`}>
-                  <div
-                    className="flex flex-col bg-center bg-no-repeat mt-[-1px]"
-                    // style={{
-                    //   backgroundImage: `url(${cardBg.src})`,
-                    //   backgroundSize: "cover",
-                    // }}
-                  >
-                    <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#27282E90] py-[16px] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6">
-                      <div className="flex items-center gap-x-8">
-                        <div className="hidden md:flex md:flex-col justify-center gap-[2px] lg:py-[8px]">
-                          {metaDeck?.deck?.augments.map((augment, i) => (
-                            <div className="flex justify-center items-center md:w-[64px] relative">
-                              <Image
-                                alt="Image"
-                                width={80}
-                                height={80}
-                                src={
-                                  augments?.find((a) => a.key === augment)
-                                    .imageUrl
-                                }
-                                className="w-[64px] md:w-[86px]"
-                                data-tooltip-id={augment}
-                              />
-                              <ReactTltp
-                                variant="augment"
-                                content={augments?.find(
-                                  (a) => a.key === augment
-                                )}
-                                id={augment}
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      </div>
 
-                      <div className="mb-[16px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[93%] lg:flex-shrink-0">
+                {!isClosed[i] && (
+                  <div className="flex flex-col bg-center bg-no-repeat mt-[-1px]">
+                    <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#27282E90] py-[16px] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6">
+                      <div className="mb-[16px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[80%] lg:flex-shrink-0">
                         <div className="flex flex-wrap justify-center lg:justify-center gap-2 w-full">
-                          {metaDeck?.deck?.champions
-                            // ?.slice(0, 8)
-                            .map((champion, i) => (
+                          {metaDeck?.deck?.champions?.map((champion, i) => {
+                            const championInfo = champions?.find(
+                              (c) => c.key === champion?.key
+                            );
+                            return (
                               <div
-                                key={i}
+                                key={`champion-${i}`}
                                 className="flex flex-col items-center gap-x-4 flex-grow basis-0 min-w-[65px] md:min-w-[80px] max-w-[78px] md:max-w-[150px]"
                               >
                                 <p
@@ -653,116 +525,223 @@ const ProjectItems = () => {
                                       "rgb(0, 0, 0) -1px 0px 2px, rgb(0, 0, 0) 0px 1px 2px, rgb(0, 0, 0) 1px 0px 2px, rgb(0, 0, 0) 0px -1px 2px",
                                   }}
                                 >
-                                  {
-                                    champions?.find(
-                                      (c) => c.key === champion?.key
-                                    )?.name
-                                  }
+                                  {championInfo?.name || ""}
                                 </p>
 
                                 <div className="inline-flex items-center justify-center flex-col">
                                   <div className="flex flex-col w-full aspect-square rounded-[20px]">
                                     <div
                                       className="relative inline-flex rounded-[10px] border-2 [box-shadow:rgba(255,_0,_0,_0.8)_0px_7px_29px_0px]"
-                                      data-tooltip-id={
-                                        champions?.find(
-                                          (c) => c.key === champion?.key
-                                        )?.key
-                                      }
+                                      data-tooltip-id={championInfo?.key}
                                     >
-                                      <Image
-                                        alt="Image"
-                                        width={100}
-                                        height={100}
-                                        src={
-                                          champions?.find(
-                                            (c) => c.key === champion?.key
-                                          )?.cardImage
-                                        }
-                                        className="h-full w-28 object-cover object-center rounded-[10px]"
-                                      />
-                                      <Image
-                                        alt="Image"
-                                        width={20}
-                                        height={20}
-                                        src={
-                                          forces?.find(
-                                            (f) =>
-                                              f.key ===
-                                              champions?.find(
-                                                (c) => c.key === champion?.key
-                                              )?.variant
-                                          )?.imageUrl
-                                        }
-                                        className="absolute -top-[3px] -right-[3px] w-[16px] md:w-[24px]"
-                                      />
+                                      {championInfo?.cardImage && (
+                                        <Image
+                                          alt={championInfo?.name || "Champion"}
+                                          width={100}
+                                          height={100}
+                                          src={championInfo?.cardImage}
+                                          className="h-full w-28 object-cover object-center rounded-[10px]"
+                                        />
+                                      )}
+
+                                      {championInfo?.variant && forces && (
+                                        <Image
+                                          alt={
+                                            championInfo?.variant || "Variant"
+                                          }
+                                          width={20}
+                                          height={20}
+                                          src={
+                                            forces?.find(
+                                              (f) =>
+                                                f.key === championInfo?.variant
+                                            )?.imageUrl || ""
+                                          }
+                                          className="absolute -top-[3px] -right-[3px] w-[16px] md:w-[24px]"
+                                        />
+                                      )}
                                     </div>
                                     <ReactTltp
                                       variant="champion"
-                                      id={
-                                        champions?.find(
-                                          (c) => c.key === champion?.key
-                                        )?.key
-                                      }
-                                      content={champions?.find(
-                                        (c) => c.key === champion?.key
-                                      )}
+                                      id={championInfo?.key}
+                                      content={championInfo}
                                     />
                                   </div>
                                 </div>
 
                                 <div className="inline-flex items-center justify-center w-full gap-1 flex-wrap">
-                                  {champion?.items &&
-                                    champion?.items.map((item, idx) => (
+                                  {champion?.items?.map((item, idx) => {
+                                    const itemInfo = items?.find(
+                                      (i) => i.key === item
+                                    );
+                                    return itemInfo ? (
                                       <div
-                                        key={idx}
+                                        key={`item-${idx}`}
                                         className="relative z-10 hover:z-20"
                                       >
                                         <ReactTltp
                                           variant="item"
-                                          content={items?.find(
-                                            (i) => i.key === item
-                                          )}
-                                          id={
-                                            items?.find((i) => i.key === item)
-                                              ?.key
-                                          }
+                                          content={itemInfo}
+                                          id={itemInfo?.key}
                                         />
                                         <Image
-                                          alt="Image"
+                                          alt={itemInfo?.name || "Item"}
                                           width={50}
                                           height={50}
-                                          src={
-                                            items?.find((i) => i.key === item)
-                                              ?.imageUrl
-                                          }
+                                          src={itemInfo?.imageUrl || ""}
                                           className="w-[20px] h-[20px] md:w-[30px] md:h-[30px] hover:scale-150 transition-all duration-300"
-                                          data-tooltip-id={
-                                            items?.find((i) => i.key === item)
-                                              ?.key
-                                          }
+                                          data-tooltip-id={itemInfo?.key}
                                         />
                                       </div>
-                                    ))}
+                                    ) : null;
+                                  })}
                                 </div>
                               </div>
-                            ))}
+                            );
+                          })}
                         </div>
                       </div>
 
-                      <div className="hidden flex w-full flex-col items-center lg:hidden">
-                        <a
-                          target="_blank"
-                          className="flex h-[28px] w-full max-w-[330px] items-center justify-center rounded-[4px] !border !border-[#CA9372] bg-transparent text-center text-[12px] leading-none text-[#CA9372] lg:hidden"
-                          href="#"
-                          rel="noopener"
-                        >
-                          More
-                        </a>
+                      <div className="mb-[12px] grid w-full grid-cols-3 md:grip-cols-4 gap-[12px] sm:w-auto md:mb-0 md:!flex md:items-center">
+                        <div className="md:!hidden flex h-[98px] flex-col justify-between rounded-[4px] bg-[#1D1D1D] py-[12px] sm:w-[126px] sm:px-[6px] lg:w-[130px]">
+                          <div className="flex justify-center gap-[2px]">
+                            <span className="text-[12px] leading-none text-[#999]">
+                              {others?.bestAugments || "Best Augments"}
+                            </span>
+                          </div>
+                          <div className="flex justify-center gap-[2px] lg:py-[8px] lg:px-[6px]">
+                            {metaDeck?.deck?.augments?.map((augment, i) => {
+                              const augmentInfo = augments?.find(
+                                (a) => a.key === augment
+                              );
+                              return augmentInfo ? (
+                                <div
+                                  key={`augment-${i}`}
+                                  className="flex justify-center items-center relative"
+                                >
+                                  <Image
+                                    alt={augmentInfo?.name || "Augment"}
+                                    width={80}
+                                    height={80}
+                                    src={augmentInfo?.imageUrl || ""}
+                                    className=""
+                                    data-tooltip-id={augment}
+                                  />
+                                  <ReactTltp
+                                    variant="augment"
+                                    content={augmentInfo}
+                                    id={augment}
+                                  />
+                                </div>
+                              ) : null;
+                            })}
+                          </div>
+                        </div>
+
+                        <div className="flex w-full flex-col justify-between rounded-[4px] bg-[#1D1D1D] pt-[10px] pb-1">
+                          <div
+                            style={{
+                              width: "113px",
+                              height: "75px",
+                            }}
+                            className="md:hidden mx-auto"
+                          >
+                            <MyBarChartComponent height={80} width={100} />
+                            <p className="text-center mb-0 text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                              {others?.avgRanking || "Avg Ranking"}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="hidden md:flex md:flex-col justify-center gap-[2px] lg:py-[8px]">
+                          {metaDeck?.deck?.augments?.map((augment, i) => {
+                            const augmentInfo = augments?.find(
+                              (a) => a.key === augment
+                            );
+                            return augmentInfo ? (
+                              <div
+                                key={`augment-desktop-${i}`}
+                                className="flex justify-center items-center md:w-[64px] relative"
+                              >
+                                <Image
+                                  alt={augmentInfo?.name || "Augment"}
+                                  width={80}
+                                  height={80}
+                                  src={augmentInfo?.imageUrl || ""}
+                                  className="w-[64px] md:w-[86px]"
+                                  data-tooltip-id={`desktop-${augment}`}
+                                />
+                                <ReactTltp
+                                  variant="augment"
+                                  content={augmentInfo}
+                                  id={`desktop-${augment}`}
+                                />
+                              </div>
+                            ) : null;
+                          })}
+                        </div>
+
+                        <div className="flex flex-col">
+                          <div className="flex w-full flex-col h-full justify-between rounded-[4px] bg-[#1D1D1D] pt-[10px] pb-1 px-[16px] sm:px-[18px]">
+                            <dl className="flex justify-between">
+                              <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                                {others?.top4 || "Top 4"}
+                              </dt>
+                              <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-white">
+                                <span>
+                                  {metaDeck?.stats?.top4Rate || "65.3%"}
+                                </span>
+                              </dd>
+                            </dl>
+                            <dl className="flex justify-between">
+                              <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                                {others?.winPercentage || "Win %"}
+                              </dt>
+                              <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-white">
+                                <span>
+                                  {metaDeck?.stats?.winRate || "26.6%"}
+                                </span>
+                              </dd>
+                            </dl>
+                            <dl className="flex justify-between">
+                              <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                                {others?.pickPercentage || "Pick %"}
+                              </dt>
+                              <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-white">
+                                <span>
+                                  {metaDeck?.stats?.pickRate || "0.39%"}
+                                </span>
+                              </dd>
+                            </dl>
+                            <dl className="flex justify-between">
+                              <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                                {others?.avgPlacement || "Avg Placement"}
+                              </dt>
+                              <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-white">
+                                <span>
+                                  {metaDeck?.stats?.avgPlacement || "4.52"}
+                                </span>
+                              </dd>
+                            </dl>
+
+                            <div
+                              style={{
+                                width: "150px",
+                                height: "80px",
+                              }}
+                              className="hidden md:block mt-2 mx-auto"
+                            >
+                              <MyBarChartComponent height={70} width={80} />
+                              <p className="text-center mb-0 text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                                {others?.avgRanking || "Avg Ranking"}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
             ))}
           </div>
@@ -793,8 +772,7 @@ const ProjectItems = () => {
         </Tooltip>
       </div>
     </div>
-    // </ProjectItemsStyleWrapper>
   );
 };
 
-export default ProjectItems;
+export default memo(RecentDecksItems);
