@@ -212,3 +212,45 @@ erqDAs .react-tabs .react-tabs__tab {
     transform: translate(-100%, -100%) translate3d(0, 0, 0);
   }
 }
+
+/* Tooltip styles to fix z-index issues with backdrop-filter */
+.tooltip-container {
+  z-index: 999999 !important;
+}
+
+/* Ensure tooltip content is above everything */
+.react-tooltip {
+  z-index: 999999 !important;
+}
+
+/* Override any stacking context issues */
+body > .tooltip-portal, 
+#tooltip-container {
+  position: fixed !important;
+  z-index: 999999 !important;
+  pointer-events: none;
+}
+
+/* Allow pointer events on the tooltip itself */
+body > .tooltip-portal .react-tooltip,
+#tooltip-container .react-tooltip {
+  pointer-events: auto !important;
+}
+
+/* Fix for elements with backdrop-filter that might create stacking contexts */
+[data-tooltip-id] {
+  position: relative;
+  z-index: 1;
+}
+
+/* Ensure tooltips are rendered at the highest level */
+#__next {
+  isolation: auto !important;
+}
+
+/* Fix for backdrop-filter elements */
+*[style*="backdrop-filter"] {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}

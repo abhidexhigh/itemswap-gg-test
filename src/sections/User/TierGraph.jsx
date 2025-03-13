@@ -11,16 +11,21 @@ const TierGraph = () => {
       type: "bar",
       height: 350,
       toolbar: {
-        show: false, // Hides the toolbar, including the export menu
+        show: false,
       },
+      background: "transparent",
+      fontFamily: "Inter, sans-serif",
     },
     plotOptions: {
       bar: {
         horizontal: false,
-        columnWidth: "55%",
+        columnWidth: "65%",
         endingShape: "rounded",
+        borderRadius: 4,
+        distributed: false,
       },
     },
+    colors: ["#8884d8", "#6b46c1", "#805ad5", "#9f7aea", "#b794f4"],
     dataLabels: {
       enabled: false,
     },
@@ -63,44 +68,133 @@ const TierGraph = () => {
         "Iron III",
         "Iron IV",
       ],
+      labels: {
+        style: {
+          colors: Array(32).fill("#a0aec0"),
+          fontSize: "10px",
+          fontFamily: "Inter, sans-serif",
+        },
+        rotate: -45,
+        hideOverlappingLabels: true,
+      },
       lines: {
-        show: false, // Optionally hide the x-axis lines if desired
+        show: false,
+      },
+      axisBorder: {
+        show: false,
+      },
+      axisTicks: {
+        show: false,
       },
     },
     yaxis: {
       title: {
-        text: "$ (thousands)",
+        text: "Players",
+        style: {
+          color: "#a0aec0",
+          fontSize: "12px",
+          fontFamily: "Inter, sans-serif",
+        },
+      },
+      labels: {
+        style: {
+          colors: ["#a0aec0"],
+          fontSize: "12px",
+          fontFamily: "Inter, sans-serif",
+        },
       },
     },
     fill: {
       opacity: 1,
+      type: "gradient",
+      gradient: {
+        shade: "dark",
+        type: "vertical",
+        shadeIntensity: 0.5,
+        gradientToColors: ["#4c1d95"],
+        inverseColors: false,
+        opacityFrom: 0.8,
+        opacityTo: 0.9,
+      },
     },
     grid: {
-      show: false, // Hides the grid lines (including horizontal lines)
+      show: true,
+      borderColor: "#2d3748",
+      strokeDashArray: 5,
+      position: "back",
+      xaxis: {
+        lines: {
+          show: false,
+        },
+      },
+      yaxis: {
+        lines: {
+          show: true,
+        },
+      },
+      padding: {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 10,
+      },
     },
     tooltip: {
       theme: "dark",
       style: {
-        backgroundColor: "#000",
-        color: "#fff",
+        fontSize: "12px",
+        fontFamily: "Inter, sans-serif",
       },
       y: {
         formatter: function (val) {
-          return "$ " + val + " thousands";
+          return val + " players";
         },
       },
+      marker: {
+        show: false,
+      },
     },
+    responsive: [
+      {
+        breakpoint: 768,
+        options: {
+          chart: {
+            height: 300,
+          },
+          xaxis: {
+            labels: {
+              rotate: -90,
+              fontSize: "8px",
+            },
+          },
+        },
+      },
+    ],
   });
 
   const [series, setSeries] = React.useState([
     {
-      name: "Net Profit",
-      // Generate random numbers for the graph
+      name: "Players",
       data: seriesData,
     },
   ]);
+
   return (
-    <ReactApexChart options={options} series={series} type="bar" height={350} />
+    <div className="bg-[#222231] rounded-xl p-4 shadow-lg border border-[#ffffff10]">
+      <h3 className="text-lg font-semibold text-white mb-4">
+        Rank Distribution
+      </h3>
+      <div className="w-full overflow-x-auto">
+        <div className="min-w-[600px]">
+          <ReactApexChart
+            options={options}
+            series={series}
+            type="bar"
+            height={350}
+          />
+        </div>
+      </div>
+    </div>
   );
 };
 

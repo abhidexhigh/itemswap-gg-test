@@ -102,7 +102,7 @@ const Leaderboard = () => {
           setActiveCategory={setActiveCategory}
           setActiveSubcategory={() => setActiveSubcategory(subcategories[0])}
         /> */}
-        <br />
+
         <LeaderboardSubcategory
           subcategories={subcategories}
           activeSubcategory={activeSubcategory}
@@ -112,10 +112,10 @@ const Leaderboard = () => {
           activeSubcategory={activeSubcategory}
           activeCategory={activeCategory}
           leaderboardData={filterLeaderboardData}
+          activeZone={activeZone}
+          seriesData={seriesData}
         />
         <Pagination />
-        <br />
-        <ZoneGraph activeZone={activeZone} seriesData={seriesData} />
       </div>
     </LeaderboardStyleWrapper>
   );

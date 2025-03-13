@@ -1,13 +1,18 @@
 import ico from "src/assets/image/icons/ico.png";
 import challenger from "src/assets/image/icons/challenger.png";
 import arrowUp from "src/assets/image/icons/arrow-up.svg";
+import dynamic from "next/dynamic";
 
-const LeaderboardCard = ({ user, rank }) => {
+const ZoneGraph = dynamic(() => import("../../ZoneGraph"), {
+  ssr: false,
+});
+
+const LeaderboardCard = ({ user, rank, activeZone, seriesData }) => {
   return (
     <div className="bg-[#222231] rounded-t-lg border border-b-0 border-[#ffffff4d] p-4 sm:p-6">
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
         {/* Left Section */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-x-4">
           <div className="flex items-center">
             <img
               src={ico.src}
@@ -15,17 +20,17 @@ const LeaderboardCard = ({ user, rank }) => {
               alt="Icon"
             />
             <div>
-              <h1 className="text-xl sm:text-2xl font-bold text-white">
+              <h1 className="text-xl sm:text-2xl font-bold text-white mb-0">
                 <span className="text-[#ca9372]">ItemSwap</span> Leaderboards
               </h1>
-              <p className="text-sm sm:text-base text-gray-400 mt-1">
+              <p className="text-sm sm:text-base text-gray-400 mb-0">
                 Last Updated: 16h ago
               </p>
             </div>
           </div>
 
           {/* Stats Cards */}
-          <div className="flex flex-wrap gap-2 mt-4 sm:mt-0">
+          <div className="flex flex-wrap gap-2 sm:mt-0">
             <div className="bg-[#2a2a3a] rounded-lg p-3 flex items-center">
               <img
                 src={challenger.src}
@@ -59,9 +64,9 @@ const LeaderboardCard = ({ user, rank }) => {
           </div>
         </div>
 
-        {/* Search Input */}
-        <div className="w-full sm:w-auto">
-          <div className="relative">
+        {/* Search Input and Zone Graph Section */}
+        <div className="w-full lg:w-auto flex flex-col items-center">
+          <div className="relative w-full lg:w-auto mb-4 lg:mb-0">
             <input
               type="text"
               className="w-full sm:w-[250px] h-[45px] bg-[#2a2a3a] text-white rounded-lg pl-4 pr-10 
@@ -85,6 +90,13 @@ const LeaderboardCard = ({ user, rank }) => {
           </div>
         </div>
       </div>
+
+      {/* Zone Graph Section - Now in a separate row */}
+      {seriesData && (
+        <div className="mt-4">
+          <ZoneGraph activeZone={activeZone} seriesData={seriesData} />
+        </div>
+      )}
     </div>
   );
 };

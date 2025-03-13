@@ -116,11 +116,11 @@ const menuData = [
     title: "Leaderboard",
     url: "/leaderboard",
   },
-  {
-    id: "435U5",
-    title: "Guides",
-    url: "/guides/patchNotes",
-  },
+  // {
+  //   id: "435U5",
+  //   title: "Guides",
+  //   url: "/guides/patchNotes",
+  // },
 ];
 
 export default menuData;

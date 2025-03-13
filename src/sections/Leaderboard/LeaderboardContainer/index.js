@@ -17,11 +17,20 @@ const LeaderboardContainer = ({
   activeCategory,
   activeSubcategory,
   leaderboardData,
+  activeZone,
+  seriesData,
 }) => {
   return (
-    <div className="w-full max-w-[1200px] mx-auto sm:px-6 lg:px-8">
+    <>
+      <LeaderboardCard activeZone={activeZone} seriesData={seriesData} />
+      <LeaderboardItemsAll leaderboardData={leaderboardData} />
+    </>
+  );
+
+  return (
+    <div className="w-full mx-auto sm:px-6 lg:px-8">
       <div className="bg-[#1a1b2b] rounded-lg shadow-xl overflow-hidden">
-        <LeaderboardCard />
+        <LeaderboardCard activeZone={activeZone} seriesData={seriesData} />
         <div className="overflow-x-auto">
           {activeCategory === "Ranked" && (
             <>

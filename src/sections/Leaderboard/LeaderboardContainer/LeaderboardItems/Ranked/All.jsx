@@ -3,8 +3,85 @@ import icoRank1 from "@assets/image/icons/ico-rank-1.svg";
 import questionMark from "@assets/image/icons/4368.png";
 import challenger from "@assets/image/icons/challenger.png";
 import Emblems from "../../../../../data/emblems.json";
+import { useState, useEffect } from "react";
 
 const LeaderboardItemsAll = ({ leaderboardData }) => {
+  const [sortedData, setSortedData] = useState(leaderboardData);
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: "ascending",
+  });
+
+  useEffect(() => {
+    let sortableData = [...leaderboardData];
+    if (sortConfig !== null) {
+      sortableData.sort((a, b) => {
+        let aValue, bValue;
+
+        switch (sortConfig.key) {
+          case "rating":
+            aValue = a.summonerLevel;
+            bValue = b.summonerLevel;
+            break;
+          case "winRate":
+            aValue = (a.wins * 100) / a.plays;
+            bValue = (b.wins * 100) / b.plays;
+            break;
+          case "top4":
+            aValue = (a.tops * 100) / a.plays;
+            bValue = (b.tops * 100) / b.plays;
+            break;
+          case "games":
+            aValue = a.plays;
+            bValue = b.plays;
+            break;
+          case "wins":
+            aValue = a.wins;
+            bValue = b.wins;
+            break;
+          case "top4Count":
+            aValue = a.tops;
+            bValue = b.tops;
+            break;
+          default:
+            return 0;
+        }
+
+        if (aValue < bValue) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    setSortedData(sortableData);
+  }, [leaderboardData, sortConfig]);
+
+  const requestSort = (key) => {
+    let direction = "ascending";
+    if (sortConfig.key === key && sortConfig.direction === "ascending") {
+      direction = "descending";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const renderSortIcon = (key) => {
+    if (sortConfig.key === key) {
+      return sortConfig.direction === "ascending" ? "▲" : "▼";
+    }
+    return null;
+  };
+
+  const getCellClass = (key) => {
+    return sortConfig.key === key ? "bg-[#222240] text-[#fff]" : "";
+  };
+
+  const getHeaderClass = (key) => {
+    return sortConfig.key === key ? "bg-[#33334d]" : "";
+  };
+
   return (
     <div className="bg-[#1a1b2b] rounded-b-lg border border-t-0 border-[#ffffff4d]">
       <div className="overflow-x-auto min-h-[500px]">
@@ -23,35 +100,48 @@ const LeaderboardItemsAll = ({ leaderboardData }) => {
               <th className="py-4 px-2 text-left font-medium text-xs sm:text-sm whitespace-nowrap">
                 Tier
               </th>
-              <th className="py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap">
+              <th
+                className={`py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap cursor-pointer ${getHeaderClass("rating")}`}
+                onClick={() => requestSort("rating")}
+              >
                 <div className="flex items-center justify-center gap-1">
-                  <img
-                    src={orderDesc.src}
-                    className="w-3 h-3 sm:w-4 sm:h-4"
-                    alt="Sort"
-                  />
-                  <span>Rating</span>
+                  <span>Rating {renderSortIcon("rating")}</span>
                 </div>
               </th>
-              <th className="py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap">
-                Win Rate
+              <th
+                className={`py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap cursor-pointer ${getHeaderClass("winRate")}`}
+                onClick={() => requestSort("winRate")}
+              >
+                Win Rate {renderSortIcon("winRate")}
               </th>
-              <th className="py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap">
-                Top 4
+              <th
+                className={`py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap cursor-pointer ${getHeaderClass("top4")}`}
+                onClick={() => requestSort("top4")}
+              >
+                Top 4% {renderSortIcon("top4")}
               </th>
-              <th className="py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap">
-                Games
+              <th
+                className={`py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap cursor-pointer ${getHeaderClass("games")}`}
+                onClick={() => requestSort("games")}
+              >
+                Games {renderSortIcon("games")}
               </th>
-              <th className="py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap">
-                Wins
+              <th
+                className={`py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap cursor-pointer ${getHeaderClass("wins")}`}
+                onClick={() => requestSort("wins")}
+              >
+                Wins {renderSortIcon("wins")}
               </th>
-              <th className="py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap">
-                TOP4
+              <th
+                className={`py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap cursor-pointer ${getHeaderClass("top4Count")}`}
+                onClick={() => requestSort("top4Count")}
+              >
+                TOP4 {renderSortIcon("top4Count")}
               </th>
             </tr>
           </thead>
           <tbody>
-            {leaderboardData?.map((data, index) => (
+            {sortedData?.map((data, index) => (
               <tr
                 key={index}
                 className="border-b border-[#ffffff1a] hover:bg-[#2a2a3a] transition-colors duration-200"
@@ -111,32 +201,44 @@ const LeaderboardItemsAll = ({ leaderboardData }) => {
                     </span>
                   </div>
                 </td>
-                <td className="py-4 px-2 text-center whitespace-nowrap">
+                <td
+                  className={`py-4 px-2 text-center whitespace-nowrap ${getCellClass("rating")}`}
+                >
                   <span className="text-white font-medium text-sm sm:text-base">
                     {data?.summonerLevel} LP
                   </span>
                 </td>
-                <td className="py-4 px-2 text-center whitespace-nowrap">
+                <td
+                  className={`py-4 px-2 text-center whitespace-nowrap ${getCellClass("winRate")}`}
+                >
                   <span className="text-white text-sm sm:text-base">
                     {((data?.wins * 100) / data?.plays).toFixed(1)}%
                   </span>
                 </td>
-                <td className="py-4 px-2 text-center whitespace-nowrap">
+                <td
+                  className={`py-4 px-2 text-center whitespace-nowrap ${getCellClass("top4")}`}
+                >
                   <span className="text-white text-sm sm:text-base">
                     {((data?.tops * 100) / data?.plays).toFixed(1)}%
                   </span>
                 </td>
-                <td className="py-4 px-2 text-center whitespace-nowrap">
+                <td
+                  className={`py-4 px-2 text-center whitespace-nowrap ${getCellClass("games")}`}
+                >
                   <span className="text-white text-sm sm:text-base">
                     {data?.plays}
                   </span>
                 </td>
-                <td className="py-4 px-2 text-center whitespace-nowrap">
+                <td
+                  className={`py-4 px-2 text-center whitespace-nowrap ${getCellClass("wins")}`}
+                >
                   <span className="text-white text-sm sm:text-base">
                     {data?.wins}
                   </span>
                 </td>
-                <td className="py-4 px-2 text-center whitespace-nowrap">
+                <td
+                  className={`py-4 px-2 text-center whitespace-nowrap ${getCellClass("top4Count")}`}
+                >
                   <span className="text-white text-sm sm:text-base">
                     {data?.tops}
                   </span>
