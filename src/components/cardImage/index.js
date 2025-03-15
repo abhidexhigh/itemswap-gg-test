@@ -11,19 +11,35 @@ const CardImage = ({
     <div className="inline-flex flex-col items-center">
       <div className="inline-flex items-center justify-center flex-col">
         <div className="inline-flex flex-col">
-          <div className={`flex flex-col rounded-[5px]`}>
+          <div className={`flex flex-col rounded-lg`}>
             <div
-              className="relative inline-flex rounded-[5px] border-1"
+              className="relative inline-flex rounded-lg border-1"
               data-tooltip-id={src?.key}
             >
-              <Image
-                src={src?.cardImage}
-                alt={"champion"}
-                // style={imgStyle}
-                height={80}
-                width={80}
-                className={`object-cover object-center rounded-[5px] ${imgStyle}`}
-              />
+              {/* If src.cardImage extension is .webp or .png or .jpg or .jpeg, then use the Image component, else if it's .mp4 or .webm, then use the video component */}
+              {src?.cardImage.endsWith(".webp") ||
+              src?.cardImage.endsWith(".png") ||
+              src?.cardImage.endsWith(".jpg") ||
+              src?.cardImage.endsWith(".jpeg") ? (
+                <Image
+                  src={src?.cardImage}
+                  alt={"champion"}
+                  // style={imgStyle}
+                  height={80}
+                  width={80}
+                  className={`object-cover object-center rounded-lg ${imgStyle}`}
+                />
+              ) : (
+                <video
+                  src={src?.cardImage}
+                  alt={"champion"}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className={`object-cover object-center rounded-lg ${imgStyle}`}
+                />
+              )}
               <Image
                 src={
                   forces?.find((force) => force.key === src?.variant)?.imageUrl

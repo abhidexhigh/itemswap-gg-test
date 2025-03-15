@@ -77,10 +77,25 @@ const MetaTrendsItem = ({
                     loop
                     muted
                     playsInline
-                    width="80"
-                    className="w-[95%] h-[95%] m-auto"
+                    preload={index < 4 ? "auto" : "metadata"}
+                    className="w-[95%] h-[95%] m-auto object-cover"
+                    onError={(e) => {
+                      console.error("Video failed to load:", e);
+                      // Optionally set a fallback image
+                      // e.target.style.display = "none";
+                    }}
                   >
-                    <source src={champion.cardImage} type="video/webm" />
+                    <source
+                      src={champion.cardImage}
+                      type={
+                        champion.cardImage.endsWith(".webm")
+                          ? "video/webm"
+                          : champion.cardImage.endsWith(".mp4")
+                            ? "video/mp4"
+                            : "video/webm"
+                      }
+                    />
+                    Your browser does not support the video tag.
                   </video>
                 )}
               </>

@@ -16,6 +16,7 @@ import { PiEye } from "react-icons/pi";
 import { PiEyeClosed } from "react-icons/pi";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import { IoMdCheckmarkCircle } from "react-icons/io";
+import CardImage from "src/components/cardImage";
 import Comps from "../../../../data/compsNew.json";
 import RecentDecksHistory from "../../../../data/newData/recentDecksHistory.json";
 import MatchHistory from "../../../../data/user/matchHistory.json";
@@ -663,38 +664,19 @@ const ProjectItems = () => {
                                 <div className="inline-flex items-center justify-center flex-col">
                                   <div className="flex flex-col w-full aspect-square rounded-[20px]">
                                     <div
-                                      className="relative inline-flex rounded-[10px] border-2 [box-shadow:rgba(255,_0,_0,_0.8)_0px_7px_29px_0px]"
+                                      className="relative inline-flex rounded-lg border-2 [box-shadow:rgba(255,_0,_0,_0.8)_0px_7px_29px_0px]"
                                       data-tooltip-id={
                                         champions?.find(
                                           (c) => c.key === champion?.key
                                         )?.key
                                       }
                                     >
-                                      <Image
-                                        alt="Image"
-                                        width={100}
-                                        height={100}
-                                        src={
-                                          champions?.find(
-                                            (c) => c.key === champion?.key
-                                          )?.cardImage
-                                        }
-                                        className="h-full w-28 object-cover object-center rounded-[10px]"
-                                      />
-                                      <Image
-                                        alt="Image"
-                                        width={20}
-                                        height={20}
-                                        src={
-                                          forces?.find(
-                                            (f) =>
-                                              f.key ===
-                                              champions?.find(
-                                                (c) => c.key === champion?.key
-                                              )?.variant
-                                          )?.imageUrl
-                                        }
-                                        className="absolute -top-[3px] -right-[3px] w-[16px] md:w-[24px]"
+                                      <CardImage
+                                        src={champions?.find(
+                                          (c) => c.key === champion?.key
+                                        )}
+                                        imgStyle="w-28"
+                                        forces={forces}
                                       />
                                     </div>
                                     <ReactTltp
@@ -711,7 +693,7 @@ const ProjectItems = () => {
                                   </div>
                                 </div>
 
-                                <div className="inline-flex items-center justify-center w-full gap-1 flex-wrap">
+                                <div className="inline-flex items-center justify-center w-full gap-0.5 flex-wrap">
                                   {champion?.items &&
                                     champion?.items.map((item, idx) => (
                                       <div
@@ -736,7 +718,7 @@ const ProjectItems = () => {
                                             items?.find((i) => i.key === item)
                                               ?.imageUrl
                                           }
-                                          className="w-[20px] h-[20px] md:w-[30px] md:h-[30px] hover:scale-150 transition-all duration-300"
+                                          className="w-[20px] md:w-[30px] rounded-lg hover:scale-150 transition-all duration-300"
                                           data-tooltip-id={
                                             items?.find((i) => i.key === item)
                                               ?.key
