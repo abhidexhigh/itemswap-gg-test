@@ -57,21 +57,40 @@ const MetaTrendsItem = ({
             }}
           >
             {champion.cardImage && (
-              <Image
-                src={champion.cardImage}
-                alt={`${champion.name || "Champion"} Image`}
-                className="w-[95%] h-[95%] m-auto"
-                width={80}
-                height={80}
-                priority={index < 4} // Prioritize loading for first 4 images
-              />
+              <>
+                {/* If champion.cardImage extension is .webp or .png or .jpg or .jpeg, then use the Image component, else if it's .mp4 or .webm, then use the video component */}
+                {champion.cardImage.endsWith(".webp") ||
+                champion.cardImage.endsWith(".png") ||
+                champion.cardImage.endsWith(".jpg") ||
+                champion.cardImage.endsWith(".jpeg") ? (
+                  <Image
+                    src={champion.cardImage}
+                    alt={`${champion.name || "Champion Image"}`}
+                    className="w-[95%] h-[95%] m-auto"
+                    width={80}
+                    height={80}
+                    priority={index < 4} // Prioritize loading for first 4 images
+                  />
+                ) : (
+                  <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    width="80"
+                    className="w-[95%] h-[95%] m-auto"
+                  >
+                    <source src={champion.cardImage} type="video/webm" />
+                  </video>
+                )}
+              </>
             )}
 
             {forceImage && (
               <Image
                 src={forceImage}
                 className="absolute -top-[3px] -right-[3px] w-[20px] md:w-[30px]"
-                alt={`${champion.variant || "Force"} icon`}
+                alt={`${champion.variant || "Force Icon"}`}
                 width={32}
                 height={32}
               />
