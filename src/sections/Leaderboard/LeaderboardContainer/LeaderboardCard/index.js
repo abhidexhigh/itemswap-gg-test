@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import ico from "src/assets/image/icons/ico.png";
 import challenger from "src/assets/image/icons/challenger.png";
 import arrowUp from "src/assets/image/icons/arrow-up.svg";
@@ -11,6 +12,8 @@ const ZoneGraph = dynamic(() => import("../../ZoneGraph"), {
 });
 
 const LeaderboardCard = ({ user, rank, activeZone, seriesData }) => {
+  const { t } = useTranslation();
+  const others = t("others");
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [matchingPlayers, setMatchingPlayers] = useState([]);
@@ -86,10 +89,11 @@ const LeaderboardCard = ({ user, rank, activeZone, seriesData }) => {
             />
             <div>
               <h1 className="text-xl sm:text-2xl font-bold text-white mb-0">
-                <span className="text-[#ca9372]">ItemSwap</span> Leaderboards
+                <span className="text-[#ca9372]">ItemSwap</span>{" "}
+                {others?.leaderboards}
               </h1>
               <p className="text-sm sm:text-base text-gray-400 mb-0">
-                Last Updated: 16h ago
+                {others?.lastUpdated}: 16h ago
               </p>
             </div>
           </div>
@@ -140,7 +144,7 @@ const LeaderboardCard = ({ user, rank, activeZone, seriesData }) => {
               className="w-full sm:w-[250px] h-[45px] bg-[#2a2a3a] text-white rounded-lg pl-4 pr-10 
                        border border-[#ffffff20] focus:border-[#ca9372] focus:outline-none 
                        transition-all duration-300 placeholder-gray-400"
-              placeholder="Search player..."
+              placeholder={others?.searchPlayerPlaceholder}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onFocus={() => {

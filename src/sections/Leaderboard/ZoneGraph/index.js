@@ -1,8 +1,12 @@
 import dynamic from "next/dynamic";
 import React from "react";
+import { useTranslation } from "react-i18next";
+import "../../../../i18n";
 import ReactApexChart from "react-apexcharts";
 
 const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
+  const { t } = useTranslation();
+  const others = t("others");
   // Generate more data points if needed
   const expandedSeriesData = React.useMemo(() => {
     // If we already have enough data points, use them
@@ -165,7 +169,7 @@ const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
     },
     yaxis: {
       title: {
-        text: "% of Players",
+        text: `% ${others?.ofPlayers}`,
         style: {
           color: "white",
           fontSize: "10px",
@@ -237,7 +241,7 @@ const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
           },
         },
         formatter: function (val) {
-          return val + "% of player base";
+          return val + `% ${others?.ofPlayerBase}`;
         },
       },
       marker: {
@@ -324,7 +328,7 @@ const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
         }}
       >
         <h3 className="text-base font-bold mb-2 text-white">
-          Player Distribution
+          {others?.playerDistribution}
         </h3>
 
         {/* Tier labels */}
@@ -351,7 +355,7 @@ const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
         </div>
         <div className="text-xs text-gray-400 mt-1 text-center">
           <p className="text-[10px] md:text-sm mb-0">
-            Player rank distribution statistics
+            {others?.playerRankDistributionStats}
           </p>
         </div>
       </div>

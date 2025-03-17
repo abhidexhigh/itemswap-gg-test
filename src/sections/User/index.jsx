@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { MdKeyboardDoubleArrowDown } from "react-icons/md";
 import Link from "next/link.js";
-import { GiBattleGear } from "react-icons/gi";
 import ChampionsStyleWrapper from "./User.style.js";
 import Comps from "../../data/compsNew.json";
 import PlayerInfo from "../../data/user/playerInfo.json";
 import matchHistory from "../../data/user/matchHistory.json";
-import ReactTltp from "src/components/tooltip/ReactTltp.jsx";
 import moment from "moment/moment.js";
-import CardImage from "src/components/cardImage/index.js";
 import ModernMatchHistory from "./ModernMatchHistory.jsx";
-import TrendFilters from "src/components/trendFilters/index.js";
 import Loader from "src/components/loader/index.js";
 
 // Array of objects for recent 20 matches with rank and average data
@@ -33,6 +30,8 @@ const recentMatchesDataGenerator = () => {
 const recentMatches = recentMatchesDataGenerator();
 
 const User = () => {
+  const { t } = useTranslation();
+  const others = t("others");
   const router = useRouter();
   const { user, matchId } = router.query;
 
@@ -236,7 +235,7 @@ const User = () => {
           <div className="w-full lg:w-8/12 bg-gradient-to-br from-[#222231] to-[#1e1e2c] rounded-xl sm:rounded-2xl shadow-xl overflow-hidden border border-white/5">
             <div className="p-4 sm:p-6">
               <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 border-b border-white/10 pb-2 sm:pb-3">
-                Performance Overview
+                {others?.performanceOverview}
               </h2>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-4">
@@ -269,7 +268,7 @@ const User = () => {
                     />
                   </div>
                   <div className="text-xs sm:text-sm text-gray-300 mt-1">
-                    Favorite Item
+                    {others?.fevoriteItem}
                   </div>
                 </motion.div>
 
@@ -290,7 +289,7 @@ const User = () => {
                     />
                   </div>
                   <div className="text-xs sm:text-sm text-gray-300 mt-1">
-                    Favorite Champion
+                    {others?.favoriteChampion}
                   </div>
                 </motion.div>
 
@@ -303,7 +302,7 @@ const User = () => {
                     212
                   </div>
                   <div className="text-xs sm:text-sm text-gray-300 mt-1">
-                    Damage Dealt
+                    {others?.damageDealt}
                   </div>
                 </motion.div>
 
@@ -316,7 +315,7 @@ const User = () => {
                     {seasonStats?.avgPlace.toFixed(2)}
                   </div>
                   <div className="text-xs sm:text-sm text-gray-300 mt-1">
-                    Average Place
+                    {others?.avgPlacement}
                   </div>
                 </motion.div>
               </div>
@@ -325,9 +324,9 @@ const User = () => {
               <div className="mt-6 sm:mt-8">
                 <h2 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4 border-b border-white/10 pb-2 sm:pb-3 flex items-center justify-between">
                   <span>
-                    Recent 20 Matches{" "}
+                    {others?.recent20Matches}{" "}
                     <span className="text-xs sm:text-sm font-normal text-gray-400">
-                      (Ranked)
+                      ({others?.ranked})
                     </span>
                   </span>
                   <Link href={`/user/${user}`} className="hover:text-inherit">
@@ -336,7 +335,7 @@ const User = () => {
                       transition={{ duration: 0.2 }}
                       className="flex items-center gap-1 text-xs sm:text-sm text-blue-400 hover:text-blue-300"
                     >
-                      <span>View All</span>
+                      <span>{others?.viewAll}</span>
                       <MdKeyboardDoubleArrowDown className="rotate-270" />
                     </motion.div>
                   </Link>

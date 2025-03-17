@@ -1,29 +1,10 @@
 import React, { Fragment, useState } from "react";
-import Link from "next/link";
-import ProgressBar from "@components/progressBar";
-import CardHover from "@components/cardHover";
 import { Tooltip } from "react-tooltip";
 import TraitTooltip from "src/components/tooltip/TraitTooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import ProjectCardStyleWrapper from "./BestItemsBuildsCard.style";
 import GirlCrush from "@assets/image/traits/GirlCrush.svg";
-import Blockbuster from "@assets/image/traits/Blockbuster.svg";
-import Chaos from "@assets/image/traits/Chaos.svg";
-import Druid from "@assets/image/traits/Druid.svg";
-import Fury from "@assets/image/traits/Fury.svg";
-import Guardian from "@assets/image/traits/Guardian.svg";
-import Mirage from "@assets/image/traits/Mirage.svg";
-import TrainIronBg from "@assets/image/traitBackgrounds/iron.svg";
-import TrainBronzeBg from "@assets/image/traitBackgrounds/bronze.svg";
-import TrainSilverBg from "@assets/image/traitBackgrounds/silver.svg";
 import TrainGoldBg from "@assets/image/traitBackgrounds/gold.svg";
-import TrainDiamondBg from "@assets/image/traitBackgrounds/diamond.svg";
-import chineseWeapon from "@assets/image/items/weapons/chinese weapon.png";
-import englandWeapon from "@assets/image/items/weapons/england weapon.png";
-import greekWeapon from "@assets/image/items/weapons/greek weapon.png";
-import indianWeapon from "@assets/image/items/weapons/indian weapon.png";
-import coin from "@assets/image/icons/coin.png";
-import styled from "styled-components";
 
 const ProjectCard = ({
   thumb,

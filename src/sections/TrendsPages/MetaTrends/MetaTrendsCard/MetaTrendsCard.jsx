@@ -1,8 +1,7 @@
 import React, { memo, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import MetaTrendsItem from "../MetaTrendsItem/MetaTrendsItem";
-// import Champions from "../../../../data/champions.json";
-import Cost from "../../../../data/compsChampions.json";
 
 // Memoize the getRandomCharacters function to avoid unnecessary recalculations
 const getRandomCharacters = (characters, count = 12) => {
@@ -27,6 +26,8 @@ const MetaTrendsCard = ({
   selectedChampion,
   forces,
 }) => {
+  const { t } = useTranslation();
+  const others = t("others");
   const coin =
     "https://res.cloudinary.com/dg0cmj6su/image/upload/v1727238375/selling_coins_sjs6so.webp";
   const coinIcons = [
@@ -120,7 +121,7 @@ const MetaTrendsCard = ({
                     </svg>
                   </span>
                   <span className="text-[14px] font-semibold font-sans leading-none text-[#999]">
-                    Cost {i + 1}
+                    {others?.cost} {i + 1}
                   </span>
                 </h5>
               </header>

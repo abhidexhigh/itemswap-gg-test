@@ -1,15 +1,19 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import "../../../../i18n";
 
 const LeaderboardSubcategory = ({
   subcategories,
   activeSubcategory,
   setActiveSubcategory,
 }) => {
+  const { t } = useTranslation();
+  const others = t("others");
   const [swiperInstance, setSwiperInstance] = useState(null);
 
   // Scroll to active tab when selected or swiper instance changes
@@ -40,7 +44,7 @@ const LeaderboardSubcategory = ({
                   } inline-block w-full p-3 border-r text-xs lg:text-base border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none`}
                   onClick={() => setActiveSubcategory(subcategory)}
                 >
-                  {subcategory}
+                  {others?.[subcategory.toLowerCase()] || subcategory}
                 </div>
               </li>
             ))}
@@ -77,7 +81,7 @@ const LeaderboardSubcategory = ({
             `}
                   onClick={() => setActiveSubcategory(subcategory)}
                 >
-                  {subcategory}
+                  {others?.[subcategory.toLowerCase()] || subcategory}
                 </div>
               </SwiperSlide>
             ))}

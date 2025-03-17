@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import moment from "moment";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -17,6 +18,8 @@ const ModernMatchHistory = ({
   matchHistoryInfo,
   matchId,
 }) => {
+  const { t } = useTranslation();
+  const others = t("others");
   const [expandedHistory, setExpandedHistory] = useState(null);
 
   useEffect(() => {
@@ -36,10 +39,12 @@ const ModernMatchHistory = ({
         {/* Match Header */}
         <header className="relative flex flex-col justify-between bg-gradient-to-br from-[#2d2d42] to-[#252538] py-2 px-4 lg:flex-row lg:items-center border-b border-white/10">
           <div className="flex flex-col md:flex-row items-center gap-3">
-            <img
+            <Image
               src={match?.info?.imageUrl}
-              className="w-12 rounded-lg shadow-md"
               alt="Match type"
+              width={48}
+              height={48}
+              className="w-12 rounded-lg shadow-md"
             />
             <div className="flex flex-col md:flex-row items-center gap-2">
               <strong className="text-base font-semibold text-white">
@@ -50,8 +55,10 @@ const ModernMatchHistory = ({
               </span>
             </div>
             <div className="flex items-center gap-x-1 px-2 py-1 bg-[#ffffff10] rounded-lg">
-              <img
+              <Image
                 src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1722934556/coin_6369589_wbb7uk.png"
+                width={16}
+                height={16}
                 className="w-4"
                 alt="Coins"
               />
@@ -70,7 +77,7 @@ const ModernMatchHistory = ({
                   className="mx-1"
                   whileHover={{ scale: 1.1 }}
                 >
-                  <img
+                  <Image
                     src={
                       traits
                         ?.find(
@@ -80,6 +87,8 @@ const ModernMatchHistory = ({
                         ?.tiers.find((tier) => tier?.min >= trait?.numUnits)
                         ?.imageUrl
                     }
+                    width={48}
+                    height={48}
                     className="w-12 rounded-md shadow-md"
                     alt={trait?.name}
                     data-tooltip-id={`trait-${trait?.name}-${i}`}
@@ -143,8 +152,10 @@ const ModernMatchHistory = ({
                     className="flex flex-col"
                     whileHover={{ scale: 1.1 }}
                   >
-                    <img
+                    <Image
                       src={augments?.find((a) => a?.key === augment)?.imageUrl}
+                      width={80}
+                      height={80}
                       className="w-20 rounded-lg shadow-md"
                       data-tooltip-id={augment}
                       alt={augment}
@@ -180,8 +191,10 @@ const ModernMatchHistory = ({
                     <div className="flex justify-center gap-1 items-center min-h-[24px] md:min-h-[32px] mt-1">
                       {unit?.items?.map((item, i) => (
                         <motion.div key={i} whileHover={{ scale: 1.1 }}>
-                          <img
+                          <Image
                             src={items?.find((i) => i?.key === item)?.imageUrl}
+                            width={20}
+                            height={20}
                             className="w-[20px] md:w-[28px] rounded-lg border border-white/20 shadow-md"
                             data-tooltip-id={
                               items?.find((i) => i?.key === item)?.imageUrl
@@ -228,7 +241,7 @@ const ModernMatchHistory = ({
       >
         <div className="p-4">
           <h3 className="text-lg font-semibold text-white mb-4">
-            Match Details
+            {others?.matchDetails}
           </h3>
 
           <div className="overflow-x-auto -mx-4">
@@ -279,8 +292,10 @@ const ModernMatchHistory = ({
                     <div className="col-span-2">
                       <div className="flex items-center gap-2">
                         <div className="relative">
-                          <img
+                          <Image
                             src={participant?.imageUrl}
+                            width={48}
+                            height={48}
                             className="w-10 sm:w-12 rounded-lg shadow-md"
                             alt={participant?.name}
                           />
@@ -310,8 +325,10 @@ const ModernMatchHistory = ({
                             );
                             return augmentData?.imageUrl ? (
                               <div key={i} className="relative">
-                                <img
+                                <Image
                                   src={augmentData.imageUrl}
+                                  width={20}
+                                  height={20}
                                   className="w-6 h-6 sm:w-8 sm:h-8 rounded-md"
                                   data-tooltip-id={`part-aug-${participant?.name}-${i}`}
                                   alt={augment}
@@ -343,8 +360,10 @@ const ModernMatchHistory = ({
 
                             return tierImage ? (
                               <div key={i} className="relative">
-                                <img
+                                <Image
                                   src={tierImage}
+                                  width={20}
+                                  height={20}
                                   className="w-6 h-6 sm:w-8 sm:h-8 rounded-md"
                                   data-tooltip-id={`part-trait-${participant?.name}-${i}`}
                                   alt={trait.name}
@@ -402,8 +421,10 @@ const ModernMatchHistory = ({
                                 );
                                 return itemData?.imageUrl ? (
                                   <div key={j} className="relative">
-                                    <img
+                                    <Image
                                       src={itemData.imageUrl}
+                                      width={20}
+                                      height={20}
                                       className="w-[14px] sm:w-[16px] md:w-[20px] rounded-md border border-white/20"
                                       data-tooltip-id={`part-item-${participant?.name}-${unit.key}-${j}`}
                                       alt={item}

@@ -1,11 +1,10 @@
-import orderDesc from "@assets/image/icons/ico-order-desc.svg";
-import icoRank1 from "@assets/image/icons/ico-rank-1.svg";
-import questionMark from "@assets/image/icons/4368.png";
-import challenger from "@assets/image/icons/challenger.png";
+import { useTranslation } from "react-i18next";
 import Emblems from "../../../../../data/emblems.json";
 import { useState, useEffect } from "react";
 
 const LeaderboardItemsAll = ({ leaderboardData }) => {
+  const { t } = useTranslation();
+  const others = t("others");
   const [sortedData, setSortedData] = useState(leaderboardData);
   const [sortConfig, setSortConfig] = useState({
     key: null,
@@ -89,54 +88,70 @@ const LeaderboardItemsAll = ({ leaderboardData }) => {
           <thead>
             <tr className="bg-[#2a2a3a] text-white">
               <th className="py-4 px-2 text-left font-medium text-xs sm:text-sm whitespace-nowrap">
-                Rank
+                {others?.rank}
               </th>
               <th className="py-4 px-2 text-left font-medium text-xs sm:text-sm whitespace-nowrap">
-                Change
+                {others?.change}
               </th>
               <th className="py-4 px-2 text-left font-medium text-xs sm:text-sm whitespace-nowrap">
-                Player
+                {others?.player}
               </th>
               <th className="py-4 px-2 text-left font-medium text-xs sm:text-sm whitespace-nowrap">
-                Tier
+                {others?.tier}
               </th>
               <th
                 className={`py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap cursor-pointer ${getHeaderClass("rating")}`}
                 onClick={() => requestSort("rating")}
               >
                 <div className="flex items-center justify-center gap-1">
-                  <span>Rating {renderSortIcon("rating")}</span>
+                  <span>{others?.rating}</span>
+                  {renderSortIcon("rating")}
                 </div>
               </th>
               <th
                 className={`py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap cursor-pointer ${getHeaderClass("winRate")}`}
                 onClick={() => requestSort("winRate")}
               >
-                Win Rate {renderSortIcon("winRate")}
+                <div className="flex items-center justify-center gap-1">
+                  <span>{others?.winRate}</span>
+                  {renderSortIcon("winRate")}
+                </div>
               </th>
               <th
                 className={`py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap cursor-pointer ${getHeaderClass("top4")}`}
                 onClick={() => requestSort("top4")}
               >
-                Top 4% {renderSortIcon("top4")}
+                <div className="flex items-center justify-center gap-1">
+                  <span>{others?.top4}</span>
+                  {renderSortIcon("top4")}
+                </div>
               </th>
               <th
                 className={`py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap cursor-pointer ${getHeaderClass("games")}`}
                 onClick={() => requestSort("games")}
               >
-                Games {renderSortIcon("games")}
+                <div className="flex items-center justify-center gap-1">
+                  <span>{others?.games}</span>
+                  {renderSortIcon("games")}
+                </div>
               </th>
               <th
                 className={`py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap cursor-pointer ${getHeaderClass("wins")}`}
                 onClick={() => requestSort("wins")}
               >
-                Wins {renderSortIcon("wins")}
+                <div className="flex items-center justify-center gap-1">
+                  <span>{others?.wins}</span>
+                  {renderSortIcon("wins")}
+                </div>
               </th>
               <th
                 className={`py-4 px-2 text-center font-medium text-xs sm:text-sm whitespace-nowrap cursor-pointer ${getHeaderClass("top4Count")}`}
                 onClick={() => requestSort("top4Count")}
               >
-                TOP4 {renderSortIcon("top4Count")}
+                <div className="flex items-center justify-center gap-1">
+                  <span>{others?.top4}</span>
+                  {renderSortIcon("top4Count")}
+                </div>
               </th>
             </tr>
           </thead>

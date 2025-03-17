@@ -690,20 +690,8 @@ const MetaTrendsItems = () => {
                       <div className="md:!hidden flex h-[98px] flex-col justify-between rounded-[4px] bg-[#1D1D1D] py-[12px] sm:w-[126px] sm:px-[6px] lg:w-[130px]">
                         <div className="flex justify-center gap-[2px]">
                           <span className="text-[12px] leading-none text-[#999]">
-                            Best Augments
+                            {others?.bestAugments}
                           </span>
-                          <div>
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 13 13"
-                              width="13"
-                              height="13"
-                              fill="currentColor"
-                              color="#999"
-                            >
-                              <path d="M6.5.688C3.29.688.687 3.313.687 6.5A5.811 5.811 0 0 0 6.5 12.313c3.188 0 5.813-2.602 5.813-5.813C12.313 3.312 9.687.687 6.5.687Zm0 10.5A4.671 4.671 0 0 1 1.812 6.5 4.686 4.686 0 0 1 6.5 1.812 4.701 4.701 0 0 1 11.188 6.5 4.686 4.686 0 0 1 6.5 11.188Zm0-7.922a.975.975 0 0 0-.984.984c0 .563.421.984.984.984.54 0 .984-.421.984-.984a.99.99 0 0 0-.984-.984Zm1.313 5.953v-.563c0-.14-.141-.281-.282-.281H7.25V6.031c0-.14-.14-.281-.281-.281h-1.5a.285.285 0 0 0-.282.281v.563a.27.27 0 0 0 .282.281h.281v1.5h-.281a.285.285 0 0 0-.282.281v.563a.27.27 0 0 0 .282.281H7.53c.14 0 .282-.117.282-.281Z"></path>
-                            </svg>
-                          </div>
                         </div>
                         <div className="flex justify-center gap-[2px] lg:py-[8px] lg:px-[6px]">
                           {metaDeck?.deck?.augments.map((augment, i) => (
@@ -836,7 +824,7 @@ const MetaTrendsItems = () => {
                         >
                           <MyBarChartComponent height={80} width={100} />
                           <p className="text-center mb-0 text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
-                            Avg Ranking
+                            {others?.avgRanking}
                           </p>
                         </div>
                       </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import RecentDecksItem from "../RecentDecksItem/RecentDecksItem";
-
+import { useTranslation } from "react-i18next";
 function getRandomCharacters(characters, count = 12) {
   // Shuffle the array using Fisher-Yates algorithm
   let shuffled = characters.slice().sort(() => Math.random() - 0.5);
@@ -22,6 +22,8 @@ const RecentDecksCard = ({
   selectedChampion,
   forces,
 }) => {
+  const { t } = useTranslation();
+  const others = t("others");
   const coinIcons = [
     "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/one_v7t2oz.webp",
     "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/two_lq4qkg.webp",
@@ -66,7 +68,7 @@ const RecentDecksCard = ({
                   </svg>
                 </span>
                 <span className="text-[14px] font-semibold font-sans leading-none text-[#999]">
-                  Cost {i + 1}
+                  {others?.cost} {i + 1}
                 </span>
               </h5>
             </header>

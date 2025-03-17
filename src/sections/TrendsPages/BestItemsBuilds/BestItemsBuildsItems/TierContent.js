@@ -119,13 +119,13 @@ const TierCard = ({ cost, itemsData }) => {
                         <thead className="table-row-group w-full text-[11px] font-[400]">
                           <tr className="text-center text-[14px] font-[500]">
                             <th className="pt-[6px] pr-0 pb-[6px] pl-[8px] text-center bg-[#1e1e24] text-[#d0d0d0] whitespace-nowrap mt-1 rounded-tl-md">
-                              Best Items
+                              {others?.bestItems}
                             </th>
                             <th className="pt-[6px] pr-0 pb-[6px] text-center bg-[#1e1e24] text-[#d0d0d0] whitespace-nowrap w-[22%]">
-                              Avg
+                              {others?.avg}
                             </th>
                             <th className="pt-[6px] pr-0 pb-[6px] pl-[5px] text-center bg-[#1e1e24] text-[#d0d0d0] whitespace-nowrap w-[22%] rounded-tr-md">
-                              Pick%
+                              {others?.pickPercentage}
                             </th>
                           </tr>
                         </thead>
