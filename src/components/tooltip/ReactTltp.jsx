@@ -4,35 +4,44 @@ import Comps from "../../data/compsNew.json";
 import { useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 
+// Single container ID for all tooltips
+const TOOLTIP_CONTAINER_ID = "global-tooltip-container";
+
+// Helper to detect touch devices
+const isTouchDevice = () => {
+  if (typeof window === "undefined") return false;
+  return (
+    "ontouchstart" in window ||
+    navigator.maxTouchPoints > 0 ||
+    navigator.msMaxTouchPoints > 0
+  );
+};
+
 // Component to render tooltip in a portal
 const TooltipPortal = ({ children }) => {
   const [mounted, setMounted] = useState(false);
   const containerRef = useRef(null);
 
   useEffect(() => {
+    // Create container only once
+    let container = document.getElementById(TOOLTIP_CONTAINER_ID);
+    if (!container) {
+      container = document.createElement("div");
+      container.id = TOOLTIP_CONTAINER_ID;
+      container.style.position = "fixed";
+      container.style.zIndex = "10000";
+      container.style.pointerEvents = "none";
+      container.style.top = "0";
+      container.style.left = "0";
+      container.style.width = "100%";
+      container.style.height = "100%";
+      document.body.appendChild(container);
+    }
+    containerRef.current = container;
+
     setMounted(true);
 
-    // Create a container for tooltips if it doesn't exist
-    if (!document.getElementById("tooltip-container")) {
-      const tooltipContainer = document.createElement("div");
-      tooltipContainer.id = "tooltip-container";
-      tooltipContainer.style.position = "fixed";
-      tooltipContainer.style.zIndex = "999999";
-      tooltipContainer.style.pointerEvents = "none";
-      tooltipContainer.style.top = "0";
-      tooltipContainer.style.left = "0";
-      tooltipContainer.style.width = "100%";
-      tooltipContainer.style.height = "100%";
-      document.body.appendChild(tooltipContainer);
-      containerRef.current = tooltipContainer;
-    } else {
-      containerRef.current = document.getElementById("tooltip-container");
-    }
-
-    return () => {
-      setMounted(false);
-      // We don't remove the container on unmount as other tooltips might be using it
-    };
+    return () => setMounted(false);
   }, []);
 
   return mounted
@@ -41,7 +50,7 @@ const TooltipPortal = ({ children }) => {
           className="tooltip-portal"
           style={{
             position: "fixed",
-            zIndex: 999999,
+            zIndex: 10000,
             pointerEvents: "none",
             top: 0,
             left: 0,
@@ -74,6 +83,31 @@ if (typeof window !== "undefined") {
         }
       });
     });
+
+    // Add support for mobile touch events globally, but only on touch devices
+    if (isTouchDevice()) {
+      document.addEventListener(
+        "touchstart",
+        (e) => {
+          // Check if the touch target has a tooltip attached
+          const tooltipId =
+            e.target.getAttribute("data-tooltip-id") ||
+            e.target
+              .closest("[data-tooltip-id]")
+              ?.getAttribute("data-tooltip-id");
+          if (!tooltipId) return;
+
+          // Get all open tooltips that aren't the current one and hide them
+          const tooltips = document.querySelectorAll(".react-tooltip");
+          tooltips.forEach((tooltip) => {
+            if (tooltip.id !== tooltipId && tooltip.style.opacity !== "0") {
+              tooltip.style.opacity = "0";
+            }
+          });
+        },
+        { passive: true }
+      );
+    }
   }, 1000);
 }
 
@@ -91,7 +125,12 @@ const ReactTltp = ({ variant = "", content, id }) => {
   const { champions } = data?.refs;
   const { items } = data?.refs;
   const { traits } = data?.refs;
-  let renderData = "";
+  const isTouch = useRef(null);
+
+  // Detect if this is a touch device on mount
+  useEffect(() => {
+    isTouch.current = isTouchDevice();
+  }, []);
 
   // Force tooltips to be reinitialized when component mounts
   useEffect(() => {
@@ -105,8 +144,92 @@ const ReactTltp = ({ variant = "", content, id }) => {
     // Also reinitialize after a short delay to ensure everything is loaded
     const timer = setTimeout(reinitTooltips, 500);
 
+    // Support for mobile touch events - only add this on touch devices
+    const addMobileTouchSupport = () => {
+      // Return early if this is not a touch device
+      if (!isTouchDevice()) return () => {};
+
+      const targets = document.querySelectorAll(`[data-tooltip-id="${id}"]`);
+
+      const handleTouch = (e) => {
+        // Don't prevent default here as it can interfere with scrolling
+        // Instead, use stopPropagation to prevent multiple tooltips
+        e.stopPropagation();
+
+        // Get the tooltip element
+        const tooltip = document.getElementById(id);
+        if (!tooltip) return;
+
+        // Check if tooltip is already visible
+        const isVisible = tooltip.style.opacity === "1";
+
+        // Toggle tooltip visibility
+        if (isVisible) {
+          tooltip.style.opacity = "0";
+        } else {
+          // Hide all other tooltips first
+          const allTooltips = document.querySelectorAll(".react-tooltip");
+          allTooltips.forEach((t) => {
+            if (t.id !== id) t.style.opacity = "0";
+          });
+
+          // Show this tooltip
+          tooltip.style.opacity = "1";
+
+          // Position near the touch point with adjustments for mobile viewing
+          const touch = e.touches[0];
+          const targetRect = e.target.getBoundingClientRect();
+
+          // Calculate tooltip position based on touch point and target element
+          const viewportHeight = window.innerHeight;
+          const viewportWidth = window.innerWidth;
+
+          // Start with a position below the touched element
+          let posY = targetRect.bottom + 10;
+          let posX = targetRect.left + targetRect.width / 2;
+
+          // Ensure tooltip stays in viewport
+          setTimeout(() => {
+            if (!tooltip) return;
+
+            const tooltipRect = tooltip.getBoundingClientRect();
+
+            // Adjust Y position if needed
+            if (posY + tooltipRect.height > viewportHeight - 20) {
+              posY = Math.max(20, targetRect.top - tooltipRect.height - 10);
+            }
+
+            // Adjust X position if needed
+            posX = Math.min(
+              Math.max(tooltipRect.width / 2 + 10, posX),
+              viewportWidth - tooltipRect.width / 2 - 10
+            );
+
+            // Apply the calculated position
+            tooltip.style.top = `${posY}px`;
+            tooltip.style.left = `${posX}px`;
+            tooltip.style.transform = "translate(-50%, 0)";
+          }, 20);
+        }
+      };
+
+      targets.forEach((target) => {
+        target.addEventListener("touchstart", handleTouch);
+      });
+
+      return () => {
+        targets.forEach((target) => {
+          target.removeEventListener("touchstart", handleTouch);
+        });
+      };
+    };
+
+    // Add mobile support after a brief delay, but only on touch devices
+    const touchTimer = setTimeout(addMobileTouchSupport, 300);
+
     return () => {
       clearTimeout(timer);
+      clearTimeout(touchTimer);
 
       // Clean up this specific tooltip when component unmounts
       try {
@@ -121,28 +244,53 @@ const ReactTltp = ({ variant = "", content, id }) => {
     };
   }, [id]);
 
+  // Get appropriate events based on device type
+  const getEventTypes = () => {
+    if (typeof window === "undefined") return ["hover"]; // Default for SSR
+
+    // For touch devices, use both touch and hover events
+    if (isTouchDevice()) {
+      return ["touch", "click"];
+    }
+
+    // For non-touch devices, use hover only
+    return ["hover"];
+  };
+
   // Common tooltip props
   const tooltipProps = {
     id,
-    delayShow: 500,
-    className: "tooltip-container",
+    delayShow: 200, // Reduced delay for better mobile experience
+    className: `tooltip-container tooltip-${variant}`,
     style: {
-      zIndex: 999999,
+      zIndex: 10000,
       position: "fixed",
       backgroundColor: variant ? "black" : undefined,
       border: variant === "otherTraits" ? "1px solid #000000" : undefined,
       borderRadius: variant === "otherTraits" ? "4px" : undefined,
+      maxWidth: "90vw", // Ensure tooltip doesn't overflow viewport width
     },
     place: "bottom",
     clickable: true,
     positionStrategy: "fixed",
     float: true,
     noArrow: true,
+    // Support appropriate events for the device type
+    events: getEventTypes(),
     appendTo: () =>
-      document.getElementById("tooltip-container") || document.body,
+      document.getElementById(TOOLTIP_CONTAINER_ID) || document.body,
     // Use render prop to ensure tooltip content is properly rendered
     render: (attrs) => (
-      <div className="tooltip-content" {...attrs}>
+      <div
+        className="tooltip-content"
+        {...attrs}
+        style={{
+          ...attrs.style,
+          overflowX: "hidden",
+          overflowY: "auto",
+          maxHeight: isTouchDevice() ? "70vh" : "auto", // Limit height on mobile
+        }}
+      >
         {variant === "champion" && (
           <div className="w-[200px] text-[#fff] bg-black">
             <div className="flex justify-start items-center gap-x-2">
@@ -156,11 +304,12 @@ const ReactTltp = ({ variant = "", content, id }) => {
               </span>
             </div>
             <div className="mb-2">
-              {content?.traits.map((trait) => (
-                <div className="flex justity-left items-center">
+              {content?.traits.map((trait, index) => (
+                <div className="flex justity-left items-center" key={index}>
                   <img
                     src={traits?.find((t) => t?.key === trait)?.imageUrl}
                     className="w-5"
+                    alt={trait}
                   />
                   <span className="text-xs font-light">{trait}</span>
                 </div>
@@ -171,7 +320,7 @@ const ReactTltp = ({ variant = "", content, id }) => {
               <div>{content?.attackRange}</div>
             </div>
             <div className="flex justify-start items-center gap-x-2">
-              <img src={content?.skill?.imageUrl} className="w-6" />
+              <img src={content?.skill?.imageUrl} className="w-6" alt="skill" />
               <div className="text-xs font-light">
                 <div>{content?.skill?.name}</div>
                 <div>Mana: {content?.skill?.skillMana}</div>
@@ -191,10 +340,12 @@ const ReactTltp = ({ variant = "", content, id }) => {
                 Recommended Items
               </div>
               <div className="flex justify-start items-center gap-x-1">
-                {content?.recommendItems?.map((item) => (
+                {content?.recommendItems?.map((item, index) => (
                   <img
+                    key={index}
                     src={items?.find((i) => i?.key === item)?.imageUrl}
                     className="w-8"
+                    alt={item}
                   />
                 ))}
               </div>
@@ -212,13 +363,14 @@ const ReactTltp = ({ variant = "", content, id }) => {
               {content?.compositions &&
                 content?.compositions.length > 0 &&
                 content?.compositions?.map((comp, index) => (
-                  <div className="flex justify-center items-center">
+                  <div className="flex justify-center items-center" key={index}>
                     <div className="rounded-full">
                       <img
                         src={
                           items?.find((item) => item?.key === comp)?.imageUrl
                         }
                         className="w-10 mr-1"
+                        alt={comp}
                       />
                     </div>
                     {index < content?.compositions?.length - 1 ? " +" : ""}
@@ -238,7 +390,7 @@ const ReactTltp = ({ variant = "", content, id }) => {
               {content.stats ? (
                 Object.entries(content.stats).map(([key, value]) => (
                   <div
-                    className={`mb-1 text-xs flex justify-start items-center ${parseInt(key) === parseInt(content?.numUnits) || parseInt(key) - 1 === parseInt(content?.numUnits) ? "text-[#23aa23] font-bold" : "text-[#fff]  font-light"}`}
+                    className={`mb-1 text-xs flex justify-start items-center ${parseInt(key) === parseInt(content?.numUnits) || parseInt(key) - 1 === parseInt(content?.numUnits) ? "text-[#23aa23] font-bold" : "text-[#fff] font-light"}`}
                     key={key}
                   >
                     <span
@@ -263,11 +415,12 @@ const ReactTltp = ({ variant = "", content, id }) => {
             </div>
             <div className="text-[12px] font-light mb-2">{content?.desc}</div>
             <div className="grid grid-cols-4 justify-center items-center gap-x-4">
-              {content?.map((trait) => (
-                <div className="">
+              {content?.map((trait, index) => (
+                <div key={index}>
                   <img
                     src={traits?.find((t) => t?.key === trait?.name)?.imageUrl}
                     className="w-14"
+                    alt={trait?.name}
                   />
                   <div className="text-sm text-center font-light">
                     {trait?.name}

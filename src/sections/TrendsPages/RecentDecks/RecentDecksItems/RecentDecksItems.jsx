@@ -357,7 +357,7 @@ const ProjectItems = () => {
             {/* Origins Section */}
             <div className="space-y-6">
               <div className="flex flex-col lg:flex-row items-center gap-4">
-                <div className="bg-[#27282E] p-3 rounded-lg text-white font-semibold text-center min-w-[100px]">
+                <div className="p-1 rounded-lg text-white font-semibold text-center min-w-[100px]">
                   {others?.origin}
                 </div>
                 <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 w-full">
@@ -397,7 +397,7 @@ const ProjectItems = () => {
 
               {/* Forces Section */}
               <div className="flex flex-col lg:flex-row items-center gap-4">
-                <div className="bg-[#27282E] p-3 rounded-lg text-white font-semibold text-center min-w-[100px]">
+                <div className="p-1 rounded-lg text-white font-semibold text-center min-w-[100px]">
                   {others?.forces}
                 </div>
                 <div className="grid grid-cols-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 w-full">

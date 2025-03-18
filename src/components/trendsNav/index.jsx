@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
@@ -25,6 +25,12 @@ const TrendsNav = ({ selected }) => {
   const router = useRouter();
 
   const [swiperInstance, setSwiperInstance] = useState(null);
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
+
+  const handleChange = (e) => {
+    router.push(`/${e.target.value}`);
+  };
 
   // Scroll to active tab when selected or swiper instance changes
   useEffect(() => {
@@ -35,9 +41,6 @@ const TrendsNav = ({ selected }) => {
       }
     }
   }, [selected, swiperInstance]);
-  const handleChange = (e) => {
-    router.push(`/${e.target.value}`);
-  };
 
   return (
     <>
@@ -185,18 +188,64 @@ const TrendsNav = ({ selected }) => {
 
         {/* Mobile View */}
         <div className="lg:hidden relative">
+          <div ref={prevRef} className="nav-button meta-prev left-0">
+            <FiChevronLeft className="text-lg" />
+          </div>
+          <div ref={nextRef} className="nav-button meta-next right-0">
+            <FiChevronRight className="text-lg" />
+          </div>
+
           <Swiper
             modules={[Navigation]}
             spaceBetween={10}
             slidesPerView={"auto"}
             speed={800}
             cssMode={true}
-            navigation={{
-              prevEl: ".meta-prev",
-              nextEl: ".meta-next",
+            onSwiper={(swiper) => {
+              setSwiperInstance(swiper);
+              // Override Swiper's navigation with our custom elements
+              swiper.navigation.init();
+              swiper.navigation.update();
+
+              // Wait until Swiper is initialized and has processed slides
+              setTimeout(() => {
+                // Set up custom navigation
+                if (prevRef.current && nextRef.current) {
+                  prevRef.current.addEventListener("click", () => {
+                    swiper.slidePrev();
+                  });
+                  nextRef.current.addEventListener("click", () => {
+                    swiper.slideNext();
+                  });
+                }
+
+                // Set up visibility handlers
+                const updateNavVisibility = () => {
+                  if (prevRef.current) {
+                    prevRef.current.style.display = swiper.isBeginning
+                      ? "none"
+                      : "flex";
+                  }
+                  if (nextRef.current) {
+                    nextRef.current.style.display = swiper.isEnd
+                      ? "none"
+                      : "flex";
+                  }
+                };
+
+                // Initialize visibility
+                updateNavVisibility();
+
+                // Add event listeners for navigation updates
+                swiper.on("slideChange", updateNavVisibility);
+                swiper.on("reachBeginning", updateNavVisibility);
+                swiper.on("reachEnd", updateNavVisibility);
+                swiper.on("fromEdge", updateNavVisibility);
+                swiper.on("resize", updateNavVisibility);
+                swiper.on("observerUpdate", updateNavVisibility);
+              }, 100);
             }}
             className="tabs-swiper"
-            onSwiper={(swiper) => setSwiperInstance(swiper)}
             slideToClickedSlide={false}
           >
             {tabConfig.map((tab) => (
@@ -218,12 +267,6 @@ const TrendsNav = ({ selected }) => {
               </SwiperSlide>
             ))}
           </Swiper>
-          <div className="nav-button meta-prev left-0">
-            <FiChevronLeft className="text-lg" />
-          </div>
-          <div className="nav-button meta-next right-0">
-            <FiChevronRight className="text-lg" />
-          </div>
         </div>
       </div>
       {/* <div className="bg-[#222231] rounded-lg !border !border-[#ffffff70] hidden lg:block">

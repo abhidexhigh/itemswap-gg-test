@@ -26,7 +26,9 @@ export default function ItemsTrends() {
         {/* <PageHeader currentPage="META TRENDS" pageTitle="META TRENDS" /> */}
         <div className="backdrop-blur-md">
           <div className="container">
-            <TrendsNav selected="metaTrends" />
+            <div className="sticky top-14 z-50">
+              <TrendsNav selected="metaTrends" />
+            </div>
             {/* <div className="bg-transparent-20"></div> */}
             <MetaTrends />
             <Footer />
