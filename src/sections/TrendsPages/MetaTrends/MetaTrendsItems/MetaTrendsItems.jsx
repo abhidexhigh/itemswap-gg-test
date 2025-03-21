@@ -391,11 +391,11 @@ const MetaTrendsItems = () => {
                           height={96}
                           src={trait?.imageUrl}
                           className="w-full h-full object-cover rounded-lg"
-                          data-tooltip-id={trait?.key}
+                          data-tooltip-id={`${trait?.key}-${i}`}
                         />
                         {trait?.key === selectedTrait && (
                           <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
-                            <IoMdCheckmarkCircle className="text-[#86efac] text-4xl" />
+                            <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
                           </div>
                         )}
                       </div>
@@ -431,11 +431,11 @@ const MetaTrendsItems = () => {
                           height={96}
                           src={force?.imageUrl}
                           className="w-full h-full object-cover rounded-lg"
-                          data-tooltip-id={force?.key}
+                          data-tooltip-id={`${force?.key}-${i}`}
                         />
                         {force?.key === selectedTrait && (
                           <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
-                            <IoMdCheckmarkCircle className="text-[#86efac] text-4xl" />
+                            <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
                           </div>
                         )}
                       </div>
@@ -470,11 +470,11 @@ const MetaTrendsItems = () => {
                         height={84}
                         src={item?.imageUrl}
                         className="w-full h-full object-contain  rounded-lg !border !border-[#ffffff20]"
-                        data-tooltip-id={item?.key}
+                        data-tooltip-id={`${item?.key}-${i}`}
                       />
                       {item?.key === selectedItem && (
                         <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
-                          <IoMdCheckmarkCircle className="text-[#86efac] text-3xl" />
+                          <IoMdCheckmarkCircle className="text-[#86efac] text-5xl z-50" />
                         </div>
                       )}
                     </div>
@@ -515,10 +515,13 @@ const MetaTrendsItems = () => {
                                   force?.key.toLowerCase()
                               )?.imageUrl
                             }
-                            data-tooltip-id={force?.key}
+                            data-tooltip-id={`${force?.key}-${i}`}
                             className="w-[24px] h-[24px] md:w-[40px] md:h-[40px] mr-1"
                           />
-                          <ReactTltp content={force?.key} id={force?.key} />
+                          <ReactTltp
+                            content={force?.key}
+                            id={`${force?.key}-${i}`}
+                          />
                           <span className="text-[18px]">{force?.numUnits}</span>
                         </div>
                       </>

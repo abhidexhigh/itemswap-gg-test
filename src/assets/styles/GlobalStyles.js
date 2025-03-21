@@ -25,9 +25,45 @@ const banners = [
   //   "https://res.cloudinary.com/dg0cmj6su/image/upload/v1726834338/15_1_kbuzpu.webp",
 ];
 
+const mobileBanners = [
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742468268/Elemental_mf2ael.webp",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742468268/Eastern_b9glxe.webp",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742468268/witch_vfyn35.webp",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742468269/Western_Dragon_emjhxc.webp",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742468269/Succubus_j0svmf.webp",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742468269/ninetails_ljgwab.webp",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742468270/phoenix_suqtrv.webp",
+];
+
 function getRandomChampionKey() {
   const randomIndex = Math.floor(Math.random() * banners.length);
   return banners[randomIndex];
+}
+
+function getRandomMobileBanner() {
+  const randomIndex = Math.floor(Math.random() * mobileBanners.length);
+  return mobileBanners[randomIndex];
+}
+
+function getMobileBackgroundPosition(pathname) {
+  // Default position
+  let position = "center center";
+
+  // Map of page paths to background positions
+  const positionMap = {
+    "/": "50%",
+    "/metaTrends": "0%",
+    "/recentDecks": "17%",
+    "/championsTrends": "34%",
+    "/itemsTrends": "51%",
+    "/traitsTrends": "68%",
+    "/augmentsTrends": "85%",
+    "/bestItemsBuilds": "100%",
+  };
+
+  console.log("pathname", pathname, positionMap[pathname]);
+
+  return positionMap[pathname] || "center center";
 }
 
 const GlobalStyles = createGlobalStyle` 
@@ -197,6 +233,9 @@ button {
 @media only screen and (max-width: 480px) {
     body {
     font-size: 15px;
+    background-image: url(${getRandomMobileBanner()});
+    background-position: center 25px;
+    background-repeat: no-repeat;
 }
 }
 

@@ -1,6 +1,7 @@
 import React, { memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import MetaTrendsItem from "../MetaTrendsItem/MetaTrendsItem";
 
 // Memoize the getRandomCharacters function to avoid unnecessary recalculations
@@ -29,13 +30,13 @@ const MetaTrendsCard = ({
   const { t } = useTranslation();
   const others = t("others");
   const coin =
-    "https://res.cloudinary.com/dg0cmj6su/image/upload/v1727238375/selling_coins_sjs6so.webp";
+    "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742545239/Coin_C_zj8naw.png";
   const coinIcons = [
-    "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/one_v7t2oz.webp",
-    "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/two_lq4qkg.webp",
-    "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/three_seducd.webp",
-    "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780377/four_nvxjwh.webp",
-    "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780551/five_om2xqr.webp",
+    "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550115/01_uwt4jg.png",
+    "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550115/02_wnemuc.png",
+    "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550114/03_pfqvqc.png",
+    "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550114/04_m1yxes.png",
+    "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550114/05_zqb2ji.png",
   ];
 
   return (
@@ -134,13 +135,65 @@ const MetaTrendsCard = ({
                 >
                   <div className="hidden lg:flex items-center">
                     {i < coinIcons.length && (
-                      <Image
-                        src={coinIcons[i]}
-                        className="w-8 md:w-10 2xl:w-12"
-                        alt={`Cost ${i + 1} Icon`}
-                        width={48}
-                        height={48}
-                      />
+                      <div className="flex items-center gap-1">
+                        <div className="relative">
+                          <Image
+                            src={coinIcons[i]}
+                            className="w-8 md:w-10 2xl:w-12"
+                            alt={`Cost ${i + 1} Icon`}
+                            width={48}
+                            height={48}
+                          />
+                          {/* <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20px] font-semibold leading-none text-[#401d1d] shadow-lg">
+                            {i + 1}
+                          </span> */}
+                        </div>
+                        <div className="flex items-center">
+                          <motion.div
+                            animate={{
+                              x: [0, 8, 0],
+                              opacity: [1, 0.5, 1],
+                            }}
+                            transition={{
+                              duration: 1.5,
+                              repeat: Infinity,
+                              ease: "easeInOut",
+                            }}
+                          >
+                            <Image
+                              src={
+                                "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742540890/Arrow_ieu0xg.png"
+                              }
+                              alt={`Cost ${i + 1} Icon`}
+                              width={48}
+                              height={48}
+                              className="w-2 -mr-0.5"
+                            />
+                          </motion.div>
+                          <motion.div
+                            animate={{
+                              x: [0, 8, 0],
+                              opacity: [1, 0.5, 1],
+                            }}
+                            transition={{
+                              duration: 1.5,
+                              repeat: Infinity,
+                              ease: "easeInOut",
+                              delay: 0.09,
+                            }}
+                          >
+                            <Image
+                              src={
+                                "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742540890/Arrow_ieu0xg.png"
+                              }
+                              alt={`Cost ${i + 1} Icon`}
+                              width={48}
+                              height={48}
+                              className="w-3"
+                            />
+                          </motion.div>
+                        </div>
+                      </div>
                     )}
                   </div>
                   {randomChampions &&

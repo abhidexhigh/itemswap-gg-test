@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import ContextProvider from "src/utils/ContextProvider";
 import GlobalStyles from "@assets/styles/GlobalStyles";
 import "@assets/styles/globalStyles.css";
+
 const App = ({ Component, pageProps }) => {
   const [showChild, setShowChild] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setShowChild(true);
@@ -15,7 +18,7 @@ const App = ({ Component, pageProps }) => {
 
   return (
     <ContextProvider>
-      <GlobalStyles />
+      <GlobalStyles pathname={router.pathname} />
       <Component {...pageProps} />
     </ContextProvider>
   );

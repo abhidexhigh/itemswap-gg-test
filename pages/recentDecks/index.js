@@ -22,7 +22,9 @@ export default function ItemsTrends() {
         {metamaskModal && <MetamaskModal />}
         <Header />
         <div className="container px-0 md:px-3">
-          <div className="h-[360px] md:h-[360px] 2xl:h-[420px]" />
+          <div className="h-[360px] md:h-[360px] 2xl:h-[420px] relative">
+            <div class="absolute bottom-0 h-10 w-full bg-transparent bg-gradient-to-b from-[#00000005] from-5% to-[#191F1F] to-95% md:static md:block"></div>
+          </div>
           {/* <PageHeader currentPage="META TRENDS" pageTitle="META TRENDS" /> */}
           <div className="sticky top-14 z-50">
             <TrendsNav selected="recentDecks" />

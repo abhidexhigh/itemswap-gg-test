@@ -36,16 +36,19 @@ const RecentDecksItem = ({
     (force) => force?.key === champion?.variant
   )?.imageUrl;
 
+  // Create unique tooltip ID
+  const tooltipId = `${champion?.key}-${index}`;
+
   return (
     // <Ttip content="Tooltip content" animation="duration-500" arrow={false}>
     <div
       className={`relative inline-flex cursor-pointer [box-shadow:rgba(255,_0,_0)_0px_5px_15px] shadow-none hover:[box-shadow:rgba(255,_0,_0)_0px_54px_55px,_rgba(0,_0,_0,_0.12)_0px_-12px_30px,_rgba(0,_0,_0,_0.12)_0px_4px_6px,_rgba(0,_0,_0,_0.17)_0px_12px_13px,_rgba(0,_0,_0,_0.09)_0px_-3px_5px] hover:-translate-y-0.5 transition-all duration-300 ease-in-out`}
       onClick={handleClick}
     >
-      <ReactTltp variant="champion" content={champion} id={champion?.key} />
+      <ReactTltp variant="champion" content={champion} id={tooltipId} />
       <div
         className="relative inline-flex flex-col"
-        data-tooltip-id={champion?.key}
+        data-tooltip-id={tooltipId}
       >
         <div className="relative flex flex-col w-[72px] h-[72px] lg:w-[98px] lg:h-[98px]">
           <div
