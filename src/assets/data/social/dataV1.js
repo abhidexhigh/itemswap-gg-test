@@ -18,6 +18,10 @@ const data = [
     icon: "youtube",
     url: "#",
   },
+  {
+    icon: "twitch",
+    url: "#",
+  },
 ];
 
 export default data;

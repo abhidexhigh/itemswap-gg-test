@@ -85,31 +85,70 @@ if (typeof window !== "undefined") {
       });
     });
 
-    // Add support for mobile touch events globally, but only on touch devices
+    // Simplified mobile touch handling
     if (isTouchDevice()) {
       document.addEventListener(
         "touchstart",
         (e) => {
-          // Check if the touch target has a tooltip attached
           const tooltipId =
             e.target.getAttribute("data-tooltip-id") ||
             e.target
               .closest("[data-tooltip-id]")
               ?.getAttribute("data-tooltip-id");
+
           if (!tooltipId) return;
 
-          // Get all open tooltips that aren't the current one and hide them
-          const tooltips = document.querySelectorAll(".react-tooltip");
-          tooltips.forEach((tooltip) => {
-            if (tooltip.id !== tooltipId && tooltip.style.opacity !== "0") {
+          // Hide all other tooltips
+          document.querySelectorAll(".react-tooltip").forEach((tooltip) => {
+            if (tooltip.id !== tooltipId) {
               tooltip.style.opacity = "0";
             }
           });
+
+          // Show current tooltip
+          const tooltip = document.getElementById(tooltipId);
+          if (tooltip) {
+            const isVisible = tooltip.style.opacity === "1";
+            tooltip.style.opacity = isVisible ? "0" : "1";
+
+            if (!isVisible) {
+              // Position tooltip near touch point
+              const touch = e.touches[0];
+              const targetRect = e.target.getBoundingClientRect();
+              const viewportHeight = window.innerHeight;
+              const viewportWidth = window.innerWidth;
+
+              let posY = targetRect.bottom + 10;
+              let posX = targetRect.left + targetRect.width / 2;
+
+              // Ensure tooltip stays in viewport
+              requestAnimationFrame(() => {
+                if (!tooltip) return;
+
+                const tooltipRect = tooltip.getBoundingClientRect();
+
+                // Adjust Y position if needed
+                if (posY + tooltipRect.height > viewportHeight - 20) {
+                  posY = Math.max(20, targetRect.top - tooltipRect.height - 10);
+                }
+
+                // Adjust X position if needed
+                posX = Math.min(
+                  Math.max(tooltipRect.width / 2 + 10, posX),
+                  viewportWidth - tooltipRect.width / 2 - 10
+                );
+
+                tooltip.style.top = `${posY}px`;
+                tooltip.style.left = `${posX}px`;
+                tooltip.style.transform = "translate(-50%, 0)";
+              });
+            }
+          }
         },
         { passive: true }
       );
     }
-  }, 1000);
+  }, 100);
 }
 
 const ReactTltp = ({ variant = "", content, id }) => {
@@ -143,95 +182,10 @@ const ReactTltp = ({ variant = "", content, id }) => {
     reinitTooltips();
 
     // Also reinitialize after a short delay to ensure everything is loaded
-    const timer = setTimeout(reinitTooltips, 500);
-
-    // Support for mobile touch events - only add this on touch devices
-    const addMobileTouchSupport = () => {
-      // Return early if this is not a touch device
-      if (!isTouchDevice()) return () => {};
-
-      const targets = document.querySelectorAll(`[data-tooltip-id="${id}"]`);
-
-      const handleTouch = (e) => {
-        // Don't prevent default here as it can interfere with scrolling
-        // Instead, use stopPropagation to prevent multiple tooltips
-        e.stopPropagation();
-
-        // Get the tooltip element
-        const tooltip = document.getElementById(id);
-        if (!tooltip) return;
-
-        // Check if tooltip is already visible
-        const isVisible = tooltip.style.opacity === "1";
-
-        // Toggle tooltip visibility
-        if (isVisible) {
-          tooltip.style.opacity = "0";
-        } else {
-          // Hide all other tooltips first
-          const allTooltips = document.querySelectorAll(".react-tooltip");
-          allTooltips.forEach((t) => {
-            if (t.id !== id) t.style.opacity = "0";
-          });
-
-          // Show this tooltip
-          tooltip.style.opacity = "1";
-
-          // Position near the touch point with adjustments for mobile viewing
-          const touch = e.touches[0];
-          const targetRect = e.target.getBoundingClientRect();
-
-          // Calculate tooltip position based on touch point and target element
-          const viewportHeight = window.innerHeight;
-          const viewportWidth = window.innerWidth;
-
-          // Start with a position below the touched element
-          let posY = targetRect.bottom + 10;
-          let posX = targetRect.left + targetRect.width / 2;
-
-          // Ensure tooltip stays in viewport
-          setTimeout(() => {
-            if (!tooltip) return;
-
-            const tooltipRect = tooltip.getBoundingClientRect();
-
-            // Adjust Y position if needed
-            if (posY + tooltipRect.height > viewportHeight - 20) {
-              posY = Math.max(20, targetRect.top - tooltipRect.height - 10);
-            }
-
-            // Adjust X position if needed
-            posX = Math.min(
-              Math.max(tooltipRect.width / 2 + 10, posX),
-              viewportWidth - tooltipRect.width / 2 - 10
-            );
-
-            // Apply the calculated position
-            tooltip.style.top = `${posY}px`;
-            tooltip.style.left = `${posX}px`;
-            tooltip.style.transform = "translate(-50%, 0)";
-          }, 20);
-        }
-      };
-
-      targets.forEach((target) => {
-        target.addEventListener("touchstart", handleTouch);
-      });
-
-      return () => {
-        targets.forEach((target) => {
-          target.removeEventListener("touchstart", handleTouch);
-        });
-      };
-    };
-
-    // Add mobile support after a brief delay, but only on touch devices
-    const touchTimer = setTimeout(addMobileTouchSupport, 300);
+    const timer = setTimeout(reinitTooltips, 100);
 
     return () => {
       clearTimeout(timer);
-      clearTimeout(touchTimer);
-
       // Clean up this specific tooltip when component unmounts
       try {
         const tooltip = document.getElementById(id);
@@ -239,7 +193,6 @@ const ReactTltp = ({ variant = "", content, id }) => {
           tooltip.parentNode.removeChild(tooltip);
         }
       } catch (e) {
-        // Ignore errors during cleanup
         console.log("Tooltip cleanup error:", e);
       }
     };
@@ -249,9 +202,9 @@ const ReactTltp = ({ variant = "", content, id }) => {
   const getEventTypes = () => {
     if (typeof window === "undefined") return ["hover"]; // Default for SSR
 
-    // For touch devices, use both touch and hover events
+    // For touch devices, use touch events only
     if (isTouchDevice()) {
-      return ["touch", "click"];
+      return ["touch"];
     }
 
     // For non-touch devices, use hover only
@@ -261,7 +214,7 @@ const ReactTltp = ({ variant = "", content, id }) => {
   // Common tooltip props
   const tooltipProps = {
     id,
-    delayShow: 200, // Reduced delay for better mobile experience
+    delayShow: 0, // Remove delay for better mobile experience
     className: `tooltip-container tooltip-${variant}`,
     style: {
       zIndex: 10000,
@@ -269,14 +222,15 @@ const ReactTltp = ({ variant = "", content, id }) => {
       backgroundColor: variant ? "black" : undefined,
       border: variant === "otherTraits" ? "1px solid #000000" : undefined,
       borderRadius: variant === "otherTraits" ? "4px" : undefined,
-      maxWidth: "90vw", // Ensure tooltip doesn't overflow viewport width
+      maxWidth: "90vw",
+      opacity: 0, // Start hidden
+      transition: "opacity 0.2s ease-in-out", // Smooth transition
     },
     place: "bottom",
     clickable: true,
     positionStrategy: "fixed",
     float: true,
     noArrow: true,
-    // Support appropriate events for the device type
     events: getEventTypes(),
     appendTo: () =>
       document.getElementById(TOOLTIP_CONTAINER_ID) || document.body,

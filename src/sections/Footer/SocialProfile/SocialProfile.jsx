@@ -4,7 +4,7 @@ import Link from "next/link";
 import { SectionTitle } from "@components/sectionTitle";
 import SocialStyleWrapper from "./SocialProfile.style";
 import data from "@assets/data/social/dataV1";
-import { FaXTwitter, FaDiscord, FaYoutube } from "react-icons/fa6";
+import { FaXTwitter, FaDiscord, FaYoutube, FaTwitch } from "react-icons/fa6";
 
 const Social = () => {
   const { t } = useTranslation();
@@ -19,6 +19,7 @@ const Social = () => {
               {profile.icon === "twitter" && <FaXTwitter />}
               {profile.icon === "youtube" && <FaYoutube />}
               {profile.icon === "discord" && <FaDiscord />}
+              {profile.icon === "twitch" && <FaTwitch />}
             </Link>
           ))}
         </div>

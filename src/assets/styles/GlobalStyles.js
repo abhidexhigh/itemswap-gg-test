@@ -231,12 +231,45 @@ button {
 }
 
 @media only screen and (max-width: 480px) {
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+
     body {
-    font-size: 15px;
-    background-image: url(${getRandomMobileBanner()});
-    background-position: center 25px;
-    background-repeat: no-repeat;
-}
+        font-size: 15px;
+        position: relative;
+        min-height: 100vh;
+        background: none;
+    }
+
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url(${getRandomMobileBanner()});
+        background-position: center 25px;
+        background-repeat: no-repeat;
+        background-size: 100% auto;
+        z-index: -1;
+        -webkit-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-perspective: 1000;
+        perspective: 1000;
+    }
+
+    #__next {
+        position: relative;
+        z-index: 1;
+        background: transparent;
+    }
 }
 
 tabs-carousel {
