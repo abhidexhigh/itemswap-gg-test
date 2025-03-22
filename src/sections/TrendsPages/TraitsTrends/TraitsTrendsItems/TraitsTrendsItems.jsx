@@ -11,6 +11,7 @@ import metaDeckTraitStats from "../../../../data/newData/metaDeckTraits.json";
 import Comps from "../../../../data/compsNew.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import ScrollableTable from "src/utils/ScrollableTable";
+import { OptimizedImage } from "../../../../utils/imageOptimizer";
 
 const ProjectItems = () => {
   const { t } = useTranslation();
@@ -237,20 +238,15 @@ const ProjectItems = () => {
                       <td className={`p-2 ${getCellClass("key")}`}>
                         <div>
                           <div className="flex justify-start items-center">
-                            <Image
+                            <OptimizedImage
                               src={
-                                traits
-                                  ?.find(
-                                    (trait) => trait?.key === metaTrait?.key
-                                  )
-                                  ?.tiers?.find(
-                                    (tier) => tier?.tier == metaTrait?.tier
-                                  )?.imageUrl
+                                traits?.find((t) => t?.key === metaTrait?.key)
+                                  ?.imageUrl
                               }
+                              alt="icon"
                               width={80}
                               height={80}
                               className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 mr-2 rounded-md"
-                              alt="icon"
                               data-tooltip-id={metaTrait?.key}
                             />
                             <ReactTltp

@@ -1,5 +1,6 @@
-import Image from "next/image";
+import { OptimizedImage } from "../../utils/imageOptimizer";
 import ReactTltp from "../tooltip/ReactTltp";
+
 const CardImage = ({
   src,
   imgStyle = "w-[48px] md:w-[96px]",
@@ -21,18 +22,17 @@ const CardImage = ({
               src?.cardImage.endsWith(".png") ||
               src?.cardImage.endsWith(".jpg") ||
               src?.cardImage.endsWith(".jpeg") ? (
-                <Image
+                <OptimizedImage
                   src={src?.cardImage}
-                  alt={"champion"}
-                  // style={imgStyle}
-                  height={80}
+                  alt="champion"
                   width={80}
+                  height={80}
                   className={`object-cover object-center rounded-lg ${imgStyle}`}
                 />
               ) : (
                 <video
                   src={src?.cardImage}
-                  alt={"champion"}
+                  alt="champion"
                   autoPlay
                   muted
                   loop
@@ -40,13 +40,13 @@ const CardImage = ({
                   className={`object-cover object-center rounded-lg ${imgStyle}`}
                 />
               )}
-              <Image
+              <OptimizedImage
                 src={
                   forces?.find((force) => force.key === src?.variant)?.imageUrl
                 }
-                alt={"force"}
-                height={20}
+                alt="force"
                 width={20}
+                height={20}
                 className={`absolute -top-[6px] -right-[6px] w-[20px] md:w-[30px] ${identificationImageStyle}`}
               />
               {/* <div className="absolute bottom-0 w-full bg-gradient-to-r from-[#1a1b3110] via-[#1a1b31] to-[#1a1b3110] bg-opacity-50">

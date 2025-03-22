@@ -5,6 +5,10 @@ import annie from "@assets/image/items/annie.jpeg";
 import { IoMdCheckmarkCircle, IoMdCheckmark } from "react-icons/io";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import ImageBorders from "../../../../data/newData/costWiseBorders.json";
+import {
+  OptimizedImage,
+  shouldPrioritizeImage,
+} from "../../../../utils/imageOptimizer";
 
 const RecentDecksItem = ({
   champion,
@@ -66,13 +70,13 @@ const RecentDecksItem = ({
                 champion.cardImage.endsWith(".png") ||
                 champion.cardImage.endsWith(".jpg") ||
                 champion.cardImage.endsWith(".jpeg") ? (
-                  <Image
+                  <OptimizedImage
                     src={champion.cardImage}
                     alt={`${champion.name || "Champion Image"}`}
                     className="w-[95%] h-[95%] m-auto"
                     width={80}
                     height={80}
-                    priority={index < 4} // Prioritize loading for first 4 images
+                    priority={shouldPrioritizeImage(index)}
                   />
                 ) : (
                   <video
@@ -90,7 +94,7 @@ const RecentDecksItem = ({
             )}
 
             {forceImage && (
-              <Image
+              <OptimizedImage
                 src={forceImage}
                 className="absolute -top-[3px] -right-[3px] w-[20px] md:w-[30px]"
                 alt={`${champion.variant || "Force Icon"}`}

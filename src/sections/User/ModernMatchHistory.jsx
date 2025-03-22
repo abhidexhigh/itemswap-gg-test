@@ -7,6 +7,7 @@ import Image from "next/image";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import CardImage from "../../components/cardImage";
 import ReactTltp from "../../components/tooltip/ReactTltp";
+import { OptimizedImage } from "../../utils/imageOptimizer";
 
 const ModernMatchHistory = ({
   match,
@@ -40,7 +41,7 @@ const ModernMatchHistory = ({
         {/* Match Header */}
         <header className="relative flex flex-col justify-between bg-gradient-to-br from-[#2d2d42] to-[#252538] py-2 px-4 lg:flex-row lg:items-center border-b border-white/10">
           <div className="flex flex-col md:flex-row items-center gap-3">
-            <Image
+            <OptimizedImage
               src={match?.info?.imageUrl}
               alt="Match type"
               width={48}
@@ -56,7 +57,7 @@ const ModernMatchHistory = ({
               </span>
             </div>
             <div className="flex items-center gap-x-1 px-2 py-1 bg-[#ffffff10] rounded-lg">
-              <Image
+              <OptimizedImage
                 src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1722934556/coin_6369589_wbb7uk.png"
                 width={16}
                 height={16}
@@ -78,7 +79,7 @@ const ModernMatchHistory = ({
                   className="mx-1"
                   whileHover={{ scale: 1.1 }}
                 >
-                  <Image
+                  <OptimizedImage
                     src={
                       traits
                         ?.find(
@@ -153,7 +154,7 @@ const ModernMatchHistory = ({
                     className="flex flex-col"
                     whileHover={{ scale: 1.1 }}
                   >
-                    <Image
+                    <OptimizedImage
                       src={augments?.find((a) => a?.key === augment)?.imageUrl}
                       width={80}
                       height={80}
@@ -192,7 +193,7 @@ const ModernMatchHistory = ({
                     <div className="flex justify-center gap-1 items-center min-h-[24px] md:min-h-[32px] mt-1">
                       {unit?.items?.map((item, i) => (
                         <motion.div key={i} whileHover={{ scale: 1.1 }}>
-                          <Image
+                          <OptimizedImage
                             src={items?.find((i) => i?.key === item)?.imageUrl}
                             width={20}
                             height={20}
@@ -293,7 +294,7 @@ const ModernMatchHistory = ({
                     <div className="col-span-2">
                       <div className="flex items-center gap-2">
                         <div className="relative">
-                          <Image
+                          <OptimizedImage
                             src={participant?.imageUrl}
                             width={48}
                             height={48}
@@ -326,7 +327,7 @@ const ModernMatchHistory = ({
                             );
                             return augmentData?.imageUrl ? (
                               <div key={i} className="relative">
-                                <Image
+                                <OptimizedImage
                                   src={augmentData.imageUrl}
                                   width={20}
                                   height={20}
@@ -361,7 +362,7 @@ const ModernMatchHistory = ({
 
                             return tierImage ? (
                               <div key={i} className="relative">
-                                <Image
+                                <OptimizedImage
                                   src={tierImage}
                                   width={20}
                                   height={20}
@@ -422,7 +423,7 @@ const ModernMatchHistory = ({
                                 );
                                 return itemData?.imageUrl ? (
                                   <div key={j} className="relative">
-                                    <Image
+                                    <OptimizedImage
                                       src={itemData.imageUrl}
                                       width={20}
                                       height={20}

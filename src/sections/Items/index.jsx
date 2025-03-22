@@ -9,6 +9,7 @@ import itemsData from "./items.json";
 import ItemTable from "./ItemTable.jsx";
 import itemsData1 from "../../data/newData/items.json";
 import ReactTltp from "src/components/tooltip/ReactTltp.jsx";
+import { OptimizedImage } from "../../utils/imageOptimizer";
 
 const Items = () => {
   const { t } = useTranslation();
@@ -78,7 +79,7 @@ const Items = () => {
                         className="relative overflow-hidden"
                         data-tooltip-id={space1?.key}
                       >
-                        <Image
+                        <OptimizedImage
                           alt="ItemImage"
                           width={100}
                           height={100}
@@ -105,7 +106,7 @@ const Items = () => {
                         className="relative overflow-hidden"
                         data-tooltip-id={space2?.key}
                       >
-                        <Image
+                        <OptimizedImage
                           alt="ItemImage"
                           width={100}
                           height={100}
@@ -149,7 +150,7 @@ const Items = () => {
                               )?.key
                         }
                       >
-                        <Image
+                        <OptimizedImage
                           alt="ItemImage"
                           width={100}
                           height={100}
@@ -246,7 +247,7 @@ const Items = () => {
                         className="relative overflow-hidden"
                         data-tooltip-id={item?.key}
                       >
-                        <Image
+                        <OptimizedImage
                           alt="ItemImage"
                           width={100}
                           height={100}
@@ -299,7 +300,7 @@ const Items = () => {
                             className="relative overflow-hidden"
                             data-tooltip-id={space1?.key}
                           >
-                            <Image
+                            <OptimizedImage
                               alt="ItemImage"
                               width={100}
                               height={100}
@@ -329,7 +330,7 @@ const Items = () => {
                                 : space1?.key
                             }
                           >
-                            <Image
+                            <OptimizedImage
                               alt="ItemImage"
                               width={100}
                               height={100}
@@ -391,7 +392,7 @@ const Items = () => {
                             className="relative overflow-hidden"
                             data-tooltip-id={item?.key}
                           >
-                            <Image
+                            <OptimizedImage
                               alt="ItemImage"
                               width={100}
                               height={100}

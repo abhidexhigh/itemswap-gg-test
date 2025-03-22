@@ -1,9 +1,7 @@
 import dynamic from "next/dynamic";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
-import React, { useState, useCallback, useMemo, memo } from "react";
-import Image from "next/image";
-import { Tooltip } from "react-tooltip";
+import React, { useState, useCallback, useMemo, memo, Suspense } from "react";
 import TraitTooltip from "src/components/tooltip/TraitTooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import GirlCrush from "@assets/image/traits/GirlCrush.svg";
@@ -19,8 +17,21 @@ import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
 import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
-const MyBarChartComponent = dynamic(() => import("./BarGraph"), { ssr: false });
+import { OptimizedImage } from "src/utils/imageOptimizer";
+
+// Dynamically import heavy components
+const Chart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+  loading: () => (
+    <div className="animate-pulse bg-gray-700 h-[350px] rounded-lg"></div>
+  ),
+});
+const MyBarChartComponent = dynamic(() => import("./BarGraph"), {
+  ssr: false,
+  loading: () => (
+    <div className="animate-pulse bg-gray-700 h-[350px] rounded-lg"></div>
+  ),
+});
 
 const MetaTrendsItems = () => {
   const { t } = useTranslation();
@@ -385,7 +396,7 @@ const MetaTrendsItems = () => {
                         id={`${trait?.key}-${i}`}
                       />
                       <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
-                        <Image
+                        <OptimizedImage
                           alt={trait?.name}
                           width={96}
                           height={96}
@@ -425,7 +436,7 @@ const MetaTrendsItems = () => {
                         id={`${force?.key}-${i}`}
                       />
                       <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
-                        <Image
+                        <OptimizedImage
                           alt={force?.name}
                           width={96}
                           height={96}
@@ -468,7 +479,7 @@ const MetaTrendsItems = () => {
                       id={`${item?.key}-${i}`}
                     />
                     <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-110">
-                      <Image
+                      <OptimizedImage
                         alt={item?.name}
                         width={84}
                         height={84}
@@ -508,7 +519,7 @@ const MetaTrendsItems = () => {
                     {metaDeck?.deck?.forces?.map((force, i) => (
                       <>
                         <div className="flex justify-center items-center bg-[#000] rounded-full mx-1 pr-2 border-[1px] border-[#ffffff50]">
-                          <Image
+                          <OptimizedImage
                             alt="Image"
                             width={50}
                             height={50}
@@ -548,7 +559,7 @@ const MetaTrendsItems = () => {
                             //   height: "48px",
                             // }}
                           >
-                            <Image
+                            <OptimizedImage
                               alt="Image"
                               width={50}
                               height={50}
@@ -672,7 +683,7 @@ const MetaTrendsItems = () => {
                                             ?.key
                                         }
                                       />
-                                      <Image
+                                      <OptimizedImage
                                         alt="Image"
                                         width={50}
                                         height={50}
@@ -703,7 +714,7 @@ const MetaTrendsItems = () => {
                         <div className="flex justify-center gap-[2px] lg:py-[8px] lg:px-[6px]">
                           {metaDeck?.deck?.augments.map((augment, i) => (
                             <div className="flex justify-center items-center relative">
-                              <Image
+                              <OptimizedImage
                                 alt="Image"
                                 width={80}
                                 height={80}
@@ -838,7 +849,7 @@ const MetaTrendsItems = () => {
                       <div className="hidden md:flex md:flex-col justify-center gap-[2px] lg:py-[8px]">
                         {metaDeck?.deck?.augments.map((augment, i) => (
                           <div className="flex justify-center items-center md:w-[64px] relative">
-                            <Image
+                            <OptimizedImage
                               alt="Image"
                               width={80}
                               height={80}
@@ -912,7 +923,7 @@ const MetaTrendsItems = () => {
                             .fill()
                             .map((_, i) => (
                               <div className="flex justify-center items-center relative">
-                                <Image
+                                <OptimizedImage
                                   alt="Image"
                                   width={20}
                                   height={20}
@@ -941,7 +952,7 @@ const MetaTrendsItems = () => {
                           className="hidden flex-shrink-0 cursor-pointer lg:inline-flex"
                           href="#"
                         >
-                          <Image
+                          <OptimizedImage
                             alt="Image"
                             width={20}
                             height={20}

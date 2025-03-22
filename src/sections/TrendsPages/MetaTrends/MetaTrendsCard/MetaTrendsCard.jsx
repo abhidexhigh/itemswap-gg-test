@@ -1,8 +1,8 @@
 import React, { memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import MetaTrendsItem from "../MetaTrendsItem/MetaTrendsItem";
+import { OptimizedImage } from "src/utils/imageOptimizer";
 
 // Memoize the getRandomCharacters function to avoid unnecessary recalculations
 const getRandomCharacters = (characters, count = 12) => {
@@ -137,7 +137,7 @@ const MetaTrendsCard = ({
                     {i < coinIcons.length && (
                       <div className="flex items-center gap-1">
                         <div className="relative">
-                          <Image
+                          <OptimizedImage
                             src={coinIcons[i]}
                             className="w-8 md:w-10 2xl:w-12"
                             alt={`Cost ${i + 1} Icon`}
@@ -160,7 +160,7 @@ const MetaTrendsCard = ({
                               ease: "easeInOut",
                             }}
                           >
-                            <Image
+                            <OptimizedImage
                               src={
                                 "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742540890/Arrow_ieu0xg.png"
                               }
@@ -182,7 +182,7 @@ const MetaTrendsCard = ({
                               delay: 0.09,
                             }}
                           >
-                            <Image
+                            <OptimizedImage
                               src={
                                 "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742540890/Arrow_ieu0xg.png"
                               }

@@ -11,6 +11,7 @@ import Forces from "../../../../data/newData/force.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
 import ScrollableTable from "src/utils/ScrollableTable";
+import { OptimizedImage } from "../../../../utils/imageOptimizer";
 
 const ProjectItems = () => {
   const { t } = useTranslation();
@@ -243,14 +244,14 @@ const ProjectItems = () => {
                           <div>
                             <div className="flex justify-start items-center">
                               <>
-                                <Image
-                                  alt="Item Image"
-                                  width={80}
-                                  height={80}
+                                <OptimizedImage
                                   src={
-                                    items.find((i) => i.key === item.key)
+                                    items?.find((i) => i?.key === item?.key)
                                       ?.imageUrl
                                   }
+                                  alt="icon"
+                                  width={80}
+                                  height={80}
                                   className="w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] md:w-[84px] md:h-[84px] mr-1 !border !border-[#ffffff60] rounded-md"
                                   data-tooltip-id={`${items.find((i) => i.key === item.key)?.key}}`}
                                 />
@@ -271,7 +272,7 @@ const ProjectItems = () => {
                                     .find((i) => i.key === item.key)
                                     ?.compositions?.map((comp, index) => (
                                       <React.Fragment key={index}>
-                                        <Image
+                                        <OptimizedImage
                                           alt="Item Image"
                                           width={80}
                                           height={80}
@@ -330,7 +331,7 @@ const ProjectItems = () => {
                               ?.slice(0, 3)
                               .map((synergy, w) => (
                                 <div key={w} className="relative">
-                                  <Image
+                                  <OptimizedImage
                                     alt="Item Image"
                                     width={80}
                                     height={80}

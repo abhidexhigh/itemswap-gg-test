@@ -10,6 +10,7 @@ import Comps from "../../../../data/compsNew.json";
 import CardImage from "src/components/cardImage";
 import TrendFilters from "src/components/trendFilters";
 import ScrollableTable from "src/utils/ScrollableTable";
+import { OptimizedImage } from "../../../../utils/imageOptimizer";
 
 const ProjectItems = () => {
   const { t } = useTranslation();
@@ -310,18 +311,17 @@ const ProjectItems = () => {
                                   i.key ===
                                   item?.split("_")[item?.split("_").length - 1]
                               )?.imageUrl
-                            // item?.split("_")[item?.split("_").length - 1]
                           )
                           .map(
                             (item) =>
                               item && (
                                 <>
-                                  <Image
+                                  <OptimizedImage
                                     src={item}
                                     alt="icon"
                                     width={80}
                                     height={80}
-                                    className="w-12 md:w-16 mr-2 rounded-lg shadow-md !border !border-[#ffffff50]"
+                                    className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mr-1 rounded-md"
                                     data-tooltip-id={item}
                                   />
                                   <ReactTltp

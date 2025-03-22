@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import Image from "next/image";
+import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import { motion } from "framer-motion";
 import RecentDecksItem from "../RecentDecksItem/RecentDecksItem";
 
@@ -137,16 +137,13 @@ const RecentDecksCard = ({
                     {i < coinIcons.length && (
                       <div className="flex items-center gap-1">
                         <div className="relative">
-                          <Image
+                          <OptimizedImage
                             src={coinIcons[i]}
                             className="w-8 md:w-10 2xl:w-12"
                             alt={`Cost ${i + 1} Icon`}
                             width={48}
                             height={48}
                           />
-                          {/* <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20px] font-semibold leading-none text-[#401d1d] shadow-lg">
-                            {i + 1}
-                          </span> */}
                         </div>
                         <div className="flex items-center">
                           <motion.div
@@ -160,10 +157,8 @@ const RecentDecksCard = ({
                               ease: "easeInOut",
                             }}
                           >
-                            <Image
-                              src={
-                                "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742540890/Arrow_ieu0xg.png"
-                              }
+                            <OptimizedImage
+                              src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1742540890/Arrow_ieu0xg.png"
                               alt={`Cost ${i + 1} Icon`}
                               width={48}
                               height={48}
@@ -182,10 +177,8 @@ const RecentDecksCard = ({
                               delay: 0.09,
                             }}
                           >
-                            <Image
-                              src={
-                                "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742540890/Arrow_ieu0xg.png"
-                              }
+                            <OptimizedImage
+                              src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1742540890/Arrow_ieu0xg.png"
                               alt={`Cost ${i + 1} Icon`}
                               width={48}
                               height={48}

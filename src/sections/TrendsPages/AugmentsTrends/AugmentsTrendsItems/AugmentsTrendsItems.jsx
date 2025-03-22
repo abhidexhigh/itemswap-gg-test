@@ -10,6 +10,7 @@ import ReactTltp from "src/components/tooltip/ReactTltp";
 import metaDeckAugments from "../../../../data/newData/metaDeckAugments.json";
 import augments from "../../../../data/newData/augments.json";
 import ScrollableTable from "src/utils/ScrollableTable";
+import { OptimizedImage } from "../../../../utils/imageOptimizer";
 
 const ProjectItems = () => {
   const { t } = useTranslation();
@@ -240,7 +241,7 @@ const ProjectItems = () => {
                         <td className={`p-2 ${getCellClass("key")}`}>
                           <div>
                             <div className="flex justify-start items-center">
-                              <Image
+                              <OptimizedImage
                                 src={
                                   augments.find(
                                     (augment) =>

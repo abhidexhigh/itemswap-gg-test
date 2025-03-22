@@ -4,6 +4,7 @@ import "react-tooltip/dist/react-tooltip.css";
 import Comps from "../../data/compsNew.json";
 import { useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
+import { OptimizedImage } from "../../utils/imageOptimizer";
 
 // Single container ID for all tooltips
 const TOOLTIP_CONTAINER_ID = "global-tooltip-container";
@@ -251,7 +252,7 @@ const ReactTltp = ({ variant = "", content, id }) => {
             <div className="flex justify-start items-center gap-x-2">
               {content?.name}
               <span className="flex justify-center items-center">
-                <Image
+                <OptimizedImage
                   src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1720771035/dollar_i5ay9s.png"
                   className="w-3"
                   alt="dollar"
@@ -266,7 +267,7 @@ const ReactTltp = ({ variant = "", content, id }) => {
             <div className="mb-2">
               {content?.traits.map((trait, index) => (
                 <div className="flex justity-left items-center" key={index}>
-                  <Image
+                  <OptimizedImage
                     src={traits?.find((t) => t?.key === trait)?.imageUrl}
                     className="w-5"
                     alt={trait}
@@ -284,7 +285,7 @@ const ReactTltp = ({ variant = "", content, id }) => {
               <div className="flex justify-start items-center gap-x-2">
                 {content?.abilities?.map((ability, index) => (
                   <div key={index}>
-                    <Image
+                    <OptimizedImage
                       src={ability?.imageUrl}
                       alt="skill"
                       width={24}
@@ -318,14 +319,12 @@ const ReactTltp = ({ variant = "", content, id }) => {
               </div>
               <div className="flex justify-start items-center gap-x-1">
                 {content?.recommendItems?.map((item, index) => (
-                  <Image
+                  <OptimizedImage
                     key={index}
                     src={items?.find((i) => i?.key === item)?.imageUrl}
                     alt={item}
                     width={24}
                     height={24}
-                    placeholder="blur"
-                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/SkhXQAAAABJRU5ErkJggg=="
                     className="w-8 rounded-sm !border !border-white/60"
                   />
                 ))}
@@ -346,14 +345,12 @@ const ReactTltp = ({ variant = "", content, id }) => {
                 content?.compositions?.map((comp, index) => (
                   <div className="flex justify-center items-center" key={index}>
                     <div className="rounded-full">
-                      <Image
+                      <OptimizedImage
                         src={
                           items?.find((item) => item?.key === comp)?.imageUrl
                         }
                         width={24}
                         height={24}
-                        placeholder="blur"
-                        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/SkhXQAAAABJRU5ErkJggg=="
                         className="w-10 mr-1"
                         alt={comp}
                       />
@@ -402,7 +399,7 @@ const ReactTltp = ({ variant = "", content, id }) => {
             <div className="grid grid-cols-4 justify-center items-center gap-x-4">
               {content?.map((trait, index) => (
                 <div key={index}>
-                  <Image
+                  <OptimizedImage
                     src={traits?.find((t) => t?.key === trait?.name)?.imageUrl}
                     className="w-14"
                     alt={trait?.name}

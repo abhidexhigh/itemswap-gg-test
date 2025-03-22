@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-import Image from "next/image";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import CardImage from "../../components/cardImage";
 import ReactTltp from "../../components/tooltip/ReactTltp";
+import { OptimizedImage } from "src/utils/imageOptimizer";
 
 const MatchHistory = ({
   match,
@@ -268,7 +268,7 @@ const MatchHistory = ({
                                 ?.slice(0, 2)
                                 ?.map((trait, i) => (
                                   <>
-                                    <Image
+                                    <OptimizedImage
                                       src={
                                         traits
                                           ?.find((t) => t.key === trait.name)

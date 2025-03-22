@@ -1,30 +1,21 @@
-import dynamic from "next/dynamic";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import "../../../../../i18n";
 import React, { useState } from "react";
-import Image from "next/image";
 import { Tooltip } from "react-tooltip";
 import moment from "moment";
 import TraitTooltip from "src/components/tooltip/TraitTooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import GirlCrush from "@assets/image/traits/GirlCrush.svg";
 import RecentDecksCard from "../RecentDecksCard/RecentDecksCard";
-import augment from "@assets/image/augments/1.png";
-import arrowRight from "@assets/image/icons/arrow-right.svg";
 import { PiEye } from "react-icons/pi";
 import { PiEyeClosed } from "react-icons/pi";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import CardImage from "src/components/cardImage";
 import Comps from "../../../../data/compsNew.json";
 import RecentDecksHistory from "../../../../data/newData/recentDecksHistory.json";
-import MatchHistory from "../../../../data/user/matchHistory.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
-import { Bar } from "react-chartjs-2";
-import "chart.js/auto";
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
-const MyBarChartComponent = dynamic(() => import("./BarGraph"), { ssr: false });
+import { OptimizedImage } from "src/utils/imageOptimizer";
 
 const ProjectItems = () => {
   const { t } = useTranslation();
@@ -373,7 +364,7 @@ const ProjectItems = () => {
                         id={`${trait?.key}-${i}`}
                       />
                       <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
-                        <Image
+                        <OptimizedImage
                           alt={trait?.name}
                           width={96}
                           height={96}
@@ -413,7 +404,7 @@ const ProjectItems = () => {
                         id={`${force?.key}-${i}`}
                       />
                       <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
-                        <Image
+                        <OptimizedImage
                           alt={force?.name}
                           width={96}
                           height={96}
@@ -456,7 +447,7 @@ const ProjectItems = () => {
                       id={`${item?.key}-${i}`}
                     />
                     <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-110">
-                      <Image
+                      <OptimizedImage
                         alt={item?.name}
                         width={84}
                         height={84}
@@ -500,7 +491,7 @@ const ProjectItems = () => {
                         className="flex items-center gap-x-2"
                       >
                         <div className="relative">
-                          <Image
+                          <OptimizedImage
                             src={metaDeck?.imageUrl}
                             alt="Image"
                             width={80}
@@ -524,7 +515,7 @@ const ProjectItems = () => {
                       {metaDeck?.deck?.forces?.map((force, i) => (
                         <>
                           <div className="flex justify-center items-center bg-[#000] rounded-full mx-1 pr-2 border-[1px] border-[#ffffff50]">
-                            <Image
+                            <OptimizedImage
                               alt="Image"
                               width={50}
                               height={50}
@@ -566,7 +557,7 @@ const ProjectItems = () => {
                               //   height: "48px",
                               // }}
                             >
-                              <Image
+                              <OptimizedImage
                                 alt="Image"
                                 width={50}
                                 height={50}
@@ -622,7 +613,7 @@ const ProjectItems = () => {
                         <div className="hidden md:flex md:flex-col justify-center gap-[2px] lg:py-[8px]">
                           {metaDeck?.deck?.augments.map((augment, i) => (
                             <div className="flex justify-center items-center md:w-[64px] relative">
-                              <Image
+                              <OptimizedImage
                                 alt="Image"
                                 width={80}
                                 height={80}
@@ -717,7 +708,7 @@ const ProjectItems = () => {
                                               ?.key
                                           }
                                         />
-                                        <Image
+                                        <OptimizedImage
                                           alt="Image"
                                           width={50}
                                           height={50}

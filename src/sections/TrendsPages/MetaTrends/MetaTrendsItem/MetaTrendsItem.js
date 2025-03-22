@@ -1,10 +1,8 @@
 import React, { memo, useCallback } from "react";
-import Image from "next/image";
-import { Tooltip as Ttip } from "flowbite-react";
-import annie from "@assets/image/items/annie.jpeg";
 import { IoMdCheckmarkCircle, IoMdCheckmark } from "react-icons/io";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import ImageBorders from "../../../../data/newData/costWiseBorders.json";
+import { OptimizedImage } from "src/utils/imageOptimizer";
 
 const MetaTrendsItem = ({
   champion,
@@ -40,7 +38,6 @@ const MetaTrendsItem = ({
   const tooltipId = `${champion?.key}-${index}`;
 
   return (
-    // <Ttip content="Tooltip content" animation="duration-500" arrow={false}>
     <div
       className={`relative inline-flex cursor-pointer [box-shadow:rgba(255,_0,_0)_0px_5px_15px] shadow-none hover:[box-shadow:rgba(255,_0,_0)_0px_54px_55px,_rgba(0,_0,_0,_0.12)_0px_-12px_30px,_rgba(0,_0,_0,_0.12)_0px_4px_6px,_rgba(0,_0,_0,_0.17)_0px_12px_13px,_rgba(0,_0,_0,_0.09)_0px_-3px_5px] hover:-translate-y-0.5 transition-all duration-300 ease-in-out`}
       onClick={handleClick}
@@ -66,7 +63,7 @@ const MetaTrendsItem = ({
                 champion.cardImage.endsWith(".png") ||
                 champion.cardImage.endsWith(".jpg") ||
                 champion.cardImage.endsWith(".jpeg") ? (
-                  <Image
+                  <OptimizedImage
                     src={champion.cardImage}
                     alt={`${champion.name || "Champion Image"}`}
                     className="w-[95%] h-[95%] m-auto"
@@ -90,7 +87,7 @@ const MetaTrendsItem = ({
             )}
 
             {forceImage && (
-              <Image
+              <OptimizedImage
                 src={forceImage}
                 className="absolute -top-[3px] -right-[3px] w-[20px] md:w-[30px]"
                 alt={`${champion.variant || "Force Icon"}`}
@@ -121,7 +118,6 @@ const MetaTrendsItem = ({
           </span>
         </div> */}
     </div>
-    // </Ttip>
   );
 };
 

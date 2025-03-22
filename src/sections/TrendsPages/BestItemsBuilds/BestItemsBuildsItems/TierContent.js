@@ -1,11 +1,11 @@
 import { Fragment, useState } from "react";
-import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import Comps from "../../../../data/compsNew.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
+import { OptimizedImage } from "src/utils/imageOptimizer";
 
 const TierCard = ({ cost, itemsData }) => {
   const { t } = useTranslation();
@@ -74,7 +74,7 @@ const TierCard = ({ cost, itemsData }) => {
                                 className="relative overflow-hidden w-[56px] md:w-[42px] group"
                                 data-tooltip-id={item}
                               >
-                                <Image
+                                <OptimizedImage
                                   src={
                                     items?.find((i) => i?.key === item)
                                       ?.imageUrl
@@ -147,7 +147,7 @@ const TierCard = ({ cost, itemsData }) => {
                                           className="relative overflow-hidden"
                                           data-tooltip-id={itemKey}
                                         >
-                                          <Image
+                                          <OptimizedImage
                                             src={
                                               items?.find(
                                                 (i) => i?.key === itemKey
