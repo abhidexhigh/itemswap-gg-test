@@ -10,7 +10,6 @@ import MetaTrends from "@sections/TrendsPages/MetaTrends";
 import Footer from "@sections/Footer/v1";
 import TrendsNav from "src/components/trendsNav";
 import Set10Tabs from "src/sections/set10Tabs";
-import PerformanceDashboard from "src/components/PerformanceDashboard";
 
 export default function ItemsTrends() {
   const { walletModalvisibility, metamaskModal } = useModal();
@@ -32,7 +31,6 @@ export default function ItemsTrends() {
         <MetaTrends />
         <Footer />
       </Layout>
-      <PerformanceDashboard />
     </Fragment>
   );
 }
