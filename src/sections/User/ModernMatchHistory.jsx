@@ -33,10 +33,10 @@ const ModernMatchHistory = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="mb-6"
+      className="mb-2"
       id={`match-history-${match?.key}`}
     >
-      <div className="flex flex-col overflow-hidden border border-white/5 bg-gradient-to-br from-[#222231] to-[#1e1e2c] rounded-xl shadow-lg">
+      <div className="flex flex-col overflow-hidden border border-white/5 bg-gradient-to-br from-[#222231] to-[#1e1e2c] rounded-lg rounded-b-none shadow-lg">
         {/* Match Header */}
         <header className="relative flex flex-col justify-between bg-gradient-to-br from-[#2d2d42] to-[#252538] py-2 px-4 lg:flex-row lg:items-center border-b border-white/10">
           <div className="flex flex-col md:flex-row items-center gap-3">
@@ -238,7 +238,7 @@ const ModernMatchHistory = ({
 
       {/* Expanded Match Details */}
       <div
-        className={`mt-2 rounded-xl shadow-lg border border-white/5 overflow-hidden ${expandedHistory === match?.key ? "block" : "hidden"}`}
+        className={`mt-2 rounded-xl shadow-lg w-[90%] mx-auto overflow-hidden ${expandedHistory === match?.key ? "block" : "hidden"}`}
       >
         <div className="px-4">
           {/* <h3 className="text-lg font-semibold text-white mb-0">
@@ -253,9 +253,9 @@ const ModernMatchHistory = ({
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2, delay: i * 0.05 }}
-                  className="mb-3 bg-[#2d2d42e9] rounded-lg border border-white/10 shadow-md"
+                  className="bg-[#2d2d42e9] rounded-lg shadow-md !border-b-2 !border-white/30"
                 >
-                  <div className="p-3 grid grid-cols-12 gap-2 items-center">
+                  <div className="px-3 grid grid-cols-12 gap-2 items-center">
                     {/* Placement Column */}
                     <div className="col-span-1">
                       <div
@@ -478,7 +478,7 @@ const ModernMatchHistory = ({
 
       {/* Toggle Button for Collapsed State */}
       <div
-        className={`w-full mt-2 p-2 bg-gradient-to-br from-[#2d2d42] to-[#252538] shadow-lg cursor-pointer rounded-lg border border-white/10 flex items-center justify-center ${expandedHistory === match?.key ? "hidden" : "block"}`}
+        className={`w-full p-2 bg-gradient-to-br from-[#2d2d42] to-[#252538] shadow-lg cursor-pointer rounded-lg rounded-t-none border border-white/10 flex items-center justify-center ${expandedHistory === match?.key ? "hidden" : "block"}`}
         onClick={() => setExpandedHistory(match?.key)}
       >
         <div className="flex items-center gap-1">
