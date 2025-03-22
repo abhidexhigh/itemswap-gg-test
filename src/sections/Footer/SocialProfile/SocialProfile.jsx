@@ -4,6 +4,7 @@ import Link from "next/link";
 import { SectionTitle } from "@components/sectionTitle";
 import SocialStyleWrapper from "./SocialProfile.style";
 import data from "@assets/data/social/dataV1";
+import { FaXTwitter, FaDiscord, FaYoutube } from "react-icons/fa6";
 
 const Social = () => {
   const { t } = useTranslation();
@@ -15,7 +16,9 @@ const Social = () => {
         <div className="social-link-list">
           {data?.map((profile, i) => (
             <Link key={i} href={profile.url}>
-              <img src={profile.icon.src} alt="social icon" />
+              {profile.icon === "twitter" && <FaXTwitter />}
+              {profile.icon === "youtube" && <FaYoutube />}
+              {profile.icon === "discord" && <FaDiscord />}
             </Link>
           ))}
         </div>

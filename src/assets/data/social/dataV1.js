@@ -7,31 +7,15 @@ import telegram from "@assets/images/icons/telegram.svg";
 import twitter from "@assets/images/icons/twitter.svg";
 const data = [
   {
-    icon: facebook,
+    icon: "twitter",
     url: "#",
   },
   {
-    icon: discord,
+    icon: "discord",
     url: "#",
   },
   {
-    icon: insta,
-    url: "#",
-  },
-  {
-    icon: linkedin,
-    url: "#",
-  },
-  {
-    icon: medium,
-    url: "#",
-  },
-  {
-    icon: telegram,
-    url: "#",
-  },
-  {
-    icon: twitter,
+    icon: "youtube",
     url: "#",
   },
 ];

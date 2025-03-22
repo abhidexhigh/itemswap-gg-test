@@ -370,7 +370,7 @@ const ProjectItems = () => {
                       <ReactTltp
                         variant="trait"
                         content={trait}
-                        id={trait?.imageUrl}
+                        id={`${trait?.key}-${i}`}
                       />
                       <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
                         <Image
@@ -410,7 +410,7 @@ const ProjectItems = () => {
                       <ReactTltp
                         variant="force"
                         content={force}
-                        id={force?.imageUrl}
+                        id={`${force?.key}-${i}`}
                       />
                       <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
                         <Image
@@ -450,7 +450,11 @@ const ProjectItems = () => {
                     className="flex flex-col items-center gap-2 cursor-pointer group max-w-[84px]"
                     onClick={() => handleFilterChange("item", item?.key)}
                   >
-                    <ReactTltp variant="item" content={item} id={item?.key} />
+                    <ReactTltp
+                      variant="item"
+                      content={item}
+                      id={`${item?.key}-${i}`}
+                    />
                     <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-110">
                       <Image
                         alt={item?.name}

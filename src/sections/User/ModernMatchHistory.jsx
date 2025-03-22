@@ -34,6 +34,7 @@ const ModernMatchHistory = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
       className="mb-6"
+      id={`match-history-${match?.key}`}
     >
       <div className="flex flex-col overflow-hidden border border-white/5 bg-gradient-to-br from-[#222231] to-[#1e1e2c] rounded-xl shadow-lg">
         {/* Match Header */}
@@ -237,22 +238,22 @@ const ModernMatchHistory = ({
 
       {/* Expanded Match Details */}
       <div
-        className={`bg-gradient-to-br from-[#222231] to-[#1e1e2c] mt-2 rounded-xl shadow-lg border border-white/5 overflow-hidden ${expandedHistory === match?.key ? "block" : "hidden"}`}
+        className={`mt-2 rounded-xl shadow-lg border border-white/5 overflow-hidden ${expandedHistory === match?.key ? "block" : "hidden"}`}
       >
-        <div className="p-4">
-          <h3 className="text-lg font-semibold text-white mb-4">
+        <div className="px-4">
+          {/* <h3 className="text-lg font-semibold text-white mb-0">
             {others?.matchDetails}
-          </h3>
+          </h3> */}
 
           <div className="overflow-x-auto -mx-4">
-            <div className="min-w-[1200px] pb-2">
+            <div className="min-w-[1200px]">
               {matchHistoryInfo?.participants?.map((participant, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2, delay: i * 0.05 }}
-                  className="mb-3 bg-[#2d2d42] rounded-lg border border-white/10 shadow-md"
+                  className="mb-3 bg-[#2d2d42e9] rounded-lg border border-white/10 shadow-md"
                 >
                   <div className="p-3 grid grid-cols-12 gap-2 items-center">
                     {/* Placement Column */}
@@ -457,7 +458,16 @@ const ModernMatchHistory = ({
         {/* Toggle Button */}
         <div
           className="w-full p-2 bg-gradient-to-br from-[#2d2d42] to-[#252538] shadow-lg cursor-pointer border-t border-white/10 flex items-center justify-center"
-          onClick={() => setExpandedHistory(null)}
+          onClick={() => {
+            setExpandedHistory(null);
+            // Scroll back to parent element
+            const parentElement = document.querySelector(
+              `#match-history-${match?.key}`
+            );
+            if (parentElement) {
+              parentElement.scrollIntoView({ behavior: "smooth" });
+            }
+          }}
         >
           <div className="flex items-center gap-1">
             <IoIosArrowUp className="text-white" />

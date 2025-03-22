@@ -136,97 +136,110 @@ const User = () => {
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 mb-6 sm:mb-8">
           {/* Profile Card */}
           <div className="w-full lg:w-4/12 bg-gradient-to-br from-[#222231] to-[#1e1e2c] rounded-xl sm:rounded-2xl shadow-xl overflow-hidden border border-white/5">
-            <div className="p-4 sm:p-6">
-              {/* Profile Image and Name */}
-              <div className="flex flex-col items-center">
-                <div className="relative w-24 h-24 sm:w-32 sm:h-32 mb-3 sm:mb-4">
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 animate-pulse-slow opacity-70"></div>
-                  <div className="absolute inset-1 rounded-full overflow-hidden border-2 border-white/20">
-                    <img
-                      src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1740809634/29_jaowdd.webp"
-                      className="w-full h-full object-cover"
-                      alt={playerInfo?.name}
-                    />
-                  </div>
-                </div>
-
-                <div className="text-center mb-3 sm:mb-4">
-                  <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1 flex flex-wrap items-center justify-center">
-                    <span className="mr-1">{playerInfo?.name}</span>
-                    <span className="text-gray-300 text-lg sm:text-xl">
-                      #{playerInfo?.tag}
-                    </span>
-                  </h1>
-
-                  <div className="flex flex-wrap items-center justify-center gap-2 mt-2">
-                    <div className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-gradient-to-r from-purple-600/40 to-blue-600/40 backdrop-blur-sm text-white text-xs sm:text-sm font-medium">
-                      {playerInfo?.rankedLeague[0]}{" "}
-                      {playerInfo?.rankedLeague[1]}LP
-                    </div>
-                    <div className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-gradient-to-r from-blue-600/40 to-purple-600/40 backdrop-blur-sm text-white text-xs sm:text-sm font-medium">
-                      Top {(playerInfo?.localRank[1] * 100).toFixed(2)}%
-                    </div>
-                  </div>
-                </div>
+            {/* Cover Picture as Background */}
+            <div className="relative">
+              <div className="absolute inset-0 h-72 bg-gradient-to-br from-purple-600/10 to-blue-600/10">
+                <img
+                  src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1742621144/360_F_413751967_FE4v2GLkAjYLhf8UzvTgjO3kex80FlwL_ukx0wy.jpg"
+                  className="w-full h-full object-cover"
+                  alt="Cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#222231]/80 to-[#222231]"></div>
               </div>
+              <div className="relative p-4 sm:p-6">
+                {/* Profile Image and Name */}
+                <div className="flex flex-col items-center">
+                  <div className="relative w-24 h-24 sm:w-32 sm:h-32 mb-3 sm:mb-4">
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 animate-pulse-slow opacity-70"></div>
+                    <div className="absolute inset-1 rounded-full overflow-hidden border-2 border-white/20">
+                      <img
+                        src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1740809634/29_jaowdd.webp"
+                        className="w-full h-full object-cover"
+                        alt={playerInfo?.name}
+                      />
+                    </div>
+                  </div>
 
-              {/* Stats Grid */}
-              <div className="grid grid-cols-2 gap-2 sm:gap-3 mt-4 sm:mt-6">
-                <motion.div
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                  className="bg-[#2d2d42] rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/10 shadow-lg"
-                >
-                  <div className="text-xl sm:text-3xl font-bold text-center text-white">
-                    {seasonStats?.top4}
-                  </div>
-                  <div className="text-xs sm:text-sm text-center text-gray-300 mt-1">
-                    Top 4
-                  </div>
-                </motion.div>
+                  <div className="text-center mb-3 sm:mb-4">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1 flex flex-wrap items-center justify-center">
+                      <span className="mr-1">{playerInfo?.name}</span>
+                      <span className="text-gray-300 text-lg sm:text-xl">
+                        #{playerInfo?.tag}
+                      </span>
+                    </h1>
 
-                <motion.div
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                  className="bg-[#2d2d42] rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/10 shadow-lg"
-                >
-                  <div className="text-xl sm:text-3xl font-bold text-center text-white">
-                    {((seasonStats?.top4 * 100) / seasonStats?.games).toFixed(
-                      1
-                    )}
-                    %
+                    <div className="flex flex-wrap items-center justify-center gap-2 mt-2">
+                      <div className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-gradient-to-r from-purple-600/40 to-blue-600/40 backdrop-blur-sm text-white text-xs sm:text-sm font-medium">
+                        {playerInfo?.rankedLeague[0]}{" "}
+                        {playerInfo?.rankedLeague[1]}LP
+                      </div>
+                      <div className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-gradient-to-r from-blue-600/40 to-purple-600/40 backdrop-blur-sm text-white text-xs sm:text-sm font-medium">
+                        Top {(playerInfo?.localRank[1] * 100).toFixed(2)}%
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-xs sm:text-sm text-center text-gray-300 mt-1">
-                    Top 4 Rate
-                  </div>
-                </motion.div>
+                </div>
 
-                <motion.div
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                  className="bg-[#2d2d42] rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/10 shadow-lg"
-                >
-                  <div className="text-xl sm:text-3xl font-bold text-center text-white">
-                    {seasonStats?.win}
-                  </div>
-                  <div className="text-xs sm:text-sm text-center text-gray-300 mt-1">
-                    Wins
-                  </div>
-                </motion.div>
+                {/* Stats Grid */}
+                <div className="grid grid-cols-2 gap-2 sm:gap-3 mt-4 sm:mt-6">
+                  <motion.div
+                    whileHover={{ y: -5, scale: 1.02 }}
+                    transition={{ duration: 0.2 }}
+                    className="bg-[#2d2d42] rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/10 shadow-lg"
+                  >
+                    <div className="text-xl sm:text-3xl font-bold text-center text-white">
+                      {seasonStats?.top4}
+                    </div>
+                    <div className="text-xs sm:text-sm text-center text-gray-300 mt-1">
+                      Top 4
+                    </div>
+                  </motion.div>
 
-                <motion.div
-                  whileHover={{ y: -5, scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                  className="bg-[#2d2d42] rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/10 shadow-lg"
-                >
-                  <div className="text-xl sm:text-3xl font-bold text-center text-white">
-                    {((seasonStats?.win * 100) / seasonStats?.games).toFixed(1)}
-                    %
-                  </div>
-                  <div className="text-xs sm:text-sm text-center text-gray-300 mt-1">
-                    Win Rate
-                  </div>
-                </motion.div>
+                  <motion.div
+                    whileHover={{ y: -5, scale: 1.02 }}
+                    transition={{ duration: 0.2 }}
+                    className="bg-[#2d2d42] rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/10 shadow-lg"
+                  >
+                    <div className="text-xl sm:text-3xl font-bold text-center text-white">
+                      {((seasonStats?.top4 * 100) / seasonStats?.games).toFixed(
+                        1
+                      )}
+                      %
+                    </div>
+                    <div className="text-xs sm:text-sm text-center text-gray-300 mt-1">
+                      Top 4 Rate
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    whileHover={{ y: -5, scale: 1.02 }}
+                    transition={{ duration: 0.2 }}
+                    className="bg-[#2d2d42] rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/10 shadow-lg"
+                  >
+                    <div className="text-xl sm:text-3xl font-bold text-center text-white">
+                      {seasonStats?.win}
+                    </div>
+                    <div className="text-xs sm:text-sm text-center text-gray-300 mt-1">
+                      Wins
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    whileHover={{ y: -5, scale: 1.02 }}
+                    transition={{ duration: 0.2 }}
+                    className="bg-[#2d2d42] rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/10 shadow-lg"
+                  >
+                    <div className="text-xl sm:text-3xl font-bold text-center text-white">
+                      {((seasonStats?.win * 100) / seasonStats?.games).toFixed(
+                        1
+                      )}
+                      %
+                    </div>
+                    <div className="text-xs sm:text-sm text-center text-gray-300 mt-1">
+                      Win Rate
+                    </div>
+                  </motion.div>
+                </div>
               </div>
             </div>
           </div>
@@ -437,7 +450,7 @@ const User = () => {
         </div>
 
         {/* Tab Content */}
-        <div className="bg-gradient-to-br from-[#222231] to-[#1e1e2c] rounded-xl sm:rounded-2xl shadow-xl overflow-hidden border border-white/5">
+        <div className="bg-gradient-to-br from-[#22223180] to-[#1e1e2c80] backdrop-blur-lg rounded-xl sm:rounded-2xl shadow-xl overflow-hidden border border-white/5">
           {activeTab === "Match History" ? (
             <div className="p-1 sm:p-2">
               {isLoading ? (
