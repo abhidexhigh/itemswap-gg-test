@@ -30,22 +30,9 @@ export const OptimizedImage = ({
   const blurDataURL =
     "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/SkhXQAAAABJRU5ErkJggg==";
 
-  // Add Cloudinary optimizations if the image is from Cloudinary
-  const isCloudinary = src?.includes("cloudinary.com");
-  let optimizedSrc = src;
-
-  if (isCloudinary) {
-    // Add Cloudinary transformations with caching strategy
-    const cacheParam = cacheControl === "public" ? "c_fill" : "c_limit";
-    optimizedSrc = src.replace(
-      "/upload/",
-      `/upload/${cacheParam},f_auto,q_auto,w_auto,dpr_auto/`
-    );
-  }
-
   return (
     <Image
-      src={optimizedSrc}
+      src={src}
       alt={alt}
       width={width}
       height={height}
