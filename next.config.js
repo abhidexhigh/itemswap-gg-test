@@ -25,6 +25,19 @@ const nextConfig = {
   //   locales: ["en", "ko", "zh-CN", "ja", "vi", "es", "ru"],
   //   defaultLocale: "en",
   // },
+  async headers() {
+    return [
+      {
+        source: "/images/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

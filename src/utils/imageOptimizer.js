@@ -10,6 +10,8 @@ import Image from "next/image";
  * @param {string} props.className - Additional CSS classes
  * @param {boolean} props.priority - Whether to prioritize loading
  * @param {boolean} props.placeholder - Whether to show placeholder
+ * @param {number} props.quality - Image quality (1-100)
+ * @param {string} props.cacheControl - Cache control strategy ('public' | 'private' | 'no-cache')
  * @returns {JSX.Element} Optimized Image component
  */
 export const OptimizedImage = ({
@@ -20,15 +22,30 @@ export const OptimizedImage = ({
   className = "",
   priority = false,
   placeholder = true,
+  quality = 75,
+  cacheControl = "public",
   ...props
 }) => {
   // Default blur placeholder
   const blurDataURL =
     "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/SkhXQAAAABJRU5ErkJggg==";
 
+  // Add Cloudinary optimizations if the image is from Cloudinary
+  const isCloudinary = src?.includes("cloudinary.com");
+  let optimizedSrc = src;
+
+  if (isCloudinary) {
+    // Add Cloudinary transformations with caching strategy
+    const cacheParam = cacheControl === "public" ? "c_fill" : "c_limit";
+    optimizedSrc = src.replace(
+      "/upload/",
+      `/upload/${cacheParam},f_auto,q_auto,w_auto,dpr_auto/`
+    );
+  }
+
   return (
     <Image
-      src={src}
+      src={optimizedSrc}
       alt={alt}
       width={width}
       height={height}
@@ -36,8 +53,9 @@ export const OptimizedImage = ({
       priority={priority}
       placeholder={placeholder ? "blur" : "empty"}
       blurDataURL={placeholder ? blurDataURL : undefined}
-      quality={75} // Optimize quality for better performance
+      quality={quality}
       loading={priority ? "eager" : "lazy"}
+      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
       {...props}
     />
   );
