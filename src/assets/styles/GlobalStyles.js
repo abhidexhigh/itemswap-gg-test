@@ -119,6 +119,30 @@ body {
 img {
     max-width: 100%;
     height: auto;
+    transition: opacity 0.3s ease-in-out;
+}
+
+img:not(.loaded) {
+    opacity: 0;
+}
+
+img.loaded {
+    opacity: 1;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.image-loading {
+    background: linear-gradient(to right, #1a1b30 4%, #2a2b40 25%, #1a1b30 36%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
 }
 
 p {

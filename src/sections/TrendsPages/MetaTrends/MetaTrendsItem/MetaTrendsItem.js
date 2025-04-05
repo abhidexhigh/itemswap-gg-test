@@ -69,7 +69,8 @@ const MetaTrendsItem = ({
                     className="w-[95%] h-[95%] m-auto"
                     width={80}
                     height={80}
-                    priority={index < 4} // Prioritize loading for first 4 images
+                    priority={index < 8} // Increase priority threshold to 8
+                    quality={85} // Increase quality for better initial load
                   />
                 ) : (
                   <video

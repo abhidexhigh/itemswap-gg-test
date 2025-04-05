@@ -8,7 +8,12 @@ const nextConfig = {
         pathname: "/dg0cmj6su/**",
       },
     ],
-    // unoptimized: true,
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 60,
+    formats: ["image/webp"],
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   reactStrictMode: false,
   // swcMinify: true,
@@ -25,19 +30,6 @@ const nextConfig = {
   //   locales: ["en", "ko", "zh-CN", "ja", "vi", "es", "ru"],
   //   defaultLocale: "en",
   // },
-  async headers() {
-    return [
-      {
-        source: "/images/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-    ];
-  },
 };
 
 module.exports = nextConfig;
