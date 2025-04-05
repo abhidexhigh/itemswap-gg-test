@@ -10,8 +10,6 @@ import Image from "next/image";
  * @param {string} props.className - Additional CSS classes
  * @param {boolean} props.priority - Whether to prioritize loading
  * @param {boolean} props.placeholder - Whether to show placeholder
- * @param {number} props.quality - Image quality (1-100)
- * @param {string} props.cacheControl - Cache control strategy ('public' | 'private' | 'no-cache')
  * @returns {JSX.Element} Optimized Image component
  */
 export const OptimizedImage = ({
@@ -22,13 +20,11 @@ export const OptimizedImage = ({
   className = "",
   priority = false,
   placeholder = true,
-  quality = 75,
-  cacheControl = "public",
   ...props
 }) => {
   // Default blur placeholder
   const blurDataURL =
-    "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQtJSEkLzUvLy0vMC4wLi8vLzUvLy8vLy8vLy8vLy8vLy8vLy8vLy8vLz/2wBDAR0dHh4eHRoaHSQtJSEkLzUvLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLz/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=";
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/SkhXQAAAABJRU5ErkJggg==";
 
   return (
     <Image
@@ -40,14 +36,8 @@ export const OptimizedImage = ({
       priority={priority}
       placeholder={placeholder ? "blur" : "empty"}
       blurDataURL={placeholder ? blurDataURL : undefined}
-      quality={quality}
+      quality={75} // Optimize quality for better performance
       loading={priority ? "eager" : "lazy"}
-      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-      unoptimized={false}
-      onLoadingComplete={(img) => {
-        // Add a class when image is loaded
-        img.classList.add("loaded");
-      }}
       {...props}
     />
   );
@@ -56,10 +46,10 @@ export const OptimizedImage = ({
 /**
  * Helper function to determine if an image should be loaded with priority
  * @param {number} index - Index of the image in a list
- * @param {number} threshold - Threshold for priority loading (default: 8)
+ * @param {number} threshold - Threshold for priority loading (default: 4)
  * @returns {boolean} Whether to prioritize loading
  */
-export const shouldPrioritizeImage = (index, threshold = 8) => {
+export const shouldPrioritizeImage = (index, threshold = 4) => {
   return index < threshold;
 };
 

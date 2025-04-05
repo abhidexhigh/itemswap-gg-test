@@ -2,26 +2,26 @@
   {
     "key": "Light",
     "name": "Light",
-    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504339/FinalImages/Forces/eyfe8cherbin7yhenlim.webp"
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1726050142/light_skill_tree_bczhn0.webp"
   },
   {
     "key": "Dark",
     "name": "Dark",
-    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504340/FinalImages/Forces/ozzmnqlajfl4u6eb4jzo.webp"
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1726050142/Dark_skill_tree_xh2nzc.webp"
   },
   {
     "key": "Fire",
     "name": "Fire",
-    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504338/FinalImages/Forces/bx928te0w5qw5fzfn7yv.webp"
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721454803/Fire_skill_tree_vwtuw4.png"
   },
   {
     "key": "Storm",
     "name": "Storm",
-    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504340/FinalImages/Forces/mrrqr2npwzgvf2wbcyl4.webp"
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1726052115/wind_skill_tree_1_v8lzis.webp"
   },
   {
     "key": "Water",
     "name": "Water",
-    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504339/FinalImages/Forces/vcrrx6plueox6miuyyya.webp"
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721454803/water_skill_tree_p7yvv9.png"
   }
 ]
