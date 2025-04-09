@@ -1,8 +1,8 @@
-import React, { memo, useMemo } from "react";
+import React, { memo, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import { motion } from "framer-motion";
 import RecentDecksItem from "../RecentDecksItem/RecentDecksItem";
+import { OptimizedImage } from "src/utils/imageOptimizer";
 
 // Memoize the getRandomCharacters function to avoid unnecessary recalculations
 const getRandomCharacters = (characters, count = 12) => {
@@ -13,6 +13,34 @@ const getRandomCharacters = (characters, count = 12) => {
 
   // Return the first 'count' elements
   return shuffled.slice(0, count);
+};
+
+// Memoize the coin icons array
+const coinIcons = [
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550115/01_uwt4jg.png",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550115/02_wnemuc.png",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550114/03_pfqvqc.png",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550114/04_m1yxes.png",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550114/05_zqb2ji.png",
+];
+
+// Memoize the arrow animation variants
+const arrowAnimation = {
+  animate: {
+    x: [0, 8, 0],
+    opacity: [1, 0.5, 1],
+  },
+  transition: {
+    duration: 1.5,
+    repeat: Infinity,
+    ease: "easeInOut",
+  },
+  initial: false,
+  whileInView: {
+    x: [0, 8, 0],
+    opacity: [1, 0.5, 1],
+  },
+  viewport: { once: true },
 };
 
 const RecentDecksCard = ({
@@ -29,15 +57,20 @@ const RecentDecksCard = ({
 }) => {
   const { t } = useTranslation();
   const others = t("others");
-  const coin =
-    "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742545239/Coin_C_zj8naw.png";
-  const coinIcons = [
-    "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550115/01_uwt4jg.png",
-    "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550115/02_wnemuc.png",
-    "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550114/03_pfqvqc.png",
-    "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550114/04_m1yxes.png",
-    "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550114/05_zqb2ji.png",
-  ];
+
+  // Memoize the renderChampion function
+  const renderChampion = useCallback(
+    (champion, j) => (
+      <RecentDecksItem
+        key={`${champion.key || j}`}
+        champion={champion}
+        setSelectedChampion={setSelectedChampion}
+        index={j}
+        forces={forces}
+      />
+    ),
+    [setSelectedChampion, forces]
+  );
 
   return (
     <div
@@ -88,6 +121,13 @@ const RecentDecksCard = ({
           const randomChampions = useMemo(() => {
             return getRandomCharacters(champions);
           }, [champions]);
+
+          // Memoize the sorted champions
+          const sortedChampions = useMemo(() => {
+            return randomChampions.sort((a, b) =>
+              a.type?.localeCompare(b.type || "")
+            );
+          }, [randomChampions]);
 
           return (
             <React.Fragment key={`cost-${i}`}>
@@ -143,65 +183,44 @@ const RecentDecksCard = ({
                             alt={`Cost ${i + 1} Icon`}
                             width={48}
                             height={48}
+                            priority={i < 2}
                           />
+                          {/* <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20px] font-semibold leading-none text-[#401d1d] shadow-lg">
+                            {i + 1}
+                          </span> */}
                         </div>
                         <div className="flex items-center">
-                          <motion.div
-                            animate={{
-                              x: [0, 8, 0],
-                              opacity: [1, 0.5, 1],
-                            }}
-                            transition={{
-                              duration: 1.5,
-                              repeat: Infinity,
-                              ease: "easeInOut",
-                            }}
-                          >
+                          <motion.div {...arrowAnimation}>
                             <OptimizedImage
                               src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1742540890/Arrow_ieu0xg.png"
                               alt={`Cost ${i + 1} Icon`}
                               width={48}
                               height={48}
                               className="w-2 -mr-0.5"
+                              {...(i >= 2
+                                ? { loading: "lazy" }
+                                : { priority: true })}
                             />
                           </motion.div>
-                          <motion.div
-                            animate={{
-                              x: [0, 8, 0],
-                              opacity: [1, 0.5, 1],
-                            }}
-                            transition={{
-                              duration: 1.5,
-                              repeat: Infinity,
-                              ease: "easeInOut",
-                              delay: 0.09,
-                            }}
-                          >
+                          <motion.div {...arrowAnimation}>
                             <OptimizedImage
                               src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1742540890/Arrow_ieu0xg.png"
                               alt={`Cost ${i + 1} Icon`}
                               width={48}
                               height={48}
                               className="w-3"
+                              {...(i >= 2
+                                ? { loading: "lazy" }
+                                : { priority: true })}
                             />
                           </motion.div>
                         </div>
                       </div>
                     )}
                   </div>
-                  {randomChampions &&
-                    randomChampions.length > 0 &&
-                    randomChampions
-                      .sort((a, b) => a.type?.localeCompare(b.type || ""))
-                      .map((champion, j) => (
-                        <RecentDecksItem
-                          key={`${champion.key || j}`}
-                          champion={champion}
-                          setSelectedChampion={setSelectedChampion}
-                          index={j}
-                          forces={forces}
-                        />
-                      ))}
+                  {sortedChampions.map((champion, j) =>
+                    renderChampion(champion, j)
+                  )}
                 </div>
               </div>
             </React.Fragment>

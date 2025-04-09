@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import "../../../../../i18n";
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { Tooltip } from "react-tooltip";
 import moment from "moment";
 import TraitTooltip from "src/components/tooltip/TraitTooltip";
@@ -66,126 +66,143 @@ const ProjectItems = () => {
   const { forces } = data?.refs;
   const [compsData, setCompsData] = useState(metaDecks);
 
-  // Fisher-Yates shuffle function to randomize an array in-place
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
+  // Memoized shuffle function
+  const shuffle = useCallback((array) => {
+    if (!array || !array.length) return [];
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
     }
-    return array;
-  }
+    return newArray;
+  }, []);
 
-  // Group champions by type
-  const championsByType = {};
-  champions.forEach((champion) => {
-    if (!championsByType[champion.type]) {
-      championsByType[champion.type] = [];
+  // Memoize champion grouping
+  const { filteredChampions, groupedArray } = useMemo(() => {
+    if (!champions || !champions.length) {
+      return { filteredChampions: [], groupedArray: [] };
     }
-    championsByType[champion.type].push(champion);
-  });
 
-  // For each type, shuffle the group and keep only 2 champions
-  const filteredChampions = [];
-  for (const type in championsByType) {
-    const group = championsByType[type];
-    // Shuffle a copy of the group array to avoid modifying the original
-    const selected = shuffle([...group]).slice(0, 2);
-    // Add the selected champions back to the final array
-    filteredChampions.push(...selected);
-  }
-
-  const handleFilterChange = (type, key) => {
-    if (type === "trait") {
-      if (selectedTrait === key) {
-        setSelectedTrait(null);
-        setCompsData(metaDecks);
-      } else {
-        setSelectedTrait(key);
-        const filteredTraits = metaDecks.filter((deck) =>
-          deck.deck.traits.some((trait) => trait.key === key)
-        );
-        setCompsData(filteredTraits);
+    // Group champions by type
+    const championsByType = {};
+    champions.forEach((champion) => {
+      if (!championsByType[champion.type]) {
+        championsByType[champion.type] = [];
       }
-      setSelectedChampion(null);
-      setSelectedItem(null);
-    } else if (type === "force") {
-      if (selectedTrait === key) {
-        setSelectedTrait(null);
-        setCompsData(metaDecks);
-      } else {
-        setSelectedTrait(key);
-        const filteredTraits = metaDecks.filter((deck) =>
-          deck.deck.forces.some(
-            (force) => force.key.toLowerCase() === key.toLowerCase()
-          )
-        );
-        setCompsData(filteredTraits);
-      }
-      setSelectedChampion(null);
-      setSelectedItem(null);
-    } else if (type === "champion") {
-      if (selectedChampion === key) {
-        setSelectedChampion(null);
-        setCompsData(metaDecks);
-      } else {
-        setSelectedChampion(key);
-        const filteredChampions = metaDecks.filter((deck) =>
-          deck.deck.champions.some((champion) => champion.key === key)
-        );
-        setCompsData(filteredChampions);
-      }
-      setSelectedTrait(null);
-      setSelectedItem(null);
-    } else if (type === "item") {
-      if (selectedItem === key) {
-        setSelectedItem(null);
-        setCompsData(metaDecks);
-      } else {
-        setSelectedItem(key);
-        const filteredItems = metaDecks.filter((deck) =>
-          deck.deck.champions.some(
-            (champion) =>
-              champion.items && champion.items.some((item) => item === key)
-          )
-        );
-        setCompsData(filteredItems);
-      }
-      setSelectedChampion(null);
-      setSelectedTrait(null);
-    }
-  };
-
-  // Function to arrange champions by cost start
-  const groupedByCost = filteredChampions.reduce((acc, champion) => {
-    const { cost } = champion;
-    if (!acc[cost]) {
-      acc[cost] = [];
-    }
-    acc[cost].push(champion);
-    return acc;
-  }, {});
-  const groupedArray = Object.values(groupedByCost);
-
-  // if (selectedChampion !== null) {
-  groupedArray.forEach((subArray) => {
-    // Traverse through each object in the sub-array
-    subArray.forEach((champion) => {
-      // Check if the key of the champion matches the selectedChampion
-      if (champion.key === selectedChampion) {
-        // Set the 'selected' property to true
-        champion.selected = true;
-      } else {
-        // Set the 'selected' property to false
-        champion.selected = false;
-      }
+      championsByType[champion.type].push(champion);
     });
-  });
-  // }
 
-  // Function to arrange champions by cost end
-  const filteredDecks = metaDecks.filter((deck) =>
-    deck.deck.champions.some((champion) => champion.key === selectedChampion)
+    // For each type, shuffle the group and keep only 2 champions
+    const filtered = [];
+    for (const type in championsByType) {
+      const group = championsByType[type];
+      const selected = shuffle([...group]).slice(0, 2);
+      filtered.push(...selected);
+    }
+
+    // Function to arrange champions by cost
+    const groupedByCost = filtered.reduce((acc, champion) => {
+      const { cost } = champion;
+      if (!acc[cost]) {
+        acc[cost] = [];
+      }
+      acc[cost].push(champion);
+      return acc;
+    }, {});
+
+    return {
+      filteredChampions: filtered,
+      groupedArray: Object.values(groupedByCost),
+    };
+  }, [champions, shuffle]);
+
+  // Update selected status
+  useMemo(() => {
+    if (!groupedArray.length) return;
+
+    groupedArray.forEach((subArray) => {
+      subArray.forEach((champion) => {
+        champion.selected = champion.key === selectedChampion;
+      });
+    });
+  }, [groupedArray, selectedChampion]);
+
+  // Memoized filter change handler
+  const handleFilterChange = useCallback(
+    (type, key) => {
+      if (!metaDecks) return;
+
+      if (type === "trait") {
+        if (selectedTrait === key) {
+          setSelectedTrait(null);
+          setCompsData(metaDecks);
+        } else {
+          setSelectedTrait(key);
+          const filteredTraits = metaDecks.filter((deck) =>
+            deck.deck.traits.some((trait) => trait.key === key)
+          );
+          setCompsData(filteredTraits);
+        }
+        setSelectedChampion(null);
+        setSelectedItem(null);
+      } else if (type === "force") {
+        if (selectedTrait === key) {
+          setSelectedTrait(null);
+          setCompsData(metaDecks);
+        } else {
+          setSelectedTrait(key);
+          const filteredTraits = metaDecks.filter((deck) =>
+            deck.deck.forces.some(
+              (force) => force.key.toLowerCase() === key.toLowerCase()
+            )
+          );
+          setCompsData(filteredTraits);
+        }
+        setSelectedChampion(null);
+        setSelectedItem(null);
+      } else if (type === "champion") {
+        if (selectedChampion === key) {
+          setSelectedChampion(null);
+          setCompsData(metaDecks);
+        } else {
+          setSelectedChampion(key);
+          const filteredChampions = metaDecks.filter((deck) =>
+            deck.deck.champions.some((champion) => champion.key === key)
+          );
+          setCompsData(filteredChampions);
+        }
+        setSelectedTrait(null);
+        setSelectedItem(null);
+      } else if (type === "item") {
+        if (selectedItem === key) {
+          setSelectedItem(null);
+          setCompsData(metaDecks);
+        } else {
+          setSelectedItem(key);
+          const filteredItems = metaDecks.filter((deck) =>
+            deck.deck.champions.some(
+              (champion) =>
+                champion.items && champion.items.some((item) => item === key)
+            )
+          );
+          setCompsData(filteredItems);
+        }
+        setSelectedChampion(null);
+        setSelectedTrait(null);
+      }
+    },
+    [metaDecks, selectedChampion, selectedItem, selectedTrait]
   );
+
+  // Memoized height toggle handler
+  const toggleHeight = useCallback(() => {
+    setHeight((previous) => (previous === "auto" ? "200px" : "auto"));
+  }, []);
+
+  // Memoized tab change handler
+  const handleTabChange = useCallback((tab) => {
+    setActiveTab(tab);
+  }, []);
 
   const series = [
     {
