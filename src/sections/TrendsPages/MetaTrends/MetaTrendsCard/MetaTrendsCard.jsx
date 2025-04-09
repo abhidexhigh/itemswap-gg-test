@@ -4,6 +4,12 @@ import { motion } from "framer-motion";
 import MetaTrendsItem from "../MetaTrendsItem/MetaTrendsItem";
 import { OptimizedImage } from "src/utils/imageOptimizer";
 
+const testImages = [
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744186286/Succubus-Dark_nfrdtd.png",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744186286/Assasin-Light_l4htzq.png",
+  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744186293/Valkyrie-Dark_fni8h0.png",
+];
+
 // Memoize the getRandomCharacters function to avoid unnecessary recalculations
 const getRandomCharacters = (characters, count = 12) => {
   if (!characters || characters.length === 0) return [];
@@ -218,9 +224,31 @@ const MetaTrendsCard = ({
                       </div>
                     )}
                   </div>
-                  {sortedChampions.map((champion, j) =>
-                    renderChampion(champion, j)
-                  )}
+                  <>
+                    {testImages.map((image, index) => (
+                      <div className="relative inline-flex flex-col">
+                        <div className="relative flex flex-col w-[72px] h-[72px] lg:w-[98px] lg:h-[98px]">
+                          <div
+                            className={`relative inline-flex rounded-[6px] w-full h-full bg-cover`}
+                            style={{
+                              backgroundImage: `url(https://res.cloudinary.com/dg0cmj6su/image/upload/v1721294604/FRAME_bronze_tj38rg.webp)`,
+                            }}
+                          >
+                            <OptimizedImage
+                              src={image}
+                              alt={`${"Champion Image"}`}
+                              className=" m-auto"
+                              width={80}
+                              height={80}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                  {sortedChampions
+                    .slice(0, 9)
+                    .map((champion, j) => renderChampion(champion, j))}
                 </div>
               </div>
             </React.Fragment>
