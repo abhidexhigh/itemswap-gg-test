@@ -47,7 +47,7 @@ const MetaTrendsItem = ({
         className="relative inline-flex flex-col"
         data-tooltip-id={tooltipId}
       >
-        <div className="relative flex flex-col w-[72px] h-[72px] lg:w-[98px] lg:h-[98px]">
+        <div className="relative flex flex-col w-[72px] h-[72px] lg:w-[104px] lg:h-[104px]">
           <div
             className={`relative inline-flex rounded-[6px] w-full h-full ${
               champion?.selected ? "border-[green]" : "border-none"

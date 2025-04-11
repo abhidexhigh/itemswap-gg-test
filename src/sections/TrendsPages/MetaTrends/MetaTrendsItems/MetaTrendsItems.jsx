@@ -320,7 +320,7 @@ const MetaTrendsItems = () => {
   };
 
   return (
-    <div className="mx-auto md:px-6 lg:px-8 py-6">
+    <div className="mx-auto md:px-0 lg:px-0 py-6">
       <div className="space-y-6">
         {/* Tabs Section */}
         <div className="flex justify-center md:justify-start">

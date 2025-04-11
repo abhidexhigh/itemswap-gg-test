@@ -265,7 +265,7 @@ const ReactTltp = ({ variant = "", content, id }) => {
               </span>
             </div>
             <div className="mb-2">
-              {content?.traits.map((trait, index) => (
+              {content?.traits?.map((trait, index) => (
                 <div className="flex justity-left items-center" key={index}>
                   <OptimizedImage
                     src={traits?.find((t) => t?.key === trait)?.imageUrl}
