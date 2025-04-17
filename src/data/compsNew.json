@@ -42,54 +42,54 @@
                     ],
                     "champions": [
                       {
-                        "key": "Rhiannon",
-                        "coreRank": 1,
-                        "items": ["TenguYoroi", "Wygar", "Aegis"]
-                      },
-                      {
-                        "key": "Helga",
+                        "key": "Andvari",
                         "coreRank": 5,
-                        "items": ["Sword", "Kavacha", "Osirian"]
+                        "items": ["Simurgh", "Aetheris", "Kunee"]
                       },
                       {
-                        "key": "Arina",
+                        "key": "Pesta",
                         "coreRank": 2,
-                        "items": ["Nandaka", "Eaglewing", "Bayan"]
-                      },
-                      {
-                        "key": "Durin",
-                        "coreRank": 3,
-                        "items": ["RuyiBang", "Frostguard", "RedHorn"]
-                      },
-                      {
-                        "key": "Cerberus",
-                        "coreRank": 1,
-                        "items": ["Excalibur", "Excalibur", "Eaglewing"]
+                        "items": ["Simurgh", "Aetheris", "Kunee"]
                       },
                       {
                         "key": "Tamamo",
+                        "coreRank": 3,
+                        "items": ["Simurgh", "Aetheris", "Kunee"]
+                      },
+                      {
+                        "key": "Daji",
+                        "coreRank": 1,
+                        "items": ["Simurgh", "Aetheris", "Kunee"]
+                      },
+                      {
+                        "key": "Karna",
                         "coreRank": 6,
                         "items": ["Vesta", "Aegis", "Wygar"]
                       },
                       {
-                        "key": "Nergal",
-                        "coreRank": 10,
-                        "items": ["Jingong", "Helmet", "JinJia"]
+                        "key": "Andvari",
+                        "coreRank": 5,
+                        "items": ["Sword", "Kavacha", "Osirian"]
                       },
                       {
-                        "key": "Inugami",
+                        "key": "Pesta",
                         "coreRank": 2,
-                        "items": ["Frostguard", "KoreanBow", "WoodenWand"]
+                        "items": ["Nandaka", "Eaglewing", "Bayan"]
                       },
                       {
-                        "key": "Grommash",
-                        "coreRank": 8,
-                        "items": ["Wygar", "Simurgh", "Kiriti"]
+                        "key": "Tamamo",
+                        "coreRank": 3,
+                        "items": ["RuyiBang", "Frostguard", "RedHorn"]
                       },
                       {
-                        "key": "Ahriman",
+                        "key": "Daji",
                         "coreRank": 1,
-                        "items": ["Nightfang", "Bloodaxe", "Kavacha"]
+                        "items": ["Excalibur", "Excalibur", "Eaglewing"]
+                      },
+                      {
+                        "key": "Karna",
+                        "coreRank": 6,
+                        "items": ["Vesta", "Aegis", "Wygar"]
                       }
                     ],
                     "traits": [
@@ -1069,7 +1069,7 @@
                   "omniVamp": 65,
                   "recommendItems": ["WoodenBow", "KoreanBow", "EagleBonnet"],
                   "secondBackground": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743488232/FinalImages/Second%20Background/Assassin/n8bojgep4lojpix52vne.webp",
-                  "cardImage": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743496380/FinalImages/Card%20Images/Assassin/dqxwp3cbx8pdn8bwjne0.webp",
+                  "cardImage": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744431851/22eafd38-1097-4ff4-8402-d9f3354a9788-video1-ezgif.com-video-to-webp-converter_uvs3ll.webp",
                   "forceImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504339/FinalImages/Forces/eyfe8cherbin7yhenlim.webp",
                   "metaDescription": "Karna, a legendary assassin born from the light itself, wields her blade with precision and honor. Once a guardian of sacred temples, she now hunts the enemies of the light, ensuring balance is maintained in the realms. Her strikes are swift and silent, leaving no trace behind.",
                   "abilities": [
@@ -1502,7 +1502,7 @@
                   "omniVamp": 43,
                   "recommendItems": ["TenguYoroi", "Cloak", "JinJia"],
                   "secondBackground": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743488229/FinalImages/Second%20Background/Cannon/ydnirdmobs3tp6imxkqo.webp",
-                  "cardImage": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743496375/FinalImages/Card%20Images/Canon/gvyrvmrmxjnppqajsjcg.webp",
+                  "cardImage": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744432436/1933cac0-8062-4696-b41a-134bca40bf98-video-ezgif.com-video-to-webp-converter_u82wdv.webp",
                   "forceImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504340/FinalImages/Forces/ozzmnqlajfl4u6eb4jzo.webp",
                   "metaDescription": "Andvari, the Dark Cannon, is a reclusive inventor who harnesses the destructive power of dark matter. His cannons unleash void energy, obliterating anything in their path. Andvari’s obsession with the unknown has led him down a path of shadowy experimentation, and while his weapons are unmatched in their destructive power, their toll on his soul is heavy.",
                   "abilities": [
@@ -3823,7 +3823,7 @@
                   "omniVamp": 80,
                   "recommendItems": ["ScaleHelmet", "Nandaka", "Sekhem"],
                   "secondBackground": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743488233/FinalImages/Second%20Background/NineTails/zabvtajj0wn3q4hda2z7.webp",
-                  "cardImage": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744351169/CardTesting/PNG/Nine_tails_Light.png",
+                  "cardImage": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744431851/13b835f5-d24a-4402-a34d-b50601a7c631-video-ezgif.com-video-to-webp-converter_jga8qa.webp",
                   "forceImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504339/FinalImages/Forces/eyfe8cherbin7yhenlim.webp",
                   "metaDescription": "Miho, the NineTail Fox of Light, is a mythical creature of elegance and mystery. Each of her nine tails glows with the radiance of the stars, and she uses her celestial powers to protect her allies and blind her enemies. Known for her wisdom, Miho’s enchanting beauty hides her immense strength.",
                   "abilities": [
@@ -3862,7 +3862,7 @@
                   "omniVamp": 11,
                   "recommendItems": ["Galea", "Kunee", "SilverBullet"],
                   "secondBackground": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743488235/FinalImages/Second%20Background/NineTails/g2sulccefmwtxcuuym6j.webp",
-                  "cardImage": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744351170/CardTesting/PNG/Nine_tails_Dark.png",
+                  "cardImage": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744432437/a3f2338b-7f00-4305-95fd-74e21472bb45-video-ezgif.com-video-to-webp-converter_wthaaj.webp",
                   "forceImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504340/FinalImages/Forces/ozzmnqlajfl4u6eb4jzo.webp",
                   "metaDescription": "Daji, the Nine-Tailed Fox of Shadows, is a master of deception and allure. Her tails shimmer with dark magic, allowing her to bend reality and manipulate the minds of her victims. Daji’s beauty hides her sinister nature, and she revels in the destruction and chaos she spreads, leaving broken souls in her wake.",
                   "abilities": [
@@ -3901,7 +3901,7 @@
                   "omniVamp": 50,
                   "recommendItems": ["Kunee", "ScaleHelmet", "Simurgh"],
                   "secondBackground": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743488235/FinalImages/Second%20Background/NineTails/ajrbighmyc6vlts5juh3.webp",
-                  "cardImage": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744351169/CardTesting/PNG/Nine_tails_Fire.png",
+                  "cardImage": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744431851/13b835f5-d24a-4402-a34d-b50601a7c631-video-ezgif.com-video-to-webp-converter_jga8qa.webp",
                   "forceImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504338/FinalImages/Forces/bx928te0w5qw5fzfn7yv.webp",
                   "metaDescription": "Tamamo, the Nine-Tailed Fox of Fire, is a trickster spirit with a fierce and fiery nature. Her tails, each representing a different flame, give her the ability to manipulate fire in myriad ways. She can incinerate her foes or mesmerize them with her fiery beauty, always keeping her enemies guessing.",
                   "abilities": [
@@ -4919,7 +4919,7 @@
                   "omniVamp": 15,
                   "recommendItems": ["Frostguard", "Raikiri", "Kaminari"],
                   "secondBackground": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743488233/FinalImages/Second%20Background/Reaper/iqfejjy7kn1cl9ann6rs.webp",
-                  "cardImage": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743496371/FinalImages/Card%20Images/Reaper/aimapstdlqyuglpuqjyw.webp",
+                  "cardImage": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744432437/71dbd655-8a70-48e0-8fd3-91ad4cc0c8e6-video-ezgif.com-video-to-webp-converter_myjqld.webp",
                   "forceImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504340/FinalImages/Forces/mrrqr2npwzgvf2wbcyl4.webp",
                   "metaDescription": "Pesta, the Wind Reaper, is a spectral figure who brings plagues and pestilence in his wake. He rides the winds like a phantom, wielding his scythe to spread disease with every swing. Where Pesta travels, crops wither, and sickness spreads, leaving desolation behind him as he claims the lives of those who cannot withstand his deadly gusts.",
                   "abilities": [
@@ -6901,27 +6901,27 @@
                     {
                       "tier": "base",
                       "min": 2,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/BASE/Base_Fury_qlxv2s.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Fury_qxavag.png"
                     },
                     {
                       "tier": "bronze",
                       "min": 4,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571945/FinalImages/Traits/BRONZE/Bronze_FURY_u1pzqg.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Fury_qxavag.png"
                     },
                     {
                       "tier": "silver",
                       "min": 6,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/SILVER/Silver_Fury_cdfojo.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Fury_qxavag.png"
                     },
                     {
                       "tier": "gold",
                       "min": 8,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571945/FinalImages/Traits/GOLD/Gold_FURY_dklezu.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Fury_qxavag.png"
                     },
                     {
                       "tier": "prismatic",
                       "min": 10,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/PRISM/Prism_Fury_sx3bsx.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Fury_qxavag.png"
                     }
                   ]
                 },
@@ -6929,7 +6929,7 @@
                   "key": "GirlCrush",
                   "name": "GirlCrush",
                   "desc": "Once your team loses 50% of their Health, Galio is summoned, slamming into the largest cluster of enemies and Stunning them. Galio's strength increases based on total star level of all active Cultists.",
-                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/BASE/Base_Girlcrush_g5mwnr.webp",
+                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Girlcrush_x18xqu.png",
                   "health": 85,
                   "mana": 86,
                   "attackDamage": 92,
@@ -6945,27 +6945,27 @@
                     {
                       "tier": "base",
                       "min": 2,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/BASE/Base_Girlcrush_g5mwnr.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Girlcrush_x18xqu.png"
                     },
                     {
                       "tier": "bronze",
                       "min": 4,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/BRONZE/Bronze_GirlCrush_dvywkj.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Girlcrush_x18xqu.png"
                     },
                     {
                       "tier": "silver",
                       "min": 6,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/SILVER/Silver_Girlcrush_db8nll.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Girlcrush_x18xqu.png"
                     },
                     {
                       "tier": "gold",
                       "min": 8,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/GOLD/Gold_GirlCrush_spqgdg.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Girlcrush_x18xqu.png"
                     },
                     {
                       "tier": "prismatic",
                       "min": 10,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/PRISM/Prism_Girlcrush_smynjq.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Girlcrush_x18xqu.png"
                     }
                   ]
                 },
@@ -7663,7 +7663,7 @@
                   "name": "Aetheris",
                   "desc": "\"Aetheris\" is derived from \"Aether,\" the personification of the upper sky and heavens in Greek mythology, often associated with light and pure air. The name reflects the staff's celestial and mystical nature, with the gemstone channeling the ethereal power of the skies.",
                   "shortDesc": "+10 Armor",
-                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285355/Greek_Magic_Weapon_yqalp8.png",
+                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744701402/3_rzawot.png",
                   "isNormal": true,
                   "tags": ["normal"],
                   "compositions": ["WoodenWand", "WoodenWand"],
@@ -7751,7 +7751,7 @@
                   "name": "Simurgh",
                   "desc": "The simurgh (/sɪˈmɜːrɡ/; Persian: سیمرغ, also spelled senmurv, simorgh, simorg, simurg, simoorg, simorq or simourv) is a benevolent bird in Persian mythology and literature. It bears some similarities with mythological birds from different origins, such as the phoenix (Persian: ققنوس quqnūs) and the humā (Persian: هما).",
                   "shortDesc": "+10 Armor",
-                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285351/Persian_Weapon_bbwl83.png",
+                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744701402/1_rdumoc.png",
                   "isNormal": true,
                   "tags": ["normal"],
                   "compositions": ["WoodenWand", "Sword"],
@@ -7861,7 +7861,7 @@
                   "name": "Kunee",
                   "desc": "The Helm of Hades is a powerful artifact that was said to have been crafted by the Cyclopes and given to Hades, the god of the underworld, during the Titanomachy, the war between the Titans and the Olympian gods.",
                   "shortDesc": "+10 Armor",
-                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285342/Greek_Helmet_xxiym2.png",
+                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744701402/2_pyteoz.png",
                   "isNormal": true,
                   "tags": ["normal"],
                   "compositions": ["PlateArmor", "WizardHat"],
@@ -8069,17 +8069,17 @@
                 {
                   "key": "Fire",
                   "name": "Fire",
-                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504338/FinalImages/Forces/bx928te0w5qw5fzfn7yv.webp"
+                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744460490/933fc4d3-84b9-40e4-9a99-8a04c625c899-video-ezgif.com-video-to-webp-converter_bsnpcz.webp"
                 },
                 {
                   "key": "Storm",
                   "name": "Storm",
-                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504340/FinalImages/Forces/mrrqr2npwzgvf2wbcyl4.webp"
+                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744460490/7a464ac9-e35a-4562-ba48-0c824690b7d6-video-ezgif.com-video-to-webp-converter_j37pqg.webp"
                 },
                 {
                   "key": "Water",
                   "name": "Water",
-                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504339/FinalImages/Forces/vcrrx6plueox6miuyyya.webp"
+                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744460490/09cda799-a421-4934-bded-afb68bc5c878-video-ezgif.com-video-to-webp-converter_pusqh4.webp"
                 }
               ],
               "augments": [

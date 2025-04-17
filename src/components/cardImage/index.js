@@ -14,7 +14,7 @@ const CardImage = ({
         <div className="inline-flex flex-col">
           <div className={`flex flex-col rounded-lg`}>
             <div
-              className="relative inline-flex rounded-lg border-1"
+              className="relative w-[48px] h-[48px] !bg-black md:w-[96px] md:h-[96px] rounded-lg"
               data-tooltip-id={src?.key}
             >
               {/* If src.cardImage extension is .webp or .png or .jpg or .jpeg, then use the Image component, else if it's .mp4 or .webm, then use the video component */}
@@ -27,7 +27,7 @@ const CardImage = ({
                   alt="champion"
                   width={80}
                   height={80}
-                  className={`object-cover object-center rounded-lg ${imgStyle}`}
+                  className={`object-cover object-canter mx-auto rounded-lg w-auto h-full ${imgStyle}`}
                 />
               ) : (
                 <video
@@ -37,9 +37,18 @@ const CardImage = ({
                   muted
                   loop
                   playsInline
-                  className={`object-cover object-center rounded-lg ${imgStyle}`}
+                  className={`object-cover object-center rounded-lg w-full h-full ${imgStyle}`}
                 />
               )}
+              <OptimizedImage
+                src={
+                  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744443307/ghjhhhhhhhh_axvnyo.png"
+                }
+                className="absolute top-0 right-0 w-full h-full"
+                alt="Border Image"
+                width={200}
+                height={200}
+              />
               <OptimizedImage
                 src={
                   forces?.find((force) => force.key === src?.variant)?.imageUrl

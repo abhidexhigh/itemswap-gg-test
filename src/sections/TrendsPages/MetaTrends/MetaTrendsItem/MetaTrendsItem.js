@@ -47,14 +47,18 @@ const MetaTrendsItem = ({
         className="relative inline-flex flex-col"
         data-tooltip-id={tooltipId}
       >
-        <div className="relative flex flex-col w-[72px] h-[72px] lg:w-[104px] lg:h-[104px]">
+        <div className="relative flex flex-col w-[72px] h-[72px] lg:w-[104px] !bg-black lg:h-[104px]">
           <div
             className={`relative inline-flex rounded-[6px] w-full h-full ${
               champion?.selected ? "border-[green]" : "border-none"
             } bg-cover`}
-            style={{
-              backgroundImage: `url(${borderImage})`,
-            }}
+            style={
+              {
+                // backgroundImage: `url(${borderImage})`,
+                // backgroundImage: `url(https://res.cloudinary.com/dg0cmj6su/image/upload/v1744371801/character_frame_rv7l87.png)`,
+                // zIndex: 100,
+              }
+            }
           >
             {champion.cardImage && (
               <>
@@ -66,7 +70,7 @@ const MetaTrendsItem = ({
                   <OptimizedImage
                     src={champion.cardImage}
                     alt={`${champion.name || "Champion Image"}`}
-                    className="w-[95%] h-[95%] m-auto"
+                    className="w-auto h-[95%] m-auto"
                     width={80}
                     height={80}
                     priority={index < 4} // Prioritize loading for first 4 images
@@ -78,7 +82,7 @@ const MetaTrendsItem = ({
                     muted
                     playsInline
                     width="80"
-                    className="w-[95%] h-[95%] m-auto"
+                    className="w-full h-full m-auto rounded-[15px]"
                   >
                     <source src={champion.cardImage} type="video/webm" />
                   </video>
@@ -95,6 +99,15 @@ const MetaTrendsItem = ({
                 height={32}
               />
             )}
+            <OptimizedImage
+              src={
+                "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744443307/ghjhhhhhhhh_axvnyo.png"
+              }
+              className="absolute top-0 right-0 w-full h-full"
+              alt={`${champion.name || "Border Image"}`}
+              width={200}
+              height={200}
+            />
 
             {champion?.selected && (
               <IoMdCheckmarkCircle className="absolute top-0 right-0 w-full h-full p-3 bg-[#00000060] text-[#86efaccc]" />

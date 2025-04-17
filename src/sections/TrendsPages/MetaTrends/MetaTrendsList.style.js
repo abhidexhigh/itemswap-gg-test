@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const ProjectsListStyleWrapper = styled.section`
   height: auto;
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(2px);
   // background: #090a1a;
   // background-image: url("https://res.cloudinary.com/dg0cmj6su/image/upload/v1726558185/adrien-olichon-RCAhiGJsUUE-unsplash_k1xxtl.jpg");
   // box-shadow: inset 0 0 0 2000px #40404154;

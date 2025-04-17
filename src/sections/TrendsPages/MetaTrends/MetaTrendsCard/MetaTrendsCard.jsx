@@ -40,6 +40,7 @@ import AuroraCard from "src/components/card/AuroraCard";
 import DustParticleCard from "src/components/card/DustParticleCard";
 import MistyFlowCard from "src/components/card/MistyFlowCard";
 import StarfieldCard from "src/components/card/StarfieldCard";
+import NewCard from "src/components/card/NewCard";
 
 const testImages = [
   "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744186286/Succubus-Dark_nfrdtd.png",
@@ -67,66 +68,159 @@ const coinIcons = [
   "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550114/05_zqb2ji.png",
 ];
 
+// const cardVideos = [
+//   {
+//     cardImage:
+//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744431851/22eafd38-1097-4ff4-8402-d9f3354a9788-video1-ezgif.com-video-to-webp-converter_uvs3ll.webp",
+//     cost: 3,
+//     variant: "Fire",
+//   },
+//   {
+//     cardImage:
+//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744432437/71dbd655-8a70-48e0-8fd3-91ad4cc0c8e6-video-ezgif.com-video-to-webp-converter_myjqld.webp",
+//     cost: 3,
+//     variant: "Storm",
+//   },
+//   {
+//     cardImage:
+//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744432437/a3f2338b-7f00-4305-95fd-74e21472bb45-video-ezgif.com-video-to-webp-converter_wthaaj.webp",
+//     cost: 3,
+//     variant: "Dark",
+//   },
+//   {
+//     cardImage:
+//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744432436/1933cac0-8062-4696-b41a-134bca40bf98-video-ezgif.com-video-to-webp-converter_u82wdv.webp",
+//     cost: 3,
+//     variant: "Dark",
+//   },
+//   {
+//     cardImage:
+//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744431851/13b835f5-d24a-4402-a34d-b50601a7c631-video-ezgif.com-video-to-webp-converter_jga8qa.webp",
+//     cost: 3,
+//     variant: "Light",
+//   },
+//   {
+//     cardImage:
+//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744804916/69699059-1e5c-4186-a60a-e12fb430c65f-video-ezgif.com-video-to-webp-converter_yacqye.webp",
+//     cost: 3,
+//     variant: "Water",
+//   },
+//   {
+//     cardImage:
+//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744804917/9c22f9ac-e4d8-46e2-8c5d-a9706bd4f88c-video-ezgif.com-video-to-webp-converter_k2kgkc.webp",
+//     cost: 3,
+//     variant: "Storm",
+//   },
+//   {
+//     cardImage:
+//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744805409/2d50e1d5-8615-4744-91a0-7945b1e34d09-video-ezgif.com-video-to-webp-converter_kigjjm.webp",
+//     cost: 3,
+//     variant: "Light",
+//   },
+//   {
+//     cardImage:
+//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744805445/4ea41363-2129-496c-a0c3-1ccb41bec28b-video-ezgif.com-video-to-webp-converter_brj4wi.webp",
+//     cost: 3,
+//     variant: "Dark",
+//   },
+//   {
+//     cardImage:
+//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744805445/e2566afc-c3ea-44a6-994c-5f2f3c73f41d-video-ezgif.com-video-to-webp-converter_dzbyld.webp",
+//     cost: 3,
+//     variant: "Fire",
+//   },
+//   {
+//     cardImage:
+//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744806457/92399a4e-cba1-44f4-88ec-8e30042c9cff-video1-ezgif.com-video-to-webp-converter_vl0sxn.webp",
+//     cost: 3,
+//     variant: "Fire",
+//   },
+// ];
+
 const cardVideos = [
   {
     cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744361432/9aedb30a-fab7-4836-9a7f-9706824705c1-video_jwavft.mp4",
+      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868503/1933cac0-8062-4696-b41a-134bca40bf98-video_rmayyd.mp4",
     cost: 3,
+    variant: "Dark",
   },
   {
     cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744361436/5097ea1a-5bfd-4cb8-a907-29f26034bdc0-video_vb9ywx.mp4",
+      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868501/13b835f5-d24a-4402-a34d-b50601a7c631-video_knnfr4.mp4",
     cost: 3,
+    variant: "Light",
   },
   {
     cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744361436/input_rn0h9o.mp4",
+      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868500/2d50e1d5-8615-4744-91a0-7945b1e34d09-video_o5nvkl.mp4",
     cost: 3,
+    variant: "Light",
   },
   {
     cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744361436/464769ae-b1f3-4eaa-9dbf-87b821387965-video_ksxvpx.mp4",
+      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868499/22eafd38-1097-4ff4-8402-d9f3354a9788-video_1_mvu75e.mp4",
     cost: 3,
+    variant: "Fire",
   },
   {
     cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744361445/a25ad994-1c3a-4a87-b95d-d7f60349a519-video_b7fiz1.mp4",
+      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868498/439a71ec-c196-4808-aaeb-6ad03134b0ff-video_ejdrvh.mp4",
     cost: 3,
+    variant: "Dark",
   },
   {
     cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744361448/08012b24-5cad-49cc-ae6b-dbf3147ae91f-video_kdejmm.mp4",
+      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868496/4ea41363-2129-496c-a0c3-1ccb41bec28b-video_bmudfc.mp4",
     cost: 3,
+    variant: "Dark",
   },
   {
     cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744361456/fbc016b9-0d33-4acd-8493-c120735571e6-video_koauwn.mp4",
+      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868495/69699059-1e5c-4186-a60a-e12fb430c65f-video_inlinx.mp4",
     cost: 3,
+    variant: "Water",
   },
   {
     cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744366011/d96d4d20-420b-47a8-bd5d-f9a8ed2a9021-video_qkk1kg.mp4",
+      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868495/71dbd655-8a70-48e0-8fd3-91ad4cc0c8e6-video_h3ufhj.mp4",
     cost: 3,
+    variant: "Storm",
   },
   {
     cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744366007/559e21a4-1aa5-40b0-b0e8-acbdfe977956-video_qib3sk.mp4",
+      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868495/92399a4e-cba1-44f4-88ec-8e30042c9cff-video_1_srinly.mp4",
     cost: 3,
+    variant: "Fire",
   },
   {
     cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744366006/22eafd38-1097-4ff4-8402-d9f3354a9788-video_1_eajzve.mp4",
+      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868494/a3f2338b-7f00-4305-95fd-74e21472bb45-video_ivx5bs.mp4",
     cost: 3,
+    variant: "Dark",
   },
   {
     cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744366005/71dbd655-8a70-48e0-8fd3-91ad4cc0c8e6-video_fnhrxo.mp4",
+      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868493/baed9284-49df-4b12-8b41-84d2b04732d9-video_wdk76c.mp4",
     cost: 3,
+    variant: "Storm",
   },
   {
     cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744366005/1933cac0-8062-4696-b41a-134bca40bf98-video_ihuhga.mp4",
+      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868494/9c22f9ac-e4d8-46e2-8c5d-a9706bd4f88c-video_g39dxn.mp4",
     cost: 3,
+    variant: "Storm",
+  },
+  {
+    cardImage:
+      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868493/e2566afc-c3ea-44a6-994c-5f2f3c73f41d-video_nrnl6b.mp4",
+    cost: 3,
+    variant: "Fire",
+  },
+  {
+    cardImage:
+      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868492/input_f3pien.mp4",
+    cost: 3,
+    variant: "Water",
   },
 ];
 
@@ -274,7 +368,7 @@ const MetaTrendsCard = ({
                     </span>
                   </h5>
                 </header>
-                <div className="mx-auto w-full">
+                <div className="mx-auto w-full hidden">
                   <div
                     className="flex items-center flex-wrap mb-2 justify-center rounded-tl-none rounded-tr-none"
                     style={{
@@ -342,15 +436,30 @@ const MetaTrendsCard = ({
             gap: "8px",
           }}
         >
-          {cardVideos.map((video, j) => renderChampion(video, j))}
+          {/* Randomise the order of the champions */}
+          {[...Array(3)].map(() =>
+            cardVideos
+              .sort(() => Math.random() - 0.5)
+              .map((video, j) => renderChampion(video, j))
+          )}
         </div>
+        {/* <div
+          className="flex items-center flex-wrap mb-2 rounded-tl-none rounded-tr-none"
+          style={{
+            gap: "8px",
+          }}
+        >
+          {championsByCost[3].map((champion, i) => {
+            return <NewCard key={i} image={champion.cardImage} />;
+          })}
+        </div> */}
         <div
           className="flex items-center flex-wrap mb-2 rounded-tl-none rounded-tr-none"
           style={{
             gap: "8px",
           }}
         >
-          <>
+          {/* <>
             <CharacterCard
               image={testImages[1]}
               name={"Champion Image"}
@@ -610,7 +719,7 @@ const MetaTrendsCard = ({
               description={"Champion Description"}
               stats={[]}
             />
-          </>
+          </> */}
         </div>
       </div>
     </div>

@@ -322,42 +322,6 @@ const MetaTrendsItems = () => {
   const cardVideos = [
     {
       cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744804916/69699059-1e5c-4186-a60a-e12fb430c65f-video-ezgif.com-video-to-webp-converter_yacqye.webp",
-      cost: 3,
-      variant: "Storm",
-    },
-    {
-      cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744804916/69699059-1e5c-4186-a60a-e12fb430c65f-video-ezgif.com-video-to-webp-converter_yacqye.webp",
-      cost: 3,
-      variant: "Water",
-    },
-    {
-      cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744804916/69699059-1e5c-4186-a60a-e12fb430c65f-video-ezgif.com-video-to-webp-converter_yacqye.webp",
-      cost: 3,
-      variant: "Storm",
-    },
-    {
-      cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744804916/69699059-1e5c-4186-a60a-e12fb430c65f-video-ezgif.com-video-to-webp-converter_yacqye.webp",
-      cost: 3,
-      variant: "Water",
-    },
-    {
-      cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744804916/69699059-1e5c-4186-a60a-e12fb430c65f-video-ezgif.com-video-to-webp-converter_yacqye.webp",
-      cost: 3,
-      variant: "Storm",
-    },
-    {
-      cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744804916/69699059-1e5c-4186-a60a-e12fb430c65f-video-ezgif.com-video-to-webp-converter_yacqye.webp",
-      cost: 3,
-      variant: "Water",
-    },
-    {
-      cardImage:
         "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744432436/1933cac0-8062-4696-b41a-134bca40bf98-video-ezgif.com-video-to-webp-converter_u82wdv.webp",
       cost: 3,
       variant: "Dark",
@@ -440,10 +404,10 @@ const MetaTrendsItems = () => {
     <div className="mx-auto md:px-0 lg:px-0 py-6">
       <div className="space-y-6">
         <div
-        // style={{
-        //   background: "rgba(0, 0, 0, 0.2)",
-        //   backdropFilter: "blur(2px)",
-        // }}
+          style={{
+            background: "rgba(0, 0, 0, 0.2)",
+            backdropFilter: "blur(2px)",
+          }}
         >
           <div className="">
             {/* Tabs Section */}
@@ -486,7 +450,7 @@ const MetaTrendsItems = () => {
             </div>
 
             {/* Content Sections */}
-            <div className="rounded-lg shadow-lg">
+            <div className="bg-background rounded-lg shadow-lg">
               {/* Champions Tab */}
               <div
                 className={`${activeTab === "Champions" ? "block" : "hidden"}`}
@@ -638,13 +602,13 @@ const MetaTrendsItems = () => {
           {compsData?.map((metaDeck, i) => (
             <div
               key={i}
-              className="flex flex-col gap-[1px] !border border-cardBorder/30 rounded-lg overflow-hidden shadow-lg bg-[#323232] mb-4"
+              className="flex flex-col gap-[1px] !border border-cardBorder/20 rounded-lg overflow-hidden shadow-lg bg-[#323232] mb-4"
               style={{
-                background: "rgba(0, 0, 0, 0.6)",
+                background: "rgba(0, 0, 0, 0.2)",
                 backdropFilter: "blur(2px)",
               }}
             >
-              <header className="relative flex md:flex-col justify-between items-end py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px]">
+              <header className="relative flex md:flex-col justify-between items-end bg-background py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px]">
                 <div className="inline-flex flex-col flex-wrap gap-[8px] md:flex-row md:items-center md:gap-[4px]">
                   <strong className="text-[26px] font-semibold leading-none text-[#F2A03D]">
                     {metaDeck?.name}
@@ -744,7 +708,7 @@ const MetaTrendsItems = () => {
                   //   backgroundSize: "cover",
                   // }}
                 >
-                  <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#111111] py-[16px] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6">
+                  <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#27282E90] py-[16px] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6">
                     <div className="mb-[16px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[80%] lg:flex-shrink-0">
                       <div className="flex flex-wrap justify-center lg:justify-center gap-2 w-full">
                         {metaDeck?.deck?.champions
