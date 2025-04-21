@@ -45,7 +45,7 @@ const NavWrapper = styled.nav`
       position: fixed;
       top: 0;
       width: 100%;
-      background: rgba(27, 34, 38, 0.8);
+      background: rgba(29, 29, 29, 0.9);
       backdrop-filter: blur(15px);
       z-index: 1000;
       margin-top: 0px;

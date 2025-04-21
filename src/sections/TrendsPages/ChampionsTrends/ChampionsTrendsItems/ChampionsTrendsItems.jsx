@@ -11,6 +11,7 @@ import CardImage from "src/components/cardImage";
 import TrendFilters from "src/components/trendFilters";
 import ScrollableTable from "src/utils/ScrollableTable";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
+import SearchBar from "src/components/searchBar";
 
 const ProjectItems = () => {
   const { t } = useTranslation();
@@ -110,7 +111,7 @@ const ProjectItems = () => {
   // Add getCellClass function to highlight sorted column cells
   const getCellClass = (key) => {
     if (sortConfig.key === key) {
-      return "bg-[#222240] text-[#fff]";
+      return "bg-[#2D2F37] text-[#D9A876]";
     }
     return "";
   };
@@ -129,8 +130,8 @@ const ProjectItems = () => {
 
   return (
     // <ProjectItemsStyleWrapper>
-    <div className="pt-2 bg-[#1a1b31] md:bg-transparent">
-      <div className="md:flex md:justify-between md:items-center bg-[#1a1b31] md:bg-transparent mb-2.5 md:mb-0">
+    <div className="pt-2 bg-[#111111] md:bg-transparent">
+      <div className="md:flex md:justify-between md:items-center bg-[#111111] md:bg-transparent mb-2.5 md:mb-0">
         <div className="flex items-center mx-auto md:!ml-0 md:!mr-0 justify-center md:justify-start">
           <h1 className="text-[#fff] hidden md:block text-lg md:text-xl font-bold mb-0">
             Cost
@@ -141,12 +142,10 @@ const ProjectItems = () => {
           />
         </div>
         <div className="mb-2 md:mb-0 px-4">
-          <input
-            type="text"
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            className="bg-[#222231] w-full text-[#fff] border-[#ffffff80] border-[1px] rounded-[4px] hover:border-[#ffffff60] hover:shadow-lg transition-all duration-300 ease-in-out md:w-[200px] h-[40px] px-[10px] text-[16px] placeholder-[#fff] placeholder-[16px] md:mt-0"
-            placeholder="Search..."
+          <SearchBar
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            placeholder="Search champion..."
           />
         </div>
       </div>
@@ -154,14 +153,14 @@ const ProjectItems = () => {
         <ScrollableTable>
           <table className="w-[900px] md:w-full relative lg:border-separate lg:border-spacing-y-2">
             <thead className="sticky top-0 z-50">
-              <tr className="bg-[#0f0f1e]">
+              <tr className="bg-[#00000099]">
                 <th className="lg:rounded-l-lg">
                   <p className="p-0 text-base !mx-2 my-2 md:text-[16px]">
                     {others.rank}
                   </p>
                 </th>
                 <th
-                  className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "key" ? "bg-[#1e1e3a]" : ""}`}
+                  className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""}`}
                   onClick={() => requestSort("key")}
                 >
                   <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -170,7 +169,7 @@ const ProjectItems = () => {
                   </p>
                 </th>
                 <th
-                  className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "avgPlacement" ? "bg-[#1e1e3a]" : ""}`}
+                  className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "avgPlacement" ? "bg-[#2D2F37]" : ""}`}
                   onClick={() => requestSort("avgPlacement")}
                 >
                   <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -181,7 +180,7 @@ const ProjectItems = () => {
                   </p>
                 </th>
                 <th
-                  className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "tops" ? "bg-[#1e1e3a]" : ""}`}
+                  className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "tops" ? "bg-[#2D2F37]" : ""}`}
                   onClick={() => requestSort("tops")}
                 >
                   <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -190,7 +189,7 @@ const ProjectItems = () => {
                   </p>
                 </th>
                 <th
-                  className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "wins" ? "bg-[#1e1e3a]" : ""}`}
+                  className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "wins" ? "bg-[#2D2F37]" : ""}`}
                   onClick={() => requestSort("wins")}
                 >
                   <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -199,7 +198,7 @@ const ProjectItems = () => {
                   </p>
                 </th>
                 <th
-                  className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "pickRate" ? "bg-[#1e1e3a]" : ""}`}
+                  className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "pickRate" ? "bg-[#2D2F37]" : ""}`}
                   onClick={() => requestSort("pickRate")}
                 >
                   <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -208,7 +207,7 @@ const ProjectItems = () => {
                   </p>
                 </th>
                 <th
-                  className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "plays" ? "bg-[#1e1e3a]" : ""}`}
+                  className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "plays" ? "bg-[#2D2F37]" : ""}`}
                   onClick={() => requestSort("plays")}
                 >
                   <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -237,7 +236,7 @@ const ProjectItems = () => {
               (champion, index) =>
                 champions.find((champ) => champ.key === champion.key)?.key && (
                   <tr
-                    className="m-2 bg-[#1a1b31] hover:bg-[#292a4ae0]"
+                    className="m-2 bg-[#111111] hover:bg-[#2D2F37]"
                     key={index}
                   >
                     <td className="ml-2 lg:rounded-l-lg">

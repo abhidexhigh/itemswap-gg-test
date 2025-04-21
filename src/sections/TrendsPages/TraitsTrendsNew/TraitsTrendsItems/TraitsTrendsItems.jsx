@@ -64,7 +64,7 @@ const ProjectItems = () => {
                   <p className="p-0 text-xs !mx-2">Recommend Items</p>
                 </th>
               </tr>
-              <tr className="m-2 bg-[#1a1b31] hover:bg-[#292a4ae0]">
+              <tr className="m-2 bg-[#111111] hover:bg-[#292a4ae0]">
                 <td className="ml-2">
                   <div className="text-center">1</div>
                 </td>

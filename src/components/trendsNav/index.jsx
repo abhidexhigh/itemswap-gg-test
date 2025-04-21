@@ -103,10 +103,9 @@ const TrendsNav = ({ selected }) => {
   const getLinkClassName = useCallback(
     (tabId, isFirst = false, isLast = false) => {
       const baseClasses =
-        "inline-block w-full p-3 border-r text-xs lg:text-base border-r-[#ffffff14] hover:bg-gray-600 focus:outline-none";
-      const activeClasses =
-        "active text-gray-900 !bg-gray-100 hover:text-black";
-      const inactiveClasses = "hover:text-white";
+        "inline-block w-full p-3 border-r text-xs lg:text-base border-r-[#2D2F37] hover:bg-[#2D2F37] focus:outline-none";
+      const activeClasses = "active bg-[#2D2F37] text-[#D9A876]";
+      const inactiveClasses = "text-[#999] hover:text-white";
       const roundedClasses = isFirst
         ? "rounded-l-lg"
         : isLast
@@ -119,7 +118,7 @@ const TrendsNav = ({ selected }) => {
   );
 
   return (
-    <div className="bg-[#222231] rounded-lg !border !border-[#ffffff70]">
+    <div className="bg-[#1D1D1D] rounded-lg !border !border-[#2D2F37]">
       {/* Desktop View */}
       <div className="hidden lg:block">
         <ul className="text-md font-medium text-center text-gray-500 shadow lg:flex">
@@ -165,12 +164,12 @@ const TrendsNav = ({ selected }) => {
                 href={tab.href}
                 prefetch={true}
                 className={`
-                  inline-block px-3 py-2.5 text-base border border-[#ffffff14] rounded-lg
+                  inline-block px-3 py-2.5 text-base border border-[#2D2F37] rounded-lg
                   whitespace-nowrap
                   ${
                     selected === tab.id
-                      ? "text-gray-900 bg-gray-100 hover:text-black font-semibold"
-                      : "text-gray-300 hover:text-white hover:bg-gray-600"
+                      ? "bg-[#2D2F37] text-[#D9A876] font-semibold"
+                      : "text-[#999] hover:text-white hover:bg-[#2D2F37]"
                   }
                 `}
               >

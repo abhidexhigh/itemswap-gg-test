@@ -487,7 +487,7 @@ const ProjectItems = () => {
           <div>
             {compsData?.map((metaDeck, i) => (
               <div
-                className="flex flex-col gap-[1px] border border-[#323232] bg-[#323232] mb-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ease-in-out"
+                className="flex flex-col gap-[1px] border border-[#00000099] bg-[#00000099] mb-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ease-in-out"
                 style={{
                   background: "rgba(0, 0, 0, 0.2)",
                   backdropFilter: "blur(2px)",

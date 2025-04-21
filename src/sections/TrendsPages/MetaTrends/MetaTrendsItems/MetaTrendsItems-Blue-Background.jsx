@@ -602,7 +602,7 @@ const MetaTrendsItems = () => {
           {compsData?.map((metaDeck, i) => (
             <div
               key={i}
-              className="flex flex-col gap-[1px] !border border-cardBorder/20 rounded-lg overflow-hidden shadow-lg bg-[#323232] mb-4"
+              className="flex flex-col gap-[1px] !border border-cardBorder/20 rounded-lg overflow-hidden shadow-lg bg-[#00000099] mb-4"
               style={{
                 background: "rgba(0, 0, 0, 0.2)",
                 backdropFilter: "blur(2px)",

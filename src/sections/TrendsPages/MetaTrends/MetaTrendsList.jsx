@@ -6,7 +6,7 @@ import ProjectsListStyleWrapper from "./MetaTrendsList.style";
 const MetaTrends = dynamic(() => import("./MetaTrendsItems/MetaTrendsItems"), {
   ssr: false,
   loading: () => (
-    <div className="min-h-[400px] bg-[#1a1b31] flex items-center justify-center">
+    <div className="min-h-[400px] bg-[#111111] flex items-center justify-center">
       <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
     </div>
   ),
@@ -17,7 +17,7 @@ const MetaTrendsList = () => {
     <ProjectsListStyleWrapper>
       <Suspense
         fallback={
-          <div className="min-h-[400px] bg-[#1a1b31] flex items-center justify-center">
+          <div className="min-h-[400px] bg-[#111111] flex items-center justify-center">
             <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
           </div>
         }

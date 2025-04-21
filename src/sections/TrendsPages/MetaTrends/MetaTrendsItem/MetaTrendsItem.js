@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useState, useRef } from "react";
 import { IoMdCheckmarkCircle, IoMdCheckmark } from "react-icons/io";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import ImageBorders from "../../../../data/newData/costWiseBorders.json";
@@ -14,12 +14,30 @@ const MetaTrendsItem = ({
   index,
   forces,
 }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const videoRef = useRef(null);
+
   // Use useCallback to memoize the click handler
   const handleClick = useCallback(() => {
     if (champion?.key) {
       setSelectedChampion(champion.key);
     }
   }, [champion?.key, setSelectedChampion]);
+
+  const handleMouseEnter = useCallback(() => {
+    setIsHovered(true);
+    if (videoRef.current) {
+      videoRef.current.play();
+    }
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setIsHovered(false);
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+  }, []);
 
   // Early return if champion is not provided
   if (!champion) return null;
@@ -41,6 +59,8 @@ const MetaTrendsItem = ({
     <div
       className={`relative inline-flex cursor-pointer [box-shadow:rgba(255,_0,_0)_0px_5px_15px] shadow-none hover:[box-shadow:rgba(255,_0,_0)_0px_54px_55px,_rgba(0,_0,_0,_0.12)_0px_-12px_30px,_rgba(0,_0,_0,_0.12)_0px_4px_6px,_rgba(0,_0,_0,_0.17)_0px_12px_13px,_rgba(0,_0,_0,_0.09)_0px_-3px_5px] hover:-translate-y-0.5 transition-all duration-300 ease-in-out`}
       onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <ReactTltp variant="champion" content={champion} id={tooltipId} />
       <div
@@ -77,15 +97,12 @@ const MetaTrendsItem = ({
                   />
                 ) : (
                   <video
-                    autoPlay
-                    loop
+                    ref={videoRef}
+                    src={champion.cardImage}
                     muted
                     playsInline
-                    width="80"
                     className="w-full h-full m-auto rounded-[15px]"
-                  >
-                    <source src={champion.cardImage} type="video/webm" />
-                  </video>
+                  />
                 )}
               </>
             )}

@@ -28,14 +28,16 @@ const TrendFilters = ({ buttons, dropdown1, dropdown2, onButtonClick }) => {
     >
       <div className="!py-2 lg:flex lg:items-center w-fit mx-auto">
         <div
-          className="inline-flex shadow-sm rounded-md mx-1 !bg-[#222231] !border !border-[#ffffff90]"
+          className="inline-flex shadow-sm rounded-md mx-1 !bg-[#1D1D1D] !border !border-[#2D2F37]"
           role="group"
         >
           {buttons?.map((button) => (
             <button
               type="button"
-              className={` border border-gray-200 text-md font-medium px-4 py-2 text-[#fff] hover:bg-gray-200 hover:text-gray-900 focus:z-10 focus:ring-blue-700 focus:text-blue-700 ${
-                selectedBtn === button ? "bg-[#fff] text-gray-900" : ""
+              className={`border border-[#2D2F37] text-md font-medium px-4 py-2 hover:bg-[#2D2F37] hover:text-white focus:z-10 focus:ring-[#D9A876] focus:text-[#D9A876] ${
+                selectedBtn === button
+                  ? "bg-[#2D2F37] text-[#D9A876]"
+                  : "text-[#999]"
               }`}
               onClick={() => handleButtonClick(button)}
             >
@@ -45,7 +47,7 @@ const TrendFilters = ({ buttons, dropdown1, dropdown2, onButtonClick }) => {
         </div>
         {dropdown1 && dropdown1?.length > 0 && (
           <div className="mx-1 mb-1">
-            <select className="bg-gray-50 border h-[36px] border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <select className="bg-[#1D1D1D] border h-[36px] border-[#2D2F37] text-[#999] text-md rounded-lg focus:ring-[#D9A876] focus:border-[#D9A876] block w-full p-2.5">
               {dropdown1?.map((drop) => (
                 <option value={drop}>{drop}</option>
               ))}
@@ -54,7 +56,7 @@ const TrendFilters = ({ buttons, dropdown1, dropdown2, onButtonClick }) => {
         )}
         {dropdown2 && dropdown2?.length > 0 && (
           <div className="mx-1 mb-1">
-            <select className="bg-gray-50 border h-[36px] border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <select className="bg-[#1D1D1D] border h-[36px] border-[#2D2F37] text-[#999] text-md rounded-lg focus:ring-[#D9A876] focus:border-[#D9A876] block w-full p-2.5">
               {dropdown2?.map((drop) => (
                 <option value={drop}>{drop}</option>
               ))}

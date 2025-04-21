@@ -399,7 +399,7 @@ const ProjectItems = () => {
                   .fill()
                   .map((_, i) => (
                     <div
-                      className="flex flex-col gap-[1px] border border-[#323232] bg-[#323232] mb-4"
+                      className="flex flex-col gap-[1px] border border-[#00000099] bg-[#00000099] mb-4"
                       style={{
                         background: "rgba(0, 0, 0, 0.2)",
                         // borderRadius: "16px",
