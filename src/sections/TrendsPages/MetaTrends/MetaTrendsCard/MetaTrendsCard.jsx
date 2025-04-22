@@ -42,12 +42,6 @@ import MistyFlowCard from "src/components/card/MistyFlowCard";
 import StarfieldCard from "src/components/card/StarfieldCard";
 import NewCard from "src/components/card/NewCard";
 
-const testImages = [
-  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744186286/Succubus-Dark_nfrdtd.png",
-  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744186286/Assasin-Light_l4htzq.png",
-  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744186293/Valkyrie-Dark_fni8h0.png",
-];
-
 // Memoize the getRandomCharacters function to avoid unnecessary recalculations
 const getRandomCharacters = (characters, count = 12) => {
   if (!characters || characters.length === 0) return [];
@@ -317,7 +311,7 @@ const MetaTrendsCard = ({
       {/* <div className="flex flex-col p-[12px] lg:px-[14px]"> */}
       <div className="grid grid-cols-1 m-2">
         {championsByCost
-          .filter((champions, i) => i === 3 || i === 0)
+          // .filter((champions, i) => i === 3 || i === 0)
           .map((champions, i) => {
             // Memoize the random characters for each cost level
             const randomChampions = useMemo(() => {
@@ -368,7 +362,7 @@ const MetaTrendsCard = ({
                     </span>
                   </h5>
                 </header>
-                <div className="mx-auto w-full hidden">
+                <div className="mx-auto w-full">
                   <div
                     className="flex items-center flex-wrap mb-2 justify-center rounded-tl-none rounded-tr-none"
                     style={{
@@ -429,7 +423,7 @@ const MetaTrendsCard = ({
             );
           })}
       </div>
-      <div className="ml-[82px]">
+      <div className="ml-[82px] hidden">
         <div
           className="flex items-center flex-wrap mb-2 rounded-tl-none rounded-tr-none"
           style={{

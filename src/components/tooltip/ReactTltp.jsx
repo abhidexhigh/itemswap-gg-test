@@ -228,10 +228,11 @@ const ReactTltp = ({ variant = "", content, id }) => {
       transition: "opacity 0.2s ease-in-out", // Smooth transition
     },
     place: "bottom",
-    clickable: true,
+    offset: 40, // Increase distance between cursor and tooltip
+    clickable: false,
     positionStrategy: "fixed",
     float: true,
-    noArrow: true,
+    noArrow: false,
     events: getEventTypes(),
     appendTo: () =>
       document.getElementById(TOOLTIP_CONTAINER_ID) || document.body,

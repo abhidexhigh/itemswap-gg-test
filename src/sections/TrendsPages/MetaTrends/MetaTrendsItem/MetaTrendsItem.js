@@ -1,4 +1,11 @@
-import React, { memo, useCallback, useState, useRef } from "react";
+import React, {
+  memo,
+  useCallback,
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+} from "react";
 import { IoMdCheckmarkCircle, IoMdCheckmark } from "react-icons/io";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import ImageBorders from "../../../../data/newData/costWiseBorders.json";
@@ -16,6 +23,77 @@ const MetaTrendsItem = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const videoRef = useRef(null);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoAvailable, setVideoAvailable] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const playAttemptRef = useRef(0);
+
+  // Check if champion has a video
+  const hasVideo = useMemo(
+    () => Boolean(champion?.cardVideo),
+    [champion?.cardVideo]
+  );
+
+  // Effect to preload video
+  useEffect(() => {
+    if (hasVideo && videoRef.current) {
+      videoRef.current.load();
+    }
+  }, [hasVideo]);
+
+  // Effect to handle video play when hovered
+  useEffect(() => {
+    let playTimeoutId;
+
+    if (isHovered && videoRef.current && hasVideo && videoAvailable) {
+      // Reset play attempts when hover starts
+      playAttemptRef.current = 0;
+
+      const attemptToPlay = () => {
+        if (playAttemptRef.current >= 3) {
+          console.warn("Max play attempts reached for video");
+          return;
+        }
+
+        const playPromise = videoRef.current.play();
+        playAttemptRef.current += 1;
+
+        // Handle play promise to avoid DOMException
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              setIsPlaying(true);
+            })
+            .catch((error) => {
+              console.error("Error playing video:", error);
+
+              if (error.name === "NotAllowedError") {
+                // Browser policy prevented autoplay, retry with user gesture simulation
+                playTimeoutId = setTimeout(attemptToPlay, 100);
+              } else if (playAttemptRef.current < 3) {
+                // Try again for other errors
+                playTimeoutId = setTimeout(attemptToPlay, 200);
+              } else {
+                setVideoAvailable(false);
+              }
+            });
+        }
+      };
+
+      // Start attempting to play with a slight delay
+      playTimeoutId = setTimeout(attemptToPlay, 50);
+    } else if (!isHovered && videoRef.current) {
+      setIsPlaying(false);
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+
+    return () => {
+      if (playTimeoutId) {
+        clearTimeout(playTimeoutId);
+      }
+    };
+  }, [isHovered, hasVideo, videoAvailable]);
 
   // Use useCallback to memoize the click handler
   const handleClick = useCallback(() => {
@@ -26,31 +104,29 @@ const MetaTrendsItem = ({
 
   const handleMouseEnter = useCallback(() => {
     setIsHovered(true);
-    if (videoRef.current) {
-      videoRef.current.play();
-    }
   }, []);
 
   const handleMouseLeave = useCallback(() => {
     setIsHovered(false);
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
   }, []);
+
+  const handleVideoLoaded = useCallback(() => {
+    setVideoLoaded(true);
+  }, []);
+
+  const handleVideoError = useCallback(() => {
+    setVideoAvailable(false);
+    console.warn(`Video not available for champion: ${champion?.name}`);
+  }, [champion?.name]);
 
   // Early return if champion is not provided
   if (!champion) return null;
 
-  // Find border image once
-  const borderImage = ImageBorders?.find(
-    (border) => border?.cost === champion?.cost
-  )?.imageUrl;
-
   // Find force image once
-  const forceImage = forces?.find(
-    (force) => force?.key === champion?.variant
-  )?.imageUrl;
+  const forceImage = useMemo(
+    () => forces.find((f) => f.key === champion.variant)?.imageUrl || null,
+    [forces, champion.variant]
+  );
 
   // Create unique tooltip ID
   const tooltipId = `${champion?.key}-${index}`;
@@ -72,39 +148,32 @@ const MetaTrendsItem = ({
             className={`relative inline-flex rounded-[6px] w-full h-full ${
               champion?.selected ? "border-[green]" : "border-none"
             } bg-cover`}
-            style={
-              {
-                // backgroundImage: `url(${borderImage})`,
-                // backgroundImage: `url(https://res.cloudinary.com/dg0cmj6su/image/upload/v1744371801/character_frame_rv7l87.png)`,
-                // zIndex: 100,
-              }
-            }
           >
-            {champion.cardImage && (
-              <>
-                {/* If champion.cardImage extension is .webp or .png or .jpg or .jpeg, then use the Image component, else if it's .mp4 or .webm, then use the video component */}
-                {champion.cardImage.endsWith(".webp") ||
-                champion.cardImage.endsWith(".png") ||
-                champion.cardImage.endsWith(".jpg") ||
-                champion.cardImage.endsWith(".jpeg") ? (
-                  <OptimizedImage
-                    src={champion.cardImage}
-                    alt={`${champion.name || "Champion Image"}`}
-                    className="w-auto h-[95%] m-auto"
-                    width={80}
-                    height={80}
-                    priority={index < 4} // Prioritize loading for first 4 images
-                  />
-                ) : (
-                  <video
-                    ref={videoRef}
-                    src={champion.cardImage}
-                    muted
-                    playsInline
-                    className="w-full h-full m-auto rounded-[15px]"
-                  />
-                )}
-              </>
+            {/* Show video on hover if available, otherwise show image */}
+            {isHovered && hasVideo && videoAvailable ? (
+              <video
+                ref={videoRef}
+                src={champion.cardVideo}
+                muted
+                playsInline
+                autoPlay
+                loop
+                onLoadedData={handleVideoLoaded}
+                onError={handleVideoError}
+                className="w-full h-full m-auto rounded-[15px]"
+                preload="auto"
+              />
+            ) : (
+              champion.cardImage && (
+                <OptimizedImage
+                  src={champion.cardImage}
+                  alt={`${champion.name || "Champion Image"}`}
+                  className="w-auto h-[95%] m-auto"
+                  width={80}
+                  height={80}
+                  priority={index < 4} // Prioritize loading for first 4 images
+                />
+              )
             )}
 
             {forceImage && (
@@ -132,21 +201,6 @@ const MetaTrendsItem = ({
           </div>
         </div>
       </div>
-      {/* <ReactTltp
-        key={`${champion?.key}${index}`}
-        id={`${champion?.key}${index}`}
-        content={"Heellooooooooo"}
-      /> */}
-      {/* <div className="flex justify-center items-center absolute top-1/2 left-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 bg-[#2322228f] rounded-[6px]">
-          <span
-            width="14"
-            height="15"
-            color="#FFFFFF"
-            className="IconContainer block h-[14px] w-[14px]"
-          >
-            <IoMdCheckmarkCircle />
-          </span>
-        </div> */}
     </div>
   );
 };
