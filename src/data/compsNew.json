@@ -40860,17 +40860,17 @@
                   "name": "Chaos",
                   "desc": "Once your team loses 50% of their Health, Galio is summoned, slamming into the largest cluster of enemies and Stunning them. Galio's strength increases based on total star level of all active Cultists.",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/BASE/Base_Chaos_t08oos.webp",
-                  "health": 14,
-                  "mana": 37,
-                  "attackDamage": 67,
-                  "attackRange": 28,
-                  "attackSpeed": 96,
-                  "physicalResistance": 38,
-                  "magicalResistance": 27,
-                  "magicalDamage": 92,
-                  "criticalDamage": 67,
-                  "criticalRate": 44,
-                  "omniVamp": 74,
+                  "health": 59,
+                  "mana": 51,
+                  "attackDamage": 40,
+                  "attackRange": 100,
+                  "attackSpeed": 22,
+                  "physicalResistance": 17,
+                  "magicalResistance": 46,
+                  "magicalDamage": 20,
+                  "criticalDamage": 74,
+                  "criticalRate": 90,
+                  "omniVamp": 92,
                   "tiers": [
                     {
                       "tier": "base",
@@ -40882,19 +40882,19 @@
                       "tier": "bronze",
                       "min": 4,
                       "desc": "Demon Lord Galio",
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571945/FinalImages/Traits/BRONZE/Bronze_Chaos_uwn6cx.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Bronze/Bronze_Chaos_copy.webp"
                     },
                     {
                       "tier": "silver",
                       "min": 6,
                       "desc": "Supreme Overlord Galio",
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/SILVER/Silver_Chaos_qpas3d.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Silver/Silver_Chaos_copy.webp"
                     },
                     {
                       "tier": "gold",
                       "min": 8,
                       "desc": "The Endbringer",
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571945/FinalImages/Traits/GOLD/Gold_Chaos_kwt2f3.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Gold/Gold_Chaos_copy.webp"
                     },
                     {
                       "tier": "prismatic",
@@ -40908,17 +40908,17 @@
                   "name": "Blockbuster",
                   "desc": "Once your team loses 50% of their Health, Galio is summoned, slamming into the largest cluster of enemies and Stunning them. Galio's strength increases based on total star level of all active Cultists.",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/BASE/Base_Blockbuster_ybxp4i.webp",
-                  "health": 87,
-                  "mana": 61,
-                  "attackDamage": 34,
-                  "attackRange": 47,
-                  "attackSpeed": 98,
-                  "physicalResistance": 100,
-                  "magicalResistance": 89,
-                  "magicalDamage": 79,
-                  "criticalDamage": 99,
-                  "criticalRate": 31,
-                  "omniVamp": 22,
+                  "health": 42,
+                  "mana": 71,
+                  "attackDamage": 62,
+                  "attackRange": 39,
+                  "attackSpeed": 60,
+                  "physicalResistance": 95,
+                  "magicalResistance": 77,
+                  "magicalDamage": 72,
+                  "criticalDamage": 38,
+                  "criticalRate": 66,
+                  "omniVamp": 91,
                   "tiers": [
                     {
                       "tier": "base",
@@ -40928,17 +40928,17 @@
                     {
                       "tier": "bronze",
                       "min": 4,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571945/FinalImages/Traits/BRONZE/Bronze_block_buster_wriusr.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Bronze/Bronze_Blockbuster_copy.webp"
                     },
                     {
                       "tier": "silver",
                       "min": 6,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/SILVER/Silver_blockbuster_any9gr.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Silver/Silver_Blockbuster_copy.webp"
                     },
                     {
                       "tier": "gold",
                       "min": 8,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/GOLD/Gold_BlockBuster_c8v25r.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Gold/Gold_Blockbuster_copy.webp"
                     },
                     {
                       "tier": "prismatic",
@@ -40952,17 +40952,17 @@
                   "name": "Druid",
                   "desc": "Once your team loses 50% of their Health, Galio is summoned, slamming into the largest cluster of enemies and Stunning them. Galio's strength increases based on total star level of all active Cultists.",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/BASE/Base_Druid_ms0u36.webp",
-                  "health": 88,
-                  "mana": 58,
-                  "attackDamage": 78,
-                  "attackRange": 77,
-                  "attackSpeed": 73,
-                  "physicalResistance": 68,
-                  "magicalResistance": 97,
-                  "magicalDamage": 18,
-                  "criticalDamage": 92,
-                  "criticalRate": 40,
-                  "omniVamp": 61,
+                  "health": 78,
+                  "mana": 46,
+                  "attackDamage": 91,
+                  "attackRange": 39,
+                  "attackSpeed": 41,
+                  "physicalResistance": 13,
+                  "magicalResistance": 93,
+                  "magicalDamage": 60,
+                  "criticalDamage": 41,
+                  "criticalRate": 31,
+                  "omniVamp": 47,
                   "tiers": [
                     {
                       "tier": "base",
@@ -40972,17 +40972,17 @@
                     {
                       "tier": "bronze",
                       "min": 4,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571945/FinalImages/Traits/BRONZE/Bronze_Druid_wqhkqd.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Bronze/Bronze_Druid_copy.webp"
                     },
                     {
                       "tier": "silver",
                       "min": 6,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571945/FinalImages/Traits/SILVER/Silver_Druid_wdduzx.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Silver/Silver_Druid_copy.webp"
                     },
                     {
                       "tier": "gold",
                       "min": 8,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571946/FinalImages/Traits/GOLD/Gold_Druid_kqsvmz.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Gold/Gold_Druid_copy.webp"
                     },
                     {
                       "tier": "prismatic",
@@ -40996,42 +40996,42 @@
                   "name": "Fury",
                   "desc": "Once your team loses 50% of their Health, Galio is summoned, slamming into the largest cluster of enemies and Stunning them. Galio's strength increases based on total star level of all active Cultists.",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/BASE/Base_Fury_qlxv2s.webp",
-                  "health": 96,
-                  "mana": 27,
-                  "attackDamage": 92,
-                  "attackRange": 89,
-                  "attackSpeed": 48,
-                  "physicalResistance": 10,
-                  "magicalResistance": 85,
-                  "magicalDamage": 99,
-                  "criticalDamage": 40,
-                  "criticalRate": 35,
-                  "omniVamp": 32,
+                  "health": 64,
+                  "mana": 62,
+                  "attackDamage": 66,
+                  "attackRange": 47,
+                  "attackSpeed": 68,
+                  "physicalResistance": 47,
+                  "magicalResistance": 71,
+                  "magicalDamage": 94,
+                  "criticalDamage": 75,
+                  "criticalRate": 49,
+                  "omniVamp": 74,
                   "tiers": [
                     {
                       "tier": "base",
                       "min": 2,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Fury_qxavag.png"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/BASE/Base_Fury_qlxv2s.webp"
                     },
                     {
                       "tier": "bronze",
                       "min": 4,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Fury_qxavag.png"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Bronze/Bronze_Fury_copy.webp"
                     },
                     {
                       "tier": "silver",
                       "min": 6,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Fury_qxavag.png"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Silver/Silver_Fury_copy.webp"
                     },
                     {
                       "tier": "gold",
                       "min": 8,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Fury_qxavag.png"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Gold/Gold_Fury_copy.webp"
                     },
                     {
                       "tier": "prismatic",
                       "min": 10,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Fury_qxavag.png"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/PRISM/Prism_Fury_sx3bsx.webp"
                     }
                   ]
                 },
@@ -41039,43 +41039,43 @@
                   "key": "GirlCrush",
                   "name": "GirlCrush",
                   "desc": "Once your team loses 50% of their Health, Galio is summoned, slamming into the largest cluster of enemies and Stunning them. Galio's strength increases based on total star level of all active Cultists.",
-                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Girlcrush_x18xqu.png",
-                  "health": 85,
-                  "mana": 86,
-                  "attackDamage": 92,
-                  "attackRange": 38,
-                  "attackSpeed": 31,
-                  "physicalResistance": 27,
-                  "magicalResistance": 68,
-                  "magicalDamage": 53,
-                  "criticalDamage": 19,
-                  "criticalRate": 29,
-                  "omniVamp": 70,
+                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/BASE/Base_Girlcrush_g5mwnr.webp",
+                  "health": 47,
+                  "mana": 39,
+                  "attackDamage": 30,
+                  "attackRange": 33,
+                  "attackSpeed": 60,
+                  "physicalResistance": 71,
+                  "magicalResistance": 61,
+                  "magicalDamage": 92,
+                  "criticalDamage": 93,
+                  "criticalRate": 21,
+                  "omniVamp": 65,
                   "tiers": [
                     {
                       "tier": "base",
                       "min": 2,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Girlcrush_x18xqu.png"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/BASE/Base_Girlcrush_g5mwnr.webp"
                     },
                     {
                       "tier": "bronze",
                       "min": 4,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Girlcrush_x18xqu.png"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Bronze/Bronze_Girlcrush_copy.webp"
                     },
                     {
                       "tier": "silver",
                       "min": 6,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Girlcrush_x18xqu.png"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Silver/Silver_Girlcrush_copy.webp"
                     },
                     {
                       "tier": "gold",
                       "min": 8,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Girlcrush_x18xqu.png"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Gold/Gold_Girlcrush_copy.webp"
                     },
                     {
                       "tier": "prismatic",
                       "min": 10,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744693772/Girlcrush_x18xqu.png"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/PRISM/Prism_Girlcrush_smynjq.webp"
                     }
                   ]
                 },
@@ -41084,17 +41084,17 @@
                   "name": "Mirage",
                   "desc": "Once your team loses 50% of their Health, Galio is summoned, slamming into the largest cluster of enemies and Stunning them. Galio's strength increases based on total star level of all active Cultists.",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/BASE/Base_Mirage_epwfzo.webp",
-                  "health": 11,
-                  "mana": 29,
-                  "attackDamage": 37,
-                  "attackRange": 48,
-                  "attackSpeed": 54,
-                  "physicalResistance": 67,
-                  "magicalResistance": 83,
+                  "health": 52,
+                  "mana": 99,
+                  "attackDamage": 30,
+                  "attackRange": 99,
+                  "attackSpeed": 76,
+                  "physicalResistance": 18,
+                  "magicalResistance": 89,
                   "magicalDamage": 12,
-                  "criticalDamage": 23,
-                  "criticalRate": 22,
-                  "omniVamp": 64,
+                  "criticalDamage": 91,
+                  "criticalRate": 74,
+                  "omniVamp": 31,
                   "tiers": [
                     {
                       "tier": "base",
@@ -41104,17 +41104,17 @@
                     {
                       "tier": "bronze",
                       "min": 4,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571945/FinalImages/Traits/BRONZE/Bronze_Mirage_z0dx6m.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Bronze/Bronze_Mirage_copy.webp"
                     },
                     {
                       "tier": "silver",
                       "min": 6,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/SILVER/Silver_Mirage_j8lmwh.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Silver/Silver_Mirage_copy.webp"
                     },
                     {
                       "tier": "gold",
                       "min": 8,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/GOLD/Gold_Mirage_zfcahq.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Gold/Gold_Mirage_copy.webp"
                     },
                     {
                       "tier": "prismatic",
@@ -41128,17 +41128,17 @@
                   "name": "WildRush",
                   "desc": "Once your team loses 50% of their Health, Galio is summoned, slamming into the largest cluster of enemies and Stunning them. Galio's strength increases based on total star level of all active Cultists.",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/BASE/Base_Wildrush_tc92sk.webp",
-                  "health": 68,
-                  "mana": 86,
-                  "attackDamage": 69,
-                  "attackRange": 35,
-                  "attackSpeed": 77,
-                  "physicalResistance": 18,
-                  "magicalResistance": 26,
-                  "magicalDamage": 95,
-                  "criticalDamage": 26,
-                  "criticalRate": 54,
-                  "omniVamp": 66,
+                  "health": 92,
+                  "mana": 64,
+                  "attackDamage": 46,
+                  "attackRange": 86,
+                  "attackSpeed": 96,
+                  "physicalResistance": 86,
+                  "magicalResistance": 92,
+                  "magicalDamage": 68,
+                  "criticalDamage": 24,
+                  "criticalRate": 99,
+                  "omniVamp": 74,
                   "tiers": [
                     {
                       "tier": "base",
@@ -41148,17 +41148,17 @@
                     {
                       "tier": "bronze",
                       "min": 4,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/BRONZE/Bronze_wildrush_q7tygc.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Bronze/Bronze_Wildrush_copy.webp"
                     },
                     {
                       "tier": "silver",
                       "min": 6,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/SILVER/Silver_wildrush_sc0fay.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Silver/Silver_Wildrush_copy.webp"
                     },
                     {
                       "tier": "gold",
                       "min": 8,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/GOLD/Gold_Wildrush_eujgvy.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Gold/Gold_Wildrush_copy.webp"
                     },
                     {
                       "tier": "prismatic",
@@ -41172,17 +41172,17 @@
                   "name": "Guardian",
                   "desc": "Once your team loses 50% of their Health, Galio is summoned, slamming into the largest cluster of enemies and Stunning them. Galio's strength increases based on total star level of all active Cultists.",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571944/FinalImages/Traits/BASE/Base_Guardian_xauroc.webp",
-                  "health": 25,
-                  "mana": 30,
-                  "attackDamage": 12,
-                  "attackRange": 58,
-                  "attackSpeed": 98,
-                  "physicalResistance": 88,
-                  "magicalResistance": 66,
-                  "magicalDamage": 76,
-                  "criticalDamage": 51,
-                  "criticalRate": 82,
-                  "omniVamp": 23,
+                  "health": 38,
+                  "mana": 66,
+                  "attackDamage": 92,
+                  "attackRange": 82,
+                  "attackSpeed": 46,
+                  "physicalResistance": 20,
+                  "magicalResistance": 65,
+                  "magicalDamage": 83,
+                  "criticalDamage": 81,
+                  "criticalRate": 35,
+                  "omniVamp": 12,
                   "tiers": [
                     {
                       "tier": "base",
@@ -41192,17 +41192,17 @@
                     {
                       "tier": "bronze",
                       "min": 4,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571945/FinalImages/Traits/BRONZE/Bronze_Guardian_j7ucl4.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Bronze/Bronze_Guardian_copy.webp"
                     },
                     {
                       "tier": "silver",
                       "min": 6,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571945/FinalImages/Traits/SILVER/Silver_Guardian_nuwxqi.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Silver/Silver_Guardian_copy.webp"
                     },
                     {
                       "tier": "gold",
                       "min": 8,
-                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743571945/FinalImages/Traits/GOLD/Gold_Guardian_dhicaf.webp"
+                      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745497319/FinalImages/Traits/Gold/Gold_Guardian_copy.webp"
                     },
                     {
                       "tier": "prismatic",
