@@ -45,6 +45,11 @@ const CardImage = ({
           return;
         }
 
+        if (!videoRef.current) {
+          console.warn("Video reference is not available");
+          return;
+        }
+
         const playPromise = videoRef.current.play();
         playAttemptRef.current += 1;
 
@@ -141,18 +146,48 @@ const CardImage = ({
                 width={200}
                 height={200}
               />
-              {forces && src?.variant && (
-                <OptimizedImage
-                  src={
-                    forces?.find((force) => force.key === src?.variant)
-                      ?.imageUrl
-                  }
-                  alt="force"
-                  width={20}
-                  height={20}
-                  className={`absolute -top-[6px] -right-[6px] w-[20px] md:w-[30px] ${identificationImageStyle}`}
-                />
-              )}
+              <div
+                className={`absolute -top-[6px] -right-[6px] w-[20px] rounded-full overflow-hidden md:w-[30px] ${identificationImageStyle}`}
+              >
+                <div className="relative">
+                  {forces &&
+                    src?.variant &&
+                    // id videoUrl is not null, then show the force video else show the force image
+                    (forces?.find((force) => force.key === src?.variant)
+                      ?.videoUrl ? (
+                      <video
+                        src={
+                          forces?.find((force) => force.key === src?.variant)
+                            ?.videoUrl
+                        }
+                        muted
+                        playsInline
+                        autoPlay
+                        loop
+                        className="p-1 rounded-full"
+                      />
+                    ) : (
+                      <OptimizedImage
+                        src={
+                          forces?.find((force) => force.key === src?.variant)
+                            ?.imageUrl
+                        }
+                        alt="force"
+                        width={20}
+                        height={20}
+                      />
+                    ))}
+                  <OptimizedImage
+                    src={
+                      "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745572723/force_icon_frame_1_dzkfh9.webp"
+                    }
+                    className="absolute top-0 right-0 w-full h-full"
+                    alt="Border Image"
+                    width={200}
+                    height={200}
+                  />
+                </div>
+              </div>
               {/* <div className="absolute bottom-0 w-full bg-gradient-to-r from-[#1a1b3110] via-[#1a1b31] to-[#1a1b3110] bg-opacity-50">
                 <p
                   className={`ellipsis text-center text-[11px] md:text-[16px] leading-[14px] text-[#ffffff] font-extralight

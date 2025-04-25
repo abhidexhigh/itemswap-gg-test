@@ -42169,27 +42169,32 @@
                 {
                   "key": "Light",
                   "name": "Light",
-                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504339/FinalImages/Forces/eyfe8cherbin7yhenlim.webp"
+                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504339/FinalImages/Forces/eyfe8cherbin7yhenlim.webp",
+                  "videoUrl": "https://res.cloudinary.com/dg0cmj6su/video/upload/v1745571219/Untitled_video_-_Made_with_Clipchamp_5_efndul.mp4"
                 },
                 {
                   "key": "Dark",
                   "name": "Dark",
-                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504340/FinalImages/Forces/ozzmnqlajfl4u6eb4jzo.webp"
+                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504340/FinalImages/Forces/ozzmnqlajfl4u6eb4jzo.webp",
+                  "videoUrl": "https://res.cloudinary.com/dg0cmj6su/video/upload/v1745571219/Untitled_video_-_Made_with_Clipchamp_6_qtzl4z.mp4"
                 },
                 {
                   "key": "Fire",
                   "name": "Fire",
-                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744460490/933fc4d3-84b9-40e4-9a99-8a04c625c899-video-ezgif.com-video-to-webp-converter_bsnpcz.webp"
+                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504338/FinalImages/Forces/bx928te0w5qw5fzfn7yv.webp",
+                  "videoUrl": "https://res.cloudinary.com/dg0cmj6su/video/upload/v1745571220/Untitled_video_-_Made_with_Clipchamp_2_krdznx.mp4"
                 },
                 {
                   "key": "Storm",
                   "name": "Storm",
-                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744460490/7a464ac9-e35a-4562-ba48-0c824690b7d6-video-ezgif.com-video-to-webp-converter_j37pqg.webp"
+                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504340/FinalImages/Forces/mrrqr2npwzgvf2wbcyl4.webp",
+                  "videoUrl": "https://res.cloudinary.com/dg0cmj6su/video/upload/v1745571219/Untitled_video_-_Made_with_Clipchamp_3_cpv1rn.mp4"
                 },
                 {
                   "key": "Water",
                   "name": "Water",
-                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744460490/09cda799-a421-4934-bded-afb68bc5c878-video-ezgif.com-video-to-webp-converter_pusqh4.webp"
+                  "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1743504339/FinalImages/Forces/vcrrx6plueox6miuyyya.webp",
+                  "videoUrl": "https://res.cloudinary.com/dg0cmj6su/video/upload/v1745571219/Untitled_video_-_Made_with_Clipchamp_4_itebmw.mp4"
                 }
               ],
               "augments": [
