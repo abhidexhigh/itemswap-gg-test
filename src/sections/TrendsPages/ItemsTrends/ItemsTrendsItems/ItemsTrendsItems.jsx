@@ -13,6 +13,7 @@ import CardImage from "src/components/cardImage";
 import ScrollableTable from "src/utils/ScrollableTable";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
+import ColoredValue from "src/components/ColoredValue";
 
 const ProjectItems = () => {
   const { t } = useTranslation();
@@ -301,7 +302,10 @@ const ProjectItems = () => {
                         </td>
                         <td className={`p-2 ${getCellClass("avgPlacement")}`}>
                           <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
-                            #{item?.avgPlacement}
+                            <ColoredValue
+                              value={item?.avgPlacement}
+                              prefix="#"
+                            />
                           </p>
                         </td>
                         <td className={`p-2 ${getCellClass("tops")}`}>

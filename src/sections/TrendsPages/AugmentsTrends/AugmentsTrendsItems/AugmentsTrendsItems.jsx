@@ -12,6 +12,7 @@ import augments from "../../../../data/newData/augments.json";
 import ScrollableTable from "src/utils/ScrollableTable";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
+import ColoredValue from "src/components/ColoredValue";
 
 const ProjectItems = () => {
   const { t } = useTranslation();
@@ -285,7 +286,10 @@ const ProjectItems = () => {
                         </td>
                         <td className={`p-2 ${getCellClass("avgPlacement")}`}>
                           <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
-                            #{item?.avgPlacement.toFixed(2)}
+                            <ColoredValue
+                              value={item?.avgPlacement}
+                              prefix="#"
+                            />
                           </p>
                         </td>
                         <td

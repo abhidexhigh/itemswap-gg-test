@@ -164,7 +164,7 @@ const CardImage = ({
                         playsInline
                         autoPlay
                         loop
-                        className="p-1 rounded-full"
+                        className="p-1 rounded-full w-[20px] md:w-[30px]"
                       />
                     ) : (
                       <OptimizedImage
@@ -175,13 +175,14 @@ const CardImage = ({
                         alt="force"
                         width={20}
                         height={20}
+                        className="p-0.5 rounded-full w-[20px] md:w-[30px]"
                       />
                     ))}
                   <OptimizedImage
                     src={
                       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745572723/force_icon_frame_1_dzkfh9.webp"
                     }
-                    className="absolute top-0 right-0 w-full h-full"
+                    className="absolute top-0 right-0 w-full object-contain"
                     alt="Border Image"
                     width={200}
                     height={200}

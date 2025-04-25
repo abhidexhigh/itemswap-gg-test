@@ -12,6 +12,7 @@ import TrendFilters from "src/components/trendFilters";
 import ScrollableTable from "src/utils/ScrollableTable";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
+import ColoredValue from "src/components/ColoredValue";
 
 const ProjectItems = () => {
   const { t } = useTranslation();
@@ -265,8 +266,11 @@ const ProjectItems = () => {
                       </div>
                     </td>
                     <td className={`p-2 ${getCellClass("avgPlacement")}`}>
-                      <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-                        #{champion?.avgPlacement}
+                      <p className="p-0 text-left text-base md:text-lg mb-0">
+                        <ColoredValue
+                          value={champion?.avgPlacement}
+                          prefix="#"
+                        />
                       </p>
                     </td>
                     <td className={`p-2 ${getCellClass("tops")}`}>
