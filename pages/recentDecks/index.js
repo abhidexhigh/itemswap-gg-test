@@ -21,18 +21,26 @@ export default function ItemsTrends() {
         {walletModalvisibility && <WalletModal />}
         {metamaskModal && <MetamaskModal />}
         <Header />
-        <div className="container px-0 md:px-3">
-          <div className="h-[360px] md:h-[360px] 2xl:h-[420px] relative">
-            <div class="absolute bottom-0 h-10 w-full bg-transparent bg-gradient-to-b from-[#00000005] from-5% to-[#191F1F] to-95% md:static md:block"></div>
+        <div className="h-[360px] md:h-[360px] 2xl:h-[420px]" />
+        <div
+          className="backdrop-blur-3xl"
+          style={{
+            backgroundImage: `url(https://res.cloudinary.com/dg0cmj6su/image/upload/v1744785474/smoke_q32s0q.jpg)`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            backgroundAttachment: "fixed",
+          }}
+        >
+          <div className="container">
+            {/* <PageHeader currentPage="META TRENDS" pageTitle="META TRENDS" /> */}
+            <div className="sticky top-14 z-50">
+              <TrendsNav selected="recentDecks" />
+            </div>
+            <RecentDecks />
           </div>
-          {/* <PageHeader currentPage="META TRENDS" pageTitle="META TRENDS" /> */}
-          <div className="sticky top-14 z-50">
-            <TrendsNav selected="recentDecks" />
-          </div>
-          {/* <div className="bg-transparent-20"></div> */}
-          <RecentDecks />
-          <Footer />
         </div>
+        <Footer />
       </Layout>
     </Fragment>
   );

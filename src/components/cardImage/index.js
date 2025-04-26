@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { OptimizedImage } from "../../utils/imageOptimizer";
 import ReactTltp from "../tooltip/ReactTltp";
+import ForceIcon from "../forceIcon";
 
 const CardImage = ({
   src,
@@ -23,6 +24,14 @@ const CardImage = ({
 
   // Check if source has a video
   const hasVideo = useMemo(() => Boolean(src?.cardVideo), [src?.cardVideo]);
+
+  // Check if force has a video
+  const hasForceVideo = useMemo(() => {
+    if (!forces || !src?.variant) return false;
+    return Boolean(
+      forces.find((force) => force.key === src?.variant)?.videoUrl
+    );
+  }, [forces, src?.variant]);
 
   // Effect to preload video
   useEffect(() => {
@@ -149,45 +158,13 @@ const CardImage = ({
               <div
                 className={`absolute -top-[6px] -right-[6px] w-[20px] rounded-full overflow-hidden md:w-[30px] ${identificationImageStyle}`}
               >
-                <div className="relative">
-                  {forces &&
-                    src?.variant &&
-                    // id videoUrl is not null, then show the force video else show the force image
-                    (forces?.find((force) => force.key === src?.variant)
-                      ?.videoUrl ? (
-                      <video
-                        src={
-                          forces?.find((force) => force.key === src?.variant)
-                            ?.videoUrl
-                        }
-                        muted
-                        playsInline
-                        autoPlay
-                        loop
-                        className="p-1 rounded-full w-[20px] md:w-[30px]"
-                      />
-                    ) : (
-                      <OptimizedImage
-                        src={
-                          forces?.find((force) => force.key === src?.variant)
-                            ?.imageUrl
-                        }
-                        alt="force"
-                        width={20}
-                        height={20}
-                        className="p-0.5 rounded-full w-[20px] md:w-[30px]"
-                      />
-                    ))}
-                  <OptimizedImage
-                    src={
-                      "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745572723/force_icon_frame_1_dzkfh9.webp"
-                    }
-                    className="absolute top-0 right-0 w-full object-contain"
-                    alt="Border Image"
-                    width={200}
-                    height={200}
+                {forces && src?.variant && (
+                  <ForceIcon
+                    force={forces?.find((force) => force.key === src?.variant)}
+                    isHovered={isHovered}
+                    size="small"
                   />
-                </div>
+                )}
               </div>
               {/* <div className="absolute bottom-0 w-full bg-gradient-to-r from-[#1a1b3110] via-[#1a1b31] to-[#1a1b3110] bg-opacity-50">
                 <p

@@ -1,69 +1,450 @@
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import "../../../../../i18n";
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, memo } from "react";
 import { Tooltip } from "react-tooltip";
 import moment from "moment";
 import TraitTooltip from "src/components/tooltip/TraitTooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import GirlCrush from "@assets/image/traits/GirlCrush.svg";
 import RecentDecksCard from "../RecentDecksCard/RecentDecksCard";
-import { PiEye } from "react-icons/pi";
-import { PiEyeClosed } from "react-icons/pi";
+import MetaTrendsCard from "../../MetaTrends/MetaTrendsCard/MetaTrendsCard";
+import { PiEye, PiEyeClosed } from "react-icons/pi";
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import CardImage from "src/components/cardImage";
 import Comps from "../../../../data/compsNew.json";
 import RecentDecksHistory from "../../../../data/newData/recentDecksHistory.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import { OptimizedImage } from "src/utils/imageOptimizer";
+import ForceIcon from "src/components/forceIcon";
 
-const ProjectItems = () => {
+// Reusable tab button component
+const TabButton = memo(({ active, label, onClick }) => (
+  <button
+    type="button"
+    className={`px-6 py-3 text-sm md:text-base font-medium transition-colors duration-200 ${
+      active ? "bg-[#ffffff] text-[#1a1b30]" : "text-white hover:bg-[#ffffff20]"
+    }`}
+    onClick={onClick}
+  >
+    {label}
+  </button>
+));
+
+// Trait item component
+const TraitItem = memo(({ trait, selectedTrait, onSelect, i }) => (
+  <div
+    className="flex flex-col items-center gap-2 cursor-pointer group"
+    onClick={() => onSelect("trait", trait?.key)}
+  >
+    <ReactTltp variant="trait" content={trait} id={`${trait?.key}-${i}`} />
+    <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
+      <OptimizedImage
+        alt={trait?.name || "Trait"}
+        width={96}
+        height={96}
+        src={trait?.imageUrl}
+        className="w-full h-full object-cover rounded-lg"
+        data-tooltip-id={`${trait?.key}-${i}`}
+        loading="lazy"
+      />
+      {trait?.key === selectedTrait && (
+        <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+          <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
+        </div>
+      )}
+    </div>
+    <span className="hidden lg:block text-sm md:text-base text-white bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
+      {trait?.name}
+    </span>
+  </div>
+));
+
+// Force item component
+const ForceItem = memo(({ force, selectedTrait, onSelect, i }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div
+      className="flex flex-col items-center gap-2 cursor-pointer group"
+      onClick={() => onSelect("force", force?.key)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <ReactTltp variant="force" content={force} id={`${force?.key}-${i}`} />
+      <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
+        <ForceIcon
+          force={force}
+          size="xxlarge"
+          isHovered={isHovered}
+          className="w-full h-full object-cover rounded-lg"
+          data-tooltip-id={`${force?.key}-${i}`}
+        />
+        {force?.key === selectedTrait && (
+          <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+            <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
+          </div>
+        )}
+      </div>
+      <span className="hidden lg:block text-sm md:text-base text-[#cccccc] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
+        {force?.name}
+      </span>
+    </div>
+  );
+});
+
+// Item icon component
+const ItemIcon = memo(({ item, selectedItem, onSelect, i }) => (
+  <div
+    className="flex flex-col items-center gap-2 cursor-pointer group max-w-[84px]"
+    onClick={() => onSelect("item", item?.key)}
+  >
+    <ReactTltp variant="item" content={item} id={`${item?.key}-${i}`} />
+    <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-110">
+      <OptimizedImage
+        alt={item?.name || "Item"}
+        width={84}
+        height={84}
+        src={item?.imageUrl}
+        className="w-full h-full object-contain rounded-lg !border !border-[#ffffff20]"
+        data-tooltip-id={`${item?.key}-${i}`}
+        loading="lazy"
+      />
+      {item?.key === selectedItem && (
+        <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+          <IoMdCheckmarkCircle className="text-[#86efac] text-5xl z-50" />
+        </div>
+      )}
+    </div>
+  </div>
+));
+
+// Champion with items component
+const ChampionWithItems = memo(({ champion, champions, items, forces }) => {
+  if (!champion) return null;
+
+  const championDetails = champions?.find((c) => c.key === champion?.key);
+  if (!championDetails) return null;
+
+  return (
+    <div className="flex flex-col items-center gap-x-4 flex-grow basis-0 min-w-[65px] md:min-w-[80px] max-w-[78px] md:max-w-[150px]">
+      <p
+        className="ellipsis text-center text-[12px] md:text-[16px] leading-[14px] text-[#fff] font-extralight w-full p-[2px] m-0"
+        style={{
+          textShadow:
+            "rgb(0, 0, 0) -1px 0px 2px, rgb(0, 0, 0) 0px 1px 2px, rgb(0, 0, 0) 1px 0px 2px, rgb(0, 0, 0) 0px -1px 2px",
+        }}
+      >
+        {championDetails.name}
+      </p>
+
+      <div className="inline-flex items-center justify-center flex-col">
+        <div className="flex flex-col w-full aspect-square rounded-[20px]">
+          <div
+            className="relative inline-flex rounded-lg"
+            data-tooltip-id={championDetails.key}
+          >
+            <CardImage src={championDetails} imgStyle="w-28" forces={forces} />
+          </div>
+          <ReactTltp
+            variant="champion"
+            id={championDetails.key}
+            content={championDetails}
+          />
+        </div>
+      </div>
+
+      <div className="inline-flex items-center justify-center w-full gap-0.5 flex-wrap">
+        {champion?.items?.map((item, idx) => {
+          const itemDetails = items?.find((i) => i.key === item);
+          if (!itemDetails) return null;
+
+          return (
+            <div
+              key={idx}
+              className="relative z-10 hover:z-20 !border !border-[#ffffff20] aspect-square rounded-lg"
+            >
+              <ReactTltp
+                variant="item"
+                content={itemDetails}
+                id={itemDetails.key}
+              />
+              <OptimizedImage
+                alt={itemDetails.name || "Item"}
+                width={50}
+                height={50}
+                src={itemDetails.imageUrl}
+                className="w-[20px] md:w-[30px] rounded-lg hover:scale-150 transition-all duration-300"
+                data-tooltip-id={itemDetails.key}
+                loading="lazy"
+              />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+});
+
+// Augment icon component
+const AugmentIcon = memo(({ augment, augments }) => {
+  const augmentDetails = augments?.find((a) => a.key === augment);
+  if (!augmentDetails) return null;
+
+  return (
+    <div className="flex justify-center items-center md:w-[64px] relative">
+      <OptimizedImage
+        alt={augmentDetails.name || "Augment"}
+        width={80}
+        height={80}
+        src={augmentDetails.imageUrl}
+        className="w-[64px] md:w-[86px]"
+        data-tooltip-id={augment}
+        loading="lazy"
+      />
+      <ReactTltp variant="augment" content={augmentDetails} id={augment} />
+    </div>
+  );
+});
+
+// Force display component
+const ForceDisplay = memo(({ force, forces, i }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const forceDetails = forces?.find(
+    (t) => t.key.toLowerCase() === force?.key.toLowerCase()
+  );
+  if (!forceDetails) return null;
+
+  return (
+    <div
+      className="flex justify-center items-center bg-[#000] rounded-full mx-1 pr-2 border-[1px] border-[#ffffff50]"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <ForceIcon
+        force={forceDetails}
+        size="custom"
+        customSize="w-[24px] h-[24px] md:w-[40px] md:h-[40px]"
+        className="mr-1"
+        isHovered={isHovered}
+        data-tooltip-id={`${force?.key}-${i}`}
+      />
+      <ReactTltp content={force?.key} id={`${force?.key}-${i}`} />
+      <span className="text-[18px]">{force?.numUnits}</span>
+    </div>
+  );
+});
+
+// TraitIcon component
+const TraitIcon = memo(({ trait, traits, i }) => {
+  const traitDetails = traits?.find((t) => t.key === trait?.key);
+  const tier = traitDetails?.tiers?.find((t) => t?.min >= trait?.numUnits);
+
+  if (!traitDetails || !tier?.imageUrl) return null;
+
+  return (
+    <div className="relative w-[30px] h-[30px] md:w-[56px] md:h-[56px]">
+      <OptimizedImage
+        alt={traitDetails.name || "Trait"}
+        width={50}
+        height={50}
+        src={tier.imageUrl}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center w-[30px] md:w-[56px]"
+        data-tooltip-id={traitDetails.key}
+        loading="lazy"
+      />
+      <ReactTltp
+        variant="trait"
+        id={traitDetails.key}
+        content={{
+          ...traitDetails,
+          numUnits: trait?.numUnits,
+        }}
+      />
+    </div>
+  );
+});
+
+// Placement badge component
+const PlacementBadge = memo(({ placement }) => (
+  <div
+    className={`rounded-lg !border-[#ffffff40] !border p-2 py-0 shadow-lg ${
+      placement === 1
+        ? "text-[#3aedbd] !border-[#3aedbd]"
+        : placement === 2
+          ? "text-[#FBDB51] !border-[#FBDB51]"
+          : placement === 3
+            ? "text-[#6eccff] !border-[#6eccff]"
+            : "text-[#ffffff]"
+    }`}
+  >
+    <div className="text-xl md:text-3xl p-2">{placement}</div>
+  </div>
+));
+
+// Deck header component
+const DeckHeader = memo(
+  ({ metaDeck, forces, traits, toggleClosed, isClosed, i }) => (
+    <header className="relative flex md:flex-col justify-between items-end bg-[#1a1b30] py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px]">
+      <div className="inline-flex flex-col flex-wrap gap-[8px] md:flex-row md:items-center md:gap-3">
+        <div className="flex items-center gap-x-2">
+          <PlacementBadge placement={metaDeck?.placement} />
+          <Link
+            href={`/user/${metaDeck?.puuid}/${metaDeck?.key}`}
+            className="flex items-center gap-x-2"
+          >
+            <div className="relative">
+              <OptimizedImage
+                src={metaDeck?.imageUrl}
+                alt={metaDeck?.name || "User"}
+                width={80}
+                height={80}
+                className="w-16 relative"
+                loading="lazy"
+              />
+            </div>
+            <div className="flex flex-col">
+              <div className="-mb-1 text-lg">{metaDeck?.name}</div>
+              <div className="-mb-1 font-normal text-sm">
+                {moment(metaDeck?.dateTime).fromNow()} • {metaDeck?.duration}
+              </div>
+            </div>
+          </Link>
+        </div>
+        <span className="flex justify-center items-center">
+          {metaDeck?.deck?.forces?.map((force, i) => (
+            <ForceDisplay key={i} force={force} forces={forces} i={i} />
+          ))}
+        </span>
+      </div>
+      <div className="inline-flex flex-shrink-0 gap-[22px] md:mt-0">
+        <div className="inline-flex flex-wrap">
+          {metaDeck?.deck?.traits?.map((trait, i) => (
+            <TraitIcon key={i} trait={trait} traits={traits} i={i} />
+          ))}
+        </div>
+        <div className="absolute right-[16px] top-[16px] inline-flex gap-[8px] lg:relative lg:right-[0px] lg:top-[0px]">
+          <button
+            className="inline-flex w-[16px] cursor-pointer items-center text-white"
+            title="Hide"
+            id={i.toString()}
+            onClick={toggleClosed}
+          >
+            {!isClosed ? <PiEye /> : <PiEyeClosed />}
+          </button>
+        </div>
+      </div>
+    </header>
+  )
+);
+
+// Meta deck component
+const MetaDeck = memo(
+  ({
+    metaDeck,
+    i,
+    isClosed,
+    handleIsClosed,
+    champions,
+    items,
+    traits,
+    forces,
+    augments,
+  }) => {
+    // Avoid re-creating the handler function on every render
+    const toggleClosed = useCallback(
+      (e) => {
+        handleIsClosed(e);
+      },
+      [handleIsClosed]
+    );
+
+    return (
+      <div
+        className="flex flex-col gap-[1px] !border border-cardBorder/30 rounded-lg overflow-hidden shadow-lg bg-[#00000099] mb-4"
+        style={{
+          background: "rgba(0, 0, 0, 0.6)",
+          backdropFilter: "blur(2px)",
+        }}
+      >
+        <DeckHeader
+          metaDeck={metaDeck}
+          forces={forces}
+          traits={traits}
+          toggleClosed={toggleClosed}
+          isClosed={isClosed[i]}
+          i={i}
+        />
+
+        {!isClosed[i] && (
+          <div className="flex flex-col bg-center bg-no-repeat mt-[-1px]">
+            <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#111111] py-[16px] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6">
+              <div className="flex items-center gap-x-8">
+                <div className="hidden md:flex md:flex-col justify-center gap-[2px] lg:py-[8px]">
+                  {metaDeck?.deck?.augments?.map((augment, i) => (
+                    <AugmentIcon
+                      key={i}
+                      augment={augment}
+                      augments={augments}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="mb-[16px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[93%] lg:flex-shrink-0">
+                <div className="flex flex-wrap justify-center lg:justify-center gap-2 w-full">
+                  {metaDeck?.deck?.champions?.map((champion, i) => (
+                    <ChampionWithItems
+                      key={i}
+                      champion={champion}
+                      champions={champions}
+                      items={items}
+                      forces={forces}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+);
+
+const RecentDecksItems = () => {
   const { t } = useTranslation();
   const others = t("others");
-  const [selectedChampion, setSelectedChampion] = React.useState(null);
-  const [selectedTrait, setSelectedTrait] = React.useState(null);
-  const [selectedItem, setSelectedItem] = React.useState(null);
-  // const { data } = projectsData;
+  const [selectedChampion, setSelectedChampion] = useState(null);
+  const [selectedTrait, setSelectedTrait] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
   const [isClosed, setIsClosed] = useState({});
-  const [height, setHeight] = useState("auto");
-  const [activeTab, setActiveTab] = useState("Champions"); // [Tier 1, Tier 2, Tier 3, Tier 4, Tier 5
-  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("Champions");
 
-  const chartData = {
-    labels: ["", "", "", "", "", "", "", "", ""],
-    datasets: [
-      {
-        label: "",
-        data: [12, 19, 3, 5, 2, 3, 7, 9, 8],
-        backgroundColor: "rgb(26 27 49)", // Uniform color for all bars
-        borderColor: "rgb(43 49 163)", // Uniform color for all bar borders
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const handleIsClosed = (event) => {
-    // Accessing the id of the clicked button
-    const buttonId = event.currentTarget.id;
-    // Updating the state
-    setIsClosed({ ...isClosed, [buttonId]: !isClosed[buttonId] });
-  };
-
-  const {
-    props: {
-      pageProps: {
-        dehydratedState: {
-          queries: { data },
+  // Extract data once from the JSON structure using useMemo
+  const { metaDecks, champions, items, traits, augments, forces } =
+    useMemo(() => {
+      const {
+        props: {
+          pageProps: {
+            dehydratedState: {
+              queries: { data },
+            },
+          },
         },
-      },
-    },
-  } = Comps;
-  const { metaDecks } = RecentDecksHistory;
-  const { champions } = data?.refs;
-  const { items } = data?.refs;
-  const { traits } = data?.refs;
-  const { augments } = data?.refs;
-  const { forces } = data?.refs;
+      } = Comps;
+
+      return {
+        metaDecks: RecentDecksHistory?.metaDecks || [],
+        champions: data?.refs?.champions || [],
+        items: data?.refs?.items || [],
+        traits: data?.refs?.traits || [],
+        augments: data?.refs?.augments || [],
+        forces: data?.refs?.forces || [],
+      };
+    }, []);
+
   const [compsData, setCompsData] = useState(metaDecks);
 
   // Memoized shuffle function
@@ -77,7 +458,7 @@ const ProjectItems = () => {
     return newArray;
   }, []);
 
-  // Memoize champion grouping
+  // Pre-process and memoize champion data
   const { filteredChampions, groupedArray } = useMemo(() => {
     if (!champions || !champions.length) {
       return { filteredChampions: [], groupedArray: [] };
@@ -106,7 +487,10 @@ const ProjectItems = () => {
       if (!acc[cost]) {
         acc[cost] = [];
       }
-      acc[cost].push(champion);
+      acc[cost].push({
+        ...champion,
+        selected: champion.key === selectedChampion,
+      });
       return acc;
     }, {});
 
@@ -114,255 +498,105 @@ const ProjectItems = () => {
       filteredChampions: filtered,
       groupedArray: Object.values(groupedByCost),
     };
-  }, [champions, shuffle]);
+  }, [champions, shuffle, selectedChampion]);
 
-  // Update selected status
-  useMemo(() => {
-    if (!groupedArray.length) return;
+  // Memoize the filtered items list
+  const filteredItems = useMemo(() => {
+    return items?.filter((item) => !item?.isFromItem) || [];
+  }, [items]);
 
-    groupedArray.forEach((subArray) => {
-      subArray.forEach((champion) => {
-        champion.selected = champion.key === selectedChampion;
-      });
-    });
-  }, [groupedArray, selectedChampion]);
-
-  // Memoized filter change handler
+  // Optimized filter change handler with proper memoization
   const handleFilterChange = useCallback(
     (type, key) => {
-      if (!metaDecks) return;
+      if (!metaDecks?.length) return;
+
+      let newCompsData;
 
       if (type === "trait") {
         if (selectedTrait === key) {
           setSelectedTrait(null);
-          setCompsData(metaDecks);
+          newCompsData = metaDecks;
         } else {
           setSelectedTrait(key);
-          const filteredTraits = metaDecks.filter((deck) =>
-            deck.deck.traits.some((trait) => trait.key === key)
+          newCompsData = metaDecks.filter((deck) =>
+            deck.deck?.traits?.some((trait) => trait.key === key)
           );
-          setCompsData(filteredTraits);
         }
         setSelectedChampion(null);
         setSelectedItem(null);
       } else if (type === "force") {
         if (selectedTrait === key) {
           setSelectedTrait(null);
-          setCompsData(metaDecks);
+          newCompsData = metaDecks;
         } else {
           setSelectedTrait(key);
-          const filteredTraits = metaDecks.filter((deck) =>
-            deck.deck.forces.some(
+          newCompsData = metaDecks.filter((deck) =>
+            deck.deck?.forces?.some(
               (force) => force.key.toLowerCase() === key.toLowerCase()
             )
           );
-          setCompsData(filteredTraits);
         }
         setSelectedChampion(null);
         setSelectedItem(null);
       } else if (type === "champion") {
         if (selectedChampion === key) {
           setSelectedChampion(null);
-          setCompsData(metaDecks);
+          newCompsData = metaDecks;
         } else {
           setSelectedChampion(key);
-          const filteredChampions = metaDecks.filter((deck) =>
-            deck.deck.champions.some((champion) => champion.key === key)
+          newCompsData = metaDecks.filter((deck) =>
+            deck.deck?.champions?.some((champion) => champion.key === key)
           );
-          setCompsData(filteredChampions);
         }
         setSelectedTrait(null);
         setSelectedItem(null);
       } else if (type === "item") {
         if (selectedItem === key) {
           setSelectedItem(null);
-          setCompsData(metaDecks);
+          newCompsData = metaDecks;
         } else {
           setSelectedItem(key);
-          const filteredItems = metaDecks.filter((deck) =>
-            deck.deck.champions.some(
+          newCompsData = metaDecks.filter((deck) =>
+            deck.deck?.champions?.some(
               (champion) =>
                 champion.items && champion.items.some((item) => item === key)
             )
           );
-          setCompsData(filteredItems);
         }
         setSelectedChampion(null);
         setSelectedTrait(null);
       }
+
+      setCompsData(newCompsData);
     },
     [metaDecks, selectedChampion, selectedItem, selectedTrait]
   );
 
-  // Memoized height toggle handler
-  const toggleHeight = useCallback(() => {
-    setHeight((previous) => (previous === "auto" ? "200px" : "auto"));
+  // Optimized function with useCallback to avoid recreation on every render
+  const handleIsClosed = useCallback((event) => {
+    const buttonId = event.currentTarget.id;
+    setIsClosed((prev) => ({ ...prev, [buttonId]: !prev[buttonId] }));
   }, []);
 
-  // Memoized tab change handler
   const handleTabChange = useCallback((tab) => {
     setActiveTab(tab);
   }, []);
 
-  const series = [
-    {
-      name: "Avg Rank",
-      data: [90, 80, 70, 60, 50, 40, 30, 20, 10],
-    },
-  ];
-  const options = {
-    chart: {
-      type: "bar",
-      height: 350,
-      toolbar: {
-        show: false, // This hides the menu button
-      },
-      padding: {
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-      },
-      margin: {
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-      },
-    },
-    grid: {
-      show: false, // This hides the background grid lines
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        barHeight: "100%", // Makes bars fill the entire vertical space
-        distributed: false,
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    stroke: {
-      show: true,
-      width: 2,
-      colors: ["transparent"],
-    },
-    xaxis: {
-      labels: {
-        show: false, // Hides x-axis labels
-      },
-      axisTicks: {
-        show: false, // Hides x-axis ticks
-      },
-      axisBorder: {
-        show: false, // Hides x-axis line
-      },
-      floating: true, // This ensures the axis doesn't take up space
-    },
-    yaxis: {
-      labels: {
-        show: false, // Hides y-axis labels
-      },
-      axisTicks: {
-        show: false, // Hides y-axis ticks
-      },
-      axisBorder: {
-        show: false, // Hides y-axis line
-      },
-      floating: true, // This ensures the axis doesn't take up space
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        barHeight: "100%", // Makes bars fill the entire vertical space
-        distributed: false,
-      },
-    },
-    tooltip: {
-      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+  // Memoize tab content to avoid unnecessary rerenders
+  const tabContent = useMemo(() => {
+    switch (activeTab) {
+      case "Champions":
         return (
-          '<div class="apexcharts-tooltip-series">' +
-          '<span class="apexcharts-tooltip-text-y-label">Avg Rank: </span>' +
-          '<span class="apexcharts-tooltip-text-y-value">' +
-          series[seriesIndex][dataPointIndex] +
-          "</span>" +
-          "</div>"
+          <MetaTrendsCard
+            itemCount={13}
+            championsByCost={groupedArray}
+            setSelectedChampion={(key) => handleFilterChange("champion", key)}
+            forces={forces}
+          />
         );
-      },
-    },
-    fill: {
-      opacity: 1,
-    },
-    // tooltip: {
-    //   y: {
-    //     formatter: function (val) {
-    //       return "$ " + val + " thousands";
-    //     },
-    //   },
-    // },
-  };
-
-  return (
-    // <ProjectItemsStyleWrapper>
-    <div className="mx-auto md:px-6 lg:px-8 py-6">
-      <div className="space-y-6">
-        {/* Tabs Section */}
-        <div className="flex justify-center md:justify-start">
-          <div className="inline-flex rounded-lg overflow-hidden border border-[#ffffff20] bg-[#1a1b30]">
-            <button
-              type="button"
-              className={`px-6 py-3 text-sm md:text-base font-medium transition-colors duration-200 ${
-                activeTab === "Champions"
-                  ? "bg-[#ffffff] text-[#1a1b30]"
-                  : "text-white hover:bg-[#ffffff20]"
-              }`}
-              onClick={() => setActiveTab("Champions")}
-            >
-              {others?.champions}
-            </button>
-            <button
-              type="button"
-              className={`px-6 py-3 text-sm md:text-base font-medium transition-colors duration-200 ${
-                activeTab === "Traits"
-                  ? "bg-[#ffffff] text-[#1a1b30]"
-                  : "text-white hover:bg-[#ffffff20]"
-              }`}
-              onClick={() => setActiveTab("Traits")}
-            >
-              {others?.traits}
-            </button>
-            <button
-              type="button"
-              className={`px-6 py-3 text-sm md:text-base font-medium transition-colors duration-200 ${
-                activeTab === "Items"
-                  ? "bg-[#ffffff] text-[#1a1b30]"
-                  : "text-white hover:bg-[#ffffff20]"
-              }`}
-              onClick={() => setActiveTab("Items")}
-            >
-              {others?.items}
-            </button>
-          </div>
-        </div>
-
-        {/* Content Sections */}
-        <div className="bg-[#1a1b30] md:bg-transparent rounded-lg shadow-lg">
-          {/* Champions Tab */}
-          <div className={`${activeTab === "Champions" ? "block" : "hidden"}`}>
-            <RecentDecksCard
-              itemCount={13}
-              championsByCost={groupedArray}
-              setSelectedChampion={(key) => handleFilterChange("champion", key)}
-              forces={forces}
-            />
-          </div>
-
-          {/* Traits Tab */}
-          <div
-            className={`${activeTab === "Traits" ? "block" : "hidden"} p-3 md:p-6 bg-[#1a1b30] rounded-lg`}
-          >
-            {/* Origins Section */}
+      case "Traits":
+        return (
+          <div className="p-3 md:p-6 bg-[#1a1b30] rounded-lg">
             <div className="space-y-6">
               <div className="flex flex-col lg:flex-row items-center gap-4">
                 <div className="p-1 rounded-lg text-white font-semibold text-center min-w-[100px]">
@@ -370,400 +604,116 @@ const ProjectItems = () => {
                 </div>
                 <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 w-full">
                   {traits?.map((trait, i) => (
-                    <div
+                    <TraitItem
                       key={i}
-                      className="flex flex-col items-center gap-2 cursor-pointer group"
-                      onClick={() => handleFilterChange("trait", trait?.key)}
-                    >
-                      <ReactTltp
-                        variant="trait"
-                        content={trait}
-                        id={`${trait?.key}-${i}`}
-                      />
-                      <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
-                        <OptimizedImage
-                          alt={trait?.name}
-                          width={96}
-                          height={96}
-                          src={trait?.imageUrl}
-                          className="w-full h-full object-cover rounded-lg"
-                          data-tooltip-id={`${trait?.key}-${i}`}
-                        />
-                        {trait?.key === selectedTrait && (
-                          <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
-                            <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
-                          </div>
-                        )}
-                      </div>
-                      <span className="hidden lg:block text-sm md:text-base text-white bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
-                        {trait?.name}
-                      </span>
-                    </div>
+                      trait={trait}
+                      selectedTrait={selectedTrait}
+                      onSelect={handleFilterChange}
+                      i={i}
+                    />
                   ))}
                 </div>
               </div>
 
-              {/* Forces Section */}
               <div className="flex flex-col lg:flex-row items-center gap-4">
                 <div className="p-1 rounded-lg text-white font-semibold text-center min-w-[100px]">
                   {others?.forces}
                 </div>
                 <div className="grid grid-cols-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 w-full">
                   {forces?.map((force, i) => (
-                    <div
+                    <ForceItem
                       key={i}
-                      className="flex flex-col items-center gap-2 cursor-pointer group"
-                      onClick={() => handleFilterChange("force", force?.key)}
-                    >
-                      <ReactTltp
-                        variant="force"
-                        content={force}
-                        id={`${force?.key}-${i}`}
-                      />
-                      <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
-                        <OptimizedImage
-                          alt={force?.name}
-                          width={96}
-                          height={96}
-                          src={force?.imageUrl}
-                          className="w-full h-full object-cover rounded-lg"
-                          data-tooltip-id={`${force?.key}-${i}`}
-                        />
-                        {force?.key === selectedTrait && (
-                          <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
-                            <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
-                          </div>
-                        )}
-                      </div>
-                      <span className="hidden lg:block text-sm md:text-base text-[#cccccc] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
-                        {force?.name}
-                      </span>
-                    </div>
+                      force={force}
+                      selectedTrait={selectedTrait}
+                      onSelect={handleFilterChange}
+                      i={i}
+                    />
                   ))}
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Items Tab */}
-          <div
-            className={`${activeTab === "Items" ? "block" : "hidden"} p-3 md:p-6 bg-[#1a1b30] rounded-lg`}
-          >
+        );
+      case "Items":
+        return (
+          <div className="p-3 md:p-6 bg-[#1a1b30] rounded-lg">
             <div className="grid grid-cols-5 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:!flex justify-center xl:!flex-wrap gap-2 lg:gap-4">
-              {items
-                ?.filter((item) => !item?.isFromItem)
-                ?.map((item, i) => (
-                  <div
-                    key={i}
-                    className="flex flex-col items-center gap-2 cursor-pointer group max-w-[84px]"
-                    onClick={() => handleFilterChange("item", item?.key)}
-                  >
-                    <ReactTltp
-                      variant="item"
-                      content={item}
-                      id={`${item?.key}-${i}`}
-                    />
-                    <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-110">
-                      <OptimizedImage
-                        alt={item?.name}
-                        width={84}
-                        height={84}
-                        src={item?.imageUrl}
-                        className="w-full h-full object-contain  rounded-lg !border !border-[#ffffff20]"
-                        data-tooltip-id={`${item?.key}-${i}`}
-                      />
-                      {item?.key === selectedItem && (
-                        <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
-                          <IoMdCheckmarkCircle className="text-[#86efac] text-5xl z-50" />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
+              {filteredItems.map((item, i) => (
+                <ItemIcon
+                  key={i}
+                  item={item}
+                  selectedItem={selectedItem}
+                  onSelect={handleFilterChange}
+                  i={i}
+                />
+              ))}
             </div>
           </div>
+        );
+      default:
+        return null;
+    }
+  }, [
+    activeTab,
+    groupedArray,
+    handleFilterChange,
+    forces,
+    traits,
+    selectedTrait,
+    filteredItems,
+    selectedItem,
+    others,
+  ]);
+
+  return (
+    <div className="mx-auto md:px-6 lg:px-8 py-6">
+      <div className="space-y-6">
+        {/* Tabs Section */}
+        <div className="flex justify-center md:justify-start">
+          <div className="inline-flex rounded-lg overflow-hidden border border-[#ffffff20] bg-[#1a1b30]">
+            <TabButton
+              active={activeTab === "Champions"}
+              label={others?.champions}
+              onClick={() => handleTabChange("Champions")}
+            />
+            <TabButton
+              active={activeTab === "Traits"}
+              label={others?.traits}
+              onClick={() => handleTabChange("Traits")}
+            />
+            <TabButton
+              active={activeTab === "Items"}
+              label={others?.items}
+              onClick={() => handleTabChange("Items")}
+            />
+          </div>
         </div>
+
+        {/* Content Sections */}
+        <div className="bg-[#1a1b30] md:bg-transparent rounded-lg shadow-lg">
+          {tabContent}
+        </div>
+
+        {/* Results Section */}
         <div className="flex flex-col gap-[16px]">
           <div>
             {compsData?.map((metaDeck, i) => (
-              <div
-                className="flex flex-col gap-[1px] border border-[#00000099] bg-[#00000099] mb-4 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 ease-in-out"
-                style={{
-                  background: "rgba(0, 0, 0, 0.2)",
-                  backdropFilter: "blur(2px)",
-                }}
-              >
-                <header className="relative flex md:flex-col justify-between items-end bg-[#1a1b30] py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px]">
-                  <div className="inline-flex flex-col flex-wrap gap-[8px] md:flex-row md:items-center md:gap-3">
-                    <div className="flex items-center gap-x-2">
-                      <div
-                        className={`rounded-lg !border-[#ffffff40] !border p-2 py-0 shadow-lg ${metaDeck?.placement == 1 ? "text-[#3aedbd] !border-[#3aedbd]" : metaDeck?.placement == 2 ? "text-[#FBDB51] !border-[#FBDB51]" : metaDeck?.placement == 3 ? "text-[#6eccff] !border-[#6eccff]" : "text-[#ffffff]"}`}
-                      >
-                        <div className="text-xl md:text-3xl p-2">
-                          {metaDeck?.placement}
-                        </div>
-                      </div>
-                      <Link
-                        href={`/user/${metaDeck?.puuid}/${metaDeck?.key}`}
-                        className="flex items-center gap-x-2"
-                      >
-                        <div className="relative">
-                          <OptimizedImage
-                            src={metaDeck?.imageUrl}
-                            alt="Image"
-                            width={80}
-                            height={80}
-                            className="w-16 relative"
-                          />
-                          {/* <div className="absolute bottom-0 right-0 px-2 rounded-full bg-[#444]">
-                              {metaDeck?.level}
-                            </div> */}
-                        </div>
-                        <div className="flex flex-col">
-                          <div className="-mb-1 text-lg">{metaDeck?.name}</div>
-                          <div className="-mb-1 font-normal text-sm">
-                            {moment(metaDeck?.dateTime).fromNow()} •{" "}
-                            {metaDeck?.duration}
-                          </div>
-                        </div>
-                      </Link>
-                    </div>
-                    <span className="flex justify-center items-center">
-                      {metaDeck?.deck?.forces?.map((force, i) => (
-                        <>
-                          <div className="flex justify-center items-center bg-[#000] rounded-full mx-1 pr-2 border-[1px] border-[#ffffff50]">
-                            <OptimizedImage
-                              alt="Image"
-                              width={50}
-                              height={50}
-                              src={
-                                forces?.find(
-                                  (t) =>
-                                    t.key.toLowerCase() ===
-                                    force?.key.toLowerCase()
-                                )?.imageUrl
-                              }
-                              data-tooltip-id={`${force?.key}-${i}`}
-                              className="w-[24px] h-[24px] md:w-[40px] md:h-[40px] mr-1"
-                            />
-                            <ReactTltp
-                              content={force?.key}
-                              id={`${force?.key}-${i}`}
-                            />
-                            <span className="text-[18px]">
-                              {force?.numUnits}
-                            </span>
-                          </div>
-                        </>
-                      ))}
-                    </span>
-                  </div>
-                  <div className="inline-flex flex-shrink-0 gap-[22px] md:mt-0">
-                    <div className="inline-flex flex-wrap">
-                      {metaDeck?.deck?.traits?.map((trait, i) => (
-                        <>
-                          {traits
-                            ?.find((t) => t.key === trait?.key)
-                            ?.tiers?.find((t) => t?.min >= trait?.numUnits)
-                            ?.imageUrl && (
-                            <div
-                              className="relative w-[30px] h-[30px] md:w-[56px] md:h-[56px]"
-                              // style={{
-                              //   backgroundImage: `url(${traitBg.src})`,
-                              //   width: "48px",
-                              //   height: "48px",
-                              // }}
-                            >
-                              <OptimizedImage
-                                alt="Image"
-                                width={50}
-                                height={50}
-                                src={
-                                  traits
-                                    ?.find((t) => t.key === trait?.key)
-                                    ?.tiers?.find(
-                                      (t) => t?.min >= trait?.numUnits
-                                    )?.imageUrl
-                                }
-                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center w-[30px] md:w-[56px]"
-                                data-tooltip-id={
-                                  traits?.find((t) => t.key === trait?.key)?.key
-                                }
-                              />
-                              <ReactTltp
-                                variant="trait"
-                                id={
-                                  traits?.find((t) => t.key === trait?.key)?.key
-                                }
-                                content={{
-                                  ...traits?.find((t) => t.key === trait?.key),
-                                  numUnits: trait?.numUnits,
-                                }}
-                              />
-                            </div>
-                          )}
-                        </>
-                      ))}
-                    </div>
-                    <div className="absolute right-[16px] top-[16px] inline-flex gap-[8px] lg:relative lg:right-[0px] lg:top-[0px]">
-                      <button
-                        className="inline-flex w-[16px] cursor-pointer items-center text-white"
-                        title="Hide"
-                        id={i}
-                        onClick={handleIsClosed}
-                      >
-                        {!isClosed[i] ? <PiEye /> : <PiEyeClosed />}
-                      </button>
-                    </div>
-                  </div>
-                </header>
-                <div className={`${isClosed[i] ? "hidden" : ""}`}>
-                  <div
-                    className="flex flex-col bg-center bg-no-repeat mt-[-1px]"
-                    // style={{
-                    //   backgroundImage: `url(${cardBg.src})`,
-                    //   backgroundSize: "cover",
-                    // }}
-                  >
-                    <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#27282E90] py-[16px] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6">
-                      <div className="flex items-center gap-x-8">
-                        <div className="hidden md:flex md:flex-col justify-center gap-[2px] lg:py-[8px]">
-                          {metaDeck?.deck?.augments.map((augment, i) => (
-                            <div className="flex justify-center items-center md:w-[64px] relative">
-                              <OptimizedImage
-                                alt="Image"
-                                width={80}
-                                height={80}
-                                src={
-                                  augments?.find((a) => a.key === augment)
-                                    .imageUrl
-                                }
-                                className="w-[64px] md:w-[86px]"
-                                data-tooltip-id={augment}
-                              />
-                              <ReactTltp
-                                variant="augment"
-                                content={augments?.find(
-                                  (a) => a.key === augment
-                                )}
-                                id={augment}
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="mb-[16px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[93%] lg:flex-shrink-0">
-                        <div className="flex flex-wrap justify-center lg:justify-center gap-2 w-full">
-                          {metaDeck?.deck?.champions
-                            // ?.slice(0, 8)
-                            .map((champion, i) => (
-                              <div
-                                key={i}
-                                className="flex flex-col items-center gap-x-4 flex-grow basis-0 min-w-[65px] md:min-w-[80px] max-w-[78px] md:max-w-[150px]"
-                              >
-                                <p
-                                  className="ellipsis text-center text-[12px] md:text-[16px] leading-[14px] text-[#fff] font-extralight w-full p-[2px] m-0"
-                                  style={{
-                                    textShadow:
-                                      "rgb(0, 0, 0) -1px 0px 2px, rgb(0, 0, 0) 0px 1px 2px, rgb(0, 0, 0) 1px 0px 2px, rgb(0, 0, 0) 0px -1px 2px",
-                                  }}
-                                >
-                                  {
-                                    champions?.find(
-                                      (c) => c.key === champion?.key
-                                    )?.name
-                                  }
-                                </p>
-
-                                <div className="inline-flex items-center justify-center flex-col">
-                                  <div className="flex flex-col w-full aspect-square rounded-[20px]">
-                                    <div
-                                      className="relative inline-flex rounded-lg border-2 [box-shadow:rgba(255,_0,_0,_0.8)_0px_7px_29px_0px]"
-                                      data-tooltip-id={
-                                        champions?.find(
-                                          (c) => c.key === champion?.key
-                                        )?.key
-                                      }
-                                    >
-                                      <CardImage
-                                        src={champions?.find(
-                                          (c) => c.key === champion?.key
-                                        )}
-                                        imgStyle="w-28"
-                                        forces={forces}
-                                      />
-                                    </div>
-                                    <ReactTltp
-                                      variant="champion"
-                                      id={
-                                        champions?.find(
-                                          (c) => c.key === champion?.key
-                                        )?.key
-                                      }
-                                      content={champions?.find(
-                                        (c) => c.key === champion?.key
-                                      )}
-                                    />
-                                  </div>
-                                </div>
-
-                                <div className="inline-flex items-center justify-center w-full gap-0.5 flex-wrap">
-                                  {champion?.items &&
-                                    champion?.items.map((item, idx) => (
-                                      <div
-                                        key={idx}
-                                        className="relative z-10 hover:z-20"
-                                      >
-                                        <ReactTltp
-                                          variant="item"
-                                          content={items?.find(
-                                            (i) => i.key === item
-                                          )}
-                                          id={
-                                            items?.find((i) => i.key === item)
-                                              ?.key
-                                          }
-                                        />
-                                        <OptimizedImage
-                                          alt="Image"
-                                          width={50}
-                                          height={50}
-                                          src={
-                                            items?.find((i) => i.key === item)
-                                              ?.imageUrl
-                                          }
-                                          className="w-[20px] md:w-[30px] rounded-lg hover:scale-150 transition-all duration-300"
-                                          data-tooltip-id={
-                                            items?.find((i) => i.key === item)
-                                              ?.key
-                                          }
-                                        />
-                                      </div>
-                                    ))}
-                                </div>
-                              </div>
-                            ))}
-                        </div>
-                      </div>
-
-                      <div className="hidden flex w-full flex-col items-center lg:hidden">
-                        <a
-                          target="_blank"
-                          className="flex h-[28px] w-full max-w-[330px] items-center justify-center rounded-[4px] !border !border-[#CA9372] bg-transparent text-center text-[12px] leading-none text-[#CA9372] lg:hidden"
-                          href="#"
-                          rel="noopener"
-                        >
-                          More
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <MetaDeck
+                key={i}
+                metaDeck={metaDeck}
+                i={i}
+                isClosed={isClosed}
+                handleIsClosed={handleIsClosed}
+                champions={champions}
+                items={items}
+                traits={traits}
+                forces={forces}
+                augments={augments}
+              />
             ))}
           </div>
         </div>
+
         <Tooltip
           id="my-tooltip"
           effect="solid"
@@ -790,8 +740,7 @@ const ProjectItems = () => {
         </Tooltip>
       </div>
     </div>
-    // </ProjectItemsStyleWrapper>
   );
 };
 
-export default ProjectItems;
+export default memo(RecentDecksItems);
