@@ -24,7 +24,6 @@ import ReactTltp from "src/components/tooltip/ReactTltp";
 import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import { OptimizedImage } from "src/utils/imageOptimizer";
-import { FixedSizeGrid } from "react-window";
 
 // Dynamically import heavy components with proper loading states
 const Chart = dynamic(() => import("react-apexcharts"), {
