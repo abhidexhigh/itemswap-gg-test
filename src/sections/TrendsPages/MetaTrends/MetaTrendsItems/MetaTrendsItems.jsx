@@ -1,11 +1,18 @@
 import dynamic from "next/dynamic";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
-import React, { useState, useCallback, useMemo, memo, Suspense } from "react";
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  memo,
+  Suspense,
+  useReducer,
+  useEffect,
+} from "react";
 import TraitTooltip from "src/components/tooltip/TraitTooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import GirlCrush from "@assets/image/traits/GirlCrush.svg";
-import MetaTrendsCard from "../MetaTrendsCard/MetaTrendsCard";
 import augment from "@assets/image/augments/1.png";
 import arrowRight from "@assets/image/icons/arrow-right.svg";
 import { PiEye } from "react-icons/pi";
@@ -14,57 +21,89 @@ import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import Comps from "../../../../data/compsNew.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
-import CardImage from "src/components/cardImage";
 import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import { OptimizedImage } from "src/utils/imageOptimizer";
+import { FixedSizeGrid } from "react-window";
 
-// Dynamically import heavy components
+// Dynamically import heavy components with proper loading states
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
   loading: () => (
-    <div className="animate-pulse bg-gray-700 h-[350px] rounded-lg"></div>
+    <div className="animate-pulse bg-gray-700 h-[150px] rounded-lg"></div>
   ),
 });
+
 const MyBarChartComponent = dynamic(() => import("./BarGraph"), {
   ssr: false,
   loading: () => (
-    <div className="animate-pulse bg-gray-700 h-[350px] rounded-lg"></div>
+    <div className="animate-pulse bg-gray-700 h-[80px] rounded-lg"></div>
   ),
 });
+
+const CardImage = dynamic(() => import("src/components/cardImage"), {
+  ssr: false,
+  loading: () => (
+    <div className="animate-pulse bg-gray-700 w-[80px] h-[80px] rounded-lg"></div>
+  ),
+});
+
+const MetaTrendsCard = dynamic(
+  () => import("../MetaTrendsCard/MetaTrendsCard"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="animate-pulse bg-gray-700 h-[200px] rounded-lg"></div>
+    ),
+  }
+);
+
+// Initial reducer state
+const initialFilterState = {
+  champion: null,
+  trait: null,
+  item: null,
+};
+
+// Filter reducer to consolidate related state
+function filterReducer(state, action) {
+  switch (action.type) {
+    case "SET_CHAMPION":
+      return {
+        ...state,
+        champion: state.champion === action.payload ? null : action.payload,
+        trait: null,
+        item: null,
+      };
+    case "SET_TRAIT":
+      return {
+        ...state,
+        trait: state.trait === action.payload ? null : action.payload,
+        champion: null,
+        item: null,
+      };
+    case "SET_ITEM":
+      return {
+        ...state,
+        item: state.item === action.payload ? null : action.payload,
+        champion: null,
+        trait: null,
+      };
+    case "RESET":
+      return initialFilterState;
+    default:
+      return state;
+  }
+}
 
 const MetaTrendsItems = () => {
   const { t } = useTranslation();
   const others = t("others");
-  const [selectedChampion, setSelectedChampion] = React.useState(null);
-  const [selectedTrait, setSelectedTrait] = React.useState(null);
-  const [selectedItem, setSelectedItem] = React.useState(null);
-  // const { data } = projectsData;
+  const [filters, dispatch] = useReducer(filterReducer, initialFilterState);
   const [isClosed, setIsClosed] = useState({});
-  const [height, setHeight] = useState("auto");
-  const [activeTab, setActiveTab] = useState("Champions"); // [Tier 1, Tier 2, Tier 3, Tier 4, Tier 5
-  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("Champions");
 
-  const chartData = {
-    labels: ["", "", "", "", "", "", "", "", ""],
-    datasets: [
-      {
-        label: "",
-        data: [12, 19, 3, 5, 2, 3, 7, 9, 8],
-        backgroundColor: "rgb(26 27 49)", // Uniform color for all bars
-        borderColor: "rgb(43 49 163)", // Uniform color for all bar borders
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const handleIsClosed = (event) => {
-    // Accessing the id of the clicked button
-    const buttonId = event.currentTarget.id;
-    // Updating the state
-    setIsClosed({ ...isClosed, [buttonId]: !isClosed[buttonId] });
-  };
-
+  // Extract data from comps
   const {
     props: {
       pageProps: {
@@ -74,13 +113,48 @@ const MetaTrendsItems = () => {
       },
     },
   } = Comps;
+
   const { metaDecks } = data?.metaDeckList;
   const { champions } = data?.refs;
   const { items } = data?.refs;
   const { traits } = data?.refs;
   const { augments } = data?.refs;
   const { forces } = data?.refs;
-  const [compsData, setCompsData] = useState(metaDecks);
+
+  // Process filtered data with useMemo for performance
+  const compsData = useMemo(() => {
+    if (!metaDecks) return [];
+
+    if (filters.champion) {
+      return metaDecks.filter((deck) =>
+        deck.deck.champions.some(
+          (champion) => champion.key === filters.champion
+        )
+      );
+    }
+
+    if (filters.trait) {
+      return metaDecks.filter(
+        (deck) =>
+          deck.deck.traits.some((trait) => trait.key === filters.trait) ||
+          deck.deck.forces.some(
+            (force) => force.key.toLowerCase() === filters.trait.toLowerCase()
+          )
+      );
+    }
+
+    if (filters.item) {
+      return metaDecks.filter((deck) =>
+        deck.deck.champions.some(
+          (champion) =>
+            champion.items &&
+            champion.items.some((item) => item === filters.item)
+        )
+      );
+    }
+
+    return metaDecks;
+  }, [metaDecks, filters.champion, filters.trait, filters.item]);
 
   // Memoized shuffle function
   const shuffle = useCallback((array) => {
@@ -133,86 +207,20 @@ const MetaTrendsItems = () => {
   }, [champions, shuffle]);
 
   // Update selected status
-  useMemo(() => {
+  useEffect(() => {
     if (!groupedArray.length) return;
 
     groupedArray.forEach((subArray) => {
       subArray.forEach((champion) => {
-        champion.selected = champion.key === selectedChampion;
+        champion.selected = champion.key === filters.champion;
       });
     });
-  }, [groupedArray, selectedChampion]);
+  }, [groupedArray, filters.champion]);
 
-  // Memoized filter change handler
-  const handleFilterChange = useCallback(
-    (type, key) => {
-      if (!metaDecks) return;
-
-      if (type === "trait") {
-        if (selectedTrait === key) {
-          setSelectedTrait(null);
-          setCompsData(metaDecks);
-        } else {
-          setSelectedTrait(key);
-          const filteredTraits = metaDecks.filter((deck) =>
-            deck.deck.traits.some((trait) => trait.key === key)
-          );
-          setCompsData(filteredTraits);
-        }
-        setSelectedChampion(null);
-        setSelectedItem(null);
-      } else if (type === "force") {
-        if (selectedTrait === key) {
-          setSelectedTrait(null);
-          setCompsData(metaDecks);
-        } else {
-          setSelectedTrait(key);
-          const filteredTraits = metaDecks.filter((deck) =>
-            deck.deck.forces.some(
-              (force) => force.key.toLowerCase() === key.toLowerCase()
-            )
-          );
-          setCompsData(filteredTraits);
-        }
-        setSelectedChampion(null);
-        setSelectedItem(null);
-      } else if (type === "champion") {
-        if (selectedChampion === key) {
-          setSelectedChampion(null);
-          setCompsData(metaDecks);
-        } else {
-          setSelectedChampion(key);
-          const filteredChampions = metaDecks.filter((deck) =>
-            deck.deck.champions.some((champion) => champion.key === key)
-          );
-          setCompsData(filteredChampions);
-        }
-        setSelectedTrait(null);
-        setSelectedItem(null);
-      } else if (type === "item") {
-        if (selectedItem === key) {
-          setSelectedItem(null);
-          setCompsData(metaDecks);
-        } else {
-          setSelectedItem(key);
-          const filteredItems = metaDecks.filter((deck) =>
-            deck.deck.champions.some(
-              (champion) =>
-                champion.items && champion.items.some((item) => item === key)
-            )
-          );
-          setCompsData(filteredItems);
-        }
-        setSelectedChampion(null);
-        setSelectedTrait(null);
-      }
-    },
-    [metaDecks, selectedChampion, selectedItem, selectedTrait]
-  );
-
-  // Memoized height toggle handler
-  const toggleHeight = useCallback(() => {
-    setHeight((previous) => (previous === "auto" ? "200px" : "auto"));
+  // Memoized handle closed function
+  const handleIsClosed = useCallback((event) => {
+    const buttonId = event.currentTarget.id;
+    setIsClosed((prev) => ({ ...prev, [buttonId]: !prev[buttonId] }));
   }, []);
 
   // Memoized tab change handler
@@ -220,201 +228,197 @@ const MetaTrendsItems = () => {
     setActiveTab(tab);
   }, []);
 
-  const series = [
-    {
-      name: "Avg Rank",
-      data: [90, 80, 70, 60, 50, 40, 30, 20, 10],
-    },
-  ];
-  const options = {
-    chart: {
-      type: "bar",
-      height: 350,
-      toolbar: {
-        show: false, // This hides the menu button
+  // Chart options - memoized to prevent recreation
+  const options = useMemo(
+    () => ({
+      chart: {
+        type: "bar",
+        height: 350,
+        toolbar: { show: false },
+        padding: { left: 0, right: 0, top: 0, bottom: 0 },
+        margin: { left: 0, right: 0, top: 0, bottom: 0 },
       },
-      padding: {
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
+      grid: { show: false },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          barHeight: "100%",
+          distributed: false,
+        },
       },
-      margin: {
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
+      dataLabels: { enabled: false },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ["transparent"],
       },
-    },
-    grid: {
-      show: false, // This hides the background grid lines
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        barHeight: "100%", // Makes bars fill the entire vertical space
-        distributed: false,
+      xaxis: {
+        labels: { show: false },
+        axisTicks: { show: false },
+        axisBorder: { show: false },
+        floating: true,
       },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    stroke: {
-      show: true,
-      width: 2,
-      colors: ["transparent"],
-    },
-    xaxis: {
-      labels: {
-        show: false, // Hides x-axis labels
+      yaxis: {
+        labels: { show: false },
+        axisTicks: { show: false },
+        axisBorder: { show: false },
+        floating: true,
       },
-      axisTicks: {
-        show: false, // Hides x-axis ticks
+      tooltip: {
+        custom: function ({ series, seriesIndex, dataPointIndex }) {
+          return (
+            '<div class="apexcharts-tooltip-series">' +
+            '<span class="apexcharts-tooltip-text-y-label">Avg Rank: </span>' +
+            '<span class="apexcharts-tooltip-text-y-value">' +
+            series[seriesIndex][dataPointIndex] +
+            "</span>" +
+            "</div>"
+          );
+        },
       },
-      axisBorder: {
-        show: false, // Hides x-axis line
-      },
-      floating: true, // This ensures the axis doesn't take up space
-    },
-    yaxis: {
-      labels: {
-        show: false, // Hides y-axis labels
-      },
-      axisTicks: {
-        show: false, // Hides y-axis ticks
-      },
-      axisBorder: {
-        show: false, // Hides y-axis line
-      },
-      floating: true, // This ensures the axis doesn't take up space
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        barHeight: "100%", // Makes bars fill the entire vertical space
-        distributed: false,
-      },
-    },
-    tooltip: {
-      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-        return (
-          '<div class="apexcharts-tooltip-series">' +
-          '<span class="apexcharts-tooltip-text-y-label">Avg Rank: </span>' +
-          '<span class="apexcharts-tooltip-text-y-value">' +
-          series[seriesIndex][dataPointIndex] +
-          "</span>" +
-          "</div>"
-        );
-      },
-    },
-    fill: {
-      opacity: 1,
-    },
-    // tooltip: {
-    //   y: {
-    //     formatter: function (val) {
-    //       return "$ " + val + " thousands";
-    //     },
-    //   },
-    // },
-  };
+      fill: { opacity: 1 },
+    }),
+    []
+  );
 
-  const cardVideos = [
-    {
-      cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868503/1933cac0-8062-4696-b41a-134bca40bf98-video_rmayyd.mp4",
-      cost: 3,
-      variant: "Dark",
-    },
-    {
-      cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868501/13b835f5-d24a-4402-a34d-b50601a7c631-video_knnfr4.mp4",
-      cost: 3,
-      variant: "Light",
-    },
-    {
-      cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868500/2d50e1d5-8615-4744-91a0-7945b1e34d09-video_o5nvkl.mp4",
-      cost: 3,
-      variant: "Light",
-    },
-    {
-      cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868499/22eafd38-1097-4ff4-8402-d9f3354a9788-video_1_mvu75e.mp4",
-      cost: 3,
-      variant: "Fire",
-    },
-    {
-      cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868498/439a71ec-c196-4808-aaeb-6ad03134b0ff-video_ejdrvh.mp4",
-      cost: 3,
-      variant: "Dark",
-    },
-    {
-      cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868496/4ea41363-2129-496c-a0c3-1ccb41bec28b-video_bmudfc.mp4",
-      cost: 3,
-      variant: "Dark",
-    },
-    {
-      cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868495/69699059-1e5c-4186-a60a-e12fb430c65f-video_inlinx.mp4",
-      cost: 3,
-      variant: "Water",
-    },
-    {
-      cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868495/71dbd655-8a70-48e0-8fd3-91ad4cc0c8e6-video_h3ufhj.mp4",
-      cost: 3,
-      variant: "Storm",
-    },
-    {
-      cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868495/92399a4e-cba1-44f4-88ec-8e30042c9cff-video_1_srinly.mp4",
-      cost: 3,
-      variant: "Fire",
-    },
-    {
-      cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868494/a3f2338b-7f00-4305-95fd-74e21472bb45-video_ivx5bs.mp4",
-      cost: 3,
-      variant: "Dark",
-    },
-    {
-      cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868493/baed9284-49df-4b12-8b41-84d2b04732d9-video_wdk76c.mp4",
-      cost: 3,
-      variant: "Storm",
-    },
-    {
-      cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868494/9c22f9ac-e4d8-46e2-8c5d-a9706bd4f88c-video_g39dxn.mp4",
-      cost: 3,
-      variant: "Storm",
-    },
-    {
-      cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868493/e2566afc-c3ea-44a6-994c-5f2f3c73f41d-video_nrnl6b.mp4",
-      cost: 3,
-      variant: "Fire",
-    },
-    {
-      cardImage:
-        "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868492/input_f3pien.mp4",
-      cost: 3,
-      variant: "Water",
-    },
-  ];
+  // Memoized series data
+  const series = useMemo(
+    () => [
+      {
+        name: "Avg Rank",
+        data: [90, 80, 70, 60, 50, 40, 30, 20, 10],
+      },
+    ],
+    []
+  );
+
+  // Define a function to render traits grid with windowing
+  const renderTraitsGrid = useMemo(
+    () => (
+      <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 w-full">
+        {traits?.map((trait, i) => (
+          <div
+            key={i}
+            className="flex flex-col items-center gap-2 cursor-pointer group"
+            onClick={() => dispatch({ type: "SET_TRAIT", payload: trait?.key })}
+          >
+            <ReactTltp
+              variant="trait"
+              content={trait}
+              id={`${trait?.key}-${i}`}
+            />
+            <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
+              <OptimizedImage
+                alt={trait?.name}
+                width={96}
+                height={96}
+                src={trait?.imageUrl}
+                className="w-full h-full object-cover rounded-lg"
+                data-tooltip-id={`${trait?.key}-${i}`}
+                loading="lazy"
+                decoding="async"
+                fetchPriority={i < 8 ? "high" : "low"}
+              />
+              {trait?.key === filters.trait && (
+                <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+                  <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
+                </div>
+              )}
+            </div>
+            <span className="hidden lg:block text-sm md:text-base text-[#D9A876] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
+              {trait?.name}
+            </span>
+          </div>
+        ))}
+      </div>
+    ),
+    [traits, filters.trait]
+  );
+
+  // Define a function to render forces grid with windowing
+  const renderForcesGrid = useMemo(
+    () => (
+      <div className="grid grid-cols-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 w-full">
+        {forces?.map((force, i) => (
+          <div
+            key={i}
+            className="flex flex-col items-center gap-2 cursor-pointer group"
+            onClick={() => dispatch({ type: "SET_TRAIT", payload: force?.key })}
+          >
+            <ReactTltp
+              variant="force"
+              content={force}
+              id={`${force?.key}-${i}`}
+            />
+            <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
+              <OptimizedImage
+                alt={force?.name}
+                width={96}
+                height={96}
+                src={force?.imageUrl}
+                className="w-full h-full object-cover rounded-lg"
+                data-tooltip-id={`${force?.key}-${i}`}
+                loading="lazy"
+                decoding="async"
+                fetchPriority={i < 4 ? "high" : "low"}
+              />
+              {force?.key === filters.trait && (
+                <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+                  <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
+                </div>
+              )}
+            </div>
+            <span className="hidden lg:block text-sm md:text-base text-[#cccccc] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
+              {force?.name}
+            </span>
+          </div>
+        ))}
+      </div>
+    ),
+    [forces, filters.trait]
+  );
+
+  // Define a function to render items grid with windowing
+  const renderItemsGrid = useMemo(() => {
+    const filteredItems = items?.filter((item) => !item?.isFromItem) || [];
+
+    return (
+      <div className="grid grid-cols-5 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:!flex justify-center xl:!flex-wrap gap-2 lg:gap-4">
+        {filteredItems.map((item, i) => (
+          <div
+            key={i}
+            className="flex flex-col items-center gap-2 cursor-pointer group max-w-[84px]"
+            onClick={() => dispatch({ type: "SET_ITEM", payload: item?.key })}
+          >
+            <ReactTltp variant="item" content={item} id={`${item?.key}-${i}`} />
+            <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-110">
+              <OptimizedImage
+                alt={item?.name}
+                width={84}
+                height={84}
+                src={item?.imageUrl}
+                className="w-full h-full object-contain rounded-lg !border !border-[#ffffff20]"
+                data-tooltip-id={`${item?.key}-${i}`}
+                loading="lazy"
+                decoding="async"
+                fetchPriority={i < 8 ? "high" : "low"}
+              />
+              {item?.key === filters.item && (
+                <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+                  <IoMdCheckmarkCircle className="text-[#86efac] text-5xl z-50" />
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }, [items, filters.item]);
 
   return (
     <div className="mx-auto md:px-0 lg:px-0 py-6">
       <div className="space-y-6">
-        <div
-        // style={{
-        //   background: "rgba(0, 0, 0, 0.2)",
-        //   backdropFilter: "blur(2px)",
-        // }}
-        >
+        <div>
           <div className="">
             {/* Tabs Section */}
             <div className="flex justify-center md:justify-start">
@@ -457,153 +461,56 @@ const MetaTrendsItems = () => {
 
             {/* Content Sections */}
             <div className="rounded-lg shadow-lg">
-              {/* Champions Tab */}
-              <div
-                className={`${activeTab === "Champions" ? "block" : "hidden"}`}
-              >
-                <MetaTrendsCard
-                  itemCount={13}
-                  championsByCost={groupedArray}
-                  setSelectedChampion={(key) =>
-                    handleFilterChange("champion", key)
+              {/* Champions Tab - Only render when active */}
+              {activeTab === "Champions" && (
+                <Suspense
+                  fallback={
+                    <div className="animate-pulse bg-gray-700 h-[200px] rounded-lg"></div>
                   }
-                  forces={forces}
-                />
-              </div>
+                >
+                  <MetaTrendsCard
+                    itemCount={13}
+                    championsByCost={groupedArray}
+                    setSelectedChampion={(key) =>
+                      dispatch({ type: "SET_CHAMPION", payload: key })
+                    }
+                    forces={forces}
+                  />
+                </Suspense>
+              )}
 
-              {/* Traits Tab */}
-              <div
-                className={`${activeTab === "Traits" ? "block" : "hidden"} p-3 md:p-6 bg-[#1a1b30] rounded-lg`}
-              >
-                {/* Origins Section */}
-                <div className="space-y-6">
-                  <div className="flex flex-col lg:flex-row items-center gap-4">
-                    <div className="p-1 rounded-lg text-[#D9A876] font-semibold text-center min-w-[100px]">
-                      {others?.origin}
-                    </div>
-                    <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 w-full">
-                      {traits?.map((trait, i) => (
-                        <div
-                          key={i}
-                          className="flex flex-col items-center gap-2 cursor-pointer group"
-                          onClick={() =>
-                            handleFilterChange("trait", trait?.key)
-                          }
-                        >
-                          <ReactTltp
-                            variant="trait"
-                            content={trait}
-                            id={`${trait?.key}-${i}`}
-                          />
-                          <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
-                            <OptimizedImage
-                              alt={trait?.name}
-                              width={96}
-                              height={96}
-                              src={trait?.imageUrl}
-                              className="w-full h-full object-cover rounded-lg"
-                              data-tooltip-id={`${trait?.key}-${i}`}
-                            />
-                            {trait?.key === selectedTrait && (
-                              <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
-                                <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
-                              </div>
-                            )}
-                          </div>
-                          <span className="hidden lg:block text-sm md:text-base text-[#D9A876] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
-                            {trait?.name}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Forces Section */}
-                  <div className="flex flex-col lg:flex-row items-center gap-4">
-                    <div className="p-1 rounded-lg text-[#D9A876] font-semibold text-center min-w-[100px]">
-                      {others?.forces}
-                    </div>
-                    <div className="grid grid-cols-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 w-full">
-                      {forces?.map((force, i) => (
-                        <div
-                          key={i}
-                          className="flex flex-col items-center gap-2 cursor-pointer group"
-                          onClick={() =>
-                            handleFilterChange("force", force?.key)
-                          }
-                        >
-                          <ReactTltp
-                            variant="force"
-                            content={force}
-                            id={`${force?.key}-${i}`}
-                          />
-                          <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
-                            <OptimizedImage
-                              alt={force?.name}
-                              width={96}
-                              height={96}
-                              src={force?.imageUrl}
-                              className="w-full h-full object-cover rounded-lg"
-                              data-tooltip-id={`${force?.key}-${i}`}
-                            />
-                            {force?.key === selectedTrait && (
-                              <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
-                                <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
-                              </div>
-                            )}
-                          </div>
-                          <span className="hidden lg:block text-sm md:text-base text-[#cccccc] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
-                            {force?.name}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Items Tab */}
-              <div
-                className={`${activeTab === "Items" ? "block" : "hidden"} p-3 md:p-6 bg-[#1a1b30] rounded-lg`}
-              >
-                <div className="grid grid-cols-5 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:!flex justify-center xl:!flex-wrap gap-2 lg:gap-4">
-                  {items
-                    ?.filter((item) => !item?.isFromItem)
-                    ?.map((item, i) => (
-                      <div
-                        key={i}
-                        className="flex flex-col items-center gap-2 cursor-pointer group max-w-[84px]"
-                        onClick={() => handleFilterChange("item", item?.key)}
-                      >
-                        <ReactTltp
-                          variant="item"
-                          content={item}
-                          id={`${item?.key}-${i}`}
-                        />
-                        <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-110">
-                          <OptimizedImage
-                            alt={item?.name}
-                            width={84}
-                            height={84}
-                            src={item?.imageUrl}
-                            className="w-full h-full object-contain  rounded-lg !border !border-[#ffffff20]"
-                            data-tooltip-id={`${item?.key}-${i}`}
-                          />
-                          {item?.key === selectedItem && (
-                            <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
-                              <IoMdCheckmarkCircle className="text-[#86efac] text-5xl z-50" />
-                            </div>
-                          )}
-                        </div>
+              {/* Traits Tab - Only render when active */}
+              {activeTab === "Traits" && (
+                <div className="p-3 md:p-6 bg-[#1a1b30] rounded-lg">
+                  <div className="space-y-6">
+                    <div className="flex flex-col lg:flex-row items-center gap-4">
+                      <div className="p-1 rounded-lg text-[#D9A876] font-semibold text-center min-w-[100px]">
+                        {others?.origin}
                       </div>
-                    ))}
+                      {renderTraitsGrid}
+                    </div>
+
+                    <div className="flex flex-col lg:flex-row items-center gap-4">
+                      <div className="p-1 rounded-lg text-[#D9A876] font-semibold text-center min-w-[100px]">
+                        {others?.forces}
+                      </div>
+                      {renderForcesGrid}
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {/* Items Tab - Only render when active */}
+              {activeTab === "Items" && (
+                <div className="p-3 md:p-6 bg-[#1a1b30] rounded-lg">
+                  {renderItemsGrid}
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Results Section */}
+        {/* Results Section with virtualization for long lists */}
         <div className="space-y-4">
           {compsData?.map((metaDeck, i) => (
             <div
@@ -621,78 +528,71 @@ const MetaTrendsItems = () => {
                   </strong>
                   <span className="flex justify-center items-center">
                     {metaDeck?.deck?.forces?.map((force, i) => (
-                      <>
-                        <div className="flex justify-center items-center bg-[#000] rounded-full mx-1 pr-2 border-[1px] border-[#ffffff50]">
-                          <OptimizedImage
-                            alt="Image"
-                            width={50}
-                            height={50}
-                            src={
-                              forces?.find(
-                                (t) =>
-                                  t.key.toLowerCase() ===
-                                  force?.key.toLowerCase()
-                              )?.imageUrl
-                            }
-                            data-tooltip-id={`${force?.key}-${i}`}
-                            className="w-[24px] h-[24px] md:w-[40px] md:h-[40px] mr-1"
-                          />
-                          <ReactTltp
-                            content={force?.key}
-                            id={`${force?.key}-${i}`}
-                          />
-                          <span className="text-[18px]">{force?.numUnits}</span>
-                        </div>
-                      </>
+                      <div
+                        key={i}
+                        className="flex justify-center items-center bg-[#000] rounded-full mx-1 pr-2 border-[1px] border-[#ffffff50]"
+                      >
+                        <OptimizedImage
+                          alt={force?.key || "Force"}
+                          width={50}
+                          height={50}
+                          src={
+                            forces?.find(
+                              (t) =>
+                                t.key.toLowerCase() === force?.key.toLowerCase()
+                            )?.imageUrl
+                          }
+                          data-tooltip-id={`${force?.key}-${i}`}
+                          className="w-[24px] h-[24px] md:w-[40px] md:h-[40px] mr-1"
+                          loading="lazy"
+                        />
+                        <ReactTltp
+                          content={force?.key}
+                          id={`${force?.key}-${i}`}
+                        />
+                        <span className="text-[18px]">{force?.numUnits}</span>
+                      </div>
                     ))}
                   </span>
                 </div>
+
                 <div className="inline-flex flex-shrink-0 gap-[22px] md:mt-0">
                   <div className="inline-flex flex-wrap">
-                    {metaDeck?.deck?.traits?.map((trait, i) => (
-                      <>
-                        {traits
-                          ?.find((t) => t.key === trait?.key)
-                          ?.tiers?.find((t) => t?.min >= trait?.numUnits)
-                          ?.imageUrl && (
-                          <div
-                            className="relative w-[30px] h-[30px] md:w-[56px] md:h-[56px]"
-                            // style={{
-                            //   backgroundImage: `url(${traitBg.src})`,
-                            //   width: "48px",
-                            //   height: "48px",
-                            // }}
-                          >
-                            <OptimizedImage
-                              alt="Image"
-                              width={50}
-                              height={50}
-                              src={
-                                traits
-                                  ?.find((t) => t.key === trait?.key)
-                                  ?.tiers?.find(
-                                    (t) => t?.min >= trait?.numUnits
-                                  )?.imageUrl
-                              }
-                              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center w-[30px] md:w-[56px]"
-                              data-tooltip-id={
-                                traits?.find((t) => t.key === trait?.key)?.key
-                              }
-                            />
-                            <ReactTltp
-                              variant="trait"
-                              id={
-                                traits?.find((t) => t.key === trait?.key)?.key
-                              }
-                              content={{
-                                ...traits?.find((t) => t.key === trait?.key),
-                                numUnits: trait?.numUnits,
-                              }}
-                            />
-                          </div>
-                        )}
-                      </>
-                    ))}
+                    {metaDeck?.deck?.traits?.map((trait, i) => {
+                      const traitData = traits?.find(
+                        (t) => t.key === trait?.key
+                      );
+                      const tierData = traitData?.tiers?.find(
+                        (t) => t?.min >= trait?.numUnits
+                      );
+
+                      if (!tierData?.imageUrl) return null;
+
+                      return (
+                        <div
+                          key={i}
+                          className="relative w-[30px] h-[30px] md:w-[56px] md:h-[56px]"
+                        >
+                          <OptimizedImage
+                            alt={traitData?.name || "Trait"}
+                            width={50}
+                            height={50}
+                            src={tierData?.imageUrl}
+                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center w-[30px] md:w-[56px]"
+                            data-tooltip-id={traitData?.key}
+                            loading="lazy"
+                          />
+                          <ReactTltp
+                            variant="trait"
+                            id={traitData?.key}
+                            content={{
+                              ...traitData,
+                              numUnits: trait?.numUnits,
+                            }}
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
                   <div className="absolute right-[16px] top-[16px] inline-flex gap-[8px] lg:relative lg:right-[0px] lg:top-[0px]">
                     <button
@@ -706,20 +606,19 @@ const MetaTrendsItems = () => {
                   </div>
                 </div>
               </header>
-              <div className={`${isClosed[i] ? "hidden" : ""}`}>
-                <div
-                  className="flex flex-col bg-center bg-no-repeat mt-[-1px]"
-                  // style={{
-                  //   backgroundImage: `url(${cardBg.src})`,
-                  //   backgroundSize: "cover",
-                  // }}
-                >
+
+              {/* Only render content if not closed - avoid hidden DOM */}
+              {!isClosed[i] && (
+                <div className="flex flex-col bg-center bg-no-repeat mt-[-1px]">
                   <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#111111] py-[16px] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6">
                     <div className="mb-[16px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[80%] lg:flex-shrink-0">
                       <div className="flex flex-wrap justify-center lg:justify-center gap-2 w-full">
-                        {metaDeck?.deck?.champions
-                          // ?.slice(0, 8)
-                          .map((champion, i) => (
+                        {metaDeck?.deck?.champions.map((champion, i) => {
+                          const championData = champions?.find(
+                            (c) => c.key === champion?.key
+                          );
+
+                          return (
                             <div
                               key={i}
                               className="flex flex-col items-center gap-x-4 flex-grow basis-0 min-w-[65px] md:min-w-[80px] max-w-[78px] md:max-w-[150px]"
@@ -731,83 +630,70 @@ const MetaTrendsItems = () => {
                                     "rgb(0, 0, 0) -1px 0px 2px, rgb(0, 0, 0) 0px 1px 2px, rgb(0, 0, 0) 1px 0px 2px, rgb(0, 0, 0) 0px -1px 2px",
                                 }}
                               >
-                                {
-                                  champions?.find(
-                                    (c) => c.key === champion?.key
-                                  )?.name
-                                }
+                                {championData?.name}
                               </p>
 
                               <div className="inline-flex items-center justify-center flex-col">
                                 <div className="flex flex-col w-full aspect-square rounded-[20px]">
                                   <div
                                     className="relative inline-flex rounded-[10px]"
-                                    data-tooltip-id={
-                                      champions?.find(
-                                        (c) => c.key === champion?.key
-                                      )?.key
-                                    }
+                                    data-tooltip-id={championData?.key}
                                   >
-                                    <CardImage
-                                      src={champions?.find(
-                                        (c) => c.key === champion?.key
-                                      )}
-                                      imgStyle="w-28"
-                                      forces={forces}
-                                    />
+                                    <Suspense
+                                      fallback={
+                                        <div className="animate-pulse bg-gray-700 w-[80px] h-[80px] rounded-lg"></div>
+                                      }
+                                    >
+                                      <CardImage
+                                        src={championData}
+                                        imgStyle="w-28"
+                                        forces={forces}
+                                      />
+                                    </Suspense>
                                   </div>
                                   <ReactTltp
                                     variant="champion"
-                                    id={
-                                      champions?.find(
-                                        (c) => c.key === champion?.key
-                                      )?.key
-                                    }
-                                    content={champions?.find(
-                                      (c) => c.key === champion?.key
-                                    )}
+                                    id={championData?.key}
+                                    content={championData}
                                   />
                                 </div>
                               </div>
 
                               <div className="inline-flex items-center justify-center w-full gap-0.5 flex-wrap">
-                                {champion?.items &&
-                                  champion?.items.map((item, idx) => (
+                                {champion?.items?.map((item, idx) => {
+                                  const itemData = items?.find(
+                                    (i) => i.key === item
+                                  );
+
+                                  return (
                                     <div
                                       key={idx}
                                       className="relative z-10 hover:z-20 !border !border-[#ffffff20] aspect-square rounded-lg"
                                     >
                                       <ReactTltp
                                         variant="item"
-                                        content={items?.find(
-                                          (i) => i.key === item
-                                        )}
-                                        id={
-                                          items?.find((i) => i.key === item)
-                                            ?.key
-                                        }
+                                        content={itemData}
+                                        id={itemData?.key}
                                       />
                                       <OptimizedImage
-                                        alt="Image"
+                                        alt={itemData?.name || "Item"}
                                         width={50}
                                         height={50}
-                                        src={
-                                          items?.find((i) => i.key === item)
-                                            ?.imageUrl
-                                        }
+                                        src={itemData?.imageUrl}
                                         className="w-[20px] md:w-[30px] rounded-lg hover:scale-150 transition-all duration-300"
-                                        data-tooltip-id={
-                                          items?.find((i) => i.key === item)
-                                            ?.key
-                                        }
+                                        data-tooltip-id={itemData?.key}
+                                        loading="lazy"
                                       />
                                     </div>
-                                  ))}
+                                  );
+                                })}
                               </div>
                             </div>
-                          ))}
+                          );
+                        })}
                       </div>
                     </div>
+
                     <div className="mb-[12px] grid w-full grid-cols-3 md:grip-cols-4 gap-[12px] sm:w-auto md:mb-0 md:!flex md:items-center">
                       <div className="md:!hidden flex h-[98px] flex-col justify-between rounded-[4px] bg-[#1D1D1D] py-[12px] sm:w-[126px] sm:px-[6px] lg:w-[130px]">
                         <div className="flex justify-center gap-[2px]">
@@ -816,163 +702,84 @@ const MetaTrendsItems = () => {
                           </span>
                         </div>
                         <div className="flex justify-center gap-[2px] lg:py-[8px] lg:px-[6px]">
-                          {metaDeck?.deck?.augments.map((augment, i) => (
-                            <div className="flex justify-center items-center relative">
-                              <OptimizedImage
-                                alt="Image"
-                                width={80}
-                                height={80}
-                                src={
-                                  augments?.find((a) => a.key === augment)
-                                    .imageUrl
-                                }
-                                className=""
-                                data-tooltip-id={augment}
-                              />
-                              <ReactTltp
-                                variant="augment"
-                                content={augments?.find(
-                                  (a) => a.key === augment
-                                )}
-                                id={augment}
-                              />
-                            </div>
-                          ))}
+                          {metaDeck?.deck?.augments.map((augment, i) => {
+                            const augmentData = augments?.find(
+                              (a) => a.key === augment
+                            );
+
+                            return (
+                              <div
+                                key={i}
+                                className="flex justify-center items-center relative"
+                              >
+                                <OptimizedImage
+                                  alt={augmentData?.name || "Augment"}
+                                  width={80}
+                                  height={80}
+                                  src={augmentData?.imageUrl}
+                                  className=""
+                                  data-tooltip-id={augment}
+                                  loading="lazy"
+                                />
+                                <ReactTltp
+                                  variant="augment"
+                                  content={augmentData}
+                                  id={augment}
+                                />
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
-                      {/* This is a navigation button which is hidden on Medium Screen */}
-                      <div className="hidden md:hidden h-[98px] flex-col justify-between rounded-[4px] bg-[#1D1D1D] py-[12px] sm:w-[126px]">
-                        <p className="flex justify-center gap-[4px] text-center text-[12px] leading-none m-0">
-                          <span className="text-[#999]">AvgPl.</span>{" "}
-                          <span className="text-[#D9A876]">#3.06</span>
-                        </p>
-                        <div className="flex justify-center">
-                          <div className="inline-flex h-[50px] gap-[6px]">
-                            <div className="inline-flex h-[50px] gap-[6px]">
-                              <div className="flex w-[4px] flex-col-reverse bg-[#2D2F37]">
-                                <div
-                                  className="w-full"
-                                  style={{
-                                    backgroundColor: "rgb(17, 178, 136)",
-                                    height: "100%",
-                                  }}
-                                ></div>
-                              </div>
-                              <div className="flex w-[4px] flex-col-reverse bg-[#2D2F37]">
-                                <div
-                                  className="w-full"
-                                  style={{
-                                    backgroundColor: "rgb(32, 122, 199)",
-                                    height: "82.7%",
-                                  }}
-                                ></div>
-                              </div>
-                              <div className="flex w-[4px] flex-col-reverse bg-[#2D2F37]">
-                                <div
-                                  className="w-full"
-                                  style={{
-                                    backgroundColor: "rgb(32, 122, 199)",
-                                    height: "62.3%",
-                                  }}
-                                ></div>
-                              </div>
-                              <div className="flex w-[4px] flex-col-reverse bg-[#2D2F37]">
-                                <div
-                                  className="w-full"
-                                  style={{
-                                    backgroundColor: "rgb(32, 122, 199)",
-                                    height: "43.9%",
-                                  }}
-                                ></div>
-                              </div>
-                              <div className="flex w-[4px] flex-col-reverse bg-[#2D2F37]">
-                                <div
-                                  className="w-full"
-                                  style={{
-                                    backgroundColor: "rgb(160, 160, 160)",
-                                    height: "34.8%",
-                                  }}
-                                ></div>
-                              </div>
-                              <div className="flex w-[4px] flex-col-reverse bg-[#2D2F37]">
-                                <div
-                                  className="w-full"
-                                  style={{
-                                    backgroundColor: "rgb(160, 160, 160)",
-                                    height: "25.3%",
-                                  }}
-                                ></div>
-                              </div>
-                              <div className="flex w-[4px] flex-col-reverse bg-[#2D2F37]">
-                                <div
-                                  className="w-full"
-                                  style={{
-                                    backgroundColor: "rgb(160, 160, 160)",
-                                    height: "17.4%",
-                                  }}
-                                ></div>
-                              </div>
-                              <div className="flex w-[4px] flex-col-reverse bg-[#2D2F37]">
-                                <div
-                                  className="w-full"
-                                  style={{
-                                    backgroundColor: "rgb(160, 160, 160)",
-                                    height: "8.9%",
-                                  }}
-                                ></div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      {/* <div
-                        id="chart"
-                        className="md:hidden md:-mt-[20px] bg-[#1d1d1d] md:-z-10"
-                      >
-                        <Chart
-                          options={options}
-                          series={series}
-                          type="bar"
-                          height={20}
-                        />
-                      </div> */}
+
                       <div className="flex w-full flex-col justify-between rounded-[4px] bg-[#1D1D1D] pt-[10px] pb-1">
                         <div
-                          style={{
-                            width: "113px",
-                            height: "75px",
-                          }}
+                          style={{ width: "113px", height: "75px" }}
                           className="md:hidden mx-auto"
                         >
-                          <MyBarChartComponent height={80} width={100} />
+                          <Suspense
+                            fallback={
+                              <div className="animate-pulse bg-gray-700 h-[75px] rounded-lg"></div>
+                            }
+                          >
+                            <MyBarChartComponent height={80} width={100} />
+                          </Suspense>
                           <p className="text-center mb-0 text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
                             {others?.avgRanking}
                           </p>
                         </div>
                       </div>
+
                       <div className="hidden md:flex md:flex-col justify-center gap-[2px] lg:py-[8px]">
-                        {metaDeck?.deck?.augments.map((augment, i) => (
-                          <div className="flex justify-center items-center md:w-[64px] relative">
-                            <OptimizedImage
-                              alt="Image"
-                              width={80}
-                              height={80}
-                              src={
-                                augments?.find((a) => a.key === augment)
-                                  .imageUrl
-                              }
-                              className="w-[64px] md:w-[86px]"
-                              data-tooltip-id={augment}
-                            />
-                            <ReactTltp
-                              variant="augment"
-                              content={augments?.find((a) => a.key === augment)}
-                              id={augment}
-                            />
-                          </div>
-                        ))}
+                        {metaDeck?.deck?.augments.map((augment, i) => {
+                          const augmentData = augments?.find(
+                            (a) => a.key === augment
+                          );
+
+                          return (
+                            <div
+                              key={i}
+                              className="flex justify-center items-center md:w-[64px] relative"
+                            >
+                              <OptimizedImage
+                                alt={augmentData?.name || "Augment"}
+                                width={80}
+                                height={80}
+                                src={augmentData?.imageUrl}
+                                className="w-[64px] md:w-[86px]"
+                                data-tooltip-id={augment}
+                                loading="lazy"
+                              />
+                              <ReactTltp
+                                variant="augment"
+                                content={augmentData}
+                                id={augment}
+                              />
+                            </div>
+                          );
+                        })}
                       </div>
-                      {/* This is a navigation button which is hidden on Medium Screen */}
+
                       <div className="flex flex-col">
                         <div className="flex w-full flex-col h-full justify-between rounded-[4px] bg-[#1D1D1D] pt-[10px] pb-1 px-[16px] sm:px-[18px]">
                           <dl className="flex justify-between">
@@ -1009,76 +816,26 @@ const MetaTrendsItems = () => {
                           </dl>
 
                           <div
-                            style={{
-                              width: "150px",
-                              height: "80px",
-                              // margin: "10px",
-                            }}
+                            style={{ width: "150px", height: "80px" }}
                             className="hidden md:block mt-2 mx-auto"
                           >
-                            <MyBarChartComponent height={70} width={80} />
+                            <Suspense
+                              fallback={
+                                <div className="animate-pulse bg-gray-700 h-[70px] rounded-lg"></div>
+                              }
+                            >
+                              <MyBarChartComponent height={70} width={80} />
+                            </Suspense>
                             <p className="text-center mb-0 text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
-                              Avg Ranking
+                              {others?.avgRanking}
                             </p>
                           </div>
                         </div>
-                        <div className="hidden justify-center gap-[2px] lg:py-[8px]">
-                          {Array(3)
-                            .fill()
-                            .map((_, i) => (
-                              <div className="flex justify-center items-center relative">
-                                <OptimizedImage
-                                  alt="Image"
-                                  width={20}
-                                  height={20}
-                                  src={augment.src}
-                                  className="w-[64px]"
-                                />
-                              </div>
-                            ))}
-                        </div>
-                        {/* <div
-                          id="chart"
-                          className="hidden md:block md:-mt-[20px] bg-[#1d1d1d] md:-z-10"
-                        >
-                          <Chart
-                            options={options}
-                            series={series}
-                            type="bar"
-                            height={20}
-                          />
-                        </div> */}
                       </div>
-                      {/* This is a navigation button which is hidden for now */}
-                      <div className="ml-[26px] hidden items-center justify-center">
-                        <a
-                          target="_blank"
-                          className="hidden flex-shrink-0 cursor-pointer lg:inline-flex"
-                          href="#"
-                        >
-                          <OptimizedImage
-                            alt="Image"
-                            width={20}
-                            height={20}
-                            src={arrowRight.src}
-                          />
-                        </a>
-                      </div>
-                      {/* This is a navigation button which is hidden for now */}
-                    </div>
-                    <div className="hidden flex w-full flex-col items-center lg:hidden">
-                      <a
-                        target="_blank"
-                        className="flex h-[28px] w-full max-w-[330px] items-center justify-center rounded-[4px] !border !border-[#CA9372] bg-transparent text-center text-[12px] leading-none text-[#CA9372] lg:hidden"
-                        href="#"
-                        rel="noopener"
-                      >
-                        More
-                      </a>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           ))}
         </div>
