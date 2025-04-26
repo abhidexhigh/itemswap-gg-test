@@ -304,7 +304,7 @@ const ProjectItems = () => {
                       </p>
                     </td>
                     <td className="lg:rounded-r-lg">
-                      <div className="flex justify-start items-center">
+                      <div className="flex justify-start items-center gap-1">
                         {champions
                           .find((champ) => champ.key === champion.key)
                           ?.recommendItems.map(
@@ -318,7 +318,7 @@ const ProjectItems = () => {
                           .map(
                             (item) =>
                               item && (
-                                <>
+                                <div className="relative z-10 hover:z-20 !border !border-[#ffffff40] aspect-square rounded-lg">
                                   <OptimizedImage
                                     src={item}
                                     alt="icon"
@@ -334,7 +334,7 @@ const ProjectItems = () => {
                                       (i) => i.imageUrl === item
                                     )}
                                   />
-                                </>
+                                </div>
                               )
                           )}
                       </div>
