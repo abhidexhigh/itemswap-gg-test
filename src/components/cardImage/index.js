@@ -17,10 +17,11 @@ const CardImage = ({
   forces,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isVisible, setIsVisible] = useState(true); // Default to true to show initial image
+  const containerRef = useRef(null);
   const videoRef = useRef(null);
   const [videoAvailable, setVideoAvailable] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const playAttemptRef = useRef(0);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   // Check if source has a video
   const hasVideo = useMemo(() => Boolean(src?.cardVideo), [src?.cardVideo]);
@@ -33,71 +34,69 @@ const CardImage = ({
     );
   }, [forces, src?.variant]);
 
-  // Effect to preload video
+  // Get force object for the ForceIcon
+  const forceObject = useMemo(() => {
+    if (!forces || !src?.variant) return null;
+    return forces.find((force) => force.key === src?.variant);
+  }, [forces, src?.variant]);
+
+  // Setup intersection observer to detect when card is visible
   useEffect(() => {
-    if (hasVideo && videoRef.current) {
-      videoRef.current.load();
-    }
-  }, [hasVideo]);
+    if (!containerRef.current) return;
 
-  // Effect to handle video play when hovered
-  useEffect(() => {
-    let playTimeoutId;
-
-    if (isHovered && videoRef.current && hasVideo && videoAvailable) {
-      // Reset play attempts when hover starts
-      playAttemptRef.current = 0;
-
-      const attemptToPlay = () => {
-        if (playAttemptRef.current >= 3) {
-          console.warn("Max play attempts reached for video");
-          return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setIsVisible(true);
+        } else {
+          setIsVisible(false);
+          // Reset hover state when not visible
+          setIsHovered(false);
         }
+      },
+      { threshold: 0.1 }
+    );
 
-        if (!videoRef.current) {
-          console.warn("Video reference is not available");
-          return;
-        }
-
-        const playPromise = videoRef.current.play();
-        playAttemptRef.current += 1;
-
-        // Handle play promise to avoid DOMException
-        if (playPromise !== undefined) {
-          playPromise
-            .then(() => {
-              setIsPlaying(true);
-            })
-            .catch((error) => {
-              console.error("Error playing video:", error);
-
-              if (error.name === "NotAllowedError") {
-                // Browser policy prevented autoplay, retry with user gesture simulation
-                playTimeoutId = setTimeout(attemptToPlay, 100);
-              } else if (playAttemptRef.current < 3) {
-                // Try again for other errors
-                playTimeoutId = setTimeout(attemptToPlay, 200);
-              } else {
-                setVideoAvailable(false);
-              }
-            });
-        }
-      };
-
-      // Start attempting to play with a slight delay
-      playTimeoutId = setTimeout(attemptToPlay, 50);
-    } else if (!isHovered && videoRef.current) {
-      setIsPlaying(false);
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
+    observer.observe(containerRef.current);
 
     return () => {
-      if (playTimeoutId) {
-        clearTimeout(playTimeoutId);
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current);
       }
     };
-  }, [isHovered, hasVideo, videoAvailable]);
+  }, []);
+
+  // Simplified video handling logic
+  useEffect(() => {
+    if (!isVisible || !hasVideo || !videoRef.current) return;
+
+    if (isHovered && videoAvailable) {
+      // Only load video when needed
+      if (!videoLoaded) {
+        videoRef.current.load();
+        setVideoLoaded(true);
+      }
+
+      const playPromise = videoRef.current.play();
+
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          console.error("Error playing video:", error);
+          if (error.name === "NotAllowedError" || error.name === "AbortError") {
+            // Browser policy prevented autoplay or user interrupted
+            setVideoAvailable(false);
+          }
+        });
+      }
+    } else if (videoRef.current) {
+      videoRef.current.pause();
+      if (!isVisible) {
+        // Reset video state when not visible to free resources
+        videoRef.current.currentTime = 0;
+        setVideoLoaded(false);
+      }
+    }
+  }, [isHovered, isVisible, hasVideo, videoAvailable, videoLoaded]);
 
   const handleMouseEnter = useCallback(() => {
     setIsHovered(true);
@@ -118,13 +117,14 @@ const CardImage = ({
         <div className="inline-flex flex-col">
           <div className={`flex flex-col rounded-lg`}>
             <div
+              ref={containerRef}
               className="relative w-[48px] h-[48px] !bg-black md:w-[96px] md:h-[96px] rounded-lg"
               data-tooltip-id={src?.key}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
               {/* Show video on hover if available, otherwise show image */}
-              {isHovered && hasVideo && videoAvailable ? (
+              {isVisible && isHovered && hasVideo && videoAvailable ? (
                 <video
                   ref={videoRef}
                   src={src?.cardVideo}
@@ -133,7 +133,7 @@ const CardImage = ({
                   loop
                   onError={handleVideoError}
                   className={`object-cover object-center rounded-lg w-full h-full ${imgStyle}`}
-                  preload="auto"
+                  preload="metadata"
                 />
               ) : (
                 src?.cardImage && (
@@ -143,6 +143,8 @@ const CardImage = ({
                     width={80}
                     height={80}
                     className={`object-cover object-canter mx-auto rounded-lg w-auto h-full ${imgStyle}`}
+                    loading={isVisible ? "eager" : "lazy"}
+                    fetchPriority={isVisible ? "high" : "auto"}
                   />
                 )
               )}
@@ -154,28 +156,26 @@ const CardImage = ({
                 alt="Border Image"
                 width={200}
                 height={200}
+                loading={isVisible ? "eager" : "lazy"}
+                fetchPriority={isVisible ? "high" : "auto"}
               />
-              {/* <div
+              {/* Force icon container - always render */}
+              <div
                 className={`absolute -top-[6px] -right-[6px] w-[20px] rounded-full overflow-hidden md:w-[30px] ${identificationImageStyle}`}
               >
-                {forces && src?.variant && (
+                {forceObject && (
                   <ForceIcon
-                    force={forces?.find((force) => force.key === src?.variant)}
+                    force={forceObject}
                     isHovered={isHovered}
                     size="small"
+                    showImageOnly={!isVisible || !isHovered}
                   />
                 )}
-              </div> */}
-              {/* <div className="absolute bottom-0 w-full bg-gradient-to-r from-[#1a1b3110] via-[#1a1b31] to-[#1a1b3110] bg-opacity-50">
-                <p
-                  className={`ellipsis text-center text-[11px] md:text-[16px] leading-[14px] text-[#ffffff] font-extralight
-                                           w-full py-0.5 m-0 ${textStyle}`}
-                >
-                  {src?.name}
-                </p>
-              </div> */}
+              </div>
             </div>
-            <ReactTltp variant="champion" id={src?.key} content={src} />
+            {isVisible && (
+              <ReactTltp variant="champion" id={src?.key} content={src} />
+            )}
           </div>
         </div>
       </div>
