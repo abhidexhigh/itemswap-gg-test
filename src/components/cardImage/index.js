@@ -155,7 +155,7 @@ const CardImage = ({
                 width={200}
                 height={200}
               />
-              <div
+              {/* <div
                 className={`absolute -top-[6px] -right-[6px] w-[20px] rounded-full overflow-hidden md:w-[30px] ${identificationImageStyle}`}
               >
                 {forces && src?.variant && (
@@ -165,7 +165,7 @@ const CardImage = ({
                     size="small"
                   />
                 )}
-              </div>
+              </div> */}
               {/* <div className="absolute bottom-0 w-full bg-gradient-to-r from-[#1a1b3110] via-[#1a1b31] to-[#1a1b3110] bg-opacity-50">
                 <p
                   className={`ellipsis text-center text-[11px] md:text-[16px] leading-[14px] text-[#ffffff] font-extralight
