@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Tooltip } from "react-tooltip";
-import "../../../assets/scss/components/tooltip/tooltip.scss";
 import ChampTooltip from "./ChampTooltip";
 import TraitTooltip from "./TraitTooltip";
 import ItemTooltip from "./ItemTooltip";
