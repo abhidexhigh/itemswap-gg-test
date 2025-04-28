@@ -164,7 +164,7 @@ const ChampionWithItems = memo(({ champion, champions, items, forces }) => {
             className="relative inline-flex rounded-[10px]"
             data-tooltip-id={championDetails.key}
           >
-            <CardImage src={championDetails} imgStyle="w-28" forces={forces} />
+            <CardImage src={championDetails} imgStyle="!w-28" forces={forces} />
           </div>
           <ReactTltp
             variant="champion"

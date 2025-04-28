@@ -118,7 +118,7 @@ const CardImage = ({
           <div className={`flex flex-col rounded-lg`}>
             <div
               ref={containerRef}
-              className="relative w-[48px] h-[48px] !bg-black md:w-[96px] md:h-[96px] rounded-lg"
+              className="relative w-[80px] h-[80px] !bg-black md:w-[96px] md:h-[96px] rounded-lg"
               data-tooltip-id={src?.key}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
