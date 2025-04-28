@@ -8,6 +8,8 @@ import React, {
   memo,
   Suspense,
   lazy,
+  useRef,
+  useEffect,
 } from "react";
 import TraitTooltip from "src/components/tooltip/TraitTooltip";
 import "react-tooltip/dist/react-tooltip.css";
@@ -21,18 +23,18 @@ import { IoMdCheckmarkCircle } from "react-icons/io";
 import Comps from "../../../../data/compsNew.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
-import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import { OptimizedImage } from "src/utils/imageOptimizer";
 import ForceIcon from "src/components/forceIcon";
 
-// Dynamically import heavy components
+// Dynamically import heavy components with loading fallbacks
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
   loading: () => (
     <div className="animate-pulse bg-gray-700 h-[350px] rounded-lg"></div>
   ),
 });
+
 const MyBarChartComponent = dynamic(() => import("./BarGraph"), {
   ssr: false,
   loading: () => (
@@ -224,6 +226,7 @@ const AugmentIcon = memo(({ augment, augments }) => {
   );
 });
 
+// Extracted to reduce render calculations and improve memoization
 const DeckHeader = memo(
   ({ metaDeck, forces, traits, toggleClosed, isClosed, i }) => {
     // Add hover state management for force icons
@@ -316,6 +319,7 @@ const DeckHeader = memo(
   }
 );
 
+// Virtualize the meta deck rendering for better performance
 const MetaDeck = memo(
   ({
     metaDeck,
@@ -337,8 +341,34 @@ const MetaDeck = memo(
       [handleIsClosed]
     );
 
+    // Add intersection observer for lazy rendering
+    const deckRef = useRef(null);
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            // Once visible, no need to observe anymore
+            if (deckRef.current) observer.unobserve(deckRef.current);
+          }
+        },
+        { threshold: 0.1 }
+      );
+
+      if (deckRef.current) {
+        observer.observe(deckRef.current);
+      }
+
+      return () => {
+        if (deckRef.current) observer.unobserve(deckRef.current);
+      };
+    }, []);
+
     return (
       <div
+        ref={deckRef}
         key={i}
         className="flex flex-col gap-[1px] !border border-cardBorder/30 rounded-lg overflow-hidden shadow-lg bg-[#00000099] mb-4"
         style={{
@@ -355,7 +385,7 @@ const MetaDeck = memo(
           i={i}
         />
 
-        {!isClosed[i] && (
+        {!isClosed[i] && isVisible && (
           <div className="flex flex-col bg-center bg-no-repeat mt-[-1px]">
             <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#111111] py-[16px] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6">
               <div className="mb-[16px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[80%] lg:flex-shrink-0">
@@ -474,6 +504,7 @@ const MetaDeck = memo(
   }
 );
 
+// Optimize MetaTrendsItems to reduce unnecessary renders
 const MetaTrendsItems = () => {
   const { t } = useTranslation();
   const others = t("others");
@@ -481,11 +512,10 @@ const MetaTrendsItems = () => {
   const [selectedTrait, setSelectedTrait] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [isClosed, setIsClosed] = useState({});
-  const [height, setHeight] = useState("auto");
   const [activeTab, setActiveTab] = useState("Champions");
-  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
+  const [visibleDecks, setVisibleDecks] = useState(10); // For virtualization
 
-  // Extract data once from the JSON structure
+  // Extract data once from the JSON structure - heavily memoized
   const { metaDecks, champions, items, traits, augments, forces } =
     useMemo(() => {
       const {
@@ -508,62 +538,134 @@ const MetaTrendsItems = () => {
       };
     }, []);
 
+  // State for filtered comps data
   const [compsData, setCompsData] = useState(metaDecks);
 
-  // Memoized shuffle function
+  // Load more items when user scrolls to bottom
+  const loadMoreDecks = useCallback(() => {
+    setVisibleDecks((prev) => Math.min(prev + 10, compsData.length));
+  }, [compsData.length]);
+
+  // Setup intersection observer for infinite scroll
+  const observerRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && visibleDecks < compsData.length) {
+          loadMoreDecks();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, [loadMoreDecks, visibleDecks, compsData.length]);
+
+  // Optimized shuffle function that runs only ONCE (using a ref)
+  const shuffleRef = useRef(null);
   const shuffle = useCallback((array) => {
     if (!array || !array.length) return [];
+
+    // If we've already shuffled, return the cached result
+    if (shuffleRef.current && shuffleRef.current.has(array)) {
+      return shuffleRef.current.get(array);
+    }
+
+    // Otherwise, perform the shuffle
     const newArray = [...array];
     for (let i = newArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
     }
+
+    // Cache the result
+    if (!shuffleRef.current) {
+      shuffleRef.current = new WeakMap();
+    }
+    shuffleRef.current.set(array, newArray);
+
     return newArray;
   }, []);
 
-  // Pre-process and memoize champion data
+  // Store processed champion data in a ref to prevent regeneration on clicks
+  const processedChampionsRef = useRef(null);
+
+  // Pre-process and memoize champion data - run only once
   const { filteredChampions, groupedArray } = useMemo(() => {
+    // If we already have processed champions, return them
+    if (processedChampionsRef.current) {
+      return processedChampionsRef.current;
+    }
+
     if (!champions || !champions.length) {
       return { filteredChampions: [], groupedArray: [] };
     }
 
-    // Group champions by type
-    const championsByType = {};
+    // Group champions by type with a Map for better performance
+    const championsByType = new Map();
     champions.forEach((champion) => {
-      if (!championsByType[champion.type]) {
-        championsByType[champion.type] = [];
+      if (!champion.type) return;
+
+      if (!championsByType.has(champion.type)) {
+        championsByType.set(champion.type, []);
       }
-      championsByType[champion.type].push(champion);
+      championsByType.get(champion.type).push(champion);
     });
 
     // For each type, shuffle the group and keep only 2 champions
     const filtered = [];
-    for (const type in championsByType) {
-      const group = championsByType[type];
+    for (const [_, group] of championsByType) {
       const selected = shuffle([...group]).slice(0, 2);
       filtered.push(...selected);
     }
 
-    // Function to arrange champions by cost
-    const groupedByCost = filtered.reduce((acc, champion) => {
+    // Function to arrange champions by cost using a Map for better performance
+    const groupedByCost = new Map();
+    filtered.forEach((champion) => {
       const { cost } = champion;
-      if (!acc[cost]) {
-        acc[cost] = [];
+      if (!groupedByCost.has(cost)) {
+        groupedByCost.set(cost, []);
       }
-      acc[cost].push({
+      groupedByCost.get(cost).push({
         ...champion,
         selected: champion.key === selectedChampion,
       });
-      return acc;
-    }, {});
+    });
 
-    return {
+    const result = {
       filteredChampions: filtered,
-      groupedArray: Object.values(groupedByCost),
+      groupedArray: Array.from(groupedByCost.values()),
     };
-  }, [champions, shuffle, selectedChampion]);
 
-  // Memoize the filtered items list
+    // Store the result to prevent recalculation
+    processedChampionsRef.current = result;
+
+    return result;
+  }, [champions, shuffle]);
+
+  // Update selected status in grouped array without reshuffling
+  const championsWithSelection = useMemo(() => {
+    if (!groupedArray.length) return groupedArray;
+
+    // Update only the selected status, without changing the order
+    return groupedArray.map((costGroup) =>
+      costGroup.map((champion) => ({
+        ...champion,
+        selected: champion.key === selectedChampion,
+      }))
+    );
+  }, [groupedArray, selectedChampion]);
+
+  // Memoize the filtered items list - avoid filter on every render
   const filteredItems = useMemo(() => {
     return items?.filter((item) => !item?.isFromItem) || [];
   }, [items]);
@@ -631,6 +733,8 @@ const MetaTrendsItems = () => {
       }
 
       setCompsData(newCompsData);
+      // Reset visible decks when filter changes
+      setVisibleDecks(10);
     },
     [metaDecks, selectedChampion, selectedItem, selectedTrait]
   );
@@ -645,14 +749,14 @@ const MetaTrendsItems = () => {
     setActiveTab(tab);
   }, []);
 
-  // Only render visible videos and optimize video loading
+  // Memoize tab content to prevent recalculation
   const handleTabContent = useMemo(() => {
     switch (activeTab) {
       case "Champions":
         return (
           <MetaTrendsCard
             itemCount={13}
-            championsByCost={groupedArray}
+            championsByCost={championsWithSelection}
             setSelectedChampion={(key) => handleFilterChange("champion", key)}
             forces={forces}
           />
@@ -720,7 +824,7 @@ const MetaTrendsItems = () => {
     }
   }, [
     activeTab,
-    groupedArray,
+    championsWithSelection,
     handleFilterChange,
     forces,
     traits,
@@ -762,9 +866,9 @@ const MetaTrendsItems = () => {
           </div>
         </div>
 
-        {/* Results Section */}
+        {/* Results Section with Virtualization */}
         <div className="space-y-4">
-          {compsData?.map((metaDeck, i) => (
+          {compsData.slice(0, visibleDecks).map((metaDeck, i) => (
             <MetaDeck
               key={i}
               metaDeck={metaDeck}
@@ -779,6 +883,16 @@ const MetaTrendsItems = () => {
               others={others}
             />
           ))}
+
+          {/* Loading indicator and observer reference for infinite scroll */}
+          {visibleDecks < compsData.length && (
+            <div
+              ref={observerRef}
+              className="animate-pulse bg-gray-800 h-[80px] rounded-lg flex items-center justify-center text-gray-400"
+            >
+              Loading more...
+            </div>
+          )}
         </div>
       </div>
     </div>

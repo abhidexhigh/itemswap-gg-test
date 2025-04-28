@@ -1,4 +1,11 @@
-import React, { memo, useMemo, useCallback } from "react";
+import React, {
+  memo,
+  useMemo,
+  useCallback,
+  useState,
+  useEffect,
+  useRef,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import MetaTrendsItem from "../MetaTrendsItem/MetaTrendsItem";
@@ -62,75 +69,7 @@ const coinIcons = [
   "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550114/05_zqb2ji.png",
 ];
 
-// const cardVideos = [
-//   {
-//     cardImage:
-//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744431851/22eafd38-1097-4ff4-8402-d9f3354a9788-video1-ezgif.com-video-to-webp-converter_uvs3ll.webp",
-//     cost: 3,
-//     variant: "Fire",
-//   },
-//   {
-//     cardImage:
-//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744432437/71dbd655-8a70-48e0-8fd3-91ad4cc0c8e6-video-ezgif.com-video-to-webp-converter_myjqld.webp",
-//     cost: 3,
-//     variant: "Storm",
-//   },
-//   {
-//     cardImage:
-//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744432437/a3f2338b-7f00-4305-95fd-74e21472bb45-video-ezgif.com-video-to-webp-converter_wthaaj.webp",
-//     cost: 3,
-//     variant: "Dark",
-//   },
-//   {
-//     cardImage:
-//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744432436/1933cac0-8062-4696-b41a-134bca40bf98-video-ezgif.com-video-to-webp-converter_u82wdv.webp",
-//     cost: 3,
-//     variant: "Dark",
-//   },
-//   {
-//     cardImage:
-//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744431851/13b835f5-d24a-4402-a34d-b50601a7c631-video-ezgif.com-video-to-webp-converter_jga8qa.webp",
-//     cost: 3,
-//     variant: "Light",
-//   },
-//   {
-//     cardImage:
-//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744804916/69699059-1e5c-4186-a60a-e12fb430c65f-video-ezgif.com-video-to-webp-converter_yacqye.webp",
-//     cost: 3,
-//     variant: "Water",
-//   },
-//   {
-//     cardImage:
-//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744804917/9c22f9ac-e4d8-46e2-8c5d-a9706bd4f88c-video-ezgif.com-video-to-webp-converter_k2kgkc.webp",
-//     cost: 3,
-//     variant: "Storm",
-//   },
-//   {
-//     cardImage:
-//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744805409/2d50e1d5-8615-4744-91a0-7945b1e34d09-video-ezgif.com-video-to-webp-converter_kigjjm.webp",
-//     cost: 3,
-//     variant: "Light",
-//   },
-//   {
-//     cardImage:
-//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744805445/4ea41363-2129-496c-a0c3-1ccb41bec28b-video-ezgif.com-video-to-webp-converter_brj4wi.webp",
-//     cost: 3,
-//     variant: "Dark",
-//   },
-//   {
-//     cardImage:
-//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744805445/e2566afc-c3ea-44a6-994c-5f2f3c73f41d-video-ezgif.com-video-to-webp-converter_dzbyld.webp",
-//     cost: 3,
-//     variant: "Fire",
-//   },
-//   {
-//     cardImage:
-//       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744806457/92399a4e-cba1-44f4-88ec-8e30042c9cff-video1-ezgif.com-video-to-webp-converter_vl0sxn.webp",
-//     cost: 3,
-//     variant: "Fire",
-//   },
-// ];
-
+// Video data for cards
 const cardVideos = [
   {
     cardImage:
@@ -237,6 +176,185 @@ const arrowAnimation = {
   viewport: { once: true },
 };
 
+// Extracted arrow icon component to reduce rerenders
+const ArrowIcon = memo(() => (
+  <motion.div {...arrowAnimation}>
+    <OptimizedImage
+      src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1742540890/Arrow_ieu0xg.png"
+      alt="Arrow icon"
+      width={48}
+      height={48}
+      className="w-3"
+      priority={true}
+    />
+  </motion.div>
+));
+
+// Extracted CoinIcon component to improve performance
+const CoinIcon = memo(({ index, priority = false }) => {
+  if (index >= coinIcons.length) return null;
+
+  return (
+    <div className="flex items-center gap-1">
+      <div className="relative">
+        <OptimizedImage
+          src={coinIcons[index]}
+          className="w-8 md:w-10 2xl:w-12"
+          alt={`Cost ${index + 1} Icon`}
+          width={48}
+          height={48}
+          priority={priority}
+        />
+      </div>
+      <div className="flex items-center">
+        <motion.div {...arrowAnimation}>
+          <OptimizedImage
+            src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1742540890/Arrow_ieu0xg.png"
+            alt={`Arrow icon`}
+            width={48}
+            height={48}
+            className="w-2 -mr-0.5"
+            priority={priority}
+          />
+        </motion.div>
+        <ArrowIcon />
+      </div>
+    </div>
+  );
+});
+
+// Extracted CostHeader component to improve performance
+const CostHeader = memo(({ costLevel, others }) => (
+  <header className="flex lg:hidden flex-col bg-[#1a1b30] mb-2 !mx-3">
+    <h5 className="flex justify-center items-center h-[30px] gap-[4px] m-1">
+      <span width="12" height="12" className="block h-[14px] w-[14px]">
+        <svg
+          viewBox="0 0 12 12"
+          fill="currentColor"
+          xmlns="http://www.w3.org/2000/svg"
+          width="100%"
+          height="100%"
+        >
+          <path d="M12 6A6 6 0 1 1 0 6a6 6 0 0 1 12 0Z" fill="#FFC528"></path>
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M6 11A5 5 0 1 0 6 1a5 5 0 0 0 0 10Zm0 1A6 6 0 1 0 6 0a6 6 0 0 0 0 12Z"
+            fill="#FF8929"
+          ></path>
+          <path
+            d="M6.58 9.5c-.511 0-.985-.076-1.422-.228a3.287 3.287 0 0 1-1.14-.665 3.075 3.075 0 0 1-.746-1.085C3.091 7.091 3 6.592 3 6.027c0-.559.094-1.054.282-1.485.189-.438.444-.808.767-1.112a3.256 3.256 0 0 1 1.14-.693c.436-.158.9-.237 1.39-.237.539 0 .996.088 1.372.264.383.177.696.377.938.602l-.797.857a2.718 2.718 0 0 0-.615-.401c-.222-.11-.504-.164-.847-.164-.309 0-.595.054-.857.164a1.857 1.857 0 0 0-.665.455 2.26 2.26 0 0 0-.434.73c-.1.285-.151.61-.151.975 0 .735.185 1.312.554 1.732.37.413.921.62 1.654.62.182 0 .356-.022.524-.064.169-.043.306-.107.414-.192v-1.33H6.348V5.644H9v3.044c-.255.225-.592.416-1.008.574A3.96 3.96 0 0 1 6.58 9.5Z"
+            fill="#FF8929"
+          ></path>
+        </svg>
+      </span>
+      <span className="text-[14px] font-semibold font-sans leading-none text-[#999]">
+        {others?.cost} {costLevel + 1}
+      </span>
+    </h5>
+  </header>
+));
+
+// ChampionsCostSection component to handle champions display per cost
+const ChampionsCostSection = memo(
+  ({ champions, costIndex, setSelectedChampion, forces, others }) => {
+    // Optimization: use refs for intersection observer to lazily render
+    const sectionRef = useRef(null);
+    const [isVisible, setIsVisible] = useState(costIndex < 2); // Eagerly load first 2 sections
+
+    // Store the processed champions to prevent reshuffling
+    const processedChampionsRef = useRef(null);
+
+    useEffect(() => {
+      // Skip for already visible sections (first 2)
+      if (isVisible) return;
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            // Once visible, no need to observe anymore
+            if (sectionRef.current) observer.unobserve(sectionRef.current);
+          }
+        },
+        { threshold: 0.1, rootMargin: "100px" }
+      );
+
+      if (sectionRef.current) {
+        observer.observe(sectionRef.current);
+      }
+
+      return () => {
+        if (sectionRef.current) observer.unobserve(sectionRef.current);
+      };
+    }, [isVisible]);
+
+    // Process champions only once and store in ref
+    const sortedChampions = useMemo(() => {
+      // If we already have processed these champions, return them
+      if (processedChampionsRef.current) {
+        return processedChampionsRef.current;
+      }
+
+      if (!champions || champions.length === 0) return [];
+
+      // Sort once by type
+      const sorted = [...champions].sort((a, b) =>
+        (a.type || "").localeCompare(b.type || "")
+      );
+
+      // Store result in ref to prevent future reshuffling
+      processedChampionsRef.current = sorted;
+
+      return sorted;
+    }, [champions]);
+
+    // Memoize the renderChampion function
+    const renderChampion = useCallback(
+      (champion, j) => (
+        <MetaTrendsItem
+          key={`${champion.key || j}`}
+          champion={champion}
+          setSelectedChampion={setSelectedChampion}
+          index={j}
+          forces={forces}
+        />
+      ),
+      [setSelectedChampion, forces]
+    );
+
+    if (!isVisible) {
+      return (
+        <div
+          ref={sectionRef}
+          className="min-h-[100px] bg-[#1a1b30] rounded mb-4 animate-pulse"
+        />
+      );
+    }
+
+    return (
+      <React.Fragment>
+        <CostHeader costLevel={costIndex} others={others} />
+        <div className="mx-auto w-full">
+          <div
+            className="flex items-center flex-wrap mb-2 justify-center rounded-tl-none rounded-tr-none"
+            style={{
+              gap: "8px",
+            }}
+          >
+            <div className="hidden lg:flex items-center">
+              {costIndex < coinIcons.length && (
+                <CoinIcon index={costIndex} priority={costIndex < 2} />
+              )}
+            </div>
+            {sortedChampions.map((champion, j) => renderChampion(champion, j))}
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  }
+);
+
 const MetaTrendsCard = ({
   title,
   description,
@@ -252,176 +370,19 @@ const MetaTrendsCard = ({
   const { t } = useTranslation();
   const others = t("others");
 
-  // Memoize the renderChampion function
-  const renderChampion = useCallback(
-    (champion, j) => (
-      <MetaTrendsItem
-        key={`${champion.key || j}`}
-        champion={champion}
-        setSelectedChampion={setSelectedChampion}
-        index={j}
-        forces={forces}
-      />
-    ),
-    [setSelectedChampion, forces]
-  );
-
   return (
-    <div
-      className="rounded-[4px]"
-      // style={{
-      //   background: "rgb(0 0 0 / 55%)",
-      //   borderRadius: "16px",
-      //   boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-      //   backdropFilter: "blur(2px)",
-      //   border: "1px solid rgba(255, 255, 255, 0.3)",
-      // }}
-    >
-      {/* <header className="flex flex-col bg-[#27282E]">
-        <h5 className="flex justify-center items-center h-[34px] gap-[4px] m-1">
-          <span width="12" height="12" className="block h-[14px] w-[14px]">
-            <svg
-              viewBox="0 0 12 12"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-              width="100%"
-              height="100%"
-            >
-              <path
-                d="M12 6A6 6 0 1 1 0 6a6 6 0 0 1 12 0Z"
-                fill="#FFC528"
-              ></path>
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M6 11A5 5 0 1 0 6 1a5 5 0 0 0 0 10Zm0 1A6 6 0 1 0 6 0a6 6 0 0 0 0 12Z"
-                fill="#FF8929"
-              ></path>
-              <path
-                d="M6.58 9.5c-.511 0-.985-.076-1.422-.228a3.287 3.287 0 0 1-1.14-.665 3.075 3.075 0 0 1-.746-1.085C3.091 7.091 3 6.592 3 6.027c0-.559.094-1.054.282-1.485.189-.438.444-.808.767-1.112a3.256 3.256 0 0 1 1.14-.693c.436-.158.9-.237 1.39-.237.539 0 .996.088 1.372.264.383.177.696.377.938.602l-.797.857a2.718 2.718 0 0 0-.615-.401c-.222-.11-.504-.164-.847-.164-.309 0-.595.054-.857.164a1.857 1.857 0 0 0-.665.455 2.26 2.26 0 0 0-.434.73c-.1.285-.151.61-.151.975 0 .735.185 1.312.554 1.732.37.413.921.62 1.654.62.182 0 .356-.022.524-.064.169-.043.306-.107.414-.192v-1.33H6.348V5.644H9v3.044c-.255.225-.592.416-1.008.574A3.96 3.96 0 0 1 6.58 9.5Z"
-                fill="#FF8929"
-              ></path>
-            </svg>
-          </span>
-          <span className="text-[12px] font-semibold leading-none text-[#999]">
-            {cost}
-          </span>
-        </h5>
-      </header> */}
-      {/* <div className="flex flex-col p-[12px] lg:px-[14px]"> */}
+    <div className="rounded-[4px]">
       <div className="grid grid-cols-1 m-2">
-        {championsByCost
-          // .filter((champions, i) => i === 3 || i === 0)
-          .map((champions, i) => {
-            // Memoize the random characters for each cost level
-            const randomChampions = useMemo(() => {
-              return getRandomCharacters(champions);
-            }, [champions]);
-
-            // Memoize the sorted champions
-            const sortedChampions = useMemo(() => {
-              return randomChampions.sort((a, b) =>
-                a.type?.localeCompare(b.type || "")
-              );
-            }, [randomChampions]);
-
-            return (
-              <React.Fragment key={`cost-${i}`}>
-                <header className="flex lg:hidden flex-col bg-[#1a1b30] mb-2 !mx-3">
-                  <h5 className="flex justify-center items-center h-[30px] gap-[4px] m-1">
-                    <span
-                      width="12"
-                      height="12"
-                      className="block h-[14px] w-[14px]"
-                    >
-                      <svg
-                        viewBox="0 0 12 12"
-                        fill="currentColor"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="100%"
-                        height="100%"
-                      >
-                        <path
-                          d="M12 6A6 6 0 1 1 0 6a6 6 0 0 1 12 0Z"
-                          fill="#FFC528"
-                        ></path>
-                        <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M6 11A5 5 0 1 0 6 1a5 5 0 0 0 0 10Zm0 1A6 6 0 1 0 6 0a6 6 0 0 0 0 12Z"
-                          fill="#FF8929"
-                        ></path>
-                        <path
-                          d="M6.58 9.5c-.511 0-.985-.076-1.422-.228a3.287 3.287 0 0 1-1.14-.665 3.075 3.075 0 0 1-.746-1.085C3.091 7.091 3 6.592 3 6.027c0-.559.094-1.054.282-1.485.189-.438.444-.808.767-1.112a3.256 3.256 0 0 1 1.14-.693c.436-.158.9-.237 1.39-.237.539 0 .996.088 1.372.264.383.177.696.377.938.602l-.797.857a2.718 2.718 0 0 0-.615-.401c-.222-.11-.504-.164-.847-.164-.309 0-.595.054-.857.164a1.857 1.857 0 0 0-.665.455 2.26 2.26 0 0 0-.434.73c-.1.285-.151.61-.151.975 0 .735.185 1.312.554 1.732.37.413.921.62 1.654.62.182 0 .356-.022.524-.064.169-.043.306-.107.414-.192v-1.33H6.348V5.644H9v3.044c-.255.225-.592.416-1.008.574A3.96 3.96 0 0 1 6.58 9.5Z"
-                          fill="#FF8929"
-                        ></path>
-                      </svg>
-                    </span>
-                    <span className="text-[14px] font-semibold font-sans leading-none text-[#999]">
-                      {others?.cost} {i + 1}
-                    </span>
-                  </h5>
-                </header>
-                <div className="mx-auto w-full">
-                  <div
-                    className="flex items-center flex-wrap mb-2 justify-center rounded-tl-none rounded-tr-none"
-                    style={{
-                      gap: "8px",
-                    }}
-                  >
-                    <div className="hidden lg:flex items-center">
-                      {i < coinIcons.length && (
-                        <div className="flex items-center gap-1">
-                          <div className="relative">
-                            <OptimizedImage
-                              src={coinIcons[i]}
-                              className="w-8 md:w-10 2xl:w-12"
-                              alt={`Cost ${i + 1} Icon`}
-                              width={48}
-                              height={48}
-                              priority={i < 2}
-                            />
-                            {/* <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20px] font-semibold leading-none text-[#401d1d] shadow-lg">
-                            {i + 1}
-                          </span> */}
-                          </div>
-                          <div className="flex items-center">
-                            <motion.div {...arrowAnimation}>
-                              <OptimizedImage
-                                src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1742540890/Arrow_ieu0xg.png"
-                                alt={`Cost ${i + 1} Icon`}
-                                width={48}
-                                height={48}
-                                className="w-2 -mr-0.5"
-                                {...(i >= 2
-                                  ? { loading: "lazy" }
-                                  : { priority: true })}
-                              />
-                            </motion.div>
-                            <motion.div {...arrowAnimation}>
-                              <OptimizedImage
-                                src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1742540890/Arrow_ieu0xg.png"
-                                alt={`Cost ${i + 1} Icon`}
-                                width={48}
-                                height={48}
-                                className="w-3"
-                                {...(i >= 2
-                                  ? { loading: "lazy" }
-                                  : { priority: true })}
-                              />
-                            </motion.div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    {sortedChampions
-                      // .slice(0, 9)
-                      .map((champion, j) => renderChampion(champion, j))}
-                  </div>
-                </div>
-              </React.Fragment>
-            );
-          })}
+        {championsByCost.map((champions, i) => (
+          <ChampionsCostSection
+            key={`cost-${i}`}
+            champions={champions}
+            costIndex={i}
+            setSelectedChampion={setSelectedChampion}
+            forces={forces}
+            others={others}
+          />
+        ))}
       </div>
     </div>
   );
