@@ -190,8 +190,8 @@ const ReactTltp = ({ variant = "", content, id }) => {
       // Clean up this specific tooltip when component unmounts
       try {
         const tooltip = document.getElementById(id);
-        if (tooltip && tooltip.parentNode) {
-          tooltip.parentNode.removeChild(tooltip);
+        if (tooltip) {
+          tooltip.remove();
         }
       } catch (e) {
         console.log("Tooltip cleanup error:", e);
