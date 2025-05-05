@@ -9,6 +9,9 @@ import { OptimizedImage } from "../../utils/imageOptimizer";
 // Single container ID for all tooltips
 const TOOLTIP_CONTAINER_ID = "global-tooltip-container";
 
+// Store created tooltip IDs to avoid duplicates and for cleanup
+const createdTooltips = new Set();
+
 // Helper to detect touch devices
 const isTouchDevice = () => {
   if (typeof window === "undefined") return false;
@@ -74,17 +77,6 @@ if (typeof window !== "undefined") {
     // Force tooltips to be reinitialized
     const event = new Event("mousemove");
     document.dispatchEvent(event);
-
-    // Add a global event listener to handle tooltip cleanup
-    window.addEventListener("beforeunload", () => {
-      // Clean up any tooltips that might be in the DOM
-      const tooltips = document.querySelectorAll(".react-tooltip");
-      tooltips.forEach((tooltip) => {
-        if (tooltip && tooltip.parentNode) {
-          tooltip.parentNode.removeChild(tooltip);
-        }
-      });
-    });
 
     // Simplified mobile touch handling
     if (isTouchDevice()) {
@@ -167,37 +159,45 @@ const ReactTltp = ({ variant = "", content, id }) => {
   const { items } = data?.refs;
   const { traits } = data?.refs;
   const isTouch = useRef(null);
+  const [tooltipVisible, setTooltipVisible] = useState(true);
+
+  // Generate a unique ID if not provided
+  const uniqueId = useRef(
+    id || `tooltip-${Math.random().toString(36).substring(2, 9)}`
+  );
+  const tooltipId = uniqueId.current;
 
   // Detect if this is a touch device on mount
   useEffect(() => {
     isTouch.current = isTouchDevice();
   }, []);
 
-  // Force tooltips to be reinitialized when component mounts
+  // Track this tooltip instance
   useEffect(() => {
+    createdTooltips.add(tooltipId);
+
+    // Force tooltips to be reinitialized
     const reinitTooltips = () => {
       const event = new Event("mousemove");
       document.dispatchEvent(event);
     };
 
     reinitTooltips();
-
-    // Also reinitialize after a short delay to ensure everything is loaded
     const timer = setTimeout(reinitTooltips, 100);
 
     return () => {
       clearTimeout(timer);
-      // Clean up this specific tooltip when component unmounts
-      try {
-        const tooltip = document.getElementById(id);
-        if (tooltip) {
-          tooltip.remove();
-        }
-      } catch (e) {
-        console.log("Tooltip cleanup error:", e);
-      }
+
+      // Instead of removing DOM elements directly, just hide this tooltip
+      setTooltipVisible(false);
+
+      // Let React handle cleanup through unmounting
+      createdTooltips.delete(tooltipId);
     };
-  }, [id]);
+  }, [tooltipId]);
+
+  // Don't render if not visible
+  if (!tooltipVisible) return null;
 
   // Get appropriate events based on device type
   const getEventTypes = () => {
@@ -214,7 +214,7 @@ const ReactTltp = ({ variant = "", content, id }) => {
 
   // Common tooltip props
   const tooltipProps = {
-    id,
+    id: tooltipId,
     delayShow: 0, // Remove delay for better mobile experience
     className: `tooltip-container tooltip-${variant}`,
     style: {
