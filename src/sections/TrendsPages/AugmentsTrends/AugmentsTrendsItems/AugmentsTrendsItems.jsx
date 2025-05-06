@@ -124,7 +124,7 @@ const ProjectItems = () => {
           <ScrollableTable>
             <table className="w-full min-w-[900px] relative lg:border-separate lg:border-spacing-y-2">
               <thead className="sticky top-0 z-50">
-                <tr className="bg-[#00000099]">
+                <tr className="bg-[#000000]">
                   <th className="lg:rounded-l-lg p-2 font-semibold">
                     <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px]">
                       {others.rank}

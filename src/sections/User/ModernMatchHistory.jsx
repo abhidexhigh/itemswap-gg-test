@@ -254,7 +254,7 @@ const ModernMatchHistory = ({
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2, delay: i * 0.05 }}
-                  className="bg-[#2d2d42e9] rounded-lg shadow-md !border-b-2 !border-white/30"
+                  className="bg-[#2d2d42e9] rounded-lg shadow-md !border-b-2 !border-white/30 py-2.5"
                 >
                   <div className="px-3 grid grid-cols-12 gap-2 items-center">
                     {/* Placement Column */}
@@ -415,6 +415,7 @@ const ModernMatchHistory = ({
                               identificationImageStyle="w-[10px] sm:w-[12px] md:w-[16px]"
                               textStyle="text-[8px] md:text-[10px]"
                               forces={forces}
+                              cardSize="w-[48px] sm:w-[52px] md:w-[60px]"
                             />
                             <div className="flex justify-center gap-[2px] mt-1">
                               {unit?.items?.map((item, j) => {

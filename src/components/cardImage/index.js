@@ -15,6 +15,7 @@ const CardImage = ({
   identificationImageStyle = "w=[16px] md:w-[32px]",
   textStyle = "text-[10px] md:text-[16px]",
   forces,
+  cardSize = "w-[80px] h-[80px] md:w-[96px] md:h-[96px]",
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(true); // Default to true to show initial image
@@ -118,7 +119,7 @@ const CardImage = ({
           <div className={`flex flex-col rounded-lg`}>
             <div
               ref={containerRef}
-              className="relative w-[80px] h-[80px] !bg-black md:w-[96px] md:h-[96px] rounded-lg"
+              className={`relative !bg-black rounded-lg ${cardSize}`}
               data-tooltip-id={src?.key}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}

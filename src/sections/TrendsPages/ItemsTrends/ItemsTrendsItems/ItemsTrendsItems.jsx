@@ -151,16 +151,16 @@ const ProjectItems = () => {
         {/* Table section */}
         <div className="projects-row overflow-auto">
           <ScrollableTable>
-            <table className="w-full min-w-[900px] relative lg:border-separate lg:border-spacing-y-2">
+            <table className="w-full min-w-[1100px] relative lg:border-separate lg:border-spacing-y-2">
               <thead className="sticky top-0 z-50">
-                <tr className="bg-[#00000099]">
-                  <th className="lg:rounded-l-lg p-2 font-semibold">
+                <tr className="bg-[#000000]">
+                  <th className="lg:rounded-l-lg p-2 font-semibold w-[50px]">
                     <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px]">
                       {others.rank}
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[200px] sm:min-w-[220px] md:min-w-[280px] ${sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("key")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -169,7 +169,7 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "avgPlacement" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] ${sortConfig?.key === "avgPlacement" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("avgPlacement")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -180,7 +180,7 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "tops" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] ${sortConfig?.key === "tops" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("tops")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -189,7 +189,7 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "wins" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] ${sortConfig?.key === "wins" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("wins")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -198,7 +198,7 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "pickRate" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] ${sortConfig?.key === "pickRate" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("pickRate")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -207,7 +207,7 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "plays" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] ${sortConfig?.key === "plays" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("plays")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -215,12 +215,12 @@ const ProjectItems = () => {
                       <span className="ml-2">{renderSortIcon("plays")}</span>
                     </p>
                   </th>
-                  <th className="p-2 font-semibold">
+                  <th className="p-2 font-semibold min-w-[120px]">
                     <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px]">
                       {others.synergy} {others.items}
                     </p>
                   </th>
-                  <th className="lg:rounded-r-lg p-2 font-semibold">
+                  <th className="lg:rounded-r-lg p-2 font-semibold min-w-[140px]">
                     <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px] text-center">
                       {others.top3} {others.champions}
                     </p>
@@ -242,7 +242,7 @@ const ProjectItems = () => {
                         </td>
                         <td className={`p-2 ${getCellClass("key")}`}>
                           <div>
-                            <div className="flex justify-start items-center">
+                            <div className="flex justify-start items-center space-x-1 sm:space-x-2">
                               <>
                                 <OptimizedImage
                                   src={
@@ -252,7 +252,7 @@ const ProjectItems = () => {
                                   alt="icon"
                                   width={80}
                                   height={80}
-                                  className="w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] md:w-[84px] md:h-[84px] mr-1 !border !border-[#ffffff60] rounded-md"
+                                  className="w-[40px] h-[40px] sm:w-[50px] sm:h-[50px] md:w-[84px] md:h-[84px] !border !border-[#ffffff60] rounded-md flex-shrink-0"
                                   data-tooltip-id={`${items.find((i) => i.key === item.key)?.key}}`}
                                 />
                                 <ReactTltp
@@ -263,8 +263,8 @@ const ProjectItems = () => {
                                   )}
                                 />
                               </>
-                              <div className="ml-2">
-                                <p className="p-0 text-base sm:text-base mb-2 md:!text-[16px] text-[#fff] truncate max-w-[120px] sm:max-w-full">
+                              <div className="min-w-0 flex-1">
+                                <p className="p-0 text-sm sm:text-sm md:text-base mb-1 md:mb-2 text-[#fff] truncate max-w-[90px] sm:max-w-[150px] md:max-w-full">
                                   {items.find((i) => i.key === item.key)?.name}
                                 </p>
                                 <div className="flex items-center flex-wrap gap-1">
@@ -301,7 +301,7 @@ const ProjectItems = () => {
                           </div>
                         </td>
                         <td className={`p-2 ${getCellClass("avgPlacement")}`}>
-                          <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
+                          <p className="p-0 text-sm sm:text-base md:text-[16px] mb-0 text-[#fff] whitespace-nowrap">
                             <ColoredValue
                               value={item?.avgPlacement}
                               prefix="#"

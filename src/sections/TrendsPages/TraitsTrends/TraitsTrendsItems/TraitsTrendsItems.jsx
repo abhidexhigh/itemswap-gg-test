@@ -131,6 +131,17 @@ const ProjectItems = () => {
     return null;
   };
 
+  // Function to get the tier-specific image URL for a trait
+  const getTraitTierImage = (traitKey, traitTier) => {
+    const trait = traits?.find((t) => t?.key === traitKey);
+    if (!trait) return null;
+
+    const tierData = trait.tiers?.find(
+      (t) => t.tier.toLowerCase() === traitTier.toLowerCase()
+    );
+    return tierData?.imageUrl || trait.imageUrl;
+  };
+
   return (
     <>
       <div className="pt-2 bg-[#111111] md:bg-transparent w-full">
@@ -157,7 +168,7 @@ const ProjectItems = () => {
             <ScrollableTable>
               <table className="w-full min-w-[900px] relative lg:border-separate lg:border-spacing-y-2">
                 <thead className="sticky top-0 z-50">
-                  <tr className="bg-[#00000099]">
+                  <tr className="bg-[#000000]">
                     <th className="lg:rounded-l-lg p-2 font-semibold">
                       <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px]">
                         {others.rank}
@@ -239,10 +250,10 @@ const ProjectItems = () => {
                         <div>
                           <div className="flex justify-start items-center">
                             <OptimizedImage
-                              src={
-                                traits?.find((t) => t?.key === metaTrait?.key)
-                                  ?.imageUrl
-                              }
+                              src={getTraitTierImage(
+                                metaTrait?.key,
+                                metaTrait?.tier
+                              )}
                               alt="icon"
                               width={80}
                               height={80}
