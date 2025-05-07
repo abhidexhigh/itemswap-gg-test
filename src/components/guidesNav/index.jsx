@@ -3,7 +3,6 @@ import { useRouter } from "next/navigation";
 
 const GuidesNav = ({ selected }) => {
   const router = useRouter();
-  console.log("selected", selected);
   const handleChange = (e) => {
     router.push(`/${e.target.value}`);
   };

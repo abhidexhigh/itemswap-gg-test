@@ -37,7 +37,6 @@ const ProjectCard = ({ comps, items, traits, champions }) => {
     verticalAlign: "middle",
     width: "56px",
   };
-  console.log(comps);
 
   const [isOpen, setIsOpen] = useState(false);
   // return <></>;

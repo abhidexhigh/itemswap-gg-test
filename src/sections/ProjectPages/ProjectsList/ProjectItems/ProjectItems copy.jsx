@@ -59,18 +59,14 @@ const ProjectItems = () => {
 
   const handleFilterChange = (type, key) => {
     if (type === "trait") {
-      console.log("Trait", key, selectedTrait);
       if (selectedTrait === key) {
-        console.log("hi");
         setSelectedTrait(null);
         setCompsData(metaDecks);
       } else {
         setSelectedTrait(key);
-        console.log(metaDecks);
         const filteredTraits = metaDecks.filter((deck) =>
           deck.deck.traits.some((trait) => trait.key === key)
         );
-        console.log("Trait", key, selectedTrait, filteredTraits);
         setCompsData(filteredTraits);
       }
       setSelectedChampion(null);

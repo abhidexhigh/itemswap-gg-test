@@ -39,7 +39,6 @@ const Traits = ({ selected }) => {
   const { champions } = data?.refs;
   const { items } = data?.refs;
   const { traits } = data?.refs;
-  console.log("chal", champions);
 
   const selectedChampion = champions?.find(
     (champion) => champion?.key === selected
@@ -420,7 +419,6 @@ const Traits = ({ selected }) => {
                   </div>
                 </li>
               </ul>
-              {console.log(selectedChampion?.skills)}
               {selectedChampion?.skills?.map((skill, index) => (
                 <figure className="flex py-[21px] px-[24px] border-t-0 border border-[#e6e6e650] bg-white">
                   <img

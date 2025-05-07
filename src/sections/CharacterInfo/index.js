@@ -100,7 +100,6 @@ const CharacterInfo = () => {
                     ?.deck?.forces?.map((force, i) => (
                       <>
                         <div className="flex justify-center items-center bg-[#000] rounded-full mx-1 pr-2 border-[1px] border-[#ffffff50]">
-                          {console.log("force", force)}
                           <img
                             src={
                               traits?.find(

@@ -61,8 +61,6 @@ function getMobileBackgroundPosition(pathname) {
     "/bestItemsBuilds": "100%",
   };
 
-  console.log("pathname", pathname, positionMap[pathname]);
-
   return positionMap[pathname] || "center center";
 }
 

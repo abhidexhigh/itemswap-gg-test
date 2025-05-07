@@ -49,7 +49,6 @@ const Banner = () => {
       const filteredSuggestions = players.filter((player) =>
         player.name.toLowerCase().includes(query.toLowerCase())
       );
-      console.log("query", query, filteredSuggestions);
       setSuggestions(filteredSuggestions);
     }
   }, [query]);
@@ -100,7 +99,6 @@ const Banner = () => {
                       {suggestions.map((suggestion, i) => (
                         <Link href={`/user/${suggestion?.name}`} key={i}>
                           <li className="!text-white cursor-pointer hover:bg-[#1d1f2f] rounded-2xl px-4 py-2">
-                            {console.log(suggestion)}
                             <div className="flex justify-start items-center mb-2">
                               <img
                                 src={suggestion?.imageUrl}

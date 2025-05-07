@@ -18,7 +18,6 @@ const Items = () => {
   const [tableHover, setTableHover] = useState(false);
   const [space1, setSpace1] = useState(null);
   const [space2, setSpace2] = useState(null);
-  console.log(itemsData);
   const [activeTab, setActiveTab] = useState("Items");
   const tabs = ["Comps", "Champions", "Traits", "Items"];
 
@@ -541,7 +540,6 @@ const Items = () => {
                 <div className="relative self-stretch pb-[20px]">
                   <div className="flex">
                     <div className="relative my-0 md:mx-auto">
-                      {console.log(itemsData)}
                       <ItemTable itemsData={itemsData} />
                       {/* <table className="table-fixed group">
                         <tbody>

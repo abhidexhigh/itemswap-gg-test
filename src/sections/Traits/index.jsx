@@ -74,8 +74,6 @@ const Traits = () => {
     setChampionss(makeInactive().filter((champion) => champion.isActive));
   }, []);
 
-  console.log(championss);
-
   return (
     // <ProjectItemsStyleWrapper>
     <>
@@ -180,10 +178,6 @@ const Traits = () => {
                                       className="inline-flex flex-col items-center"
                                       style={{ gap: "4px" }}
                                     >
-                                      {/* {console.log("trait", trait)} */}
-                                      {trait.key === "Chaos"
-                                        ? console.log("champion", champion)
-                                        : ""}
                                       <div className="inline-flex items-center justify-center relative flex-col">
                                         <div className="relative inline-flex flex-col">
                                           <div className="relative flex flex-col w-[72px] h-[72px] md:w-[108px] md:h-[108px] rounded-[20px]">

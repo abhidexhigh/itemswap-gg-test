@@ -47,7 +47,6 @@ const Traits = ({ selected }) => {
     width: window.innerWidth,
     height: window.innerHeight,
   });
-  console.log(dimensions);
 
   useEffect(() => {
     setChampionss(makeInactive());
@@ -70,7 +69,6 @@ const Traits = ({ selected }) => {
   }, []);
 
   useEffect(() => {
-    console.log(championss);
     if (dimensions?.width <= 640 && filtered !== "active") {
       const activeChampions = makeInactive().filter(
         (champion, index) => champion?.isActive
@@ -132,7 +130,6 @@ const Traits = ({ selected }) => {
     const filteredChampions = makeInactive()?.filter((champion) =>
       champion?.name.toLowerCase().includes(search.toLowerCase())
     );
-    console.log("Search", filteredChampions);
     setChampionss(filteredChampions);
   };
 

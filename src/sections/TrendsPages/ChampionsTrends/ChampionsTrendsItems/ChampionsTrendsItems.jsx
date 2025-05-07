@@ -64,7 +64,6 @@ const ProjectItems = () => {
   }, [metaDeckChampionsStats, sortConfig]);
 
   const requestSort = (key) => {
-    console.log("key", key);
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
       direction = "descending";
@@ -93,7 +92,6 @@ const ProjectItems = () => {
   });
 
   const handleButtonClick = (button) => {
-    console.log(button);
     if (button === "All") {
       setMetaDeckChampionsStatsData(metaDeckChampionsStats);
     } else {

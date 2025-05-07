@@ -15,7 +15,6 @@ export default function Champion() {
   const { walletModalvisibility, metamaskModal } = useModal();
   const router = useRouter();
   const { champion } = router.query;
-  console.log(champion);
   return (
     <Fragment>
       <SEO title="igo ranking page" />
