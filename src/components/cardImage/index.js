@@ -16,6 +16,7 @@ const CardImage = ({
   textStyle = "text-[10px] md:text-[16px]",
   forces,
   cardSize = "w-[80px] h-[80px] md:w-[96px] md:h-[96px]",
+  tier = 0, // Add tier prop with default value 0
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(true); // Default to true to show initial image
@@ -112,10 +113,30 @@ const CardImage = ({
     console.warn(`Video not available for: ${src?.name || "Unknown"}`);
   }, [src?.name]);
 
+  // Create array of star count based on tier
+  const starArray = useMemo(() => {
+    return tier > 0 ? Array(tier).fill(1) : [];
+  }, [tier]);
+
   return (
     <div className="inline-flex flex-col items-center">
       <div className="inline-flex items-center justify-center flex-col">
         <div className="inline-flex flex-col">
+          {/* Star icons display above the image */}
+          {tier > 0 && (
+            <div className="flex justify-center gap-[1px] mb-1">
+              {starArray.map((_, index) => (
+                <OptimizedImage
+                  key={index}
+                  src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1746781271/gold_3_atgi3f.webp"
+                  width={12}
+                  height={12}
+                  className="w-[10px] h-[10px] md:w-[14px] md:h-[14px]"
+                  alt="Star"
+                />
+              ))}
+            </div>
+          )}
           <div className={`flex flex-col rounded-lg`}>
             <div
               ref={containerRef}

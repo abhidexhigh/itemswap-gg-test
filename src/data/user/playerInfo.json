@@ -59,52 +59,62 @@
           {
             "key": "Rhiannon",
             "coreRank": 1,
-            "items": ["TenguYoroi", "Wygar", "Aegis"]
+            "items": ["TenguYoroi", "Wygar", "Aegis"],
+            "tier": 3
           },
           {
             "key": "Helga",
             "coreRank": 5,
-            "items": ["Sword", "Kavacha", "Osirian"]
+            "items": ["Sword", "Kavacha", "Osirian"],
+            "tier": 3
           },
           {
             "key": "Arina",
             "coreRank": 2,
-            "items": ["Nandaka", "Eaglewing", "Bayan"]
+            "items": ["Nandaka", "Eaglewing", "Bayan"],
+            "tier": 2
           },
           {
             "key": "Durin",
             "coreRank": 3,
-            "items": ["RuyiBang", "Frostguard", "RedHorn"]
+            "items": ["RuyiBang", "Frostguard", "RedHorn"],
+            "tier": 2
           },
           {
             "key": "Cerberus",
             "coreRank": 1,
-            "items": ["Excalibur", "Excalibur", "Eaglewing"]
+            "items": ["Excalibur", "Excalibur", "Eaglewing"],
+            "tier": 2
           },
           {
             "key": "Tamamo",
             "coreRank": 6,
-            "items": ["Vesta", "Aegis", "Wygar"]
+            "items": ["Vesta", "Aegis", "Wygar"],
+            "tier": 2
           },
           {
             "key": "Nergal",
             "coreRank": 10,
-            "items": ["Jingong", "Helmet", "JinJia"]
+            "items": ["Jingong", "Helmet", "JinJia"],
+            "tier": 1
           },
           {
             "key": "Inugami",
             "coreRank": 2,
-            "items": ["Frostguard", "KoreanBow", "WoodenWand"]
+            "items": ["Frostguard", "KoreanBow", "WoodenWand"],
+            "tier": 1
           },
           {
             "key": "Grommash",
             "coreRank": 8,
-            "items": ["Wygar", "Simurgh", "Kiriti"]
+            "items": ["Wygar", "Simurgh", "Kiriti"],
+            "tier": 1
           },
           {
             "key": "Ahriman",
             "coreRank": 1,
-            "items": ["Nightfang", "Bloodaxe", "Kavacha"]
+            "items": ["Nightfang", "Bloodaxe", "Kavacha"],
+            "tier": 1
           }
         ],
         "augments": ["LevelSpins", "BattleRegen", "LootDrop"]
@@ -167,52 +177,62 @@
           {
             "key": "Shesha",
             "coreRank": 2,
-            "items": ["Kunee", "Kiriti", "LeaderArmor"]
+            "items": ["Kunee", "Kiriti", "LeaderArmor"],
+            "tier": 3
           },
           {
             "key": "Shinigami",
             "coreRank": 4,
-            "items": ["ScaleHelmet", "Osirian", "EyeOfRa"]
+            "items": ["ScaleHelmet", "Osirian", "EyeOfRa"],
+            "tier": 3
           },
           {
             "key": "Grimgor",
             "coreRank": 5,
-            "items": ["Simurgh", "Evalach", "Kaminari"]
+            "items": ["Simurgh", "Evalach", "Kaminari"],
+            "tier": 2
           },
           {
             "key": "Orphne",
             "coreRank": 2,
-            "items": ["Bayan", "Raikiri", "Gladius"]
+            "items": ["Bayan", "Raikiri", "Gladius"],
+            "tier": 2
           },
           {
             "key": "Tiamat",
             "coreRank": 9,
-            "items": ["EyeOfRa", "Darius", "Raikiri"]
+            "items": ["EyeOfRa", "Darius", "Raikiri"],
+            "tier": 2
           },
           {
             "key": "Nordri",
             "coreRank": 3,
-            "items": ["SilverBullet", "Bayan", "Cloak"]
+            "items": ["SilverBullet", "Bayan", "Cloak"],
+            "tier": 2
           },
           {
             "key": "Zarok",
             "coreRank": 3,
-            "items": ["Kiriti", "Pendragon’sCrown", "Kunee"]
+            "items": ["Kiriti", "Pendragon’sCrown", "Kunee"],
+            "tier": 2
           },
           {
             "key": "Karna",
             "coreRank": 10,
-            "items": ["Simurgh", "Evalach", "Kaminari"]
+            "items": ["Simurgh", "Evalach", "Kaminari"],
+            "tier": 2
           },
           {
             "key": "Aello",
             "coreRank": 10,
-            "items": ["ScaleHelmet", "Osirian", "EyeOfRa"]
+            "items": ["ScaleHelmet", "Osirian", "EyeOfRa"],
+            "tier": 1
           },
           {
             "key": "Alberich",
             "coreRank": 7,
-            "items": ["Raikiri", "Stormhorn", "Jingong"]
+            "items": ["Raikiri", "Stormhorn", "Jingong"],
+            "tier": 1
           }
         ],
         "augments": ["FixedIncome", "LastHope", "IllusoryDash"]
@@ -270,52 +290,62 @@
           {
             "key": "Shesha",
             "coreRank": 2,
-            "items": ["Kunee", "Kiriti", "LeaderArmor"]
+            "items": ["Kunee", "Kiriti", "LeaderArmor"],
+            "tier": 1
           },
           {
             "key": "Shinigami",
             "coreRank": 4,
-            "items": ["ScaleHelmet", "Osirian", "EyeOfRa"]
+            "items": ["ScaleHelmet", "Osirian", "EyeOfRa"],
+            "tier": 1
           },
           {
             "key": "Grimgor",
             "coreRank": 5,
-            "items": ["Simurgh", "Evalach", "Kaminari"]
+            "items": ["Simurgh", "Evalach", "Kaminari"],
+            "tier": 2
           },
           {
             "key": "Orphne",
             "coreRank": 2,
-            "items": ["Bayan", "Raikiri", "Gladius"]
+            "items": ["Bayan", "Raikiri", "Gladius"],
+            "tier": 2
           },
           {
             "key": "Tiamat",
             "coreRank": 9,
-            "items": ["EyeOfRa", "Darius", "Raikiri"]
+            "items": ["EyeOfRa", "Darius", "Raikiri"],
+            "tier": 3
           },
           {
             "key": "Nordri",
             "coreRank": 3,
-            "items": ["SilverBullet", "Bayan", "Cloak"]
+            "items": ["SilverBullet", "Bayan", "Cloak"],
+            "tier": 3
           },
           {
             "key": "Zarok",
             "coreRank": 3,
-            "items": ["Kiriti", "Pendragon’sCrown", "Kunee"]
+            "items": ["Kiriti", "Pendragon’sCrown", "Kunee"],
+            "tier": 2
           },
           {
             "key": "Karna",
             "coreRank": 10,
-            "items": ["Simurgh", "Evalach", "Kaminari"]
+            "items": ["Simurgh", "Evalach", "Kaminari"],
+            "tier": 2
           },
           {
             "key": "Aello",
             "coreRank": 10,
-            "items": ["ScaleHelmet", "Osirian", "EyeOfRa"]
+            "items": ["ScaleHelmet", "Osirian", "EyeOfRa"],
+            "tier": 2
           },
           {
             "key": "Alberich",
             "coreRank": 7,
-            "items": ["Raikiri", "Stormhorn", "Jingong"]
+            "items": ["Raikiri", "Stormhorn", "Jingong"],
+            "tier": 2
           }
         ],
         "augments": ["QuickStart", "FreeShoping", "ItemCycle"]

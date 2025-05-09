@@ -204,6 +204,7 @@ const ModernMatchHistory = ({
                       identificationImageStyle="w-[16px] md:w-[28px]"
                       textStyle="text-[10px] md:text-[14px]"
                       forces={forces}
+                      tier={unit?.tier || 0}
                     />
                     <div className="flex justify-center gap-1 items-center min-h-[24px] md:min-h-[32px]">
                       {unit?.items?.map((item, i) => (
@@ -226,9 +227,12 @@ const ModernMatchHistory = ({
                 ))}
 
                 {match?.info?.units?.length > 8 && (
-                  <motion.div whileHover={{ scale: 1.05, y: -5 }}>
+                  <motion.div
+                    whileHover={{ scale: 1.05, y: -5 }}
+                    className="self-end"
+                  >
                     <div
-                      className="w-[68px] md:w-20 h-[68px] md:h-20 rounded-lg bg-[#00000040] border border-white/20 shadow-md flex items-center justify-center cursor-pointer"
+                      className="w-[68px] md:w-24 h-[68px] md:h-24 rounded-lg bg-[#00000040] border border-white/20 shadow-md flex items-center justify-center cursor-pointer"
                       onClick={() =>
                         setExpandedHistory(
                           expandedHistory !== match?.key ? match?.key : null
@@ -236,7 +240,7 @@ const ModernMatchHistory = ({
                       }
                     >
                       <span className="text-xl font-bold text-white">
-                        +{match?.info?.units?.length - 8}
+                        +{match?.info?.units?.length - 7}
                       </span>
                     </div>
                     <div className="min-h-[24px] md:min-h-[32px]"></div>
@@ -454,6 +458,7 @@ const ModernMatchHistory = ({
                                 textStyle="text-[8px] md:text-[10px]"
                                 forces={forces}
                                 cardSize="w-[48px] sm:w-[52px] md:w-[82px]"
+                                tier={unit?.tier || 0}
                               />
                               <div className="flex justify-center gap-[2px]">
                                 {unit?.items?.map((item, j) => {
