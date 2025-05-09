@@ -253,9 +253,9 @@ const ModernMatchHistory = ({
                   transition={{ duration: 0.2, delay: i * 0.05 }}
                   className="bg-[#2d2d42e9] rounded-lg shadow-md !border-b-2 !border-white/30 py-2.5"
                 >
-                  <div className="px-3 grid grid-cols-12 gap-2 items-center">
+                  <div className="px-3 flex items-center gap-2">
                     {/* Placement Column */}
-                    <div className="">
+                    <div className="flex-shrink-0">
                       <div
                         className={`flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg ${
                           participant?.placement === 1
@@ -288,7 +288,7 @@ const ModernMatchHistory = ({
                     </div>
 
                     {/* Player Info Column */}
-                    <div className="col-span-2">
+                    <div className="w-[13%] flex-shrink-0">
                       <div className="flex items-center gap-2">
                         <div className="relative">
                           <OptimizedImage
@@ -314,7 +314,7 @@ const ModernMatchHistory = ({
                     </div>
 
                     {/* Augments & Traits Column */}
-                    <div className="col-span-2">
+                    <div className="w-[15%] flex-shrink-0">
                       <div className="flex flex-col gap-1 sm:gap-2">
                         {/* Augments */}
                         <div className="flex flex-wrap gap-1 bg-[#00000020] rounded-md p-1 w-fit">
@@ -421,7 +421,7 @@ const ModernMatchHistory = ({
                     </div>
 
                     {/* Units & Items Column */}
-                    <div className="col-span-7">
+                    <div className="flex-grow">
                       <div className="flex flex-wrap gap-1 justify-start">
                         {participant?.units?.map((unit, i) => (
                           <div key={i} className="flex flex-col">
@@ -429,11 +429,11 @@ const ModernMatchHistory = ({
                               src={champions?.find(
                                 (champion) => champion.key === unit.key
                               )}
-                              imgStyle="w-[48px] sm:w-[52px] md:w-[64px] rounded-lg shadow-md"
+                              imgStyle="w-[48px] sm:w-[52px] md:w-[60px] rounded-lg shadow-md"
                               identificationImageStyle="w-[10px] sm:w-[12px] md:w-[16px]"
                               textStyle="text-[8px] md:text-[10px]"
                               forces={forces}
-                              cardSize="w-[48px] sm:w-[52px] md:w-[72px]"
+                              cardSize="w-[48px] sm:w-[52px] md:w-[82px]"
                             />
                             <div className="flex justify-center gap-[2px]">
                               {unit?.items?.map((item, j) => {
@@ -459,7 +459,7 @@ const ModernMatchHistory = ({
                                       item={itemData}
                                       size={{
                                         container:
-                                          "w-[14px] sm:w-[16px] md:w-[22px]",
+                                          "w-[14px] sm:w-[16px] md:w-[24px]",
                                         frame: "w-full h-full",
                                         image: "w-full h-full",
                                       }}
