@@ -98,8 +98,8 @@ const ItemDisplay = ({
       {/* Item Image */}
       <div className="relative z-10 flex items-center justify-center">
         <Image
-          src={item.imageUrl}
-          alt={item.name}
+          src={item?.imageUrl}
+          alt={item?.name}
           width={96}
           height={96}
           className={`aspect-square object-contain ${
