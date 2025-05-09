@@ -59,6 +59,7 @@ const TierCard = ({ cost, itemsData }) => {
                         <CardImage
                           src={champions?.find((c) => c?.key === champion?.key)}
                           imgStyle="w-[96px] md:w-[64px] rounded-lg border-2 border-[#ffffff30] shadow-lg hover:border-[#ffffff50] transition-all duration-300"
+                          cardSize="w-[96px] md:w-[86px]"
                           identificationImageStyle="w-[36px] md:w-[30px]"
                           textStyle="text-[10px] md:text-[16px] font-medium"
                           forces={forces}
@@ -71,7 +72,7 @@ const TierCard = ({ cost, itemsData }) => {
                           .map((item, idx) => (
                             <div key={idx} className="flex-shrink-0">
                               <div
-                                className="relative overflow-hidden w-[56px] md:w-[42px] group"
+                                className="relative overflow-hidden w-[56px] md:w-[36px] group"
                                 data-tooltip-id={item}
                               >
                                 <OptimizedImage
