@@ -21,22 +21,22 @@
         "traits": [
           {
             "name": "Blockbuster",
-            "numUnits": 2,
+            "numUnits": 5,
             "currentTier": 1
           },
           {
             "name": "Chaos",
-            "numUnits": 2,
+            "numUnits": 8,
             "currentTier": 1
           },
           {
             "name": "Druid",
-            "numUnits": 1,
+            "numUnits": 9,
             "currentTier": 0
           },
           {
             "name": "Fury",
-            "numUnits": 1,
+            "numUnits": 4,
             "currentTier": 0
           },
           {
@@ -46,12 +46,12 @@
           },
           {
             "name": "Mirage",
-            "numUnits": 1,
+            "numUnits": 4,
             "currentTier": 0
           },
           {
             "name": "Wildrush",
-            "numUnits": 2,
+            "numUnits": 1,
             "currentTier": 1
           }
         ],
@@ -144,17 +144,17 @@
         "traits": [
           {
             "name": "Chaos",
-            "numUnits": 2,
+            "numUnits": 10,
             "currentTier": 1
           },
           {
             "name": "Druid",
-            "numUnits": 1,
+            "numUnits": 8,
             "currentTier": 0
           },
           {
             "name": "GirlCrush",
-            "numUnits": 2,
+            "numUnits": 5,
             "currentTier": 1
           },
           {

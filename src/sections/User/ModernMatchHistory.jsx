@@ -81,15 +81,29 @@ const ModernMatchHistory = ({
                   whileHover={{ scale: 1.1 }}
                 >
                   <OptimizedImage
-                    src={
-                      traits
-                        ?.find(
-                          (t) =>
-                            t?.key.toLowerCase() === trait?.name.toLowerCase()
-                        )
-                        ?.tiers.find((tier) => tier?.min >= trait?.numUnits)
-                        ?.imageUrl
-                    }
+                    src={(() => {
+                      const traitData = traits?.find(
+                        (t) =>
+                          t?.key.toLowerCase() === trait?.name.toLowerCase()
+                      );
+
+                      // Find the correct tier based on numUnits
+                      let tierImage = null;
+                      if (traitData?.tiers && traitData.tiers.length > 0) {
+                        // Sort tiers by min value in ascending order
+                        const sortedTiers = [...traitData.tiers].sort(
+                          (a, b) => a.min - b.min
+                        );
+
+                        // Find the highest tier that the numUnits satisfies
+                        for (let j = sortedTiers.length - 1; j >= 0; j--) {
+                          if (trait.numUnits >= sortedTiers[j].min) {
+                            return sortedTiers[j].imageUrl;
+                          }
+                        }
+                      }
+                      return null;
+                    })()}
                     width={48}
                     height={48}
                     className="w-12 rounded-md shadow-md"
