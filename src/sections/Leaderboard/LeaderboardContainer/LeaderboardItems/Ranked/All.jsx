@@ -187,12 +187,12 @@ const LeaderboardItemsAll = ({ leaderboardData }) => {
                   <div className="flex items-center gap-2">
                     <img
                       src={data?.profileIconUrl}
-                      className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
+                      className="w-8 h-8 sm:w-12 sm:h-12 rounded-full"
                       alt={data?.gameName}
                     />
                     <a
                       href="#"
-                      className="text-white hover:text-[#ca9372] transition-colors duration-200 text-sm sm:text-base"
+                      className="text-white hover:text-[#ca9372] transition-colors duration-200 text-sm sm:text-lg"
                     >
                       {data?.gameName}
                     </a>
@@ -201,14 +201,15 @@ const LeaderboardItemsAll = ({ leaderboardData }) => {
                 <td className="py-4 px-2 whitespace-nowrap">
                   <div className="flex items-center gap-2">
                     <img
-                      src={
-                        Emblems?.find(
-                          (emblem) =>
-                            emblem?.tier?.toLowerCase() ===
-                            data?.tier.toLowerCase()
-                        )?.imageUrl
-                      }
-                      className="w-6 h-6 sm:w-8 sm:h-8"
+                      // src={
+                      //   Emblems?.find(
+                      //     (emblem) =>
+                      //       emblem?.tier?.toLowerCase() ===
+                      //       data?.tier.toLowerCase()
+                      //   )?.imageUrl
+                      // }
+                      src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1746779103/Challenger_2_tku4pn.webp"
+                      className="w-6 h-6 sm:w-12 sm:h-12"
                       alt={data?.tier}
                     />
                     <span className="text-white text-sm sm:text-base">
