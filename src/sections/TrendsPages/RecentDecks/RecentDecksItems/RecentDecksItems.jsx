@@ -120,71 +120,68 @@ const ItemIcon = memo(({ item, selectedItem, onSelect, i }) => (
 ));
 
 // Champion with items component
-const ChampionWithItems = memo(({ champion, champions, items, forces }) => {
-  if (!champion) return null;
+const ChampionWithItems = memo(
+  ({ champion, champions, items, forces, tier }) => {
+    if (!champion) return null;
 
-  const championDetails = champions?.find((c) => c.key === champion?.key);
-  if (!championDetails) return null;
+    const championDetails = champions?.find((c) => c.key === champion?.key);
+    if (!championDetails) return null;
 
-  return (
-    <div className="flex flex-col items-center gap-x-4 flex-grow basis-0 min-w-[65px] md:min-w-[80px] max-w-[78px] md:max-w-[150px]">
-      <p
-        className="ellipsis text-center text-[12px] md:text-[16px] leading-[14px] text-[#fff] font-extralight w-full p-[2px] m-0"
-        style={{
-          textShadow:
-            "rgb(0, 0, 0) -1px 0px 2px, rgb(0, 0, 0) 0px 1px 2px, rgb(0, 0, 0) 1px 0px 2px, rgb(0, 0, 0) 0px -1px 2px",
-        }}
-      >
-        {championDetails.name}
-      </p>
-
-      <div className="inline-flex items-center justify-center flex-col">
-        <div className="flex flex-col w-full aspect-square rounded-[20px]">
-          <div
-            className="relative inline-flex rounded-lg"
-            data-tooltip-id={championDetails.key}
-          >
-            <CardImage src={championDetails} imgStyle="w-28" forces={forces} />
-          </div>
-          <ReactTltp
-            variant="champion"
-            id={championDetails.key}
-            content={championDetails}
-          />
-        </div>
-      </div>
-
-      <div className="inline-flex items-center justify-center w-full gap-0.5 flex-wrap">
-        {champion?.items?.map((item, idx) => {
-          const itemDetails = items?.find((i) => i.key === item);
-          if (!itemDetails) return null;
-
-          return (
+    return (
+      <div className="flex flex-col items-center gap-x-4 flex-grow basis-0 min-w-[65px] md:min-w-[80px] max-w-[78px] md:max-w-[150px]">
+        <div className="inline-flex items-center justify-center flex-col">
+          <div className="flex flex-col w-full aspect-square rounded-[20px]">
             <div
-              key={idx}
-              className="relative z-10 hover:z-20 !border !border-[#ffffff20] aspect-square rounded-lg"
+              className="relative inline-flex rounded-lg"
+              data-tooltip-id={championDetails.key}
             >
-              <ReactTltp
-                variant="item"
-                content={itemDetails}
-                id={itemDetails.key}
-              />
-              <OptimizedImage
-                alt={itemDetails.name || "Item"}
-                width={50}
-                height={50}
-                src={itemDetails.imageUrl}
-                className="w-[20px] md:w-[30px] rounded-lg hover:scale-150 transition-all duration-300"
-                data-tooltip-id={itemDetails.key}
-                loading="lazy"
+              <CardImage
+                src={championDetails}
+                imgStyle="w-28"
+                forces={forces}
+                tier={tier}
               />
             </div>
-          );
-        })}
+            <ReactTltp
+              variant="champion"
+              id={championDetails.key}
+              content={championDetails}
+            />
+          </div>
+        </div>
+
+        <div className="inline-flex items-center justify-center w-full gap-0.5 flex-wrap">
+          {champion?.items?.map((item, idx) => {
+            const itemDetails = items?.find((i) => i.key === item);
+            if (!itemDetails) return null;
+
+            return (
+              <div
+                key={idx}
+                className="relative z-10 hover:z-20 !border !border-[#ffffff20] aspect-square rounded-lg"
+              >
+                <ReactTltp
+                  variant="item"
+                  content={itemDetails}
+                  id={itemDetails.key}
+                />
+                <OptimizedImage
+                  alt={itemDetails.name || "Item"}
+                  width={50}
+                  height={50}
+                  src={itemDetails.imageUrl}
+                  className="w-[20px] md:w-[30px] rounded-lg hover:scale-150 transition-all duration-300"
+                  data-tooltip-id={itemDetails.key}
+                  loading="lazy"
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
 // Augment icon component
 const AugmentIcon = memo(({ augment, augments }) => {
@@ -401,6 +398,7 @@ const MetaDeck = memo(
                       champions={champions}
                       items={items}
                       forces={forces}
+                      tier={champion.tier}
                     />
                   ))}
                 </div>

@@ -140,71 +140,78 @@ const ItemIcon = memo(({ item, selectedItem, onSelect, i }) => (
   </div>
 ));
 
-const ChampionWithItems = memo(({ champion, champions, items, forces }) => {
-  if (!champion) return null;
+const ChampionWithItems = memo(
+  ({ champion, champions, items, forces, tier }) => {
+    if (!champion) return null;
 
-  const championDetails = champions?.find((c) => c.key === champion?.key);
-  if (!championDetails) return null;
+    const championDetails = champions?.find((c) => c.key === champion?.key);
+    if (!championDetails) return null;
 
-  return (
-    <div className="flex flex-col items-center gap-x-4 flex-grow basis-0 min-w-[65px] md:min-w-[80px] max-w-[78px] md:max-w-[150px]">
-      <p
-        className="ellipsis text-center text-[12px] md:text-[16px] leading-[14px] text-[#D9A876] font-extralight w-full p-[2px] m-0"
-        style={{
-          textShadow:
-            "rgb(0, 0, 0) -1px 0px 2px, rgb(0, 0, 0) 0px 1px 2px, rgb(0, 0, 0) 1px 0px 2px, rgb(0, 0, 0) 0px -1px 2px",
-        }}
-      >
-        {championDetails.name}
-      </p>
+    return (
+      <div className="flex flex-col items-center gap-x-4 flex-grow basis-0 min-w-[65px] md:min-w-[80px] max-w-[78px] md:max-w-[150px]">
+        {/* <p
+          className="ellipsis text-center text-[12px] md:text-[16px] leading-[14px] text-[#D9A876] font-extralight w-full p-[2px] m-0"
+          style={{
+            textShadow:
+              "rgb(0, 0, 0) -1px 0px 2px, rgb(0, 0, 0) 0px 1px 2px, rgb(0, 0, 0) 1px 0px 2px, rgb(0, 0, 0) 0px -1px 2px",
+          }}
+        >
+          {championDetails.name}
+        </p> */}
 
-      <div className="inline-flex items-center justify-center flex-col">
-        <div className="flex flex-col w-full aspect-square rounded-[20px]">
-          <div
-            className="relative inline-flex rounded-[10px]"
-            data-tooltip-id={championDetails.key}
-          >
-            <CardImage src={championDetails} imgStyle="!w-28" forces={forces} />
-          </div>
-          <ReactTltp
-            variant="champion"
-            id={championDetails.key}
-            content={championDetails}
-          />
-        </div>
-      </div>
-
-      <div className="inline-flex items-center justify-center w-full gap-0.5 flex-wrap">
-        {champion?.items?.map((item, idx) => {
-          const itemDetails = items?.find((i) => i.key === item);
-          if (!itemDetails) return null;
-
-          return (
+        <div className="inline-flex items-center justify-center flex-col">
+          <div className="flex flex-col w-full aspect-square rounded-[20px]">
             <div
-              key={idx}
-              className="relative z-10 hover:z-20 !border !border-[#ffffff20] aspect-square rounded-lg"
+              className="relative inline-flex rounded-[10px]"
+              data-tooltip-id={championDetails.key}
             >
-              <ReactTltp
-                variant="item"
-                content={itemDetails}
-                id={itemDetails.key}
-              />
-              <OptimizedImage
-                alt={itemDetails.name || "Item"}
-                width={50}
-                height={50}
-                src={itemDetails.imageUrl}
-                className="w-[20px] md:w-[30px] rounded-lg hover:scale-150 transition-all duration-300"
-                data-tooltip-id={itemDetails.key}
-                loading="lazy"
+              <CardImage
+                src={championDetails}
+                imgStyle="!w-28"
+                forces={forces}
+                tier={tier}
               />
             </div>
-          );
-        })}
+            <ReactTltp
+              variant="champion"
+              id={championDetails.key}
+              content={championDetails}
+            />
+          </div>
+        </div>
+
+        <div className="inline-flex items-center justify-center w-full gap-0.5 flex-wrap">
+          {champion?.items?.map((item, idx) => {
+            const itemDetails = items?.find((i) => i.key === item);
+            if (!itemDetails) return null;
+
+            return (
+              <div
+                key={idx}
+                className="relative z-10 hover:z-20 !border !border-[#ffffff20] aspect-square rounded-lg"
+              >
+                <ReactTltp
+                  variant="item"
+                  content={itemDetails}
+                  id={itemDetails.key}
+                />
+                <OptimizedImage
+                  alt={itemDetails.name || "Item"}
+                  width={50}
+                  height={50}
+                  src={itemDetails.imageUrl}
+                  className="w-[20px] md:w-[30px] rounded-lg hover:scale-150 transition-all duration-300"
+                  data-tooltip-id={itemDetails.key}
+                  loading="lazy"
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
 const AugmentIcon = memo(({ augment, augments }) => {
   const augmentDetails = augments?.find((a) => a.key === augment);
@@ -226,9 +233,29 @@ const AugmentIcon = memo(({ augment, augments }) => {
   );
 });
 
+const SkillTreeIcon = memo(({ skillTree, skills }) => {
+  const skillDetails = skills?.find((s) => s.key === skillTree);
+  if (!skillDetails) return null;
+
+  return (
+    <div className="flex justify-center items-center relative">
+      <OptimizedImage
+        alt={skillDetails.name || "Skill"}
+        width={80}
+        height={80}
+        src={skillDetails.imageUrl}
+        className="w-8 h-8"
+        data-tooltip-id={skillTree}
+        loading="lazy"
+      />
+      <ReactTltp variant="skill" content={skillDetails} id={skillTree} />
+    </div>
+  );
+});
+
 // Extracted to reduce render calculations and improve memoization
 const DeckHeader = memo(
-  ({ metaDeck, forces, traits, toggleClosed, isClosed, i }) => {
+  ({ metaDeck, forces, traits, toggleClosed, isClosed, i, skills }) => {
     // Add hover state management for force icons
     const [hoveredForce, setHoveredForce] = useState(null);
 
@@ -263,6 +290,16 @@ const DeckHeader = memo(
                   <ReactTltp content={force?.key} id={`${force?.key}-${i}`} />
                   <span className="text-[18px]">{force?.numUnits}</span>
                 </div>
+              );
+            })}
+          </span>
+          <span className="flex justify-center items-center hidden">
+            {metaDeck?.deck?.skillTree?.map((skill, i) => {
+              const skillDetails = skills?.find((s) => s.key === skill);
+              if (!skillDetails) return null;
+
+              return (
+                <SkillTreeIcon key={i} skillTree={skill} skills={skills} />
               );
             })}
           </span>
@@ -332,6 +369,7 @@ const MetaDeck = memo(
     forces,
     augments,
     others,
+    skills,
   }) => {
     // Avoid re-creating the handler function on every render
     const toggleClosed = useCallback(
@@ -383,6 +421,7 @@ const MetaDeck = memo(
           toggleClosed={toggleClosed}
           isClosed={isClosed[i]}
           i={i}
+          skills={skills}
         />
 
         {!isClosed[i] && isVisible && (
@@ -397,6 +436,7 @@ const MetaDeck = memo(
                       champions={champions}
                       items={items}
                       forces={forces}
+                      tier={champion.tier}
                     />
                   ))}
                 </div>
@@ -516,7 +556,7 @@ const MetaTrendsItems = () => {
   const [visibleDecks, setVisibleDecks] = useState(10); // For virtualization
 
   // Extract data once from the JSON structure - heavily memoized
-  const { metaDecks, champions, items, traits, augments, forces } =
+  const { metaDecks, champions, items, traits, augments, forces, skillTree } =
     useMemo(() => {
       const {
         props: {
@@ -535,6 +575,7 @@ const MetaTrendsItems = () => {
         traits: data?.refs?.traits || [],
         augments: data?.refs?.augments || [],
         forces: data?.refs?.forces || [],
+        skillTree: data?.refs?.skillTree || [],
       };
     }, []);
 
@@ -881,6 +922,7 @@ const MetaTrendsItems = () => {
               forces={forces}
               augments={augments}
               others={others}
+              skills={skillTree}
             />
           ))}
 

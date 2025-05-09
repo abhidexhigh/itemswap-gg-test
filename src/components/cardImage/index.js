@@ -124,11 +124,15 @@ const CardImage = ({
         <div className="inline-flex flex-col">
           {/* Star icons display above the image */}
           {tier > 0 && (
-            <div className="flex justify-center gap-[1px] mb-1">
+            <div
+              className={`flex justify-center gap-[1px] mb-1 ${
+                tier > 2 ? "visible" : "invisible"
+              }`}
+            >
               {starArray.map((_, index) => (
                 <OptimizedImage
                   key={index}
-                  src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1746781271/gold_3_atgi3f.webp"
+                  src={`${tier === 4 ? "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746781271/prismatic_i5en18.webp" : "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746781271/gold_3_atgi3f.webp"}`}
                   width={12}
                   height={12}
                   className="w-[10px] h-[10px] md:w-[14px] md:h-[14px]"
