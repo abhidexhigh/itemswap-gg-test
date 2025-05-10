@@ -51,7 +51,7 @@ const ProjectItems = () => {
     ...new Set(metaDeckSkillTreeStats.map((item) => item.variant)),
   ];
   const variantImages = {
-    All: "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746874548/all_button_aklc3t.webp",
+    All: "/images/all_button.webp",
     Light:
       "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745815427/light_mz3oml.webp",
     Dark: "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745815427/dark_rtcoqw.webp",
