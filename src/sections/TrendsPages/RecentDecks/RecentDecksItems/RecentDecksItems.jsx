@@ -18,6 +18,29 @@ import ReactTltp from "src/components/tooltip/ReactTltp";
 import { OptimizedImage } from "src/utils/imageOptimizer";
 import ForceIcon from "src/components/forceIcon";
 
+// Add SkillTreeIcon component
+const SkillTreeIcon = memo(({ skillTree, skills }) => {
+  const skillDetails = skills?.find((s) => s.key === skillTree);
+  if (!skillDetails) return null;
+
+  return (
+    <div className="relative inline-block">
+      <div className="bg-gradient-to-br from-[#232339] to-[#1a1a2a] p-1 rounded-lg border border-white/10 hover:border-white/30 transition-all duration-200 hover:shadow-lg hover:-translate-y-[2px] cursor-pointer">
+        <OptimizedImage
+          alt={skillDetails.name || "Skill"}
+          width={80}
+          height={80}
+          src={skillDetails.imageUrl}
+          className="w-8 h-8 md:w-10 md:h-10 rounded-md"
+          data-tooltip-id={skillTree}
+          loading="lazy"
+        />
+      </div>
+      <ReactTltp variant="skillTree" content={skillDetails} id={skillTree} />
+    </div>
+  );
+});
+
 // Reusable tab button component
 const TabButton = memo(({ active, label, onClick }) => (
   <button
@@ -282,7 +305,7 @@ const PlacementBadge = memo(({ placement }) => (
 
 // Deck header component
 const DeckHeader = memo(
-  ({ metaDeck, forces, traits, toggleClosed, isClosed, i }) => (
+  ({ metaDeck, forces, traits, toggleClosed, isClosed, i, skills }) => (
     <header className="relative flex md:flex-col justify-between items-end bg-[#1a1b30] py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px]">
       <div className="inline-flex flex-col flex-wrap gap-[8px] md:flex-row md:items-center md:gap-3">
         <div className="flex items-center gap-x-2">
@@ -314,6 +337,13 @@ const DeckHeader = memo(
             <ForceDisplay key={i} force={force} forces={forces} i={i} />
           ))}
         </span>
+        {metaDeck?.deck?.skillTree && metaDeck?.deck?.skillTree.length > 0 && (
+          <span className="flex justify-center gap-x-2 items-center ml-2 bg-gradient-to-br from-[#1e1e2c]/70 to-[#15151e]/70 py-2 px-3 rounded-lg border border-white/5">
+            {metaDeck?.deck?.skillTree?.map((skill, i) => (
+              <SkillTreeIcon key={i} skillTree={skill} skills={skills} />
+            ))}
+          </span>
+        )}
       </div>
       <div className="inline-flex flex-shrink-0 gap-[22px] md:mt-0">
         <div className="inline-flex flex-wrap">
@@ -348,6 +378,7 @@ const MetaDeck = memo(
     traits,
     forces,
     augments,
+    skills,
   }) => {
     // Avoid re-creating the handler function on every render
     const toggleClosed = useCallback(
@@ -372,6 +403,7 @@ const MetaDeck = memo(
           toggleClosed={toggleClosed}
           isClosed={isClosed[i]}
           i={i}
+          skills={skills}
         />
 
         {!isClosed[i] && (
@@ -421,7 +453,7 @@ const RecentDecksItems = () => {
   const [activeTab, setActiveTab] = useState("Champions");
 
   // Extract data once from the JSON structure using useMemo
-  const { metaDecks, champions, items, traits, augments, forces } =
+  const { metaDecks, champions, items, traits, augments, forces, skillTree } =
     useMemo(() => {
       const {
         props: {
@@ -440,6 +472,7 @@ const RecentDecksItems = () => {
         traits: data?.refs?.traits || [],
         augments: data?.refs?.augments || [],
         forces: data?.refs?.forces || [],
+        skillTree: data?.refs?.skillTree || [],
       };
     }, []);
 
@@ -707,6 +740,7 @@ const RecentDecksItems = () => {
                 traits={traits}
                 forces={forces}
                 augments={augments}
+                skills={skillTree}
               />
             ))}
           </div>

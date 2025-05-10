@@ -115,6 +115,40 @@ const ForceItem = memo(({ force, selectedTrait, onSelect, i, t }) => {
   );
 });
 
+const SkillTreeItem = memo(({ skill, selectedSkillTree, onSelect, i }) => (
+  <div
+    className="flex flex-col items-center gap-1 cursor-pointer group max-w-[70px] md:max-w-[96px]"
+    onClick={() => onSelect("skillTree", skill?.key)}
+  >
+    <ReactTltp
+      variant="skillTree"
+      content={skill}
+      id={`skill-${skill?.key}-${i}`}
+    />
+    <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-105">
+      <div className="bg-gradient-to-br from-[#232339] to-[#1a1a2a] p-1 rounded-lg border border-white/10 hover:border-white/30 transition-all duration-200 w-full h-full flex items-center justify-center">
+        <OptimizedImage
+          alt={skill?.name || "Skill"}
+          width={80}
+          height={80}
+          src={skill?.imageUrl}
+          className="w-[80%] h-[80%] object-cover rounded-md"
+          data-tooltip-id={`skill-${skill?.key}-${i}`}
+          loading="lazy"
+        />
+      </div>
+      {skill?.key === selectedSkillTree && (
+        <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+          <IoMdCheckmarkCircle className="text-[#86efac] text-3xl z-50" />
+        </div>
+      )}
+    </div>
+    <span className="hidden lg:block text-xs truncate max-w-full text-center text-[#cccccc]">
+      {skill?.name}
+    </span>
+  </div>
+));
+
 const ItemIcon = memo(({ item, selectedItem, onSelect, i }) => (
   <div
     className="flex flex-col items-center gap-2 cursor-pointer group max-w-[84px]"
@@ -239,16 +273,18 @@ const SkillTreeIcon = memo(({ skillTree, skills }) => {
 
   return (
     <div className="flex justify-center items-center relative">
-      <OptimizedImage
-        alt={skillDetails.name || "Skill"}
-        width={80}
-        height={80}
-        src={skillDetails.imageUrl}
-        className="w-8 h-8"
-        data-tooltip-id={skillTree}
-        loading="lazy"
-      />
-      <ReactTltp variant="skill" content={skillDetails} id={skillTree} />
+      <div className="bg-gradient-to-br from-[#232339] to-[#1a1a2a] p-1 rounded-lg border border-white/10 hover:border-white/30 transition-all duration-200 hover:shadow-lg hover:-translate-y-[2px] cursor-pointer">
+        <OptimizedImage
+          alt={skillDetails.name || "Skill"}
+          width={80}
+          height={80}
+          src={skillDetails.imageUrl}
+          className="w-8 h-8 md:w-10 md:h-10 rounded-md"
+          data-tooltip-id={skillTree}
+          loading="lazy"
+        />
+      </div>
+      <ReactTltp variant="skillTree" content={skillDetails} id={skillTree} />
     </div>
   );
 });
@@ -293,7 +329,9 @@ const DeckHeader = memo(
               );
             })}
           </span>
-          <span className="flex justify-center items-center hidden">
+        </div>
+        <div className="inline-flex flex-shrink-0 gap-[22px] md:mt-0">
+          <span className="flex justify-center gap-x-2 items-center">
             {metaDeck?.deck?.skillTree?.map((skill, i) => {
               const skillDetails = skills?.find((s) => s.key === skill);
               if (!skillDetails) return null;
@@ -303,8 +341,6 @@ const DeckHeader = memo(
               );
             })}
           </span>
-        </div>
-        <div className="inline-flex flex-shrink-0 gap-[22px] md:mt-0">
           <div className="inline-flex flex-wrap">
             {metaDeck?.deck?.traits?.map((trait, i) => {
               const traitDetails = traits?.find((t) => t.key === trait?.key);
@@ -551,6 +587,7 @@ const MetaTrendsItems = () => {
   const [selectedChampion, setSelectedChampion] = useState(null);
   const [selectedTrait, setSelectedTrait] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedSkillTree, setSelectedSkillTree] = useState(null);
   const [isClosed, setIsClosed] = useState({});
   const [activeTab, setActiveTab] = useState("Champions");
   const [visibleDecks, setVisibleDecks] = useState(10); // For virtualization
@@ -730,6 +767,7 @@ const MetaTrendsItems = () => {
         }
         setSelectedChampion(null);
         setSelectedItem(null);
+        setSelectedSkillTree(null);
       } else if (type === "force") {
         if (selectedTrait === key) {
           setSelectedTrait(null);
@@ -744,6 +782,7 @@ const MetaTrendsItems = () => {
         }
         setSelectedChampion(null);
         setSelectedItem(null);
+        setSelectedSkillTree(null);
       } else if (type === "champion") {
         if (selectedChampion === key) {
           setSelectedChampion(null);
@@ -756,6 +795,7 @@ const MetaTrendsItems = () => {
         }
         setSelectedTrait(null);
         setSelectedItem(null);
+        setSelectedSkillTree(null);
       } else if (type === "item") {
         if (selectedItem === key) {
           setSelectedItem(null);
@@ -771,13 +811,33 @@ const MetaTrendsItems = () => {
         }
         setSelectedChampion(null);
         setSelectedTrait(null);
+        setSelectedSkillTree(null);
+      } else if (type === "skillTree") {
+        if (selectedSkillTree === key) {
+          setSelectedSkillTree(null);
+          newCompsData = metaDecks;
+        } else {
+          setSelectedSkillTree(key);
+          newCompsData = metaDecks.filter((deck) =>
+            deck.deck?.skillTree?.includes(key)
+          );
+        }
+        setSelectedChampion(null);
+        setSelectedTrait(null);
+        setSelectedItem(null);
       }
 
       setCompsData(newCompsData);
       // Reset visible decks when filter changes
       setVisibleDecks(10);
     },
-    [metaDecks, selectedChampion, selectedItem, selectedTrait]
+    [
+      metaDecks,
+      selectedChampion,
+      selectedItem,
+      selectedTrait,
+      selectedSkillTree,
+    ]
   );
 
   // Optimized function with useCallback to avoid recreation on every render
@@ -860,6 +920,25 @@ const MetaTrendsItems = () => {
             </div>
           </div>
         );
+      case "SkillTree":
+        return (
+          <div className="p-3 md:p-6 bg-[#1a1b30] rounded-lg">
+            <div className="flex flex-wrap justify-center gap-2 mx-auto w-full">
+              {skillTree
+                // ?.slice(0, 13)
+                ?.filter((skill) => skill?.imageUrl)
+                ?.map((skill, i) => (
+                  <SkillTreeItem
+                    key={i}
+                    skill={skill}
+                    selectedSkillTree={selectedSkillTree}
+                    onSelect={handleFilterChange}
+                    i={i}
+                  />
+                ))}
+            </div>
+          </div>
+        );
       default:
         return null;
     }
@@ -869,7 +948,9 @@ const MetaTrendsItems = () => {
     handleFilterChange,
     forces,
     traits,
+    skillTree,
     selectedTrait,
+    selectedSkillTree,
     filteredItems,
     selectedItem,
     others,
@@ -898,6 +979,11 @@ const MetaTrendsItems = () => {
                   active={activeTab === "Items"}
                   label={others?.items}
                   onClick={() => handleTabChange("Items")}
+                />
+                <TabButton
+                  active={activeTab === "SkillTree"}
+                  label={others?.skillTree || "Skill Tree"}
+                  onClick={() => handleTabChange("SkillTree")}
                 />
               </div>
             </div>

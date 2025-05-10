@@ -435,6 +435,14 @@ const ReactTltp = ({ variant = "", content, id }) => {
           </div>
         )}
 
+        {variant === "skillTree" && (
+          <div className="w-[200px] text-[#fff] bg-black">
+            <div className="flex justify-start items-center gap-x-2">
+              {content?.name}
+            </div>
+          </div>
+        )}
+
         {!variant && content}
       </div>
     ),
