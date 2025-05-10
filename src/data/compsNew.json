@@ -46001,175 +46001,175 @@
               "skillTree": [
                 {
                   "key": "FireTrap",
-                  "tier": "Fire",
+                  "variant": "Fire",
                   "name": "Fire Trap",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786506/FinalImages/Skill%20Tree/Fire/fire_trap.webp"
                 },
                 {
                   "key": "Doom",
-                  "tier": "Fire",
+                  "variant": "Fire",
                   "name": "Doom",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786507/FinalImages/Skill%20Tree/Fire/doom.webp"
                 },
                 {
                   "key": "Meteor",
-                  "tier": "Fire",
+                  "variant": "Fire",
                   "name": "Meteor",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786506/FinalImages/Skill%20Tree/Fire/Meteor.webp"
                 },
                 {
                   "key": "SolarGuardian",
-                  "tier": "Fire",
+                  "variant": "Fire",
                   "name": "Solar Guardian",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786506/FinalImages/Skill%20Tree/Fire/SOLAR_GUARDIAN.webp"
                 },
                 {
                   "key": "OverCharge",
-                  "tier": "Fire",
+                  "variant": "Fire",
                   "name": "Over Charge",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786506/FinalImages/Skill%20Tree/Fire/over_charge.webp"
                 },
                 {
                   "key": "WaterTrap",
-                  "tier": "Water",
+                  "variant": "Water",
                   "name": "Water Trap",
                   "desc": "",
                   "imageUrl": ""
                 },
                 {
                   "key": "Freeze",
-                  "tier": "Water",
+                  "variant": "Water",
                   "name": "Freeze",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786506/FinalImages/Skill%20Tree/Water/Freeze.webp"
                 },
                 {
                   "key": "SnowBlizzard",
-                  "tier": "Water",
+                  "variant": "Water",
                   "name": "Snow Blizzard",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786506/FinalImages/Skill%20Tree/Water/SnowBlizzard.webp"
                 },
                 {
                   "key": "Torrent",
-                  "tier": "Water",
+                  "variant": "Water",
                   "name": "Torrent",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786506/FinalImages/Skill%20Tree/Water/Torrent.webp"
                 },
                 {
                   "key": "ManaDrain",
-                  "tier": "Water",
+                  "variant": "Water",
                   "name": "Mana Drain",
                   "desc": "",
                   "imageUrl": ""
                 },
                 {
                   "key": "KineticField",
-                  "tier": "Wind",
+                  "variant": "Storm",
                   "name": "Kinetic Field",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786507/FinalImages/Skill%20Tree/Wind/KINETIC_FIELD.webp"
                 },
                 {
                   "key": "GaleForce",
-                  "tier": "Wind",
+                  "variant": "Storm",
                   "name": "Gale Force",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786507/FinalImages/Skill%20Tree/Wind/Gale_Force_GUST.webp"
                 },
                 {
                   "key": "LightningBolt",
-                  "tier": "Wind",
+                  "variant": "Storm",
                   "name": "Lightning Bolt",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786507/FinalImages/Skill%20Tree/Wind/LIGHTNING_BOLT.webp"
                 },
                 {
                   "key": "Tornado",
-                  "tier": "Wind",
+                  "variant": "Storm",
                   "name": "Tornado",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786506/FinalImages/Skill%20Tree/Wind/Tornado.webp"
                 },
                 {
                   "key": "WindShear",
-                  "tier": "Wind",
+                  "variant": "Storm",
                   "name": "Wind Shear",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786506/FinalImages/Skill%20Tree/Wind/Tornado2.webp"
                 },
                 {
                   "key": "MoonBlessing",
-                  "tier": "Dark",
+                  "variant": "Dark",
                   "name": "Moon Blessing",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786506/FinalImages/Skill%20Tree/Dark/MoonBlessing.webp"
                 },
                 {
                   "key": "Neathertoxin2",
-                  "tier": "Dark",
+                  "variant": "Dark",
                   "name": "Neathertoxin2",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786506/FinalImages/Skill%20Tree/Dark/Neathertoxin2.webp"
                 },
                 {
                   "key": "Neathertoxin",
-                  "tier": "Dark",
+                  "variant": "Dark",
                   "name": "Neathertoxin",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786507/FinalImages/Skill%20Tree/Dark/Neathertoxin.webp"
                 },
                 {
                   "key": "DarkRavage",
-                  "tier": "Dark",
+                  "variant": "Dark",
                   "name": "Dark Ravage",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786507/FinalImages/Skill%20Tree/Dark/DARK_RAVAGE.webp"
                 },
                 {
                   "key": "Eclipse",
-                  "tier": "Dark",
+                  "variant": "Dark",
                   "name": "Eclipse",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786507/FinalImages/Skill%20Tree/Dark/ECLIPSE.webp"
                 },
                 {
                   "key": "Repel",
-                  "tier": "Light",
+                  "variant": "Light",
                   "name": "Repel",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786507/FinalImages/Skill%20Tree/Light/repel.webp"
                 },
                 {
                   "key": "ShallowGrave",
-                  "tier": "Light",
+                  "variant": "Light",
                   "name": "Shallow Grave",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786507/FinalImages/Skill%20Tree/Light/SHALLOW_GRAVE.webp"
                 },
                 {
                   "key": "HandOfGod",
-                  "tier": "Light",
+                  "variant": "Light",
                   "name": "Hand of God",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786507/FinalImages/Skill%20Tree/Light/HAND_OF_GOD.webp"
                 },
                 {
                   "key": "Reincarnation",
-                  "tier": "Light",
+                  "variant": "Light",
                   "name": "Reincarnation",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786507/FinalImages/Skill%20Tree/Light/REINCARNATION.webp"
                 },
                 {
                   "key": "DefenseMatrix",
-                  "tier": "Light",
+                  "variant": "Light",
                   "name": "Defense Matrix",
                   "desc": "",
                   "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746786506/FinalImages/Skill%20Tree/Light/DEFENSE_MATRIX.webp"

@@ -3,12 +3,13 @@ import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import "react-tooltip/dist/react-tooltip.css";
-import GirlCrush from "@assets/image/traits/GirlCrush.svg";
 import TrendFilters from "src/components/trendFilters";
 import { HiArrowSmUp, HiArrowSmDown } from "react-icons/hi";
+import metaDeckSkillTreeStats from "../../../../data/newData/metaDeckSkillTree.json";
+import Comps from "../../../../data/compsNew.json";
+import Forces from "../../../../data/newData/force.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
-import metaDeckAugments from "../../../../data/newData/metaDeckAugments.json";
-import augments from "../../../../data/newData/augments.json";
+import CardImage from "src/components/cardImage";
 import ScrollableTable from "src/utils/ScrollableTable";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
@@ -17,15 +18,54 @@ import ColoredValue from "src/components/ColoredValue";
 const ProjectItems = () => {
   const { t } = useTranslation();
   const others = t("others");
-  const { augmentStats } = metaDeckAugments;
+  const {
+    props: {
+      pageProps: {
+        dehydratedState: {
+          queries: { data },
+        },
+      },
+    },
+  } = Comps;
+  const { champions } = data?.refs;
+  const { items } = data?.refs;
+  const { forces } = data?.refs;
+  const { skillTree } = data?.refs;
 
-  const [augmentsStatsData, setAugmentsStatsData] = useState(augmentStats);
+  console.log("skillTree", skillTree);
+
+  const [metaDeckSkillTreeStatsData, setMetaDeckSkillTreeStatsData] = useState(
+    metaDeckSkillTreeStats
+  );
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "ascending",
   });
   const [searchValue, setSearchValue] = useState("");
 
+  // Get unique variants from the skill tree data and prepare buttons and image URLs
+  const uniqueVariants = [
+    "All",
+    ...new Set(metaDeckSkillTreeStats.map((item) => item.variant)),
+  ];
+  const variantImages = {
+    All: "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746874548/all_button_aklc3t.webp",
+    Light:
+      "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745815427/light_mz3oml.webp",
+    Dark: "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745815427/dark_rtcoqw.webp",
+    Fire: "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745815427/fire_mj0fey.webp",
+    Storm:
+      "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745815427/storm_vpfovn.webp",
+    Water:
+      "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745815427/water_lxpw8d.webp",
+  };
+
+  // Prepare image URLs for the buttons
+  const imageButtonsUrls = uniqueVariants.map(
+    (variant) => variantImages[variant] || ""
+  );
+
+  // Add getCellClass function to highlight sorted column cells
   const getCellClass = (key) => {
     if (sortConfig.key === key) {
       return "bg-[#2D2F37] text-[#D9A876]";
@@ -33,25 +73,34 @@ const ProjectItems = () => {
     return "";
   };
 
-  const handleButtonClick = (button) => {
-    if (button === "All") {
-      setAugmentsStatsData(augmentStats);
-    } else {
-      setAugmentsStatsData(
-        augmentStats.filter(
-          (augment) => augment.tier.toLowerCase() === button.toLowerCase()
-        )
+  // Add renderSortIcon function for consistent icon rendering
+  const renderSortIcon = (key) => {
+    if (sortConfig.key === key) {
+      return sortConfig.direction === "ascending" ? (
+        <HiArrowSmUp className="text-lg" />
+      ) : (
+        <HiArrowSmDown className="text-lg" />
       );
     }
+    return null;
   };
 
   useEffect(() => {
-    let sortedData = [...augmentStats];
+    let sortedData = [...metaDeckSkillTreeStats];
     if (sortConfig !== null) {
       sortedData.sort((a, b) => {
         let aValue, bValue;
 
-        if (["tops", "wins"].includes(sortConfig.key)) {
+        if (["firstPick", "secondPick", "thirdPick"].includes(sortConfig.key)) {
+          const index =
+            sortConfig.key === "firstPick"
+              ? 0
+              : sortConfig.key === "secondPick"
+                ? 1
+                : 2;
+          aValue = a.skillTreeRoundStats[index]?.avgPlacement || 0;
+          bValue = b.skillTreeRoundStats[index]?.avgPlacement || 0;
+        } else if (["tops", "wins"].includes(sortConfig.key)) {
           // calculate the top percentage and win percentage based on the plays
           aValue = (a[sortConfig.key] * 100) / a.plays;
           bValue = (b[sortConfig.key] * 100) / b.plays;
@@ -69,8 +118,9 @@ const ProjectItems = () => {
         return 0;
       });
     }
-    setAugmentsStatsData(sortedData);
-  }, [augmentStats, sortConfig]);
+    console.log("sortedData", sortedData);
+    setMetaDeckSkillTreeStatsData(sortedData);
+  }, [metaDeckSkillTreeStats, sortConfig]);
 
   const requestSort = (key) => {
     let direction = "ascending";
@@ -80,24 +130,32 @@ const ProjectItems = () => {
     setSortConfig({ key, direction });
   };
 
-  useEffect(() => {
-    setAugmentsStatsData(
-      augmentStats.filter((augment) =>
-        augment.key.toLowerCase().includes(searchValue.toLowerCase())
-      )
-    );
-  }, [searchValue]);
-
-  const renderSortIcon = (key) => {
-    if (sortConfig.key === key) {
-      return sortConfig.direction === "ascending" ? (
-        <HiArrowSmUp className="text-lg" />
-      ) : (
-        <HiArrowSmDown className="text-lg" />
+  const handleButtonClick = (button) => {
+    if (button === "All") {
+      setMetaDeckSkillTreeStatsData(metaDeckSkillTreeStats);
+    } else {
+      setMetaDeckSkillTreeStatsData(
+        metaDeckSkillTreeStats.filter((item) => {
+          // Filter by skill tree variant
+          return item.variant === button;
+        })
       );
     }
-    return null;
   };
+
+  useEffect(() => {
+    setMetaDeckSkillTreeStatsData(
+      metaDeckSkillTreeStats.filter((item) => {
+        const foundItem = items.find((i) => i.key === item.key);
+        // If the item doesn't exist in the items array, keep it anyway
+        if (!foundItem) return true;
+        return (
+          foundItem.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.name?.toLowerCase().includes(searchValue.toLowerCase())
+        );
+      })
+    );
+  }, [searchValue]);
 
   return (
     <>
@@ -106,7 +164,8 @@ const ProjectItems = () => {
         <div className="flex flex-col sm:flex-row justify-between items-center bg-[#111111] md:bg-transparent px-2 sm:px-4 mb-2.5 md:mb-0">
           <div className="w-full sm:w-auto sm:mb-0">
             <TrendFilters
-              buttons={["All", "Silver", "Gold", "Prismatic"]}
+              buttons={uniqueVariants}
+              imageButtons={imageButtonsUrls}
               onButtonClick={handleButtonClick}
             />
           </div>
@@ -114,7 +173,7 @@ const ProjectItems = () => {
             <SearchBar
               searchValue={searchValue}
               setSearchValue={setSearchValue}
-              placeholder="Search augment..."
+              placeholder="Search skill..."
             />
           </div>
         </div>
@@ -122,222 +181,184 @@ const ProjectItems = () => {
         {/* Table section */}
         <div className="projects-row overflow-auto">
           <ScrollableTable>
-            <table className="w-full min-w-[900px] relative lg:border-separate lg:border-spacing-y-2">
+            <table className="w-full min-w-[1100px] relative lg:border-separate lg:border-spacing-y-2">
               <thead className="sticky top-0 z-50">
                 <tr className="bg-[#000000]">
-                  <th className="lg:rounded-l-lg p-2 font-semibold">
+                  <th className="lg:rounded-l-lg p-2 font-semibold w-[50px]">
                     <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px]">
                       {others.rank}
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[200px] sm:min-w-[220px] md:min-w-[280px] ${sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("key")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                      {others?.augment}
+                      {others.items}
                       <span className="ml-2">{renderSortIcon("key")}</span>
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "avgPlacement" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] ${sortConfig?.key === "avgPlacement" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("avgPlacement")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                      {others?.avgPlacement}
+                      {others.avgRank}
                       <span className="ml-2">
                         {renderSortIcon("avgPlacement")}
                       </span>
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "roundOnePickRate" ? "bg-[#2D2F37]" : ""}`}
-                    onClick={() => requestSort("roundOnePickRate")}
-                  >
-                    <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                      {others?.firstPick}
-                      <span className="ml-2">
-                        {renderSortIcon("roundOnePickRate")}
-                      </span>
-                    </p>
-                  </th>
-                  <th
-                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "roundTwoPickRate" ? "bg-[#2D2F37]" : ""}`}
-                    onClick={() => requestSort("roundTwoPickRate")}
-                  >
-                    <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                      {others?.secondPick}
-                      <span className="ml-2">
-                        {renderSortIcon("roundTwoPickRate")}
-                      </span>
-                    </p>
-                  </th>
-                  <th
-                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "roundThreePickRate" ? "bg-[#2D2F37]" : ""}`}
-                    onClick={() => requestSort("roundThreePickRate")}
-                  >
-                    <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                      {others?.thirdPick}
-                      <span className="ml-2">
-                        {renderSortIcon("roundThreePickRate")}
-                      </span>
-                    </p>
-                  </th>
-                  <th
-                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "tops" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] ${sortConfig?.key === "tops" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("tops")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                      {others?.top4}
+                      {others.top4}
                       <span className="ml-2">{renderSortIcon("tops")}</span>
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "wins" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] ${sortConfig?.key === "wins" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("wins")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                      {others?.winPercentage}
+                      {others.winPercentage}
                       <span className="ml-2">{renderSortIcon("wins")}</span>
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "pickRate" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] ${sortConfig?.key === "pickRate" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("pickRate")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                      {others?.pickPercentage}
+                      {others.pickPercentage}
                       <span className="ml-2">{renderSortIcon("pickRate")}</span>
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 lg:rounded-r-lg font-semibold ${sortConfig?.key === "plays" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] ${sortConfig?.key === "plays" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("plays")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                      {others?.played}
+                      {others.played}
                       <span className="ml-2">{renderSortIcon("plays")}</span>
+                    </p>
+                  </th>
+                  <th className="lg:rounded-r-lg p-2 font-semibold min-w-[140px]">
+                    <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px] text-center">
+                      {others.top3} {others.comps}
                     </p>
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-[#111111]">
-                {augmentsStatsData.map(
-                  (item, index) =>
-                    augments.find(
-                      (augment) =>
-                        augment.key ===
-                        item.key?.split("_")[item?.key?.split("_").length - 1]
-                    )?.key && (
-                      <tr
-                        className="m-2 hover:bg-[#2D2F37] transition-colors duration-200 md:border-[1px] md:border-[#2D2F37]"
-                        key={index}
-                      >
-                        <td className="p-2 lg:rounded-l-lg">
-                          <div className="text-center text-base">
-                            {index + 1}
-                          </div>
-                        </td>
-                        <td className={`p-2 ${getCellClass("key")}`}>
-                          <div>
-                            <div className="flex justify-start items-center">
-                              <OptimizedImage
-                                src={
-                                  augments.find(
-                                    (augment) =>
-                                      augment.key ===
-                                      item.key?.split("_")[
-                                        item?.key?.split("_").length - 1
-                                      ]
-                                  )?.imageUrl
-                                }
-                                alt="icon"
-                                width={80}
-                                height={80}
-                                className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mr-1 rounded-md"
-                                data-tooltip-id={item?.key}
-                              />
-                              <ReactTltp
-                                variant="augment"
-                                id={item?.key}
-                                content={augments.find(
-                                  (augment) =>
-                                    augment.key ===
-                                    item.key?.split("_")[
-                                      item?.key?.split("_").length - 1
-                                    ]
-                                )}
-                              />
-                              <div>
-                                <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-1 ml-2 truncate max-w-[120px] sm:max-w-full">
-                                  {
-                                    augments.find(
-                                      (augment) =>
-                                        augment.key ===
-                                        item.key?.split("_")[
-                                          item?.key?.split("_").length - 1
-                                        ]
-                                    )?.name
-                                  }
-                                </p>
-                              </div>
+                {console.log(
+                  "metaDeckSkillTreeStatsData",
+                  metaDeckSkillTreeStatsData
+                )}
+                {metaDeckSkillTreeStatsData.map((item, index) => (
+                  <tr
+                    className="m-2 hover:bg-[#2D2F37] transition-colors duration-200 md:border-[1px] md:border-[#2D2F37]"
+                    key={index}
+                  >
+                    <td className="p-2 lg:rounded-l-lg">
+                      <div className="text-center text-base">{index + 1}</div>
+                    </td>
+                    <td className={`p-2 ${getCellClass("key")}`}>
+                      <div>
+                        <div className="flex justify-start items-center space-x-1 sm:space-x-2">
+                          <>
+                            <OptimizedImage
+                              src={
+                                items?.find((i) => i?.key === item?.key)
+                                  ?.imageUrl || item?.imageUrl
+                              }
+                              alt="icon"
+                              width={80}
+                              height={80}
+                              className="w-[40px] h-[40px] sm:w-[50px] sm:h-[50px] md:w-[84px] md:h-[84px] !border !border-[#ffffff60] rounded-md flex-shrink-0"
+                              data-tooltip-id={`${item?.key}`}
+                            />
+                            <ReactTltp
+                              variant="item"
+                              id={`${item?.key}`}
+                              content={
+                                items.find((i) => i.key === item.key) || item
+                              }
+                            />
+                          </>
+                          <div className="min-w-0 flex-1">
+                            <p className="p-0 text-sm sm:text-sm md:text-base mb-1 md:mb-2 text-[#fff] truncate max-w-[90px] sm:max-w-[150px] md:max-w-full">
+                              {items.find((i) => i.key === item.key)?.name ||
+                                item.name}
+                            </p>
+                            <div className="flex items-center flex-wrap gap-1">
+                              {items
+                                .find((i) => i.key === item.key)
+                                ?.compositions?.map((comp, index) => {
+                                  const compItem = items.find(
+                                    (i) => i.key === comp
+                                  );
+                                  if (!compItem) return null;
+                                  return (
+                                    <React.Fragment key={index}>
+                                      <OptimizedImage
+                                        alt="Item Image"
+                                        width={80}
+                                        height={80}
+                                        src={compItem.imageUrl}
+                                        className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 !border !border-[#ffffff60] rounded-md"
+                                        data-tooltip-id={`${compItem.key}_${index}`}
+                                      />
+                                      {index === 0 && (
+                                        <span className="mx-1">+</span>
+                                      )}
+                                      <ReactTltp
+                                        variant="item"
+                                        id={`${compItem.key}_${index}`}
+                                        content={compItem}
+                                      />
+                                    </React.Fragment>
+                                  );
+                                })}
                             </div>
                           </div>
-                        </td>
-                        <td className={`p-2 ${getCellClass("avgPlacement")}`}>
-                          <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
-                            <ColoredValue
-                              value={item?.avgPlacement}
-                              prefix="#"
-                            />
-                          </p>
-                        </td>
-                        <td
-                          className={`p-2 ${getCellClass("roundOnePickRate")}`}
-                        >
-                          <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
-                            {item?.roundOnePickRate.toFixed(2)}%
-                          </p>
-                        </td>
-                        <td
-                          className={`p-2 ${getCellClass("roundTwoPickRate")}`}
-                        >
-                          <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
-                            {item?.roundTwoPickRate.toFixed(2)}%
-                          </p>
-                        </td>
-                        <td
-                          className={`p-2 ${getCellClass("roundThreePickRate")}`}
-                        >
-                          <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
-                            {item?.roundThreePickRate.toFixed(2)}%
-                          </p>
-                        </td>
-                        <td className={`p-2 ${getCellClass("tops")}`}>
-                          <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
-                            {((item?.tops * 100) / item?.plays).toFixed(2)}%
-                          </p>
-                        </td>
-                        <td className={`p-2 ${getCellClass("wins")}`}>
-                          <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
-                            {((item?.wins * 100) / item?.plays).toFixed(2)}%
-                          </p>
-                        </td>
-                        <td className={`p-2 ${getCellClass("pickRate")}`}>
-                          <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
-                            {(item?.pickRate * 100).toFixed(2)}%
-                          </p>
-                        </td>
-                        <td
-                          className={`p-2 lg:rounded-r-lg ${getCellClass("plays")}`}
-                        >
-                          <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
-                            {item?.plays.toLocaleString("en-US")}
-                          </p>
-                        </td>
-                      </tr>
-                    )
-                )}
+                        </div>
+                      </div>
+                    </td>
+                    <td className={`p-2 ${getCellClass("avgPlacement")}`}>
+                      <p className="p-0 text-sm sm:text-base md:text-[16px] mb-0 text-[#fff] whitespace-nowrap">
+                        <ColoredValue value={item?.avgPlacement} prefix="#" />
+                      </p>
+                    </td>
+                    <td className={`p-2 ${getCellClass("tops")}`}>
+                      <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
+                        {((item?.tops * 100) / item?.plays).toFixed(2)}%
+                      </p>
+                    </td>
+                    <td className={`p-2 ${getCellClass("wins")}`}>
+                      <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
+                        {((item?.wins * 100) / item?.plays).toFixed(2)}%
+                      </p>
+                    </td>
+                    <td className={`p-2 ${getCellClass("pickRate")}`}>
+                      <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
+                        {(item?.pickRate * 100).toFixed(2)}%
+                      </p>
+                    </td>
+                    <td className={`p-2 ${getCellClass("plays")}`}>
+                      <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
+                        {item?.plays.toLocaleString("en-US")}
+                      </p>
+                    </td>
+                    <td className="p-2 font-semibold min-w-[120px]">
+                      <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px] text-center">
+                        {item?.top3Comps?.join(", ")}
+                      </p>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </ScrollableTable>
