@@ -124,6 +124,8 @@
     "recent20Matches": "Recent 20 Matches",
     "ranked": "Ranked",
     "matchDetails": "Match Details",
-    "bestAugments": "Best Augments"
+    "bestAugments": "Best Augments",
+    "skillTree": "Skill Tree",
+    "skillTrends": "Skill Trends"
   }
 }

@@ -124,6 +124,8 @@
     "recent20Matches": "最近20场对局",
     "ranked": "排位赛",
     "matchDetails": "对局详情",
-    "bestAugments": "最佳强化"
+    "bestAugments": "最佳强化",
+    "skillTree": "技能树",
+    "skillTrends": "技能趋势"
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
@@ -42,6 +42,8 @@ const ProjectItems = () => {
     direction: "ascending",
   });
   const [searchValue, setSearchValue] = useState("");
+  // Track selected variant
+  const [selectedVariant, setSelectedVariant] = useState("All");
 
   // Get unique variants from the skill tree data and prepare buttons and image URLs
   const uniqueVariants = [
@@ -131,31 +133,66 @@ const ProjectItems = () => {
   };
 
   const handleButtonClick = (button) => {
-    if (button === "All") {
-      setMetaDeckSkillTreeStatsData(metaDeckSkillTreeStats);
-    } else {
-      setMetaDeckSkillTreeStatsData(
-        metaDeckSkillTreeStats.filter((item) => {
-          // Filter by skill tree variant
-          return item.variant === button;
-        })
-      );
-    }
+    // Apply both variant and search filters together
+    const variantFiltered =
+      button === "All"
+        ? metaDeckSkillTreeStats
+        : metaDeckSkillTreeStats.filter((item) => item.variant === button);
+
+    // Apply search filter on top of variant filter
+    applySearchFilter(variantFiltered);
   };
 
+  // Helper function to apply search filter
+  const applySearchFilter = useCallback(
+    (dataToFilter) => {
+      const searchLower = searchValue.toLowerCase().trim();
+      setMetaDeckSkillTreeStatsData(
+        dataToFilter.filter((item) => {
+          // If search value is empty, return all items
+          if (!searchLower) return true;
+
+          // Check if item name contains search text
+          if (item.name?.toLowerCase().includes(searchLower)) {
+            return true;
+          }
+
+          // Check in items array as fallback
+          const foundItem = items.find((i) => i.key === item.key);
+          if (
+            foundItem &&
+            foundItem.name?.toLowerCase().includes(searchLower)
+          ) {
+            return true;
+          }
+
+          return false;
+        })
+      );
+    },
+    [searchValue, items]
+  );
+
+  // Update search filter whenever search value changes
   useEffect(() => {
-    setMetaDeckSkillTreeStatsData(
-      metaDeckSkillTreeStats.filter((item) => {
-        const foundItem = items.find((i) => i.key === item.key);
-        // If the item doesn't exist in the items array, keep it anyway
-        if (!foundItem) return true;
-        return (
-          foundItem.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
-          item.name?.toLowerCase().includes(searchValue.toLowerCase())
-        );
-      })
-    );
-  }, [searchValue]);
+    // Get the current filtered data based on selected variant
+    const currentVariantFilter = selectedVariant;
+    const variantFiltered =
+      currentVariantFilter === "All"
+        ? metaDeckSkillTreeStats
+        : metaDeckSkillTreeStats.filter(
+            (item) => item.variant === currentVariantFilter
+          );
+
+    // Apply search filter on top of variant filter
+    applySearchFilter(variantFiltered);
+  }, [searchValue, selectedVariant, metaDeckSkillTreeStats, applySearchFilter]);
+
+  // Override handleButtonClick from TrendFilters to track selected variant
+  const handleVariantClick = (button) => {
+    setSelectedVariant(button);
+    handleButtonClick(button);
+  };
 
   return (
     <>
@@ -166,7 +203,7 @@ const ProjectItems = () => {
             <TrendFilters
               buttons={uniqueVariants}
               imageButtons={imageButtonsUrls}
-              onButtonClick={handleButtonClick}
+              onButtonClick={handleVariantClick}
             />
           </div>
           <div className="w-full sm:w-auto px-4 sm:px-0">

@@ -124,6 +124,8 @@
     "recent20Matches": "Последние 20 матчей",
     "ranked": "Рейтинговый",
     "matchDetails": "Детали матча",
-    "bestAugments": "Лучшие усиления"
+    "bestAugments": "Лучшие усиления",
+    "skillTree": "Дерево навыков",
+    "skillTrends": "Тренды навыков"
   }
 }

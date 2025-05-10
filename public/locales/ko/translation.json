@@ -124,6 +124,8 @@
     "recent20Matches": "최근 20경기",
     "ranked": "랭크",
     "matchDetails": "매치 상세 정보",
-    "bestAugments": "최고의 증강"
+    "bestAugments": "최고의 증강",
+    "skillTree": "스킬 트리",
+    "skillTrends": "스킬 트렌드"
   }
 }
