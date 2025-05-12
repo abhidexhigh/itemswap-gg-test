@@ -421,7 +421,7 @@ const ProjectItems = () => {
                           />
                         </span>
                         {/* <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-[#D9A876] group-hover:w-3/4 transition-all duration-300"></span> */}
-                        <OptimizedImage
+                        <img
                           src="/images/rule_1_1.png"
                           alt="rule"
                           width={150}

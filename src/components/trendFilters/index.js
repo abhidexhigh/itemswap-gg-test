@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import "../../../i18n";
-import { OptimizedImage } from "../../utils/imageOptimizer";
 
 const TrendFilters = ({
   buttons,
@@ -53,7 +52,7 @@ const TrendFilters = ({
                   }`}
                   onClick={() => handleButtonClick(buttons[index])}
                 >
-                  <OptimizedImage
+                  <img
                     src={item}
                     alt={buttons[index]}
                     width={32}
