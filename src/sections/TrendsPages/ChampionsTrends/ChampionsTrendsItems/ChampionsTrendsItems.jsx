@@ -252,6 +252,7 @@ const ProjectItems = () => {
                             identificationImageStyle="w=[16px] md:w-[32px]"
                             textStyle="text-[10px] md:text-[16px] hidden"
                             forces={forces}
+                            cardSize="!w-[80px] !h-[80px] md:!w-[96px] md:!h-[96px]"
                           />
                           <p className="p-0 text-left text-base md:text-xl mb-0 ml-2 text-[#fff]">
                             {

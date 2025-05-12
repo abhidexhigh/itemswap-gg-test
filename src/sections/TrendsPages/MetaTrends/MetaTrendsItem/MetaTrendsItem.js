@@ -180,6 +180,7 @@ const MetaTrendsItem = memo(
           forces={forces}
           imgStyle="w-28"
           identificationImageStyle="w-[20px] md:w-[30px]"
+          cardSize="!w-[80px] !h-[80px] md:!w-[96px] md:!h-[96px]"
         />
       </div>
     );

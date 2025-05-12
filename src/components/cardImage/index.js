@@ -15,7 +15,7 @@ const CardImage = ({
   identificationImageStyle = "w=[16px] md:w-[32px]",
   textStyle = "text-[10px] md:text-[16px]",
   forces,
-  cardSize = "w-[80px] h-[80px] md:w-[96px] md:h-[96px]",
+  cardSize = "",
   tier = 0, // Add tier prop with default value 0
 }) => {
   const [isHovered, setIsHovered] = useState(false);

@@ -60,7 +60,7 @@ const TrendFilters = ({
                     height={32}
                     className={`w-8 h-8 md:w-10 md:h-10 ${
                       selectedBtn === buttons[index]
-                        ? "border-2 border-[#D9A876] rounded-md"
+                        ? "rounded-md"
                         : "border border-[#2D2F37] rounded-md opacity-70"
                     }`}
                   />

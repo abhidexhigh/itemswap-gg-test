@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useCallback } from "react";
-import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import "react-tooltip/dist/react-tooltip.css";
 import TrendFilters from "src/components/trendFilters";
 import { HiArrowSmUp, HiArrowSmDown } from "react-icons/hi";
+import { IoMdClose } from "react-icons/io";
+import { PiEye } from "react-icons/pi";
+import { IoMdCheckmarkCircle } from "react-icons/io";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
+import { createPortal } from "react-dom";
 import metaDeckSkillTreeStats from "../../../../data/newData/metaDeckSkillTree.json";
 import Comps from "../../../../data/compsNew.json";
 import Forces from "../../../../data/newData/force.json";
@@ -14,6 +18,9 @@ import ScrollableTable from "src/utils/ScrollableTable";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
 import ColoredValue from "src/components/ColoredValue";
+import ForceIcon from "src/components/forceIcon";
+import CompsModal from "./CompsModal";
+import GradientText from "src/components/gradientText/GradientText";
 
 const ProjectItems = () => {
   const { t } = useTranslation();
@@ -27,6 +34,8 @@ const ProjectItems = () => {
       },
     },
   } = Comps;
+  const { metaDecks } = data?.metaDeckList;
+  const { traits } = data?.refs;
   const { champions } = data?.refs;
   const { items } = data?.refs;
   const { forces } = data?.refs;
@@ -44,6 +53,9 @@ const ProjectItems = () => {
   const [searchValue, setSearchValue] = useState("");
   // Track selected variant
   const [selectedVariant, setSelectedVariant] = useState("All");
+  // Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItemForModal, setSelectedItemForModal] = useState(null);
 
   // Get unique variants from the skill tree data and prepare buttons and image URLs
   const uniqueVariants = [
@@ -192,6 +204,12 @@ const ProjectItems = () => {
   const handleVariantClick = (button) => {
     setSelectedVariant(button);
     handleButtonClick(button);
+  };
+
+  // Function to open the modal with the selected item's details
+  const openModal = (item) => {
+    setSelectedItemForModal(item);
+    setIsModalOpen(true);
   };
 
   return (
@@ -390,9 +408,27 @@ const ProjectItems = () => {
                       </p>
                     </td>
                     <td className="p-2 font-semibold min-w-[120px]">
-                      <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px] text-center">
-                        {item?.top3Comps?.join(", ")}
-                      </p>
+                      <button
+                        onClick={() => openModal(item)}
+                        className="group flex items-center justify-center hover:scale-110 hover:translate-y-[-2px] gap-1.5 p-1 text-sm sm:text-base md:text-[16px] text-center text-[#D9A876] hover:text-[#F2A03D] transition-all duration-200 cursor-pointer w-full mx-auto relative"
+                        title="View top comps"
+                      >
+                        <PiEye className="text-lg group-hover:scale-110 transition-all duration-200" />
+                        <span className="truncate">
+                          {/* {item?.top3Comps?.join(", ") || "N/A"} */}
+                          <GradientText
+                            value={item?.top3Comps?.join(", ") || "N/A"}
+                          />
+                        </span>
+                        {/* <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-[#D9A876] group-hover:w-3/4 transition-all duration-300"></span> */}
+                        <OptimizedImage
+                          src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1736245309/rule_1_1_otljzg.png"
+                          alt="rule"
+                          width={150}
+                          height={150}
+                          className="w-0 absolute -bottom-3 left-1/2 -translate-x-1/2 group-hover:w-1/3 transition-all duration-300"
+                        />
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -401,6 +437,20 @@ const ProjectItems = () => {
           </ScrollableTable>
         </div>
       </div>
+
+      {/* Render the modal */}
+      <CompsModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        selectedItem={selectedItemForModal}
+        comps={metaDecks}
+        champions={champions}
+        items={items}
+        forces={forces}
+        skillTree={skillTree}
+        traits={traits}
+        others={others}
+      />
     </>
   );
 };

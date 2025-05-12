@@ -376,6 +376,7 @@ const ProjectItems = () => {
                                     identificationImageStyle="w-[10px] sm:w-[12px] md:w-[16px] lg:w-[32px]"
                                     textStyle="text-[6px] sm:text-[8px] md:text-[10px] lg:text-[16px]"
                                     forces={forces}
+                                    cardSize="!w-[80px] !h-[80px] md:!w-[96px] md:!h-[96px]"
                                   />
                                 </div>
                               ))}
