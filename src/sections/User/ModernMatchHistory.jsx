@@ -90,16 +90,13 @@ const ModernMatchHistory = ({
                       // Find the correct tier based on numUnits
                       let tierImage = null;
                       if (traitData?.tiers && traitData.tiers.length > 0) {
-                        // Sort tiers by min value in ascending order
-                        const sortedTiers = [...traitData.tiers].sort(
-                          (a, b) => a.min - b.min
+                        // Find the tier that matches the numUnits
+                        const tier = traitData.tiers.find(
+                          (t) =>
+                            trait.numUnits >= t.min && trait.numUnits <= t.max
                         );
-
-                        // Find the highest tier that the numUnits satisfies
-                        for (let j = sortedTiers.length - 1; j >= 0; j--) {
-                          if (trait.numUnits >= sortedTiers[j].min) {
-                            return sortedTiers[j].imageUrl;
-                          }
+                        if (tier) {
+                          return tier.imageUrl;
                         }
                       }
                       return null;
@@ -384,21 +381,14 @@ const ModernMatchHistory = ({
                                   traitData?.tiers &&
                                   traitData.tiers.length > 0
                                 ) {
-                                  // Sort tiers by min value in ascending order
-                                  const sortedTiers = [...traitData.tiers].sort(
-                                    (a, b) => a.min - b.min
+                                  // Find the tier that matches the numUnits
+                                  const tier = traitData.tiers.find(
+                                    (t) =>
+                                      trait.numUnits >= t.min &&
+                                      trait.numUnits <= t.max
                                   );
-
-                                  // Find the highest tier that the numUnits satisfies
-                                  for (
-                                    let j = sortedTiers.length - 1;
-                                    j >= 0;
-                                    j--
-                                  ) {
-                                    if (trait.numUnits >= sortedTiers[j].min) {
-                                      tierImage = sortedTiers[j].imageUrl;
-                                      break;
-                                    }
+                                  if (tier) {
+                                    tierImage = tier.imageUrl;
                                   }
                                 }
 

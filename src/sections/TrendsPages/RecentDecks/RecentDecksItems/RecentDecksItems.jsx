@@ -259,7 +259,9 @@ const ForceDisplay = memo(({ force, forces, i }) => {
 // TraitIcon component
 const TraitIcon = memo(({ trait, traits, i }) => {
   const traitDetails = traits?.find((t) => t.key === trait?.key);
-  const tier = traitDetails?.tiers?.find((t) => t?.min >= trait?.numUnits);
+  const tier = traitDetails?.tiers?.find(
+    (t) => trait?.numUnits >= t?.min && trait?.numUnits <= t?.max
+  );
 
   if (!traitDetails || !tier?.imageUrl) return null;
 

@@ -345,7 +345,7 @@ const DeckHeader = memo(
             {metaDeck?.deck?.traits?.map((trait, i) => {
               const traitDetails = traits?.find((t) => t.key === trait?.key);
               const tier = traitDetails?.tiers?.find(
-                (t) => t?.min >= trait?.numUnits
+                (t) => trait?.numUnits >= t?.min && trait?.numUnits <= t?.max
               );
 
               if (!traitDetails || !tier?.imageUrl) return null;
