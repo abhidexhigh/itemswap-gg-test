@@ -26,9 +26,129 @@
               "plays": 3439072,
               "metaDecks": [
                 {
+                  "key": "662433D77BA03B18B6F3A7B05A8540F5",
+                  "deckKey": "670A1889F6901569D5998E731300952B",
+                  "name": "Girlcrush",
+                  "plays": 8633,
+                  "pickRate": 20.61053895,
+                  "winRate": 10.48491606,
+                  "topRate": 15.4102081,
+                  "avgPlacement": 5,
+                  "deck": {
+                    "augments": [
+                      "SealoftheBlockbuster",
+                      "FreeShoping",
+                      "LevelBoost"
+                    ],
+                    "skillTree": ["FireTrap", "Meteor", "Doom"],
+                    "champions": [
+                      {
+                        "key": "Ao Guang",
+                        "coreRank": 7,
+                        "items": ["Cloak", "Jingong", "RuyiBang"],
+                        "tier": 2
+                      },
+                      {
+                        "key": "Tian Long",
+                        "coreRank": 2,
+                        "items": ["Helmet", "Sword", "WoodenBow"],
+                        "tier": 2
+                      },
+                      {
+                        "key": "Miho",
+                        "coreRank": 4,
+                        "items": ["Vesta", "Aegis", "Wygar"],
+                        "tier": 2
+                      },
+                      {
+                        "key": "Aurora",
+                        "coreRank": 10,
+                        "items": [
+                          "Pendragon’sCrown",
+                          "ScaleHelmet",
+                          "KoreanBow"
+                        ],
+                        "tier": 2
+                      },
+                      {
+                        "key": "Artemis",
+                        "coreRank": 1,
+                        "items": ["LeaderArmor", "SilverBullet", "WizardHat"],
+                        "tier": 1
+                      },
+                      {
+                        "key": "Daji",
+                        "coreRank": 2,
+                        "items": ["Sword", "Kavacha", "Osirian"],
+                        "tier": 2
+                      },
+                      {
+                        "key": "Yuki Onna",
+                        "coreRank": 1,
+                        "items": ["Stormhorn", "EyeOfRa", "Vesta"],
+                        "tier": 2
+                      },
+                      {
+                        "key": "Nuwa",
+                        "coreRank": 2,
+                        "items": ["Gladius", "Gladius", "Simurgh"],
+                        "tier": 2
+                      },
+                      {
+                        "key": "Kaliya",
+                        "coreRank": 8,
+                        "items": ["Nandaka", "Eaglewing", "Bayan"],
+                        "tier": 2
+                      },
+                      {
+                        "key": "Yumi",
+                        "coreRank": 9,
+                        "items": ["WoodenWand", "PlateArmor", "Aetheris"],
+                        "tier": 2
+                      }
+                    ],
+                    "traits": [
+                      {
+                        "key": "Guardian",
+                        "numUnits": 6
+                      },
+                      {
+                        "key": "WildRush",
+                        "numUnits": 3
+                      },
+                      {
+                        "key": "Chaos",
+                        "numUnits": 3
+                      },
+                      {
+                        "key": "Blockbuster",
+                        "numUnits": 2
+                      },
+                      {
+                        "key": "Fury",
+                        "numUnits": 2
+                      }
+                    ],
+                    "forces": [
+                      {
+                        "key": "Light",
+                        "numUnits": 7
+                      },
+                      {
+                        "key": "Dark",
+                        "numUnits": 1
+                      },
+                      {
+                        "key": "Water",
+                        "numUnits": 1
+                      }
+                    ]
+                  }
+                },
+                {
                   "key": "FD3F1C70D6BDC2BC822AA8D88A645D44",
                   "deckKey": "4E1D470D4202806EACCD284FFA0F1F3C",
-                  "name": "Girlcrush",
+                  "name": "Chaos",
                   "plays": 8609,
                   "pickRate": 21.74539833,
                   "winRate": 29.86018633,
@@ -129,126 +249,6 @@
                       {
                         "key": "Fire",
                         "numUnits": 10
-                      }
-                    ]
-                  }
-                },
-                {
-                  "key": "AB8EECA4416A636CB875472A550778DA",
-                  "deckKey": "1A9456B47CA84EB26D543A55BC130300",
-                  "name": "Guardian",
-                  "plays": 5208,
-                  "pickRate": 26.59040099,
-                  "winRate": 22.73562567,
-                  "topRate": 28.08168804,
-                  "avgPlacement": 6,
-                  "deck": {
-                    "augments": [
-                      "SealoftheBlockbuster",
-                      "FreeShoping",
-                      "LevelBoost"
-                    ],
-                    "skillTree": ["DarkRavage", "FireTrap", "SolarGuardian"],
-                    "champions": [
-                      {
-                        "key": "Vespera",
-                        "coreRank": 7,
-                        "items": ["Cloak", "Jingong", "RuyiBang"],
-                        "tier": 1
-                      },
-                      {
-                        "key": "Fafnir",
-                        "coreRank": 2,
-                        "items": ["Helmet", "Sword", "WoodenBow"],
-                        "tier": 4
-                      },
-                      {
-                        "key": "Leizu",
-                        "coreRank": 4,
-                        "items": ["Vesta", "Aegis", "Wygar"],
-                        "tier": 4
-                      },
-                      {
-                        "key": "Varcolac",
-                        "coreRank": 10,
-                        "items": [
-                          "Pendragon’sCrown",
-                          "ScaleHelmet",
-                          "KoreanBow"
-                        ],
-                        "tier": 1
-                      },
-                      {
-                        "key": "Yama",
-                        "coreRank": 1,
-                        "items": ["LeaderArmor", "SilverBullet", "WizardHat"],
-                        "tier": 3
-                      },
-                      {
-                        "key": "Tian Long",
-                        "coreRank": 2,
-                        "items": ["Sword", "Kavacha", "Osirian"],
-                        "tier": 4
-                      },
-                      {
-                        "key": "Podarge",
-                        "coreRank": 1,
-                        "items": ["Stormhorn", "EyeOfRa", "Vesta"],
-                        "tier": 2
-                      },
-                      {
-                        "key": "Garmr",
-                        "coreRank": 2,
-                        "items": ["Gladius", "Gladius", "Simurgh"],
-                        "tier": 3
-                      },
-                      {
-                        "key": "Aurora",
-                        "coreRank": 8,
-                        "items": ["Nandaka", "Eaglewing", "Bayan"],
-                        "tier": 4
-                      },
-                      {
-                        "key": "Tatsu",
-                        "coreRank": 9,
-                        "items": ["WoodenWand", "PlateArmor", "Aetheris"],
-                        "tier": 2
-                      }
-                    ],
-                    "traits": [
-                      {
-                        "key": "Guardian",
-                        "numUnits": 3
-                      },
-                      {
-                        "key": "Druid",
-                        "numUnits": 6
-                      },
-                      {
-                        "key": "Druid",
-                        "numUnits": 5
-                      },
-                      {
-                        "key": "Blockbuster",
-                        "numUnits": 2
-                      },
-                      {
-                        "key": "Fury",
-                        "numUnits": 10
-                      }
-                    ],
-                    "forces": [
-                      {
-                        "key": "Dark",
-                        "numUnits": 4
-                      },
-                      {
-                        "key": "Light",
-                        "numUnits": 1
-                      },
-                      {
-                        "key": "Storm",
-                        "numUnits": 4
                       }
                     ]
                   }
