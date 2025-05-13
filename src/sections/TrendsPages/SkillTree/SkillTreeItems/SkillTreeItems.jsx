@@ -236,7 +236,7 @@ const ProjectItems = () => {
         {/* Table section */}
         <div className="projects-row overflow-auto">
           <ScrollableTable>
-            <table className="w-full min-w-[1100px] relative lg:border-separate lg:border-spacing-y-2">
+            <table className="w-full min-w-[1300px] relative lg:border-separate lg:border-spacing-y-2">
               <thead className="sticky top-0 z-50">
                 <tr className="bg-[#000000]">
                   <th className="lg:rounded-l-lg p-2 font-semibold w-[50px]">
@@ -245,7 +245,7 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold min-w-[200px] sm:min-w-[220px] md:min-w-[280px] ${sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[200px] sm:min-w-[220px] md:min-w-[200px] ${sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("key")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -283,12 +283,14 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] ${sortConfig?.key === "pickRate" ? "bg-[#2D2F37]" : ""}`}
-                    onClick={() => requestSort("pickRate")}
+                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] ${sortConfig?.key === "threeStarPercentage" ? "bg-[#2D2F37]" : ""}`}
+                    onClick={() => requestSort("threeStarPercentage")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                      {others.pickPercentage}
-                      <span className="ml-2">{renderSortIcon("pickRate")}</span>
+                      {others.threeStarsPercentage}
+                      <span className="ml-2">
+                        {renderSortIcon("threeStarPercentage")}
+                      </span>
                     </p>
                   </th>
                   <th
@@ -298,6 +300,16 @@ const ProjectItems = () => {
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
                       {others.played}
                       <span className="ml-2">{renderSortIcon("plays")}</span>
+                    </p>
+                  </th>
+                  <th className="p-2 font-semibold min-w-[140px]">
+                    <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px] text-center">
+                      {others.top3} {others.champions}
+                    </p>
+                  </th>
+                  <th className="p-2 font-semibold min-w-[140px]">
+                    <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px] text-center">
+                      {others.best} {others.pairs}
                     </p>
                   </th>
                   <th className="lg:rounded-r-lg p-2 font-semibold min-w-[140px]">
@@ -397,15 +409,67 @@ const ProjectItems = () => {
                         {((item?.wins * 100) / item?.plays).toFixed(2)}%
                       </p>
                     </td>
-                    <td className={`p-2 ${getCellClass("pickRate")}`}>
+                    <td
+                      className={`p-2 ${getCellClass("threeStarPercentage")}`}
+                    >
                       <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
-                        {(item?.pickRate * 100).toFixed(2)}%
+                        {(item?.threeStarPercentage * 100).toFixed(2)}%
                       </p>
                     </td>
                     <td className={`p-2 ${getCellClass("plays")}`}>
                       <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
                         {item?.plays.toLocaleString("en-US")}
                       </p>
+                    </td>
+                    <td className="p-2 font-semibold min-w-[140px]">
+                      <div className="flex items-center justify-center flex-wrap gap-1">
+                        {item?.top3Champions?.map((champKey, index) => {
+                          const champion = champions.find(
+                            (c) => c.key === champKey || c.name === champKey
+                          );
+                          if (!champion) return null;
+                          console.log("champion", champion);
+                          return (
+                            <React.Fragment key={`champ-${index}`}>
+                              <CardImage
+                                src={champion}
+                                imgStyle="w-[68px] md:w-[84px]"
+                                identificationImageStyle="w=[16px] md:w-[24px]"
+                                textStyle="text-[10px] md:text-[16px] hidden"
+                                cardSize="!w-[48px] !h-[48px] md:!w-[64px] md:!h-[64px]"
+                                forces={forces}
+                              />
+                            </React.Fragment>
+                          );
+                        })}
+                      </div>
+                    </td>
+                    <td className="p-2 font-semibold min-w-[140px]">
+                      <div className="flex items-center justify-center flex-wrap gap-1">
+                        {item?.bestPairs?.map((skillKey, index) => {
+                          const skill = skillTree.find(
+                            (s) => s.key === skillKey || s.name === skillKey
+                          );
+                          if (!skill) return null;
+                          return (
+                            <React.Fragment key={`skill-${index}`}>
+                              <OptimizedImage
+                                alt={skill.name}
+                                width={80}
+                                height={80}
+                                src={skill.imageUrl}
+                                className="w-6 h-6 sm:w-8 sm:h-8 md:w-14 md:h-14"
+                                data-tooltip-id={`skill-${skill.key}-${index}`}
+                              />
+                              <ReactTltp
+                                variant="skillTree"
+                                id={`skill-${skill.key}-${index}`}
+                                content={skill}
+                              />
+                            </React.Fragment>
+                          );
+                        })}
+                      </div>
                     </td>
                     <td className="p-2 font-semibold min-w-[120px]">
                       <button
