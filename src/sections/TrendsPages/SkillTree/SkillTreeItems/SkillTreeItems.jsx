@@ -41,8 +41,6 @@ const ProjectItems = () => {
   const { forces } = data?.refs;
   const { skillTree } = data?.refs;
 
-  console.log("skillTree", skillTree);
-
   const [metaDeckSkillTreeStatsData, setMetaDeckSkillTreeStatsData] = useState(
     metaDeckSkillTreeStats
   );
@@ -132,7 +130,6 @@ const ProjectItems = () => {
         return 0;
       });
     }
-    console.log("sortedData", sortedData);
     setMetaDeckSkillTreeStatsData(sortedData);
   }, [metaDeckSkillTreeStats, sortConfig]);
 
@@ -304,12 +301,12 @@ const ProjectItems = () => {
                   </th>
                   <th className="p-2 font-semibold min-w-[140px]">
                     <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px] text-center">
-                      {others.top3} {others.champions}
+                      {others.best} {others.pairs}
                     </p>
                   </th>
                   <th className="p-2 font-semibold min-w-[140px]">
                     <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px] text-center">
-                      {others.best} {others.pairs}
+                      {others.top3} {others.champions}
                     </p>
                   </th>
                   <th className="lg:rounded-r-lg p-2 font-semibold min-w-[140px]">
@@ -320,10 +317,6 @@ const ProjectItems = () => {
                 </tr>
               </thead>
               <tbody className="bg-[#111111]">
-                {console.log(
-                  "metaDeckSkillTreeStatsData",
-                  metaDeckSkillTreeStatsData
-                )}
                 {metaDeckSkillTreeStatsData.map((item, index) => (
                   <tr
                     className="m-2 hover:bg-[#2D2F37] transition-colors duration-200 md:border-[1px] md:border-[#2D2F37]"
@@ -423,29 +416,6 @@ const ProjectItems = () => {
                     </td>
                     <td className="p-2 font-semibold min-w-[140px]">
                       <div className="flex items-center justify-center flex-wrap gap-1">
-                        {item?.top3Champions?.map((champKey, index) => {
-                          const champion = champions.find(
-                            (c) => c.key === champKey || c.name === champKey
-                          );
-                          if (!champion) return null;
-                          console.log("champion", champion);
-                          return (
-                            <React.Fragment key={`champ-${index}`}>
-                              <CardImage
-                                src={champion}
-                                imgStyle="w-[68px] md:w-[84px]"
-                                identificationImageStyle="w=[16px] md:w-[24px]"
-                                textStyle="text-[10px] md:text-[16px] hidden"
-                                cardSize="!w-[48px] !h-[48px] md:!w-[64px] md:!h-[64px]"
-                                forces={forces}
-                              />
-                            </React.Fragment>
-                          );
-                        })}
-                      </div>
-                    </td>
-                    <td className="p-2 font-semibold min-w-[140px]">
-                      <div className="flex items-center justify-center flex-wrap gap-1">
                         {item?.bestPairs?.map((skillKey, index) => {
                           const skill = skillTree.find(
                             (s) => s.key === skillKey || s.name === skillKey
@@ -471,6 +441,28 @@ const ProjectItems = () => {
                         })}
                       </div>
                     </td>
+                    <td className="p-2 font-semibold min-w-[140px]">
+                      <div className="flex items-center justify-center flex-wrap gap-1">
+                        {item?.top3Champions?.map((champKey, index) => {
+                          const champion = champions.find(
+                            (c) => c.key === champKey || c.name === champKey
+                          );
+                          if (!champion) return null;
+                          return (
+                            <React.Fragment key={`champ-${index}`}>
+                              <CardImage
+                                src={champion}
+                                imgStyle="w-[68px] md:w-[84px]"
+                                identificationImageStyle="w=[16px] md:w-[24px]"
+                                textStyle="text-[10px] md:text-[16px] hidden"
+                                cardSize="!w-[48px] !h-[48px] md:!w-[64px] md:!h-[64px]"
+                                forces={forces}
+                              />
+                            </React.Fragment>
+                          );
+                        })}
+                      </div>
+                    </td>
                     <td className="p-2 font-semibold min-w-[120px]">
                       <button
                         onClick={() => openModal(item)}
@@ -480,9 +472,9 @@ const ProjectItems = () => {
                         <PiEye className="text-lg group-hover:scale-110 transition-all duration-200" />
                         <span className="truncate">
                           {/* {item?.top3Comps?.join(", ") || "N/A"} */}
-                          <GradientText
+                          {/* <GradientText
                             value={item?.top3Comps?.join(", ") || "N/A"}
-                          />
+                          /> */}
                         </span>
                         {/* <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-[#D9A876] group-hover:w-3/4 transition-all duration-300"></span> */}
                         <img
