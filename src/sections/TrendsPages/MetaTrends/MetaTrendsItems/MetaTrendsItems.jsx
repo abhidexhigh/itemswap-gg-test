@@ -27,6 +27,9 @@ import "chart.js/auto";
 import { OptimizedImage } from "src/utils/imageOptimizer";
 import ForceIcon from "src/components/forceIcon";
 
+// Create a cache for filter results
+const filterCache = new Map();
+
 // Dynamically import heavy components with loading fallbacks
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -583,7 +586,9 @@ const MetaDeck = memo(
 // Optimize MetaTrendsItems to reduce unnecessary renders
 const MetaTrendsItems = () => {
   const { t } = useTranslation();
-  const others = t("others");
+  const othersRef = useRef(t("others"));
+  const others = othersRef.current;
+
   const [selectedChampion, setSelectedChampion] = useState(null);
   const [selectedTrait, setSelectedTrait] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -616,13 +621,16 @@ const MetaTrendsItems = () => {
       };
     }, []);
 
-  // State for filtered comps data
+  // State for filtered comps data with reference equality check
   const [compsData, setCompsData] = useState(metaDecks);
 
-  // Load more items when user scrolls to bottom
+  // Reference to original metaDecks to avoid dependency issues
+  const metaDecksRef = useRef(metaDecks);
+
+  // Load more items when user scrolls to bottom - stabilized dependencies
   const loadMoreDecks = useCallback(() => {
     setVisibleDecks((prev) => Math.min(prev + 10, compsData.length));
-  }, [compsData.length]);
+  }, [compsData]);
 
   // Setup intersection observer for infinite scroll
   const observerRef = useRef(null);
@@ -715,7 +723,7 @@ const MetaTrendsItems = () => {
       }
       groupedByCost.get(cost).push({
         ...champion,
-        selected: champion.key === selectedChampion,
+        selected: false, // Initialize all as unselected
       });
     });
 
@@ -748,22 +756,37 @@ const MetaTrendsItems = () => {
     return items?.filter((item) => !item?.isFromItem) || [];
   }, [items]);
 
-  // Consolidated handler for changing filters with proper memoization
+  // Generate cache key for filter operations
+  const getFilterCacheKey = useCallback((type, key) => {
+    return `${type}:${key}`;
+  }, []);
+
+  // Consolidated handler for changing filters with proper memoization and caching
   const handleFilterChange = useCallback(
     (type, key) => {
+      const metaDecks = metaDecksRef.current;
       if (!metaDecks?.length) return;
 
       let newCompsData;
+      const cacheKey = getFilterCacheKey(type, key);
 
+      // Check if we have a cached result for this filter
       if (type === "trait") {
         if (selectedTrait === key) {
           setSelectedTrait(null);
           newCompsData = metaDecks;
         } else {
           setSelectedTrait(key);
-          newCompsData = metaDecks.filter((deck) =>
-            deck.deck.traits.some((trait) => trait.key === key)
-          );
+          // Check cache first
+          if (filterCache.has(cacheKey)) {
+            newCompsData = filterCache.get(cacheKey);
+          } else {
+            newCompsData = metaDecks.filter((deck) =>
+              deck.deck.traits.some((trait) => trait.key === key)
+            );
+            // Cache the result
+            filterCache.set(cacheKey, newCompsData);
+          }
         }
         setSelectedChampion(null);
         setSelectedItem(null);
@@ -774,11 +797,18 @@ const MetaTrendsItems = () => {
           newCompsData = metaDecks;
         } else {
           setSelectedTrait(key);
-          newCompsData = metaDecks.filter((deck) =>
-            deck.deck.forces.some(
-              (force) => force.key.toLowerCase() === key.toLowerCase()
-            )
-          );
+          // Check cache first
+          if (filterCache.has(cacheKey)) {
+            newCompsData = filterCache.get(cacheKey);
+          } else {
+            newCompsData = metaDecks.filter((deck) =>
+              deck.deck.forces.some(
+                (force) => force.key.toLowerCase() === key.toLowerCase()
+              )
+            );
+            // Cache the result
+            filterCache.set(cacheKey, newCompsData);
+          }
         }
         setSelectedChampion(null);
         setSelectedItem(null);
@@ -789,9 +819,16 @@ const MetaTrendsItems = () => {
           newCompsData = metaDecks;
         } else {
           setSelectedChampion(key);
-          newCompsData = metaDecks.filter((deck) =>
-            deck.deck.champions.some((champion) => champion.key === key)
-          );
+          // Check cache first
+          if (filterCache.has(cacheKey)) {
+            newCompsData = filterCache.get(cacheKey);
+          } else {
+            newCompsData = metaDecks.filter((deck) =>
+              deck.deck.champions.some((champion) => champion.key === key)
+            );
+            // Cache the result
+            filterCache.set(cacheKey, newCompsData);
+          }
         }
         setSelectedTrait(null);
         setSelectedItem(null);
@@ -802,12 +839,19 @@ const MetaTrendsItems = () => {
           newCompsData = metaDecks;
         } else {
           setSelectedItem(key);
-          newCompsData = metaDecks.filter((deck) =>
-            deck.deck.champions.some(
-              (champion) =>
-                champion.items && champion.items.some((item) => item === key)
-            )
-          );
+          // Check cache first
+          if (filterCache.has(cacheKey)) {
+            newCompsData = filterCache.get(cacheKey);
+          } else {
+            newCompsData = metaDecks.filter((deck) =>
+              deck.deck.champions.some(
+                (champion) =>
+                  champion.items && champion.items.some((item) => item === key)
+              )
+            );
+            // Cache the result
+            filterCache.set(cacheKey, newCompsData);
+          }
         }
         setSelectedChampion(null);
         setSelectedTrait(null);
@@ -818,9 +862,16 @@ const MetaTrendsItems = () => {
           newCompsData = metaDecks;
         } else {
           setSelectedSkillTree(key);
-          newCompsData = metaDecks.filter((deck) =>
-            deck.deck?.skillTree?.includes(key)
-          );
+          // Check cache first
+          if (filterCache.has(cacheKey)) {
+            newCompsData = filterCache.get(cacheKey);
+          } else {
+            newCompsData = metaDecks.filter((deck) =>
+              deck.deck?.skillTree?.includes(key)
+            );
+            // Cache the result
+            filterCache.set(cacheKey, newCompsData);
+          }
         }
         setSelectedChampion(null);
         setSelectedTrait(null);
@@ -832,7 +883,7 @@ const MetaTrendsItems = () => {
       setVisibleDecks(10);
     },
     [
-      metaDecks,
+      getFilterCacheKey,
       selectedChampion,
       selectedItem,
       selectedTrait,
@@ -859,6 +910,7 @@ const MetaTrendsItems = () => {
             itemCount={13}
             championsByCost={championsWithSelection}
             setSelectedChampion={(key) => handleFilterChange("champion", key)}
+            selectedChampion={selectedChampion}
             forces={forces}
           />
         );
@@ -957,6 +1009,24 @@ const MetaTrendsItems = () => {
     t,
   ]);
 
+  // Memoize the visible decks slice to prevent recalculation
+  const visibleDecksData = useMemo(() => {
+    return compsData.slice(0, visibleDecks);
+  }, [compsData, visibleDecks]);
+
+  // Memoize the MetaDeck props to avoid object recreation
+  const deckProps = useMemo(() => {
+    return {
+      champions,
+      items,
+      traits,
+      forces,
+      augments,
+      others,
+      skills: skillTree,
+    };
+  }, [champions, items, traits, forces, augments, skillTree, others]);
+
   return (
     <div className="mx-auto md:px-0 lg:px-0 py-6">
       <div className="space-y-6">
@@ -995,20 +1065,14 @@ const MetaTrendsItems = () => {
 
         {/* Results Section with Virtualization */}
         <div className="space-y-4">
-          {compsData.slice(0, visibleDecks).map((metaDeck, i) => (
+          {visibleDecksData.map((metaDeck, i) => (
             <MetaDeck
               key={i}
               metaDeck={metaDeck}
               i={i}
               isClosed={isClosed}
               handleIsClosed={handleIsClosed}
-              champions={champions}
-              items={items}
-              traits={traits}
-              forces={forces}
-              augments={augments}
-              others={others}
-              skills={skillTree}
+              {...deckProps}
             />
           ))}
 

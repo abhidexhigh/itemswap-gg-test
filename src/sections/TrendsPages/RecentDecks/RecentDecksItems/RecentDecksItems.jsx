@@ -339,15 +339,15 @@ const DeckHeader = memo(
             <ForceDisplay key={i} force={force} forces={forces} i={i} />
           ))}
         </span>
+      </div>
+      <div className="inline-flex flex-shrink-0 gap-[22px] md:mt-0">
         {metaDeck?.deck?.skillTree && metaDeck?.deck?.skillTree.length > 0 && (
-          <span className="flex justify-center gap-x-2 items-center ml-2 bg-gradient-to-br from-[#1e1e2c]/70 to-[#15151e]/70 py-2 px-3 rounded-lg border border-white/5">
+          <span className="flex justify-center gap-x-2 items-center">
             {metaDeck?.deck?.skillTree?.map((skill, i) => (
               <SkillTreeIcon key={i} skillTree={skill} skills={skills} />
             ))}
           </span>
         )}
-      </div>
-      <div className="inline-flex flex-shrink-0 gap-[22px] md:mt-0">
         <div className="inline-flex flex-wrap">
           {metaDeck?.deck?.traits?.map((trait, i) => (
             <TraitIcon key={i} trait={trait} traits={traits} i={i} />
@@ -445,12 +445,48 @@ const MetaDeck = memo(
   }
 );
 
+// SkillTreeItem component
+const SkillTreeItem = memo(({ skill, selectedSkillTree, onSelect, i }) => (
+  <div
+    className="flex flex-col items-center gap-1 cursor-pointer group max-w-[70px] md:max-w-[96px]"
+    onClick={() => onSelect("skillTree", skill?.key)}
+  >
+    <ReactTltp
+      variant="skillTree"
+      content={skill}
+      id={`skill-${skill?.key}-${i}`}
+    />
+    <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-105">
+      <div className="bg-gradient-to-br from-[#232339] to-[#1a1a2a] p-1 rounded-lg border border-white/10 hover:border-white/30 transition-all duration-200 w-full h-full flex items-center justify-center">
+        <OptimizedImage
+          alt={skill?.name || "Skill"}
+          width={80}
+          height={80}
+          src={skill?.imageUrl}
+          className="w-[80%] h-[80%] object-cover rounded-md"
+          data-tooltip-id={`skill-${skill?.key}-${i}`}
+          loading="lazy"
+        />
+      </div>
+      {skill?.key === selectedSkillTree && (
+        <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+          <IoMdCheckmarkCircle className="text-[#86efac] text-3xl z-50" />
+        </div>
+      )}
+    </div>
+    <span className="hidden lg:block text-xs truncate max-w-full text-center text-[#cccccc]">
+      {skill?.name}
+    </span>
+  </div>
+));
+
 const RecentDecksItems = () => {
   const { t } = useTranslation();
   const others = t("others");
   const [selectedChampion, setSelectedChampion] = useState(null);
   const [selectedTrait, setSelectedTrait] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedSkillTree, setSelectedSkillTree] = useState(null);
   const [isClosed, setIsClosed] = useState({});
   const [activeTab, setActiveTab] = useState("Champions");
 
@@ -557,6 +593,7 @@ const RecentDecksItems = () => {
         }
         setSelectedChampion(null);
         setSelectedItem(null);
+        setSelectedSkillTree(null);
       } else if (type === "force") {
         if (selectedTrait === key) {
           setSelectedTrait(null);
@@ -571,6 +608,7 @@ const RecentDecksItems = () => {
         }
         setSelectedChampion(null);
         setSelectedItem(null);
+        setSelectedSkillTree(null);
       } else if (type === "champion") {
         if (selectedChampion === key) {
           setSelectedChampion(null);
@@ -583,6 +621,7 @@ const RecentDecksItems = () => {
         }
         setSelectedTrait(null);
         setSelectedItem(null);
+        setSelectedSkillTree(null);
       } else if (type === "item") {
         if (selectedItem === key) {
           setSelectedItem(null);
@@ -598,11 +637,31 @@ const RecentDecksItems = () => {
         }
         setSelectedChampion(null);
         setSelectedTrait(null);
+        setSelectedSkillTree(null);
+      } else if (type === "skillTree") {
+        if (selectedSkillTree === key) {
+          setSelectedSkillTree(null);
+          newCompsData = metaDecks;
+        } else {
+          setSelectedSkillTree(key);
+          newCompsData = metaDecks.filter((deck) =>
+            deck.deck?.skillTree?.includes(key)
+          );
+        }
+        setSelectedChampion(null);
+        setSelectedTrait(null);
+        setSelectedItem(null);
       }
 
       setCompsData(newCompsData);
     },
-    [metaDecks, selectedChampion, selectedItem, selectedTrait]
+    [
+      metaDecks,
+      selectedChampion,
+      selectedItem,
+      selectedTrait,
+      selectedSkillTree,
+    ]
   );
 
   // Optimized function with useCallback to avoid recreation on every render
@@ -624,6 +683,7 @@ const RecentDecksItems = () => {
             itemCount={13}
             championsByCost={groupedArray}
             setSelectedChampion={(key) => handleFilterChange("champion", key)}
+            selectedChampion={selectedChampion}
             forces={forces}
           />
         );
@@ -683,6 +743,24 @@ const RecentDecksItems = () => {
             </div>
           </div>
         );
+      case "SkillTree":
+        return (
+          <div className="p-3 md:p-6 bg-[#1a1b30] rounded-lg">
+            <div className="flex flex-wrap justify-center gap-2 mx-auto w-full">
+              {skillTree
+                ?.filter((skill) => skill?.imageUrl)
+                ?.map((skill, i) => (
+                  <SkillTreeItem
+                    key={i}
+                    skill={skill}
+                    selectedSkillTree={selectedSkillTree}
+                    onSelect={handleFilterChange}
+                    i={i}
+                  />
+                ))}
+            </div>
+          </div>
+        );
       default:
         return null;
     }
@@ -692,10 +770,13 @@ const RecentDecksItems = () => {
     handleFilterChange,
     forces,
     traits,
+    skillTree,
     selectedTrait,
+    selectedSkillTree,
     filteredItems,
     selectedItem,
     others,
+    selectedChampion,
   ]);
 
   return (
@@ -718,6 +799,11 @@ const RecentDecksItems = () => {
               active={activeTab === "Items"}
               label={others?.items}
               onClick={() => handleTabChange("Items")}
+            />
+            <TabButton
+              active={activeTab === "SkillTree"}
+              label={others?.skillTree || "Skill Tree"}
+              onClick={() => handleTabChange("SkillTree")}
             />
           </div>
         </div>

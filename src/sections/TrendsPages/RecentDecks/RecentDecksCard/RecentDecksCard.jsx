@@ -63,13 +63,16 @@ const RecentDecksCard = ({
     (champion, j) => (
       <RecentDecksItem
         key={`${champion.key || j}`}
-        champion={champion}
+        champion={{
+          ...champion,
+          selected: champion.key === selectedChampion,
+        }}
         setSelectedChampion={setSelectedChampion}
         index={j}
         forces={forces}
       />
     ),
-    [setSelectedChampion, forces]
+    [setSelectedChampion, forces, selectedChampion]
   );
 
   return (

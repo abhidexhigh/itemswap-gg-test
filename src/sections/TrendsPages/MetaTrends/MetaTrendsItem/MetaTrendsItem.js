@@ -182,6 +182,12 @@ const MetaTrendsItem = memo(
           identificationImageStyle="w-[20px] md:w-[30px]"
           cardSize="!w-[80px] !h-[80px] md:!w-[96px] md:!h-[96px]"
         />
+
+        {champion?.selected && (
+          <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+            <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
+          </div>
+        )}
       </div>
     );
   }

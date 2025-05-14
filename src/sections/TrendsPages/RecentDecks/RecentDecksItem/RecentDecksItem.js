@@ -104,7 +104,9 @@ const RecentDecksItem = ({
             )}
 
             {champion?.selected && (
-              <IoMdCheckmarkCircle className="absolute top-0 right-0 w-full h-full p-3 bg-[#00000060] text-[#86efaccc]" />
+              <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+                <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
+              </div>
             )}
           </div>
         </div>

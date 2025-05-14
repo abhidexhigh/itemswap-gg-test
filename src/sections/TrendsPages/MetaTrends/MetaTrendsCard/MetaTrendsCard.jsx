@@ -257,7 +257,14 @@ const CostHeader = memo(({ costLevel, others }) => (
 
 // ChampionsCostSection component to handle champions display per cost
 const ChampionsCostSection = memo(
-  ({ champions, costIndex, setSelectedChampion, forces, others }) => {
+  ({
+    champions,
+    costIndex,
+    setSelectedChampion,
+    forces,
+    others,
+    selectedChampion,
+  }) => {
     // Optimization: use refs for intersection observer to lazily render
     const sectionRef = useRef(null);
     const [isVisible, setIsVisible] = useState(costIndex < 2); // Eagerly load first 2 sections
@@ -314,13 +321,16 @@ const ChampionsCostSection = memo(
       (champion, j) => (
         <MetaTrendsItem
           key={`${champion.key || j}`}
-          champion={champion}
+          champion={{
+            ...champion,
+            selected: champion.key === selectedChampion,
+          }}
           setSelectedChampion={setSelectedChampion}
           index={j}
           forces={forces}
         />
       ),
-      [setSelectedChampion, forces]
+      [setSelectedChampion, forces, selectedChampion]
     );
 
     if (!isVisible) {
@@ -381,6 +391,7 @@ const MetaTrendsCard = ({
             setSelectedChampion={setSelectedChampion}
             forces={forces}
             others={others}
+            selectedChampion={selectedChampion}
           />
         ))}
       </div>
