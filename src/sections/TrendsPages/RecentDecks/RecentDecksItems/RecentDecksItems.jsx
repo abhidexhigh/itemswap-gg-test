@@ -227,67 +227,6 @@ const AugmentIcon = memo(({ augment, augments }) => {
   );
 });
 
-// Force display component
-const ForceDisplay = memo(({ force, forces, i }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
-  const forceDetails = forces?.find(
-    (t) => t.key.toLowerCase() === force?.key.toLowerCase()
-  );
-  if (!forceDetails) return null;
-
-  return (
-    <div
-      className="flex justify-center items-center bg-[#000] rounded-full mx-1 pr-2 border-[1px] border-[#ffffff50]"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <ForceIcon
-        force={forceDetails}
-        size="custom"
-        customSize="w-[24px] h-[24px] md:w-[40px] md:h-[40px]"
-        className="mr-1"
-        isHovered={isHovered}
-        data-tooltip-id={`${force?.key}-${i}`}
-      />
-      <ReactTltp content={force?.key} id={`${force?.key}-${i}`} />
-      <span className="text-[18px]">{force?.numUnits}</span>
-    </div>
-  );
-});
-
-// TraitIcon component
-const TraitIcon = memo(({ trait, traits, i }) => {
-  const traitDetails = traits?.find((t) => t.key === trait?.key);
-  const tier = traitDetails?.tiers?.find(
-    (t) => trait?.numUnits >= t?.min && trait?.numUnits <= t?.max
-  );
-
-  if (!traitDetails || !tier?.imageUrl) return null;
-
-  return (
-    <div className="relative w-[30px] h-[30px] md:w-[56px] md:h-[56px]">
-      <OptimizedImage
-        alt={traitDetails.name || "Trait"}
-        width={50}
-        height={50}
-        src={tier.imageUrl}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center w-[30px] md:w-[56px]"
-        data-tooltip-id={traitDetails.key}
-        loading="lazy"
-      />
-      <ReactTltp
-        variant="trait"
-        id={traitDetails.key}
-        content={{
-          ...traitDetails,
-          numUnits: trait?.numUnits,
-        }}
-      />
-    </div>
-  );
-});
-
 // Placement badge component
 const PlacementBadge = memo(({ placement }) => (
   <div
@@ -307,65 +246,146 @@ const PlacementBadge = memo(({ placement }) => (
 
 // Deck header component
 const DeckHeader = memo(
-  ({ metaDeck, forces, traits, toggleClosed, isClosed, i, skills }) => (
-    <header className="relative flex md:flex-col justify-between items-end bg-[#1a1b30] py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px]">
-      <div className="inline-flex flex-col flex-wrap gap-[8px] md:flex-row md:items-center md:gap-3">
-        <div className="flex items-center gap-x-2">
-          <PlacementBadge placement={metaDeck?.placement} />
-          <Link
-            href={`/user/${metaDeck?.puuid}/${metaDeck?.key}`}
-            className="flex items-center gap-x-2"
-          >
-            <div className="relative">
-              <OptimizedImage
-                src={metaDeck?.imageUrl}
-                alt={metaDeck?.name || "User"}
-                width={80}
-                height={80}
-                className="w-16 relative"
-                loading="lazy"
-              />
-            </div>
-            <div className="flex flex-col">
-              <div className="-mb-1 text-lg">{metaDeck?.name}</div>
-              <div className="-mb-1 font-normal text-sm">
-                {moment(metaDeck?.dateTime).fromNow()} • {metaDeck?.duration}
+  ({ metaDeck, forces, traits, toggleClosed, isClosed, i, skills }) => {
+    // Add hover state management for force icons
+    const [hoveredForce, setHoveredForce] = useState(null);
+
+    return (
+      <header className="relative flex flex-col md:flex-col justify-between items-start md:items-end bg-[#1a1b30] py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px]">
+        <div className="inline-flex flex-col flex-wrap gap-[8px] w-full md:w-auto md:flex-row md:items-center md:gap-[4px]">
+          <div className="flex items-center gap-x-2">
+            <PlacementBadge placement={metaDeck?.placement} />
+            <Link
+              href={`/user/${metaDeck?.puuid}/${metaDeck?.key}`}
+              className="flex items-center gap-x-2"
+            >
+              <div className="relative">
+                <OptimizedImage
+                  src={metaDeck?.imageUrl}
+                  alt={metaDeck?.name || "User"}
+                  width={80}
+                  height={80}
+                  className="w-16 relative"
+                  loading="lazy"
+                />
               </div>
-            </div>
-          </Link>
-        </div>
-        <span className="flex justify-center items-center">
-          {metaDeck?.deck?.forces?.map((force, i) => (
-            <ForceDisplay key={i} force={force} forces={forces} i={i} />
-          ))}
-        </span>
-      </div>
-      <div className="inline-flex flex-shrink-0 gap-[22px] md:mt-0">
-        {metaDeck?.deck?.skillTree && metaDeck?.deck?.skillTree.length > 0 && (
-          <span className="flex justify-center gap-x-2 items-center">
-            {metaDeck?.deck?.skillTree?.map((skill, i) => (
-              <SkillTreeIcon key={i} skillTree={skill} skills={skills} />
-            ))}
+              <div className="flex flex-col">
+                <div className="-mb-1 text-lg">{metaDeck?.name}</div>
+                <div className="-mb-1 font-normal text-sm">
+                  {moment(metaDeck?.dateTime).fromNow()} • {metaDeck?.duration}
+                </div>
+              </div>
+            </Link>
+          </div>
+          <span className="flex justify-start md:justify-center items-center">
+            {metaDeck?.deck?.forces?.map((force, i) => {
+              const forceDetails = forces?.find(
+                (t) => t.key.toLowerCase() === force?.key.toLowerCase()
+              );
+              if (!forceDetails) return null;
+
+              return (
+                <div
+                  key={i}
+                  className="flex justify-center items-center bg-[#000] rounded-full mx-1 pr-2 border-[1px] border-[#ffffff50]"
+                  onMouseEnter={() => setHoveredForce(force?.key)}
+                  onMouseLeave={() => setHoveredForce(null)}
+                >
+                  <ForceIcon
+                    force={forceDetails}
+                    size="custom"
+                    customSize="w-[30px] h-[30px] md:w-[40px] md:h-[40px]"
+                    className="mr-1"
+                    data-tooltip-id={`${force?.key}-${i}`}
+                    isHovered={hoveredForce === force?.key}
+                  />
+                  <ReactTltp content={force?.key} id={`${force?.key}-${i}`} />
+                  <span className="text-[18px]">{force?.numUnits}</span>
+                </div>
+              );
+            })}
           </span>
-        )}
-        <div className="inline-flex flex-wrap">
-          {metaDeck?.deck?.traits?.map((trait, i) => (
-            <TraitIcon key={i} trait={trait} traits={traits} i={i} />
-          ))}
         </div>
-        <div className="absolute right-[16px] top-[16px] inline-flex gap-[8px] lg:relative lg:right-[0px] lg:top-[0px]">
-          <button
-            className="inline-flex w-[16px] cursor-pointer items-center text-white"
-            title="Hide"
-            id={i.toString()}
-            onClick={toggleClosed}
-          >
-            {!isClosed ? <PiEye /> : <PiEyeClosed />}
-          </button>
+        <div className="inline-flex flex-shrink-0 justify-between gap-1 mt-3 md:mt-0">
+          {metaDeck?.deck?.skillTree &&
+            metaDeck?.deck?.skillTree.length > 0 && (
+              <span className="flex justify-center gap-x-1 items-center">
+                {metaDeck?.deck?.skillTree?.map((skill, i) => {
+                  const skillDetails = skills?.find((s) => s.key === skill);
+                  if (!skillDetails) return null;
+
+                  return (
+                    <div key={i} className="relative inline-block">
+                      <div className="bg-gradient-to-br from-[#232339] to-[#1a1a2a] p-1 rounded-lg border border-white/10 hover:border-white/30 transition-all duration-200 hover:shadow-lg hover:-translate-y-[2px] cursor-pointer">
+                        <OptimizedImage
+                          alt={skillDetails.name || "Skill"}
+                          width={80}
+                          height={80}
+                          src={skillDetails.imageUrl}
+                          className="w-8 h-8 md:w-10 md:h-10 rounded-md"
+                          data-tooltip-id={skill}
+                          loading="lazy"
+                        />
+                      </div>
+                      <ReactTltp
+                        variant="skillTree"
+                        content={skillDetails}
+                        id={skill}
+                      />
+                    </div>
+                  );
+                })}
+              </span>
+            )}
+          <div className="flex flex-wrap gap-1 md:gap-0 md:inline-flex md:flex-wrap justify-start md:justify-end md:mr-0">
+            {metaDeck?.deck?.traits?.map((trait, i) => {
+              const traitDetails = traits?.find((t) => t.key === trait?.key);
+              const tier = traitDetails?.tiers?.find(
+                (t) => trait?.numUnits >= t?.min && trait?.numUnits <= t?.max
+              );
+
+              if (!traitDetails || !tier?.imageUrl) return null;
+
+              return (
+                <div
+                  key={i}
+                  className="relative w-[38px] h-[38px] md:w-[56px] md:h-[56px]"
+                >
+                  <OptimizedImage
+                    alt={traitDetails.name || "Trait"}
+                    width={50}
+                    height={50}
+                    src={tier.imageUrl}
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center w-[38px] md:w-[56px]"
+                    data-tooltip-id={traitDetails.key}
+                    loading="lazy"
+                  />
+                  <ReactTltp
+                    variant="trait"
+                    id={traitDetails.key}
+                    content={{
+                      ...traitDetails,
+                      numUnits: trait?.numUnits,
+                    }}
+                  />
+                </div>
+              );
+            })}
+          </div>
+          <div className="absolute right-[16px] top-[16px] inline-flex gap-[8px] lg:relative lg:right-[0px] lg:top-[0px]">
+            <button
+              className="inline-flex w-[16px] cursor-pointer items-center text-white"
+              title="Hide"
+              id={i.toString()}
+              onClick={toggleClosed}
+            >
+              {!isClosed ? <PiEye /> : <PiEyeClosed />}
+            </button>
+          </div>
         </div>
-      </div>
-    </header>
-  )
+      </header>
+    );
+  }
 );
 
 // Meta deck component
@@ -445,7 +465,7 @@ const MetaDeck = memo(
   }
 );
 
-// SkillTreeItem component
+// SkillTreeItem component (used in the filter section)
 const SkillTreeItem = memo(({ skill, selectedSkillTree, onSelect, i }) => (
   <div
     className="flex flex-col items-center gap-1 cursor-pointer group max-w-[70px] md:max-w-[96px]"
@@ -802,7 +822,7 @@ const RecentDecksItems = () => {
             />
             <TabButton
               active={activeTab === "SkillTree"}
-              label={others?.skillTree || "Skill Tree"}
+              label={others?.skills}
               onClick={() => handleTabChange("SkillTree")}
             />
           </div>

@@ -12,7 +12,7 @@ import ForceIcon from "../forceIcon";
 const CardImage = ({
   src,
   imgStyle = "w-[48px] md:w-[96px]",
-  identificationImageStyle = "w=[16px] md:w-[32px]",
+  identificationImageStyle = "w-[16px] md:w-[32px]",
   textStyle = "text-[10px] md:text-[16px]",
   forces,
   cardSize = "",
@@ -195,6 +195,7 @@ const CardImage = ({
                     isHovered={isHovered}
                     size="small"
                     showImageOnly={!isVisible || !isHovered}
+                    className="w-[20px] rounded-full overflow-hidden md:w-[30px]"
                   />
                 )}
               </div>

@@ -6,7 +6,7 @@ const ForceIcon = ({
   size = "small", // small, medium, large, or custom
   customSize,
   isHovered = false,
-  className = "",
+  className = "w-[40px] md:w-[30px]",
   iconFrameUrl = "https://res.cloudinary.com/dg0cmj6su/image/upload/v1745572723/force_icon_frame_1_dzkfh9.webp",
   showImageOnly = false, // New prop to force showing static image only
 }) => {

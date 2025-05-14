@@ -15,7 +15,7 @@ const tabConfig = [
   { id: "recentDecks", href: "/recentDecks" },
   { id: "championsTrends", href: "/championsTrends" },
   { id: "itemsTrends", href: "/itemsTrends" },
-  { id: "skillTrends", href: "/skillTree" },
+  { id: "skillTrends", href: "/skillTrends" },
   { id: "traitsTrends", href: "/traitsTrends" },
   { id: "augmentsTrends", href: "/augmentsTrends" },
   { id: "bestItemsBuilds", href: "/bestItemsBuilds" },

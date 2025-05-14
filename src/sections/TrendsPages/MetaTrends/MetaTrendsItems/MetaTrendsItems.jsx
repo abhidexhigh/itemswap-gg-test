@@ -299,12 +299,12 @@ const DeckHeader = memo(
     const [hoveredForce, setHoveredForce] = useState(null);
 
     return (
-      <header className="relative flex md:flex-col justify-between items-end py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px]">
-        <div className="inline-flex flex-col flex-wrap gap-[8px] md:flex-row md:items-center md:gap-[4px]">
-          <strong className="text-[26px] font-semibold leading-none text-[#F2A03D]">
+      <header className="relative flex flex-col md:flex-col justify-between items-start md:items-end py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px]">
+        <div className="inline-flex flex-col flex-wrap gap-[8px] w-full md:w-auto md:flex-row md:items-center md:gap-[4px]">
+          <strong className="text-[26px] font-semibold leading-none text-[#F2A03D] pr-8 md:pr-0">
             {metaDeck?.name}
           </strong>
-          <span className="flex justify-center items-center">
+          <span className="flex justify-start md:justify-center items-center">
             {metaDeck?.deck?.forces?.map((force, i) => {
               const forceDetails = forces?.find(
                 (t) => t.key.toLowerCase() === force?.key.toLowerCase()
@@ -321,7 +321,7 @@ const DeckHeader = memo(
                   <ForceIcon
                     force={forceDetails}
                     size="custom"
-                    customSize="w-[24px] h-[24px] md:w-[40px] md:h-[40px]"
+                    customSize="w-[30px] h-[30px] md:w-[40px] md:h-[40px]"
                     className="mr-1"
                     data-tooltip-id={`${force?.key}-${i}`}
                     isHovered={hoveredForce === force?.key}
@@ -333,8 +333,8 @@ const DeckHeader = memo(
             })}
           </span>
         </div>
-        <div className="inline-flex flex-shrink-0 gap-[22px] md:mt-0">
-          <span className="flex justify-center gap-x-2 items-center">
+        <div className="inline-flex flex-shrink-0 justify-between gap-1 mt-3 md:mt-0">
+          <span className="flex justify-center gap-x-1 items-center">
             {metaDeck?.deck?.skillTree?.map((skill, i) => {
               const skillDetails = skills?.find((s) => s.key === skill);
               if (!skillDetails) return null;
@@ -344,7 +344,7 @@ const DeckHeader = memo(
               );
             })}
           </span>
-          <div className="inline-flex flex-wrap">
+          <div className="flex flex-wrap gap-1 md:gap-0 md:inline-flex md:flex-wrap justify-start md:justify-end md:mr-0">
             {metaDeck?.deck?.traits?.map((trait, i) => {
               const traitDetails = traits?.find((t) => t.key === trait?.key);
               const tier = traitDetails?.tiers?.find(
@@ -356,14 +356,14 @@ const DeckHeader = memo(
               return (
                 <div
                   key={i}
-                  className="relative w-[30px] h-[30px] md:w-[56px] md:h-[56px]"
+                  className="relative w-[38px] h-[38px] md:w-[56px] md:h-[56px]"
                 >
                   <OptimizedImage
                     alt={traitDetails.name || "Trait"}
                     width={50}
                     height={50}
                     src={tier.imageUrl}
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center w-[30px] md:w-[56px]"
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center w-[38px] md:w-[56px]"
                     data-tooltip-id={traitDetails.key}
                     loading="lazy"
                   />
@@ -1052,7 +1052,7 @@ const MetaTrendsItems = () => {
                 />
                 <TabButton
                   active={activeTab === "SkillTree"}
-                  label={others?.skillTree || "Skill Tree"}
+                  label={others?.skills}
                   onClick={() => handleTabChange("SkillTree")}
                 />
               </div>

@@ -9,11 +9,11 @@ import SkillTreeList from "@sections/TrendsPages/SkillTree";
 import Footer from "@sections/Footer/v1";
 import TrendsNav from "src/components/trendsNav";
 
-export default function ItemsTrends() {
+export default function SkillTrends() {
   const { walletModalvisibility, metamaskModal } = useModal();
   return (
     <Fragment>
-      <SEO title="Skill Tree" />
+      <SEO title="Skill Trends" />
       <Layout>
         {walletModalvisibility && <WalletModal />}
         {metamaskModal && <MetamaskModal />}
@@ -32,7 +32,7 @@ export default function ItemsTrends() {
         >
           <div className="container px-0 md:px-3">
             <div className="sticky top-14 z-50">
-              <TrendsNav selected="skillTree" />
+              <TrendsNav selected="skillTrends" />
             </div>
             {/* <div className="bg-transparent-20"></div> */}
             <SkillTreeList />

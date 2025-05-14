@@ -60,7 +60,7 @@ const TierCard = ({ cost, itemsData }) => {
                           src={champions?.find((c) => c?.key === champion?.key)}
                           imgStyle="w-[96px] md:w-[64px] rounded-lg border-2 border-[#ffffff30] shadow-lg hover:border-[#ffffff50] transition-all duration-300"
                           cardSize="w-[96px] md:w-[86px]"
-                          identificationImageStyle="w-[36px] md:w-[30px]"
+                          identificationImageStyle="!w-[36px] md:!w-[30px]"
                           textStyle="text-[10px] md:text-[16px] font-medium"
                           forces={forces}
                         />
