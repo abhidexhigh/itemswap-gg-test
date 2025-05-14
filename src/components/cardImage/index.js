@@ -22,8 +22,10 @@ const CardImage = ({
   const [isVisible, setIsVisible] = useState(true); // Default to true to show initial image
   const containerRef = useRef(null);
   const videoRef = useRef(null);
+  const imageRef = useRef(null);
   const [videoAvailable, setVideoAvailable] = useState(true);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoError, setVideoError] = useState(false);
 
   // Check if source has a video
   const hasVideo = useMemo(() => Boolean(src?.cardVideo), [src?.cardVideo]);
@@ -68,15 +70,31 @@ const CardImage = ({
     };
   }, []);
 
-  // Simplified video handling logic
+  // Preload video when component mounts to make hover transition smoother
+  useEffect(() => {
+    if (hasVideo && src?.cardVideo && isVisible) {
+      const videoPreload = document.createElement("video");
+      videoPreload.src = src.cardVideo;
+      videoPreload.preload = "auto";
+      videoPreload.muted = true;
+      videoPreload.onloadeddata = () => {
+        setVideoLoaded(true);
+      };
+      videoPreload.onerror = () => {
+        setVideoAvailable(false);
+        setVideoError(true);
+      };
+    }
+  }, [hasVideo, src?.cardVideo, isVisible]);
+
+  // Enhanced video handling logic
   useEffect(() => {
     if (!isVisible || !hasVideo || !videoRef.current) return;
 
-    if (isHovered && videoAvailable) {
-      // Only load video when needed
-      if (!videoLoaded) {
+    if (isHovered && videoAvailable && !videoError) {
+      // Make sure video is loaded
+      if (videoRef.current.readyState < 2) {
         videoRef.current.load();
-        setVideoLoaded(true);
       }
 
       const playPromise = videoRef.current.play();
@@ -95,10 +113,9 @@ const CardImage = ({
       if (!isVisible) {
         // Reset video state when not visible to free resources
         videoRef.current.currentTime = 0;
-        setVideoLoaded(false);
       }
     }
-  }, [isHovered, isVisible, hasVideo, videoAvailable, videoLoaded]);
+  }, [isHovered, isVisible, hasVideo, videoAvailable, videoError]);
 
   const handleMouseEnter = useCallback(() => {
     setIsHovered(true);
@@ -110,6 +127,7 @@ const CardImage = ({
 
   const handleVideoError = useCallback(() => {
     setVideoAvailable(false);
+    setVideoError(true);
     console.warn(`Video not available for: ${src?.name || "Unknown"}`);
   }, [src?.name]);
 
@@ -121,7 +139,7 @@ const CardImage = ({
   return (
     <div className="inline-flex flex-col items-center">
       <div className="inline-flex items-center justify-center flex-col">
-        <div className="inline-flex flex-col">
+        <div className="inline-flex flex-col w-full">
           {/* Star icons display above the image */}
           {tier > 0 && (
             <div
@@ -141,65 +159,103 @@ const CardImage = ({
               ))}
             </div>
           )}
-          <div className={`flex flex-col rounded-lg`}>
+          <div className="flex flex-col rounded-lg w-full relative">
             <div
               ref={containerRef}
-              className={`relative !bg-black rounded-lg ${cardSize}`}
+              className={`relative !bg-black rounded-lg aspect-square ${cardSize}`}
+              style={{
+                position: "relative",
+                width: "100%",
+                height: "100%",
+                aspectRatio: "1/1",
+              }}
               data-tooltip-id={src?.key}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
-              {/* Show video on hover if available, otherwise show image */}
-              {isVisible && isHovered && hasVideo && videoAvailable ? (
-                <video
-                  ref={videoRef}
-                  src={src?.cardVideo}
-                  muted
-                  playsInline
-                  loop
-                  onError={handleVideoError}
-                  className={`object-cover object-center rounded-lg w-full h-full ${imgStyle}`}
-                  preload="metadata"
-                />
-              ) : (
-                src?.cardImage && (
+              {/* Always render the static image */}
+              <div
+                className={`absolute inset-0 z-10 transition-opacity duration-300 ${
+                  isHovered && hasVideo && videoAvailable && !videoError
+                    ? "opacity-0"
+                    : "opacity-100"
+                }`}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {src?.cardImage && (
                   <OptimizedImage
+                    ref={imageRef}
                     src={src?.cardImage}
-                    alt="champion"
-                    width={80}
-                    height={80}
-                    className={`object-cover object-canter mx-auto rounded-lg w-auto h-full ${imgStyle}`}
+                    alt={src?.name || "champion"}
+                    width={96}
+                    height={96}
+                    className="w-full h-full object-cover object-center rounded-lg"
                     loading={isVisible ? "eager" : "lazy"}
                     fetchPriority={isVisible ? "high" : "auto"}
                   />
-                )
+                )}
+              </div>
+
+              {/* Always render the video but keep it hidden until needed */}
+              {hasVideo && (
+                <div
+                  className="absolute inset-0 z-20 flex items-center justify-center"
+                  style={{
+                    opacity: isHovered && videoAvailable && !videoError ? 1 : 0,
+                    transition: "opacity 0.3s ease",
+                  }}
+                >
+                  <video
+                    ref={videoRef}
+                    src={src?.cardVideo}
+                    muted
+                    playsInline
+                    loop
+                    onError={handleVideoError}
+                    className="w-full h-full object-cover object-center rounded-lg"
+                    preload="auto"
+                  />
+                </div>
               )}
+
               <OptimizedImage
                 src={
                   "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744443307/ghjhhhhhhhh_axvnyo.png"
                 }
-                className="absolute top-0 right-0 w-full h-full"
+                className="absolute top-0 left-0 w-full h-full z-30 pointer-events-none"
                 alt="Border Image"
                 width={200}
                 height={200}
                 loading={isVisible ? "eager" : "lazy"}
                 fetchPriority={isVisible ? "high" : "auto"}
               />
-              {/* Force icon container - always render */}
-              <div
-                className={`absolute -top-[6px] -right-[6px] w-[20px] rounded-full overflow-hidden md:w-[30px] ${identificationImageStyle}`}
-              >
-                {forceObject && (
-                  <ForceIcon
-                    force={forceObject}
-                    isHovered={isHovered}
-                    size="small"
-                    showImageOnly={!isVisible || !isHovered}
-                    className="w-[20px] rounded-full overflow-hidden md:w-[30px]"
-                  />
-                )}
-              </div>
             </div>
+
+            {/* Force icon positioned outside container without overflow:hidden */}
+            {forceObject && (
+              <div
+                className="absolute z-30"
+                style={{
+                  top: "-6px",
+                  right: "-6px",
+                  width: "30px",
+                  height: "30px",
+                }}
+              >
+                <ForceIcon
+                  force={forceObject}
+                  isHovered={isHovered}
+                  size="small"
+                  showImageOnly={!isVisible || !isHovered}
+                  className="w-full h-full rounded-full"
+                />
+              </div>
+            )}
+
             {isVisible && (
               <ReactTltp variant="champion" id={src?.key} content={src} />
             )}

@@ -160,9 +160,12 @@ const ChampionWithItems = memo(
             >
               <CardImage
                 src={championDetails}
-                imgStyle="w-28"
                 forces={forces}
                 tier={tier}
+                imgStyle="w-[68px] md:w-[84px]"
+                identificationImageStyle="w=[16px] md:w-[32px]"
+                textStyle="text-[10px] md:text-[16px] hidden"
+                cardSize="!w-[80px] !h-[80px] md:!w-[96px] md:!h-[96px]"
               />
             </div>
             <ReactTltp

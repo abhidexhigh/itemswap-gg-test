@@ -58,11 +58,11 @@ const TierCard = ({ cost, itemsData }) => {
                       <div className="flex-shrink-0">
                         <CardImage
                           src={champions?.find((c) => c?.key === champion?.key)}
-                          imgStyle="w-[96px] md:w-[64px] rounded-lg border-2 border-[#ffffff30] shadow-lg hover:border-[#ffffff50] transition-all duration-300"
-                          cardSize="w-[96px] md:w-[86px]"
-                          identificationImageStyle="!w-[36px] md:!w-[30px]"
-                          textStyle="text-[10px] md:text-[16px] font-medium"
                           forces={forces}
+                          imgStyle="w-[68px] md:w-[84px]"
+                          identificationImageStyle="w=[16px] md:w-[32px]"
+                          textStyle="text-[10px] md:text-[16px] hidden"
+                          cardSize="!w-[80px] !h-[80px] md:!w-[86px] md:!h-[86px]"
                         />
                       </div>
 

@@ -17,7 +17,7 @@ const ForceIcon = ({
 
   // Size mapping
   const sizeClasses = {
-    small: "w-[20px] md:w-[30px]",
+    small: "w-[30px] md:w-[30px]",
     medium: "w-[30px] md:w-[40px]",
     large: "w-[40px] md:w-[60px]",
     xxlarge: "w-[60px] md:w-[96px]",
