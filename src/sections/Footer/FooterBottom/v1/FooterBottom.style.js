@@ -2,8 +2,8 @@ import styled from "styled-components";
 import footerBg from "@assets/images/bg/footer-bg.jpg";
 
 const FooterStyleWrapper = styled.div`
-  background: url(${footerBg.src});
-  background-repeat: no-repeat; 
+  // background: url(${footerBg.src});
+  background-repeat: no-repeat;
   background-size: cover;
   position: relative;
   padding-top: 100px;

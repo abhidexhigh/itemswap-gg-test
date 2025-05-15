@@ -32,6 +32,9 @@ export const ChampionWithItems = ({
               imgStyle="sm:!w-20 md:!w-32"
               forces={forces}
               tier={tier}
+              identificationImageStyle="w=[16px] md:w-[32px]"
+              textStyle="text-[10px] md:text-[16px] hidden"
+              cardSize="!w-[80px] !h-[80px] md:!w-[96px] md:!h-[96px]"
             />
           </div>
           <ReactTltp

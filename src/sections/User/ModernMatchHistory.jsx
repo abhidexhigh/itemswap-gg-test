@@ -23,6 +23,16 @@ const ModernMatchHistory = ({
   const { t } = useTranslation();
   const others = t("others");
   const [expandedHistory, setExpandedHistory] = useState(null);
+  console.log(
+    match,
+    traits,
+    champions,
+    items,
+    augments,
+    forces,
+    matchHistoryInfo,
+    matchId
+  );
 
   useEffect(() => {
     if (matchId && matchId === match?.key) {
@@ -43,7 +53,10 @@ const ModernMatchHistory = ({
         <header className="relative flex flex-col justify-between bg-gradient-to-br from-[#2d2d42] to-[#252538] py-2 px-4 lg:flex-row lg:items-center border-b border-white/10">
           <div className="flex flex-col md:flex-row items-center gap-3">
             <OptimizedImage
-              src={match?.info?.imageUrl}
+              src={
+                match?.info?.imageUrl ||
+                "https://res.cloudinary.com/dg0cmj6su/image/upload/v1722934556/coin_6369589_wbb7uk.png"
+              }
               alt="Match type"
               width={48}
               height={48}
@@ -54,7 +67,7 @@ const ModernMatchHistory = ({
                 {match?.gameType}
               </strong>
               <span className="text-sm text-gray-300">
-                {moment(match?.dateTime).fromNow()} • {match?.duration}
+                {moment(match?.dateTime)?.fromNow()} • {match?.duration}
               </span>
             </div>
             <div className="flex items-center gap-x-1 px-2 py-1 bg-[#ffffff10] rounded-lg">
@@ -74,48 +87,45 @@ const ModernMatchHistory = ({
           <div className="flex justify-center lg:mt-0">
             {match?.info?.traits
               ?.filter((trait) => trait?.numUnits > 1)
-              ?.map((trait, i) => (
-                <motion.div
-                  key={i}
-                  className="mx-1"
-                  whileHover={{ scale: 1.1 }}
-                >
-                  <OptimizedImage
-                    src={(() => {
-                      const traitData = traits?.find(
-                        (t) =>
-                          t?.key.toLowerCase() === trait?.name.toLowerCase()
-                      );
+              ?.map((trait, i) => {
+                // Calculate tier image URL
+                const traitData = traits?.find(
+                  (t) => t?.key.toLowerCase() === trait?.name.toLowerCase()
+                );
 
-                      // Find the correct tier based on numUnits
-                      let tierImage = null;
-                      if (traitData?.tiers && traitData.tiers.length > 0) {
-                        // Find the tier that matches the numUnits
-                        const tier = traitData.tiers.find(
-                          (t) =>
-                            trait.numUnits >= t.min && trait.numUnits <= t.max
-                        );
-                        if (tier) {
-                          return tier.imageUrl;
-                        }
-                      }
-                      return null;
-                    })()}
-                    width={48}
-                    height={48}
-                    className="w-12 rounded-md shadow-md"
-                    alt={trait?.name}
-                    data-tooltip-id={`trait-${trait?.name}-${i}`}
-                  />
-                  <ReactTltp
-                    variant="trait"
-                    content={traits?.find(
-                      (t) => t?.key.toLowerCase() === trait?.name.toLowerCase()
-                    )}
-                    id={`trait-${trait?.name}-${i}`}
-                  />
-                </motion.div>
-              ))}
+                let tierImageUrl = null;
+                if (traitData?.tiers && traitData.tiers.length > 0) {
+                  const tier = traitData.tiers.find(
+                    (t) => trait.numUnits >= t.min && trait.numUnits <= t.max
+                  );
+                  if (tier) {
+                    tierImageUrl = tier.imageUrl;
+                  }
+                }
+
+                // Only render if we have a valid image URL
+                return tierImageUrl ? (
+                  <motion.div
+                    key={i}
+                    className="mx-1"
+                    whileHover={{ scale: 1.1 }}
+                  >
+                    <OptimizedImage
+                      src={tierImageUrl}
+                      width={48}
+                      height={48}
+                      className="w-12 rounded-md shadow-md"
+                      alt={trait?.name || "Trait"}
+                      data-tooltip-id={`trait-${trait?.name}-${i}`}
+                    />
+                    <ReactTltp
+                      variant="trait"
+                      content={traitData}
+                      id={`trait-${trait?.name}-${i}`}
+                    />
+                  </motion.div>
+                ) : null;
+              })}
           </div>
         </header>
 
@@ -160,27 +170,30 @@ const ModernMatchHistory = ({
             {/* Augments */}
             <div className="w-full lg:w-auto">
               <div className="flex justify-center gap-2 p-3 bg-[#00000030] rounded-xl">
-                {match?.info?.augments?.map((augment, i) => (
-                  <motion.div
-                    key={i}
-                    className="flex flex-col"
-                    whileHover={{ scale: 1.1 }}
-                  >
-                    <OptimizedImage
-                      src={augments?.find((a) => a?.key === augment)?.imageUrl}
-                      width={80}
-                      height={80}
-                      className="w-20 rounded-lg shadow-md"
-                      data-tooltip-id={augment}
-                      alt={augment}
-                    />
-                    <ReactTltp
-                      variant="augment"
-                      content={augments?.find((a) => a?.key === augment)}
-                      id={augment}
-                    />
-                  </motion.div>
-                ))}
+                {match?.info?.augments?.map((augment, i) => {
+                  const augmentData = augments?.find((a) => a?.key === augment);
+                  return augmentData?.imageUrl ? (
+                    <motion.div
+                      key={i}
+                      className="flex flex-col"
+                      whileHover={{ scale: 1.1 }}
+                    >
+                      <OptimizedImage
+                        src={augmentData.imageUrl}
+                        width={80}
+                        height={80}
+                        className="w-20 rounded-lg shadow-md"
+                        data-tooltip-id={augment}
+                        alt={augment || "Augment"}
+                      />
+                      <ReactTltp
+                        variant="augment"
+                        content={augmentData}
+                        id={augment}
+                      />
+                    </motion.div>
+                  ) : null;
+                })}
               </div>
             </div>
 
@@ -197,11 +210,12 @@ const ModernMatchHistory = ({
                       src={champions?.find(
                         (champion) => champion?.key === unit?.key
                       )}
-                      imgStyle="w-[72px] md:w-20 rounded-lg shadow-md"
-                      identificationImageStyle="w-[16px] md:w-[28px]"
-                      textStyle="text-[10px] md:text-[14px]"
                       forces={forces}
                       tier={unit?.tier || 0}
+                      imgStyle="w-[68px] md:w-[84px]"
+                      identificationImageStyle="w=[16px] md:w-[32px]"
+                      textStyle="text-[10px] md:text-[16px] hidden"
+                      cardSize="!w-[80px] !h-[80px] md:!w-[96px] md:!h-[96px]"
                     />
                     <div className="flex justify-center gap-1 items-center min-h-[24px] md:min-h-[32px]">
                       {unit?.items?.map((item, i) => (
@@ -310,11 +324,14 @@ const ModernMatchHistory = ({
                         <div className="flex items-center gap-2">
                           <div className="relative">
                             <OptimizedImage
-                              src={participant?.imageUrl}
+                              src={
+                                participant?.imageUrl ||
+                                "https://res.cloudinary.com/dg0cmj6su/image/upload/v1722934556/coin_6369589_wbb7uk.png"
+                              }
                               width={48}
                               height={48}
                               className="w-10 sm:w-16 rounded-lg shadow-md"
-                              alt={participant?.name}
+                              alt={participant?.name || "Player"}
                             />
                             <div className="absolute bottom-0 right-0 px-1.5 sm:px-2 rounded-full bg-[#444] !text-white text-[10px] sm:text-xs">
                               {/* {participant?.level} */}
@@ -349,7 +366,7 @@ const ModernMatchHistory = ({
                                     height={20}
                                     className="w-6 h-6 md:w-12 md:h-12 rounded-md"
                                     data-tooltip-id={`part-aug-${participant?.name}-${i}`}
-                                    alt={augment}
+                                    alt={augment || "Augment"}
                                     onError={(e) => {
                                       e.target.onerror = null;
                                       e.target.src =
@@ -400,7 +417,7 @@ const ModernMatchHistory = ({
                                       height={20}
                                       className="w-6 h-6 md:w-12 md:h-12 rounded-md"
                                       data-tooltip-id={`part-trait-${participant?.name}-${i}`}
-                                      alt={trait.name}
+                                      alt={trait.name || "Trait"}
                                       onError={(e) => {
                                         e.target.onerror = null;
                                         e.target.src =
@@ -443,12 +460,12 @@ const ModernMatchHistory = ({
                                 src={champions?.find(
                                   (champion) => champion.key === unit.key
                                 )}
-                                imgStyle="w-[48px] sm:w-[52px] md:w-[60px] rounded-lg shadow-md"
-                                identificationImageStyle="w-[10px] sm:w-[12px] md:w-[16px]"
-                                textStyle="text-[8px] md:text-[10px]"
                                 forces={forces}
-                                cardSize="w-[48px] sm:w-[52px] md:w-[82px]"
                                 tier={unit?.tier || 0}
+                                imgStyle="w-[68px] md:w-[84px]"
+                                identificationImageStyle="w=[16px] md:w-[32px]"
+                                textStyle="text-[10px] md:text-[16px] hidden"
+                                cardSize="!w-[80px] !h-[80px] md:!w-[80px] md:!h-[80px]"
                               />
                               <div className="flex justify-center gap-[2px]">
                                 {unit?.items?.map((item, j) => {

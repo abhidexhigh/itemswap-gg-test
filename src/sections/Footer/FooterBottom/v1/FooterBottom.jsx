@@ -15,7 +15,13 @@ const FooterBottom = () => {
       <div className="container">
         <div className="footer-bottom-content">
           <Link href="/" className="footer-logo">
-            <img src={logo.src} className="w-[190px]" alt="footer logo" />
+            <img
+              src={
+                "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747135734/ArmyDragone_text_copy_kelovj_wb1nrz.webp"
+              }
+              className="w-[190px]"
+              alt="footer logo"
+            />
           </Link>
 
           <ul className="footer-menu">
