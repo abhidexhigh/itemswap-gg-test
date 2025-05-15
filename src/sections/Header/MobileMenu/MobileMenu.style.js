@@ -28,7 +28,7 @@ const MobileMenuStyleWrapper = styled.div`
   }
 
   .gamfi_mobile_menu_content {
-    background: #ffffff;
+    background: #111111;
     height: 100vh;
     width: 400px;
     padding: 50px;
@@ -51,7 +51,7 @@ const MobileMenuStyleWrapper = styled.div`
     transform: translateY(-50%);
 
     svg {
-      color: #090b1a;
+      color: #ffffff;
       font-size: 24px;
     }
   }
@@ -78,7 +78,7 @@ const MobileMenuStyleWrapper = styled.div`
           padding: 10px 0;
           text-align: left;
           text-transform: uppercase;
-          color: #090b1a;
+          color: #ffffff;
           width: 100%;
           transition: all 0.4s;
 
@@ -96,7 +96,7 @@ const MobileMenuStyleWrapper = styled.div`
             top: 25px;
             width: 15px;
             height: 2px;
-            background: #090b1a;
+            background: #ffffff;
             content: "";
             transform: translateY(-50%);
           }
@@ -107,7 +107,7 @@ const MobileMenuStyleWrapper = styled.div`
             top: 25px;
             width: 2px;
             height: 15px;
-            background: #090b1a;
+            background: #ffffff;
             content: "";
             transform: rotate(180deg);
             transition: all 0.1s;
@@ -145,7 +145,7 @@ const MobileMenuStyleWrapper = styled.div`
       /* menu border  */
       li + li {
         a {
-          border-top: 1px solid rgba(0, 0, 0, 0.06);
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
         }
       }
     }

@@ -19,7 +19,9 @@ const MobileMenu = ({ mobileMenuhandle }) => {
         <div className="mobile_menu_logo">
           <img
             className="gamfi_logo w-[150px]"
-            src={logo.src}
+            src={
+              "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747135734/ArmyDragone_text_copy_kelovj_wb1nrz.webp"
+            }
             alt="gamfi logo"
           />
           <button
