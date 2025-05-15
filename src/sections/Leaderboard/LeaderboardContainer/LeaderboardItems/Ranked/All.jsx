@@ -82,11 +82,11 @@ const LeaderboardItemsAll = ({ leaderboardData }) => {
   };
 
   return (
-    <div className="bg-[#1a1b2b] rounded-b-lg border border-t-0 border-[#ffffff4d]">
+    <div className="bg-[#1d1d1d] rounded-b-lg border border-t-0 border-[#ffffff4d]">
       <div className="overflow-x-auto min-h-[500px]">
         <table className="w-full min-w-[800px]">
           <thead>
-            <tr className="bg-[#2a2a3a] text-white">
+            <tr className="bg-[#10101080] text-white">
               <th className="py-4 px-2 text-left font-medium text-xs sm:text-sm whitespace-nowrap">
                 {others?.rank}
               </th>
@@ -159,9 +159,9 @@ const LeaderboardItemsAll = ({ leaderboardData }) => {
             {sortedData?.map((data, index) => (
               <tr
                 key={index}
-                className="border-b border-[#ffffff1a] hover:bg-[#2a2a3a] transition-colors duration-200"
+                className="border-b border-[#ffffff1a] hover:bg-[#10101080] transition-colors duration-200"
               >
-                <td className="py-4 px-2 text-center whitespace-nowrap">
+                <td className="py-2 px-2 text-center whitespace-nowrap">
                   {data?.position < 4 ? (
                     <img
                       src={
@@ -180,10 +180,10 @@ const LeaderboardItemsAll = ({ leaderboardData }) => {
                     </span>
                   )}
                 </td>
-                <td className="py-4 px-2 text-center text-gray-400 whitespace-nowrap">
+                <td className="py-2 px-2 text-center text-gray-400 whitespace-nowrap">
                   -
                 </td>
-                <td className="py-4 px-2 whitespace-nowrap">
+                <td className="py-2 px-2 whitespace-nowrap">
                   <div className="flex items-center gap-2">
                     <img
                       src={data?.profileIconUrl}
@@ -198,18 +198,18 @@ const LeaderboardItemsAll = ({ leaderboardData }) => {
                     </a>
                   </div>
                 </td>
-                <td className="py-4 px-2 whitespace-nowrap">
+                <td className="py-2 px-2 whitespace-nowrap">
                   <div className="flex items-center gap-2">
                     <img
-                      // src={
-                      //   Emblems?.find(
-                      //     (emblem) =>
-                      //       emblem?.tier?.toLowerCase() ===
-                      //       data?.tier.toLowerCase()
-                      //   )?.imageUrl
-                      // }
-                      src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1746779103/Challenger_2_tku4pn.webp"
-                      className="w-6 h-6 sm:w-12 sm:h-12"
+                      src={
+                        Emblems?.find(
+                          (emblem) =>
+                            emblem?.tier?.toLowerCase() ===
+                            data?.tier.toLowerCase()
+                        )?.imageUrl
+                      }
+                      // src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1746779103/Challenger_2_tku4pn.webp"
+                      className="w-10 h-10 sm:w-16 sm:h-16"
                       alt={data?.tier}
                     />
                     <span className="text-white text-sm sm:text-base">

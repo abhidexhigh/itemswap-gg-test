@@ -30,7 +30,7 @@ const LeaderboardSubcategory = ({
   };
   return (
     <>
-      <div className="bg-[#222231] rounded-lg !border !border-[#ffffff70]">
+      <div className="bg-[#1d1d1d] rounded-lg !border !border-[#ffffff70]">
         {/* Desktop View (keep your original desktop code here) */}
         <div className="hidden lg:block">
           <ul className="text-md font-medium text-center text-gray-500 shadow lg:flex">

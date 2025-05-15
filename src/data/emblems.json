@@ -1,30 +1,34 @@
 [
   {
     "tier": "IRON",
-    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1723280058/Iron_i6bmm4.png"
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747306807/Iron_Emblem_1_ahiicg.webp"
   },
   {
     "tier": "BRONZE",
-    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1723280066/bronze_fpnz5p.png"
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747289694/Bronze_Emblem_auybqg.webp"
   },
   {
     "tier": "SILVER",
-    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1723280065/silver_d5qvbz.png"
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747289694/Silver_Emblem_wsme2l.webp"
   },
   {
     "tier": "GOLD",
-    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1723280060/Gold_frtetx.png"
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747289695/Gold_Emblem_odau8h.webp"
   },
   {
     "tier": "PLATINUM",
-    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1723280066/Platinum_nf3rnx.png"
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747289694/Platinum_Emblem_with_effect_ixwafm.webp"
   },
   {
     "tier": "DIAMOND",
-    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1723280067/Diamond_zkpqcr.png"
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747289694/Diomond_Emblem_with_effect_g6lssd.webp"
   },
   {
     "tier": "MASTER",
-    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1723280069/Master_fz7rty.png"
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747291235/Master_Emblem_with_effect_rd2xt6.webp"
+  },
+  {
+    "tier": "CHALLENGER",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747289694/Challenger_Emblem_with_effect_dvl3ei.webp"
   }
 ]

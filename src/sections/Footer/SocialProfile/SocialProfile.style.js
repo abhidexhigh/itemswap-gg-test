@@ -2,7 +2,7 @@ import styled from "styled-components";
 import linkBgShape from "@assets/images/icons/icon-image.png";
 
 const SocialStyleWrapper = styled.section`
-  margin-bottom: 100px;
+  margin-bottom: 48px;
   .section_title {
     text-align: center;
     margin-bottom: 50px;

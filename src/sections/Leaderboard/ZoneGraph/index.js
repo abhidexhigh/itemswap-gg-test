@@ -318,7 +318,7 @@ const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
       <div
         className="zone-graph"
         style={{
-          background: "rgba(13, 10, 38, 0.6)",
+          background: "#101010",
           boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
           backdropFilter: "blur(8px)",
           border: "1px solid rgba(123, 97, 255, 0.3)",

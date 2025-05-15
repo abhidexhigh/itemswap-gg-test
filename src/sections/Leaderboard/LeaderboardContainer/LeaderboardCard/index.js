@@ -77,7 +77,7 @@ const LeaderboardCard = ({ user, rank, activeZone, seriesData }) => {
   };
 
   return (
-    <div className="bg-[#222231] rounded-t-lg border border-b-0 border-[#ffffff4d] p-4 sm:p-6">
+    <div className="bg-[#1d1d1d] rounded-t-lg border border-b-0 border-[#ffffff4d] p-4 sm:p-6">
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
         {/* Left Section */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-x-4">

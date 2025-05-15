@@ -9,7 +9,7 @@ const FooterStyleWrapper = styled.div`
   padding-top: 100px;
   text-align: center;
   .footer-logo {
-    margin-bottom: 45px;
+    margin-bottom: 10px;
     display: inline-block;
   }
 

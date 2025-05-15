@@ -21,6 +21,7 @@ import walletIcon2 from "@assets/images/icons/uniswap.png";
 import walletIcon3 from "@assets/images/icons/market.png";
 import walletIcon4 from "@assets/images/icons/gate.png";
 import LanguageSwitcher from "src/lib/LanguageSwitcher";
+import Badge3 from "src/components/badge/Badge3";
 
 const Header = () => {
   const { t } = useTranslation();
@@ -42,7 +43,11 @@ const Header = () => {
       <div className="container mx-auto">
         {/* Main Menu Start */}
         <div className="gamfi_menu_sect">
-          <div className="gamfi_menu_right_sect gamfi_v1_menu_right_sect !w-1/4 md:!w-1/2 md:!hidden "></div>
+          <div className="gamfi_menu_right_sect gamfi_v1_menu_right_sect !w-1/4 md:!w-1/2 md:!hidden ">
+            <Link href={"https://itemswap-guild-test.vercel.app/champions"}>
+              <Badge3 value="RPG" />
+            </Link>
+          </div>
           <div className="gamfi_menu_left_sect mx-auto !justify-center md:!justify-start">
             <div className="logo">
               <a href="http://itemswap-guild-test.vercel.app/">
