@@ -26,14 +26,14 @@
               "plays": 3439072,
               "metaDecks": [
                 {
-                  "key": "6C673233080DA2D5C748018FE1DF3BEA",
-                  "deckKey": "CBC579C0DD88AE3176A9147544CBA202",
+                  "key": "681391C5019C346D423BAD44D7559310",
+                  "deckKey": "26CDFD1E4E84C6B2C83F77B89E1FCC44",
                   "name": "Chaos Reroll",
-                  "plays": 8774,
-                  "pickRate": 11.52965757,
-                  "winRate": 24.76218803,
-                  "topRate": 22.53153265,
-                  "avgPlacement": 2,
+                  "plays": 8472,
+                  "pickRate": 19.88739588,
+                  "winRate": 29.69010817,
+                  "topRate": 13.88643726,
+                  "avgPlacement": 5,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -58,19 +58,19 @@
                         "key": "Shinigami",
                         "coreRank": 2,
                         "items": ["Nandaka", "Eaglewing", "Bayan"],
-                        "tier": 2
+                        "tier": 3
                       },
                       {
                         "key": "Hana",
                         "coreRank": 3,
                         "items": ["RuyiBang", "Frostguard", "RedHorn"],
-                        "tier": 2
+                        "tier": 3
                       },
                       {
                         "key": "Nergal",
                         "coreRank": 1,
                         "items": ["Excalibur", "Excalibur", "Eaglewing"],
-                        "tier": 2
+                        "tier": 3
                       },
                       {
                         "key": "Lyra",
@@ -130,14 +130,14 @@
                   }
                 },
                 {
-                  "key": "B55F1FFFCC3BD5CEA469AAEC00FDBB10",
-                  "deckKey": "E312EEC0D5DF3C17D7AD7F819F3C1D0E",
+                  "key": "3355D155980075D324EA49832AE184F4",
+                  "deckKey": "11E9578ED9C3EEE43F4D065A3E8F86E7",
                   "name": "Chaos",
-                  "plays": 7508,
-                  "pickRate": 20.00845361,
-                  "winRate": 16.6148028,
-                  "topRate": 18.32258043,
-                  "avgPlacement": 1,
+                  "plays": 2717,
+                  "pickRate": 27.03512074,
+                  "winRate": 20.7862916,
+                  "topRate": 13.34719115,
+                  "avgPlacement": 6,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -254,14 +254,118 @@
                   }
                 },
                 {
-                  "key": "AF74ECE3657AAC4B6F392D9C1CF7B32B",
-                  "deckKey": "E90ECE44EEE58EB8244290CEE1646F15",
+                  "key": "66E88749D203B09BBC9759218C46B901",
+                  "deckKey": "FA543952CF25EB8231786D89B1E26DE5",
+                  "name": "WildRush Reroll",
+                  "plays": 2770,
+                  "pickRate": 21.05833088,
+                  "winRate": 10.63487169,
+                  "topRate": 17.87289185,
+                  "avgPlacement": 5,
+                  "deck": {
+                    "augments": [
+                      "SavageMomentum",
+                      "WhirlwindofChaos",
+                      "PowerGrowth"
+                    ],
+                    "skillTree": ["FireTrap", "Meteor", "Doom"],
+                    "champions": [
+                      {
+                        "key": "Miho",
+                        "coreRank": 1,
+                        "items": ["TenguYoroi", "Wygar", "Aegis"],
+                        "tier": 2
+                      },
+                      {
+                        "key": "Lamia",
+                        "coreRank": 5,
+                        "items": ["Sword", "Kavacha", "Osirian"],
+                        "tier": 3
+                      },
+                      {
+                        "key": "Kaliya",
+                        "coreRank": 2,
+                        "items": ["Nandaka", "Eaglewing", "Bayan"],
+                        "tier": 3
+                      },
+                      {
+                        "key": "Pontianak",
+                        "coreRank": 3,
+                        "items": ["RuyiBang", "Frostguard", "RedHorn"],
+                        "tier": 2
+                      },
+                      {
+                        "key": "Nicothoe",
+                        "coreRank": 1,
+                        "items": ["Excalibur", "Excalibur", "Eaglewing"],
+                        "tier": 3
+                      },
+                      {
+                        "key": "Garou",
+                        "coreRank": 6,
+                        "items": ["Vesta", "Aegis", "Wygar"],
+                        "tier": 3
+                      },
+                      {
+                        "key": "Azog",
+                        "coreRank": 10,
+                        "items": ["Jingong", "Helmet", "JinJia"],
+                        "tier": 2
+                      },
+                      {
+                        "key": "Obsidian",
+                        "coreRank": 2,
+                        "items": ["Frostguard", "KoreanBow", "WoodenWand"],
+                        "tier": 2
+                      }
+                    ],
+                    "traits": [
+                      {
+                        "key": "WildRush",
+                        "numUnits": 6
+                      },
+                      {
+                        "key": "Blockbuster",
+                        "numUnits": 2
+                      },
+                      {
+                        "key": "Druid",
+                        "numUnits": 2
+                      },
+                      {
+                        "key": "Guardian",
+                        "numUnits": 2
+                      },
+                      {
+                        "key": "Mirage",
+                        "numUnits": 2
+                      }
+                    ],
+                    "forces": [
+                      {
+                        "key": "Light",
+                        "numUnits": 4
+                      },
+                      {
+                        "key": "Dark",
+                        "numUnits": 3
+                      },
+                      {
+                        "key": "Storm",
+                        "numUnits": 1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "key": "5813352C5C16A4D6E8DF344ACEF076F5",
+                  "deckKey": "8EF1DCEDF70596B2BE4EE3D11604513B",
                   "name": "WildRush",
-                  "plays": 9591,
-                  "pickRate": 28.79190802,
-                  "winRate": 18.59462001,
-                  "topRate": 14.19004499,
-                  "avgPlacement": 1,
+                  "plays": 1272,
+                  "pickRate": 23.56840825,
+                  "winRate": 11.89883026,
+                  "topRate": 12.46219515,
+                  "avgPlacement": 4,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -374,14 +478,14 @@
                   }
                 },
                 {
-                  "key": "9D07AE3DC1CBF1F8E24155AC3E7BE571",
-                  "deckKey": "23907A11DCCC6D2A522650C2C0D05C08",
-                  "name": "WildRush Reroll",
-                  "plays": 6976,
-                  "pickRate": 14.5125162,
-                  "winRate": 23.21611501,
-                  "topRate": 27.47694267,
-                  "avgPlacement": 6,
+                  "key": "0760970BF5CB9AB37D3EA1A6BC1DA560",
+                  "deckKey": "88406CF9855DA461264BC1D754FB77DA",
+                  "name": "GirlCrush",
+                  "plays": 8364,
+                  "pickRate": 22.35820208,
+                  "winRate": 24.12331145,
+                  "topRate": 17.34867537,
+                  "avgPlacement": 9,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -391,57 +495,171 @@
                     "skillTree": ["FireTrap", "Meteor", "Doom"],
                     "champions": [
                       {
-                        "key": "Miho",
+                        "key": "Rowena",
                         "coreRank": 1,
                         "items": ["TenguYoroi", "Wygar", "Aegis"],
                         "tier": 2
                       },
                       {
-                        "key": "Lamia",
+                        "key": "Elysia",
                         "coreRank": 5,
                         "items": ["Sword", "Kavacha", "Osirian"],
                         "tier": 2
                       },
                       {
-                        "key": "Kaliya",
+                        "key": "Aetheria",
                         "coreRank": 2,
                         "items": ["Nandaka", "Eaglewing", "Bayan"],
                         "tier": 2
                       },
                       {
-                        "key": "Pontianak",
+                        "key": "Akane",
                         "coreRank": 3,
                         "items": ["RuyiBang", "Frostguard", "RedHorn"],
                         "tier": 2
                       },
                       {
-                        "key": "Nicothoe",
+                        "key": "Lilith",
                         "coreRank": 1,
                         "items": ["Excalibur", "Excalibur", "Eaglewing"],
                         "tier": 2
                       },
                       {
-                        "key": "Garou",
+                        "key": "Miho",
                         "coreRank": 6,
                         "items": ["Vesta", "Aegis", "Wygar"],
                         "tier": 2
                       },
                       {
-                        "key": "Azog",
+                        "key": "Hestial",
                         "coreRank": 10,
                         "items": ["Jingong", "Helmet", "JinJia"],
                         "tier": 2
                       },
                       {
-                        "key": "Obsidian",
+                        "key": "Helga",
                         "coreRank": 2,
                         "items": ["Frostguard", "KoreanBow", "WoodenWand"],
+                        "tier": 2
+                      },
+                      {
+                        "key": "Leviathan",
+                        "coreRank": 8,
+                        "items": ["Wygar", "Simurgh", "Kiriti"],
                         "tier": 2
                       }
                     ],
                     "traits": [
                       {
-                        "key": "WildRush",
+                        "key": "GirlCrush",
+                        "numUnits": 8
+                      },
+                      {
+                        "key": "Blockbuster",
+                        "numUnits": 2
+                      },
+                      {
+                        "key": "Chaos",
+                        "numUnits": 2
+                      },
+                      {
+                        "key": "Fury",
+                        "numUnits": 2
+                      },
+                      {
+                        "key": "Druid",
+                        "numUnits": 1
+                      }
+                    ],
+                    "forces": [
+                      {
+                        "key": "Fire",
+                        "numUnits": 4
+                      },
+                      {
+                        "key": "Dark",
+                        "numUnits": 2
+                      },
+                      {
+                        "key": "Light",
+                        "numUnits": 2
+                      },
+                      {
+                        "key": "Water",
+                        "numUnits": 1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "key": "2A1FB1AA2DF45F553DDADAE35513D347",
+                  "deckKey": "60ABE1233FDF68C009739CE5B22B345C",
+                  "name": "GirlCrush Reroll",
+                  "plays": 8712,
+                  "pickRate": 17.05684831,
+                  "winRate": 12.59494095,
+                  "topRate": 16.54695969,
+                  "avgPlacement": 9,
+                  "deck": {
+                    "augments": [
+                      "SavageMomentum",
+                      "WhirlwindofChaos",
+                      "PowerGrowth"
+                    ],
+                    "skillTree": ["FireTrap", "Meteor", "Doom"],
+                    "champions": [
+                      {
+                        "key": "Osseus",
+                        "coreRank": 1,
+                        "items": ["TenguYoroi", "Wygar", "Aegis"],
+                        "tier": 2
+                      },
+                      {
+                        "key": "Siren",
+                        "coreRank": 5,
+                        "items": ["Sword", "Kavacha", "Osirian"],
+                        "tier": 2
+                      },
+                      {
+                        "key": "Artemis",
+                        "coreRank": 2,
+                        "items": ["Nandaka", "Eaglewing", "Bayan"],
+                        "tier": 2
+                      },
+                      {
+                        "key": "Tamamo",
+                        "coreRank": 3,
+                        "items": ["RuyiBang", "Frostguard", "RedHorn"],
+                        "tier": 2
+                      },
+                      {
+                        "key": "Akane",
+                        "coreRank": 1,
+                        "items": ["Excalibur", "Excalibur", "Eaglewing"],
+                        "tier": 3
+                      },
+                      {
+                        "key": "Lyra",
+                        "coreRank": 6,
+                        "items": ["Vesta", "Aegis", "Wygar"],
+                        "tier": 2
+                      },
+                      {
+                        "key": "Pyra",
+                        "coreRank": 10,
+                        "items": ["Jingong", "Helmet", "JinJia"],
+                        "tier": 3
+                      },
+                      {
+                        "key": "Varcolac",
+                        "coreRank": 2,
+                        "items": ["Frostguard", "KoreanBow", "WoodenWand"],
+                        "tier": 3
+                      }
+                    ],
+                    "traits": [
+                      {
+                        "key": "GirlCrush",
                         "numUnits": 6
                       },
                       {
@@ -449,236 +667,32 @@
                         "numUnits": 2
                       },
                       {
-                        "key": "Druid",
-                        "numUnits": 2
-                      },
-                      {
-                        "key": "Guardian",
+                        "key": "Chaos",
                         "numUnits": 2
                       },
                       {
                         "key": "Mirage",
                         "numUnits": 2
+                      },
+                      {
+                        "key": "WildRush",
+                        "numUnits": 2
                       }
                     ],
                     "forces": [
                       {
-                        "key": "Light",
+                        "key": "Fire",
                         "numUnits": 4
                       },
                       {
                         "key": "Dark",
-                        "numUnits": 3
+                        "numUnits": 2
                       },
                       {
-                        "key": "Storm",
-                        "numUnits": 1
+                        "key": "Light",
+                        "numUnits": 2
                       }
                     ]
-                  }
-                },
-                {
-                  "key": "",
-                  "deckKey": "",
-                  "name": "",
-                  "plays": null,
-                  "pickRate": null,
-                  "winRate": null,
-                  "topRate": null,
-                  "avgPlacement": null,
-                  "deck": {
-                    "augments": [],
-                    "skillTree": [],
-                    "champions": [],
-                    "traits": [],
-                    "forces": []
-                  }
-                },
-                {
-                  "key": "",
-                  "deckKey": "",
-                  "name": "",
-                  "plays": null,
-                  "pickRate": null,
-                  "winRate": null,
-                  "topRate": null,
-                  "avgPlacement": null,
-                  "deck": {
-                    "augments": [],
-                    "skillTree": [],
-                    "champions": [],
-                    "traits": [],
-                    "forces": []
-                  }
-                },
-                {
-                  "key": "",
-                  "deckKey": "",
-                  "name": "",
-                  "plays": null,
-                  "pickRate": null,
-                  "winRate": null,
-                  "topRate": null,
-                  "avgPlacement": null,
-                  "deck": {
-                    "augments": [],
-                    "skillTree": [],
-                    "champions": [],
-                    "traits": [],
-                    "forces": []
-                  }
-                },
-                {
-                  "key": "",
-                  "deckKey": "",
-                  "name": "",
-                  "plays": null,
-                  "pickRate": null,
-                  "winRate": null,
-                  "topRate": null,
-                  "avgPlacement": null,
-                  "deck": {
-                    "augments": [],
-                    "skillTree": [],
-                    "champions": [],
-                    "traits": [],
-                    "forces": []
-                  }
-                },
-                {
-                  "key": "",
-                  "deckKey": "",
-                  "name": "",
-                  "plays": null,
-                  "pickRate": null,
-                  "winRate": null,
-                  "topRate": null,
-                  "avgPlacement": null,
-                  "deck": {
-                    "augments": [],
-                    "skillTree": [],
-                    "champions": [],
-                    "traits": [],
-                    "forces": []
-                  }
-                },
-                {
-                  "key": "",
-                  "deckKey": "",
-                  "name": "",
-                  "plays": null,
-                  "pickRate": null,
-                  "winRate": null,
-                  "topRate": null,
-                  "avgPlacement": null,
-                  "deck": {
-                    "augments": [],
-                    "skillTree": [],
-                    "champions": [],
-                    "traits": [],
-                    "forces": []
-                  }
-                },
-                {
-                  "key": "",
-                  "deckKey": "",
-                  "name": "",
-                  "plays": null,
-                  "pickRate": null,
-                  "winRate": null,
-                  "topRate": null,
-                  "avgPlacement": null,
-                  "deck": {
-                    "augments": [],
-                    "skillTree": [],
-                    "champions": [],
-                    "traits": [],
-                    "forces": []
-                  }
-                },
-                {
-                  "key": "",
-                  "deckKey": "",
-                  "name": "",
-                  "plays": null,
-                  "pickRate": null,
-                  "winRate": null,
-                  "topRate": null,
-                  "avgPlacement": null,
-                  "deck": {
-                    "augments": [],
-                    "skillTree": [],
-                    "champions": [],
-                    "traits": [],
-                    "forces": []
-                  }
-                },
-                {
-                  "key": "",
-                  "deckKey": "",
-                  "name": "",
-                  "plays": null,
-                  "pickRate": null,
-                  "winRate": null,
-                  "topRate": null,
-                  "avgPlacement": null,
-                  "deck": {
-                    "augments": [],
-                    "skillTree": [],
-                    "champions": [],
-                    "traits": [],
-                    "forces": []
-                  }
-                },
-                {
-                  "key": "",
-                  "deckKey": "",
-                  "name": "",
-                  "plays": null,
-                  "pickRate": null,
-                  "winRate": null,
-                  "topRate": null,
-                  "avgPlacement": null,
-                  "deck": {
-                    "augments": [],
-                    "skillTree": [],
-                    "champions": [],
-                    "traits": [],
-                    "forces": []
-                  }
-                },
-                {
-                  "key": "",
-                  "deckKey": "",
-                  "name": "",
-                  "plays": null,
-                  "pickRate": null,
-                  "winRate": null,
-                  "topRate": null,
-                  "avgPlacement": null,
-                  "deck": {
-                    "augments": [],
-                    "skillTree": [],
-                    "champions": [],
-                    "traits": [],
-                    "forces": []
-                  }
-                },
-                {
-                  "key": "",
-                  "deckKey": "",
-                  "name": "",
-                  "plays": null,
-                  "pickRate": null,
-                  "winRate": null,
-                  "topRate": null,
-                  "avgPlacement": null,
-                  "deck": {
-                    "augments": [],
-                    "skillTree": [],
-                    "champions": [],
-                    "traits": [],
-                    "forces": []
                   }
                 }
               ]
