@@ -8,6 +8,7 @@ import React, {
 import { OptimizedImage } from "../../utils/imageOptimizer";
 import ReactTltp from "../tooltip/ReactTltp";
 import ForceIcon from "../forceIcon";
+import costWiseFrameData from "../../data/costWiseFrame.json";
 
 const CardImage = ({
   src,
@@ -43,6 +44,14 @@ const CardImage = ({
     if (!forces || !src?.variant) return null;
     return forces.find((force) => force.key === src?.variant);
   }, [forces, src?.variant]);
+
+  // Get frame image based on cost
+  const frameImage = useMemo(() => {
+    const frameData = costWiseFrameData.costWiseFrame.find(
+      (frame) => frame.cost === src.cost
+    );
+    return frameData?.imageUrl || costWiseFrameData.costWiseFrame[0].imageUrl; // fallback to cost 1 frame
+  }, [src]);
 
   // Setup intersection observer to detect when card is visible
   useEffect(() => {
@@ -223,11 +232,9 @@ const CardImage = ({
               )}
 
               <OptimizedImage
-                src={
-                  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1744443307/ghjhhhhhhhh_axvnyo.png"
-                }
+                src={frameImage}
                 className="absolute top-0 left-0 w-full h-full z-30 pointer-events-none"
-                alt="Border Image"
+                alt="Cost Frame"
                 width={200}
                 height={200}
                 loading={isVisible ? "eager" : "lazy"}

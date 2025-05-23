@@ -383,6 +383,7 @@ const MetaTrendsCard = ({
   return (
     <div className="rounded-[4px]">
       <div className="grid grid-cols-1 m-2">
+        {console.log("championsByCost", championsByCost)}
         {championsByCost.map((champions, i) => (
           <ChampionsCostSection
             key={`cost-${i}`}

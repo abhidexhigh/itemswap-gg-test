@@ -471,16 +471,23 @@ const MetaDeck = memo(
             <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#111111] py-[16px] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6">
               <div className="mb-[16px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[80%] lg:flex-shrink-0">
                 <div className="flex flex-wrap justify-center lg:justify-center gap-2 w-full">
-                  {metaDeck?.deck?.champions.map((champion, i) => (
-                    <ChampionWithItems
-                      key={i}
-                      champion={champion}
-                      champions={champions}
-                      items={items}
-                      forces={forces}
-                      tier={champion.tier}
-                    />
-                  ))}
+                  {metaDeck?.deck?.champions
+                    .slice()
+                    .sort((a, b) => {
+                      const champA = champions.find((c) => c.key === a.key);
+                      const champB = champions.find((c) => c.key === b.key);
+                      return (champA?.cost || 0) - (champB?.cost || 0);
+                    })
+                    .map((champion, i) => (
+                      <ChampionWithItems
+                        key={i}
+                        champion={champion}
+                        champions={champions}
+                        items={items}
+                        forces={forces}
+                        tier={champion.tier}
+                      />
+                    ))}
                 </div>
               </div>
 
@@ -730,9 +737,13 @@ const MetaTrendsItems = () => {
       });
     });
 
+    console.log("groupedByCost", groupedByCost);
+
     const result = {
       filteredChampions: filtered,
-      groupedArray: Array.from(groupedByCost.values()),
+      groupedArray: Array.from(groupedByCost.entries())
+        .sort(([costA], [costB]) => costA - costB) // Sort by cost ascending
+        .map(([cost, champions]) => champions), // Extract just the champions arrays
     };
 
     // Store the result to prevent recalculation

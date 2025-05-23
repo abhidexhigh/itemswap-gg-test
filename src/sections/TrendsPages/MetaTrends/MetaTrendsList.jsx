@@ -1,13 +1,14 @@
 import React, { memo, Suspense } from "react";
 import dynamic from "next/dynamic";
 import ProjectsListStyleWrapper from "./MetaTrendsList.style";
+import Loader from "src/components/loader";
 
 // Dynamically import MetaTrends with no SSR
 const MetaTrends = dynamic(() => import("./MetaTrendsItems/MetaTrendsItems"), {
   ssr: false,
   loading: () => (
     <div className="min-h-[400px] bg-[#111111] flex items-center justify-center">
-      <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
+      <Loader />
     </div>
   ),
 });
@@ -18,7 +19,7 @@ const MetaTrendsList = () => {
       <Suspense
         fallback={
           <div className="min-h-[400px] bg-[#111111] flex items-center justify-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
+            <Loader />
           </div>
         }
       >
