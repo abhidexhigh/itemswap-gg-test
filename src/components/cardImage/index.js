@@ -18,6 +18,7 @@ const CardImage = ({
   forces,
   cardSize = "",
   tier = 0, // Add tier prop with default value 0
+  showCost = false,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(true); // Default to true to show initial image
@@ -240,6 +241,28 @@ const CardImage = ({
                 loading={isVisible ? "eager" : "lazy"}
                 fetchPriority={isVisible ? "high" : "auto"}
               />
+
+              {/* Cost icon positioned in bottom right corner */}
+              {src?.cost && showCost && (
+                <div className="absolute bottom-0.5 right-0.5 w-fit z-30">
+                  <div className="flex items-center gap-x-1 rounded-full bg-slate-800 px-1 ">
+                    <OptimizedImage
+                      src={
+                        "https://res.cloudinary.com/dg0cmj6su/image/upload/v1748080983/Coin_C_zj8naw_mqv3h4.webp"
+                      }
+                      alt={`Cost ${src.cost}`}
+                      width={10}
+                      height={10}
+                      className="w-3 h-3 object-contain"
+                      loading={isVisible ? "eager" : "lazy"}
+                      fetchPriority={isVisible ? "high" : "auto"}
+                    />
+                    <div className="text-xs font-medium text-white md:text-sm md:font-semibold ">
+                      {src.cost}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Force icon positioned outside container without overflow:hidden */}
