@@ -1,4 +1,5 @@
 import React from "react";
+import RoundOff from "../utils/RoundOff";
 
 const ColoredValue = ({ value, prefix = "", suffix = "" }) => {
   // Default to white/normal color
@@ -16,7 +17,7 @@ const ColoredValue = ({ value, prefix = "", suffix = "" }) => {
   return (
     <span className={textColor}>
       {prefix}
-      {value}
+      {RoundOff(value)}
       {suffix}
     </span>
   );
