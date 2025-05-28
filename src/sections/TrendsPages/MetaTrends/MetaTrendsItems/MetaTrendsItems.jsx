@@ -734,11 +734,11 @@ const MetaDeck = memo(
                   </div>
                 </div>
 
-                <div className="hidden md:flex md:flex-col justify-center gap-[2px] lg:py-[8px]">
+                <div className="hidden md:flex md:flex-col justify-center gap-y-[2px] lg:py-[8px]">
                   {augmentDetails.map((augment, index) => (
                     <div
                       key={`${augment.key}-${index}`}
-                      className="flex justify-center items-center md:w-[64px] relative"
+                      className="flex justify-center items-center md:w-[48px] relative"
                     >
                       <AugmentIcon augment={augment.key} augments={augments} />
                     </div>
