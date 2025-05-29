@@ -39,6 +39,40 @@ const clearCacheIfNeeded = () => {
   }
 };
 
+// PERFORMANCE OPTIMIZATION: Scroll-aware intersection observer optimization
+let isScrolling = false;
+let scrollTimeout;
+
+const handleScroll = () => {
+  isScrolling = true;
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(() => {
+    isScrolling = false;
+  }, 150); // Debounce scroll end detection
+};
+
+// Add scroll listener once
+if (typeof window !== "undefined") {
+  window.addEventListener("scroll", handleScroll, { passive: true });
+}
+
+// PERFORMANCE OPTIMIZATION: Optimized intersection observer with scroll awareness
+const createOptimizedObserver = (callback, options = {}) => {
+  const defaultOptions = {
+    threshold: 0.1,
+    rootMargin: "100px",
+    ...options,
+  };
+
+  return new IntersectionObserver((entries) => {
+    // Always process visibility for initial detection, but skip expensive operations during scroll
+    entries.forEach((entry) => {
+      // Allow callback to decide what to do based on scroll state
+      callback(entry, isScrolling);
+    });
+  }, defaultOptions);
+};
+
 // PERFORMANCE OPTIMIZATION: Dynamically import heavy components with better loading states
 const Chart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -71,24 +105,22 @@ const TabButton = memo(({ active, label, onClick }) => (
   </button>
 ));
 
-// PERFORMANCE OPTIMIZATION: Heavily optimized TraitItem with intersection observer
+// PERFORMANCE OPTIMIZATION: Heavily optimized TraitItem with scroll-aware intersection observer
 const TraitItem = memo(({ trait, selectedTrait, onSelect, i, t }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [hasBeenVisible, setHasBeenVisible] = useState(false);
   const itemRef = useRef(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasBeenVisible) {
-          setIsVisible(true);
-          setHasBeenVisible(true);
-          // Disconnect after first visibility
-          if (itemRef.current) observer.unobserve(itemRef.current);
-        }
-      },
-      { threshold: 0.1, rootMargin: "50px" }
-    );
+    const observer = createOptimizedObserver((entry, isScrolling) => {
+      // Always detect visibility for initial load, skip expensive operations during scroll
+      if (entry.isIntersecting && !hasBeenVisible) {
+        setIsVisible(true);
+        setHasBeenVisible(true);
+        // Disconnect after first visibility
+        if (itemRef.current) observer.unobserve(itemRef.current);
+      }
+    });
 
     if (itemRef.current) {
       observer.observe(itemRef.current);
@@ -108,6 +140,7 @@ const TraitItem = memo(({ trait, selectedTrait, onSelect, i, t }) => {
       ref={itemRef}
       className="flex flex-col items-center gap-2 cursor-pointer group"
       onClick={handleClick}
+      style={{ willChange: isScrolling ? "auto" : "transform" }}
     >
       <ReactTltp variant="trait" content={trait} id={`${trait?.key}-${i}`} />
       <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
@@ -145,16 +178,15 @@ const ForceItem = memo(({ force, selectedTrait, onSelect, i, t }) => {
   const itemRef = useRef(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasBeenVisible) {
-          setIsVisible(true);
-          setHasBeenVisible(true);
-          if (itemRef.current) observer.unobserve(itemRef.current);
-        }
-      },
-      { threshold: 0.1, rootMargin: "50px" }
-    );
+    const observer = createOptimizedObserver((entry, isScrolling) => {
+      // Always detect visibility for initial load, skip expensive operations during scroll
+      if (entry.isIntersecting && !hasBeenVisible) {
+        setIsVisible(true);
+        setHasBeenVisible(true);
+        // Disconnect after first visibility
+        if (itemRef.current) observer.unobserve(itemRef.current);
+      }
+    });
 
     if (itemRef.current) {
       observer.observe(itemRef.current);
@@ -179,6 +211,7 @@ const ForceItem = memo(({ force, selectedTrait, onSelect, i, t }) => {
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      style={{ willChange: isScrolling ? "auto" : "transform" }}
     >
       <ReactTltp variant="force" content={force} id={`${force?.key}-${i}`} />
       <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
@@ -213,16 +246,15 @@ const SkillTreeItem = memo(({ skill, selectedSkillTree, onSelect, i }) => {
   const itemRef = useRef(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasBeenVisible) {
-          setIsVisible(true);
-          setHasBeenVisible(true);
-          if (itemRef.current) observer.unobserve(itemRef.current);
-        }
-      },
-      { threshold: 0.1, rootMargin: "50px" }
-    );
+    const observer = createOptimizedObserver((entry, isScrolling) => {
+      // Always detect visibility for initial load, skip expensive operations during scroll
+      if (entry.isIntersecting && !hasBeenVisible) {
+        setIsVisible(true);
+        setHasBeenVisible(true);
+        // Disconnect after first visibility
+        if (itemRef.current) observer.unobserve(itemRef.current);
+      }
+    });
 
     if (itemRef.current) {
       observer.observe(itemRef.current);
@@ -242,6 +274,7 @@ const SkillTreeItem = memo(({ skill, selectedSkillTree, onSelect, i }) => {
       ref={itemRef}
       className="flex flex-col items-center gap-1 cursor-pointer group max-w-[70px] md:max-w-[96px]"
       onClick={handleClick}
+      style={{ willChange: isScrolling ? "auto" : "transform" }}
     >
       <ReactTltp
         variant="skillTree"
@@ -249,7 +282,13 @@ const SkillTreeItem = memo(({ skill, selectedSkillTree, onSelect, i }) => {
         id={`skill-${skill?.key}-${i}`}
       />
       <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-105">
-        <div className="bg-gradient-to-br from-[#232339] to-[#1a1a2a] p-1 rounded-lg border border-white/10 hover:border-white/30 transition-all duration-200 w-full h-full flex items-center justify-center">
+        <div
+          className={`bg-gradient-to-br from-[#232339] to-[#1a1a2a] p-1 rounded-lg border border-white/10 transition-all duration-200 cursor-pointer ${
+            isScrolling
+              ? ""
+              : "hover:border-white/30 hover:shadow-lg hover:-translate-y-[2px]"
+          }`}
+        >
           {isVisible ? (
             <OptimizedImage
               alt={skill?.name || "Skill"}
@@ -284,16 +323,15 @@ const ItemIcon = memo(({ item, selectedItem, onSelect, i }) => {
   const itemRef = useRef(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasBeenVisible) {
-          setIsVisible(true);
-          setHasBeenVisible(true);
-          if (itemRef.current) observer.unobserve(itemRef.current);
-        }
-      },
-      { threshold: 0.1, rootMargin: "50px" }
-    );
+    const observer = createOptimizedObserver((entry, isScrolling) => {
+      // Always detect visibility for initial load, skip expensive operations during scroll
+      if (entry.isIntersecting && !hasBeenVisible) {
+        setIsVisible(true);
+        setHasBeenVisible(true);
+        // Disconnect after first visibility
+        if (itemRef.current) observer.unobserve(itemRef.current);
+      }
+    });
 
     if (itemRef.current) {
       observer.observe(itemRef.current);
@@ -313,6 +351,7 @@ const ItemIcon = memo(({ item, selectedItem, onSelect, i }) => {
       ref={itemRef}
       className="flex flex-col items-center gap-2 cursor-pointer group max-w-[84px]"
       onClick={handleClick}
+      style={{ willChange: isScrolling ? "auto" : "transform" }}
     >
       <ReactTltp variant="item" content={item} id={`${item?.key}-${i}`} />
       <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-110">
@@ -398,7 +437,9 @@ const ChampionWithItems = memo(
                 width={50}
                 height={50}
                 src={itemDetails.imageUrl}
-                className="w-[20px] md:w-[30px] rounded-lg hover:scale-150 transition-all duration-300"
+                className={`w-[20px] md:w-[30px] rounded-lg transition-all duration-300 ${
+                  isScrolling ? "" : "hover:scale-150"
+                }`}
                 data-tooltip-id={`${itemDetails.key}-${idx}`}
                 loading="lazy"
               />
@@ -444,7 +485,13 @@ const SkillTreeIcon = memo(({ skillTree, skills }) => {
 
   return (
     <div className="flex justify-center items-center relative">
-      <div className="bg-gradient-to-br from-[#232339] to-[#1a1a2a] p-1 rounded-lg border border-white/10 hover:border-white/30 transition-all duration-200 hover:shadow-lg hover:-translate-y-[2px] cursor-pointer">
+      <div
+        className={`bg-gradient-to-br from-[#232339] to-[#1a1a2a] p-1 rounded-lg border border-white/10 transition-all duration-200 cursor-pointer ${
+          isScrolling
+            ? ""
+            : "hover:border-white/30 hover:shadow-lg hover:-translate-y-[2px]"
+        }`}
+      >
         <OptimizedImage
           alt={skillDetails.name || "Skill"}
           width={80}
@@ -616,16 +663,16 @@ const MetaDeck = memo(
 
     // PERFORMANCE OPTIMIZATION: Enhanced intersection observer with better thresholds
     const deckRef = useRef(null);
-    const [isVisible, setIsVisible] = useState(false);
+    const [isVisible, setIsVisible] = useState(true); // Start visible for better UX
     const [hasBeenVisible, setHasBeenVisible] = useState(false);
 
     useEffect(() => {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
+      // PERFORMANCE OPTIMIZATION: Use intersection observer for optimization, not blocking visibility
+      const observer = createOptimizedObserver(
+        (entry, isScrolling) => {
           if (entry.isIntersecting && !hasBeenVisible) {
-            setIsVisible(true);
             setHasBeenVisible(true);
-            // Keep observing for potential re-entry optimizations
+            // Can add additional optimizations here based on visibility
           }
         },
         { threshold: 0.05, rootMargin: "100px" }
