@@ -589,7 +589,7 @@ const DeckHeader = memo(
             ))}
           </span>
         </div>
-        <div className="inline-flex flex-shrink-0 justify-between gap-1 mt-3 md:mt-0">
+        <div className="inline-flex flex-shrink-0 justify-between gap-1 !gap-x-6 mt-3 md:mt-0">
           <span className="flex justify-center gap-x-1 items-center">
             {skillDetails.map((skill, index) => (
               <SkillTreeIcon

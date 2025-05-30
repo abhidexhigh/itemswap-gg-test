@@ -135,7 +135,7 @@ const ProjectItems = () => {
         <div className="flex flex-col sm:flex-row justify-between items-center bg-[#111111] md:bg-transparent px-2 sm:px-4 mb-2.5 md:mb-0">
           <div className="w-full sm:w-auto sm:mb-0">
             <TrendFilters
-              buttons={["All", "Normal", "Radiant"]}
+              buttons={["All", "Normal"]}
               onButtonClick={handleButtonClick}
             />
           </div>
