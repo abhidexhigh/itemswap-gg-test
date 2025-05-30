@@ -26,14 +26,14 @@
               "plays": 3439072,
               "metaDecks": [
                 {
-                  "key": "255A30D6B9B886249D03ECAD73C93770",
-                  "deckKey": "E181B6A64BF90263F428227D109DA0D3",
+                  "key": "6409414B0F1C60BD4C73ABD95EABA444",
+                  "deckKey": "7F2A387D5EF325A32E77B5C018E352AD",
                   "name": "Guardian",
-                  "plays": 2088,
-                  "pickRate": 25.64371629,
-                  "winRate": 13.43333501,
-                  "topRate": 25.98706831,
-                  "avgPlacement": 4,
+                  "plays": 3756,
+                  "pickRate": 19.31759944,
+                  "winRate": 15.0438562,
+                  "topRate": 28.27638636,
+                  "avgPlacement": 7,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -76,19 +76,19 @@
                       {
                         "key": "Ravos",
                         "coreRank": 10,
-                        "items": ["Bloodaxe", "Stormhorn", "Frostguard"],
+                        "items": ["Gladius", "Galea", "Vesta"],
                         "tier": 2
                       },
                       {
                         "key": "Aradia",
                         "coreRank": 2,
-                        "items": ["Simurgh", "Darius", "Bayan"],
+                        "items": ["Aetheris", "Kunee", "Aegis"],
                         "tier": 2
                       },
                       {
                         "key": "Brynhild",
                         "coreRank": 8,
-                        "items": ["Simurgh", "Darius", "Bayan"],
+                        "items": ["Aetheris", "Kunee", "Aegis"],
                         "tier": 2
                       },
                       {
@@ -145,14 +145,14 @@
                   }
                 },
                 {
-                  "key": "3E3A11FB9E0A39A5961C1F517F3A077E",
-                  "deckKey": "089B93E93936901AF9ABDE180D5D7153",
+                  "key": "0D14613CFE0CA2A0839FBD20557CCD56",
+                  "deckKey": "A390001E8E5F0E0F7F84C24311FB2F0E",
                   "name": "Guardian Reroll",
-                  "plays": 3008,
-                  "pickRate": 13.30405033,
-                  "winRate": 29.24346723,
-                  "topRate": 16.47432115,
-                  "avgPlacement": 3,
+                  "plays": 5832,
+                  "pickRate": 27.97739276,
+                  "winRate": 17.55393327,
+                  "topRate": 10.82700115,
+                  "avgPlacement": 6,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -174,7 +174,7 @@
                       {
                         "key": "Amarok",
                         "coreRank": 2,
-                        "items": ["Bloodaxe", "Stormhorn", "Frostguard"],
+                        "items": ["Nandaka", "Kiriti", "Kavacha"],
                         "tier": 4
                       },
                       {
@@ -185,13 +185,13 @@
                       {
                         "key": "Yamata",
                         "coreRank": 1,
-                        "items": ["RuyiBang", "Jingong", "JinJia"],
+                        "items": ["Excalibur", "Eaglewing", "Evalach"],
                         "tier": 4
                       },
                       {
                         "key": "Zarok",
                         "coreRank": 6,
-                        "items": ["Bloodaxe", "Stormhorn", "Frostguard"],
+                        "items": ["Nandaka", "Kiriti", "Kavacha"],
                         "tier": 4
                       },
                       {
@@ -207,7 +207,7 @@
                       {
                         "key": "Sigrdrífa",
                         "coreRank": 8,
-                        "items": ["Simurgh", "Darius", "Bayan"],
+                        "items": ["Aetheris", "Kunee", "Aegis"],
                         "tier": 2
                       }
                     ],
@@ -246,14 +246,14 @@
                   }
                 },
                 {
-                  "key": "2F0FC36FE5310B0843D1D49BFD1FD4A1",
-                  "deckKey": "0B39DE1D6F6F92A73F80B66C83F88899",
+                  "key": "8B8CBC05D1DD1BF6B298ED7C8986881B",
+                  "deckKey": "5210BA89770C05166BABEDD7C2CF9A8E",
                   "name": "Chaos",
-                  "plays": 9649,
-                  "pickRate": 21.7183475,
-                  "winRate": 25.90751005,
-                  "topRate": 24.64341573,
-                  "avgPlacement": 6,
+                  "plays": 7843,
+                  "pickRate": 23.30405403,
+                  "winRate": 12.30610665,
+                  "topRate": 22.10881864,
+                  "avgPlacement": 1,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -361,14 +361,14 @@
                   }
                 },
                 {
-                  "key": "9DFC67394DC5B34C1FAE06535BF39D1F",
-                  "deckKey": "0E3347A6F032EEE2563E3C52B7A74E49",
+                  "key": "65B188F97A0BD1826D68501C96717025",
+                  "deckKey": "192067B95F8A1F2651A0781CDD2D1A00",
                   "name": "Chaos Reroll",
-                  "plays": 5078,
-                  "pickRate": 17.97527174,
-                  "winRate": 27.89981465,
-                  "topRate": 15.96443745,
-                  "avgPlacement": 6,
+                  "plays": 4324,
+                  "pickRate": 24.2701757,
+                  "winRate": 12.05799616,
+                  "topRate": 24.61172947,
+                  "avgPlacement": 3,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -385,7 +385,7 @@
                       {
                         "key": "Azrael",
                         "coreRank": 5,
-                        "items": ["SilverBullet", "Pendragon’sCrown", "Wygar"],
+                        "items": ["Bloodaxe", "Stormhorn", "Frostguard"],
                         "tier": 4
                       },
                       {
@@ -407,7 +407,7 @@
                       {
                         "key": "Fuma",
                         "coreRank": 6,
-                        "items": ["Nandaka", "Kiriti", "Kavacha"],
+                        "items": ["SilverBullet", "Pendragon’sCrown", "Wygar"],
                         "tier": 4
                       },
                       {
@@ -467,14 +467,14 @@
                   }
                 },
                 {
-                  "key": "B0ACED73B0DEA04C0D3FBAA10A2CE481",
-                  "deckKey": "1DBC80C0A27C4B9494EE94BFA28C21D7",
+                  "key": "C84DC4FDE3BCDFB583951F6065316F92",
+                  "deckKey": "2ED744ED9BA37DB4AF80E655B3C8C5DD",
                   "name": "WildRush",
-                  "plays": 1408,
-                  "pickRate": 12.62375248,
-                  "winRate": 25.24198466,
-                  "topRate": 12.22852853,
-                  "avgPlacement": 8,
+                  "plays": 7337,
+                  "pickRate": 14.64276447,
+                  "winRate": 16.67949116,
+                  "topRate": 20.94031883,
+                  "avgPlacement": 2,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -501,7 +501,7 @@
                       {
                         "key": "Solarius",
                         "coreRank": 3,
-                        "items": ["KoreanBow", "ScaleHelmet", "GayaArmor"],
+                        "items": ["Excalibur", "Eaglewing", "Evalach"],
                         "tier": 2
                       },
                       {
@@ -523,13 +523,13 @@
                       {
                         "key": "Daji",
                         "coreRank": 2,
-                        "items": ["Aetheris", "Kunee", "Aegis"],
+                        "items": ["Simurgh", "Darius", "Bayan"],
                         "tier": 2
                       },
                       {
                         "key": "Brynhild",
                         "coreRank": 8,
-                        "items": ["Simurgh", "Darius", "Bayan"],
+                        "items": ["EyeOfRa", "Sekhem", "Osirian"],
                         "tier": 2
                       },
                       {
@@ -582,14 +582,14 @@
                   }
                 },
                 {
-                  "key": "50AF2069BEF05A2B6EDA28B85ABB8E49",
-                  "deckKey": "9F3B5A192CE7DFDD944C1A643BBB277A",
+                  "key": "CEF2A677A7F3B5AFD380FB1D7F7F6A93",
+                  "deckKey": "ECD8EC5BDE1127ECB7079569924B093D",
                   "name": "WildRush Reroll",
-                  "plays": 2303,
-                  "pickRate": 26.66375783,
-                  "winRate": 24.49043449,
-                  "topRate": 14.66694049,
-                  "avgPlacement": 6,
+                  "plays": 8728,
+                  "pickRate": 12.8368848,
+                  "winRate": 15.52846243,
+                  "topRate": 15.62439036,
+                  "avgPlacement": 3,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -627,13 +627,13 @@
                       {
                         "key": "Kaliya",
                         "coreRank": 6,
-                        "items": ["RuyiBang", "Jingong", "JinJia"],
+                        "items": ["Excalibur", "Eaglewing", "Evalach"],
                         "tier": 4
                       },
                       {
                         "key": "Nuwa",
                         "coreRank": 10,
-                        "items": ["SilverBullet", "Pendragon’sCrown", "Wygar"],
+                        "items": ["KoreanBow", "ScaleHelmet", "GayaArmor"],
                         "tier": 4
                       },
                       {
@@ -679,14 +679,14 @@
                   }
                 },
                 {
-                  "key": "2456B7B9465F643BBE598DEAAAFDBD2E",
-                  "deckKey": "35BD29CD6C555CEEE69C60D9A8596DA6",
+                  "key": "352ABD601F6615833CA4B04271D1EA5D",
+                  "deckKey": "3D8C908E67C0F5E4450531A36A44AD98",
                   "name": "GirlCrush",
-                  "plays": 4179,
-                  "pickRate": 21.31945873,
-                  "winRate": 14.26734975,
-                  "topRate": 23.26940237,
-                  "avgPlacement": 5,
+                  "plays": 5771,
+                  "pickRate": 11.44635833,
+                  "winRate": 28.55792751,
+                  "topRate": 24.24497498,
+                  "avgPlacement": 1,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -718,7 +718,7 @@
                       {
                         "key": "Rhiannon",
                         "coreRank": 1,
-                        "items": ["SilverBullet", "Pendragon’sCrown", "Wygar"],
+                        "items": ["RedHorn", "EagleBonnet", "Nightfang"],
                         "tier": 2
                       },
                       {
@@ -790,14 +790,14 @@
                   }
                 },
                 {
-                  "key": "5D860818F04BA0568140011846BE8638",
-                  "deckKey": "80632E5F41B08DE004A6D415B75FAFDA",
+                  "key": "20E069FBC2A9442B3334B43762AEFFBC",
+                  "deckKey": "C305EB384DE508D1E7AC5C1B618CD6E1",
                   "name": "GirlCrush Reroll",
-                  "plays": 2913,
-                  "pickRate": 29.7839214,
-                  "winRate": 10.57637499,
-                  "topRate": 28.1123813,
-                  "avgPlacement": 6,
+                  "plays": 1471,
+                  "pickRate": 10.09913495,
+                  "winRate": 24.51701486,
+                  "topRate": 14.62473059,
+                  "avgPlacement": 9,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -900,14 +900,14 @@
                   }
                 },
                 {
-                  "key": "D674AC6865156CD0E05480C2D16C4FE3",
-                  "deckKey": "5463937A77E76E96058FAB25038831BF",
+                  "key": "E1E7C4BE9B5E798437639DC638D11E6B",
+                  "deckKey": "37ED9926F462FFE421F9F56091F16EB2",
                   "name": "Mirage",
-                  "plays": 6874,
-                  "pickRate": 20.52493559,
-                  "winRate": 28.38442087,
-                  "topRate": 23.97984585,
-                  "avgPlacement": 10,
+                  "plays": 6696,
+                  "pickRate": 20.43491106,
+                  "winRate": 27.61559918,
+                  "topRate": 28.1167658,
+                  "avgPlacement": 3,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -968,7 +968,7 @@
                       {
                         "key": "Jormungandr",
                         "coreRank": 8,
-                        "items": ["Nandaka", "Kiriti", "Kavacha"],
+                        "items": ["SilverBullet", "Pendragon’sCrown", "Wygar"],
                         "tier": 2
                       }
                     ],
@@ -1015,13 +1015,13 @@
                   }
                 },
                 {
-                  "key": "111E345C70ECD536FA89F7E9688138DA",
-                  "deckKey": "E3E47C5E8CE39A931E41FC8CEB305D98",
+                  "key": "44756D6D3EFFBF158DA3D83B2DC32652",
+                  "deckKey": "1DE1A656BDC298C7E82638FF6D1EB472",
                   "name": "Mirage Reroll",
-                  "plays": 3925,
-                  "pickRate": 23.63068646,
-                  "winRate": 22.35992764,
-                  "topRate": 17.25241076,
+                  "plays": 1941,
+                  "pickRate": 19.27671578,
+                  "winRate": 21.05030266,
+                  "topRate": 11.21535013,
                   "avgPlacement": 8,
                   "deck": {
                     "augments": [
@@ -1039,13 +1039,13 @@
                       {
                         "key": "Varcolac",
                         "coreRank": 5,
-                        "items": ["Raikiri", "Kaminari", "TenguYoroi"],
+                        "items": ["Excalibur", "Eaglewing", "Evalach"],
                         "tier": 4
                       },
                       {
                         "key": "Pyra",
                         "coreRank": 2,
-                        "items": ["EyeOfRa", "Sekhem", "Osirian"],
+                        "items": ["Aetheris", "Kunee", "Aegis"],
                         "tier": 4
                       },
                       {
@@ -1121,14 +1121,14 @@
                   }
                 },
                 {
-                  "key": "BA98859656E7AF1DE5D6780C7B8F4487",
-                  "deckKey": "FF219AC9F2D0C297104D8898CA7854DD",
+                  "key": "EB9C5747C6D7FF67DD3085B3C216BB9C",
+                  "deckKey": "D218CAB5C65E63AC46FCB11B70C5FAF1",
                   "name": "Druid",
-                  "plays": 5087,
-                  "pickRate": 11.63747455,
-                  "winRate": 28.002399,
-                  "topRate": 20.55613231,
-                  "avgPlacement": 10,
+                  "plays": 1605,
+                  "pickRate": 23.90537732,
+                  "winRate": 28.04437408,
+                  "topRate": 17.96175044,
+                  "avgPlacement": 5,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -1166,7 +1166,7 @@
                       {
                         "key": "Grimroth",
                         "coreRank": 6,
-                        "items": ["Excalibur", "Eaglewing", "Evalach"],
+                        "items": ["Raikiri", "Kaminari", "TenguYoroi"],
                         "tier": 2
                       },
                       {
@@ -1177,13 +1177,13 @@
                       {
                         "key": "Leizu",
                         "coreRank": 2,
-                        "items": ["Simurgh", "Darius", "Bayan"],
+                        "items": ["Aetheris", "Kunee", "Aegis"],
                         "tier": 2
                       },
                       {
                         "key": "Jormungandr",
                         "coreRank": 8,
-                        "items": ["Nandaka", "Kiriti", "Kavacha"],
+                        "items": ["SilverBullet", "Pendragon’sCrown", "Wygar"],
                         "tier": 2
                       },
                       {
@@ -1236,14 +1236,14 @@
                   }
                 },
                 {
-                  "key": "D847E51EFE6C6362A4BC4ED8F83F38E4",
-                  "deckKey": "EA75056DB734FE70AA9802E1459286DD",
+                  "key": "E77EBC14277F56E762377A3BA0D6ADAE",
+                  "deckKey": "8B238DFC796E6D405E1537415363E878",
                   "name": "Druid Reroll",
-                  "plays": 5460,
-                  "pickRate": 27.81578259,
-                  "winRate": 17.38515626,
-                  "topRate": 25.82623217,
-                  "avgPlacement": 9,
+                  "plays": 2734,
+                  "pickRate": 20.97791094,
+                  "winRate": 11.98768855,
+                  "topRate": 10.74846538,
+                  "avgPlacement": 3,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -1255,7 +1255,7 @@
                       {
                         "key": "Brokkr",
                         "coreRank": 1,
-                        "items": ["Excalibur", "Eaglewing", "Evalach"],
+                        "items": ["Raikiri", "Kaminari", "TenguYoroi"],
                         "tier": 4
                       },
                       {
@@ -1333,13 +1333,13 @@
                   }
                 },
                 {
-                  "key": "D5BE95714D65234384516C254BB64C0B",
-                  "deckKey": "AD0DEF2F7183C6A81E475EBC0BF6FFD3",
+                  "key": "AC26A4BFD2FBEC3D0E4EE1D015FE8CF1",
+                  "deckKey": "905473DDEF96FF6E5F49D34008009185",
                   "name": "Fury",
-                  "plays": 4166,
-                  "pickRate": 28.48406737,
-                  "winRate": 21.34280412,
-                  "topRate": 19.11214874,
+                  "plays": 6605,
+                  "pickRate": 17.7378093,
+                  "winRate": 27.36451561,
+                  "topRate": 15.22400089,
                   "avgPlacement": 10,
                   "deck": {
                     "augments": [
@@ -1383,13 +1383,13 @@
                       {
                         "key": "Fenghuang",
                         "coreRank": 10,
-                        "items": ["Aetheris", "Kunee", "Aegis"],
+                        "items": ["Simurgh", "Darius", "Bayan"],
                         "tier": 2
                       },
                       {
                         "key": "Anastasia",
                         "coreRank": 2,
-                        "items": ["Bloodaxe", "Stormhorn", "Frostguard"],
+                        "items": ["Nandaka", "Kiriti", "Kavacha"],
                         "tier": 2
                       },
                       {
@@ -1452,14 +1452,14 @@
                   }
                 },
                 {
-                  "key": "9471B3B1DA747353F3723F0ED7CA33E6",
-                  "deckKey": "F6B8832F8EE1AEFA3B11651D238DF410",
+                  "key": "DA77466876790668EE19E36FE1D839F1",
+                  "deckKey": "02F408DEA65873E59204FCE5938749BF",
                   "name": "Fury Reroll",
-                  "plays": 9272,
-                  "pickRate": 12.26083222,
-                  "winRate": 16.39982928,
-                  "topRate": 21.94386263,
-                  "avgPlacement": 8,
+                  "plays": 8959,
+                  "pickRate": 20.24072013,
+                  "winRate": 15.97414374,
+                  "topRate": 19.84549559,
+                  "avgPlacement": 7,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -1471,7 +1471,7 @@
                       {
                         "key": "Gulmok",
                         "coreRank": 1,
-                        "items": ["RuyiBang", "Jingong", "JinJia"],
+                        "items": ["Raikiri", "Kaminari", "TenguYoroi"],
                         "tier": 4
                       },
                       {
@@ -1504,7 +1504,7 @@
                       {
                         "key": "Anastasia",
                         "coreRank": 10,
-                        "items": ["Bloodaxe", "Stormhorn", "Frostguard"],
+                        "items": ["Nandaka", "Kiriti", "Kavacha"],
                         "tier": 2
                       },
                       {
@@ -1516,7 +1516,7 @@
                       {
                         "key": "Eclipse",
                         "coreRank": 8,
-                        "items": ["Aetheris", "Kunee", "Aegis"],
+                        "items": ["Simurgh", "Darius", "Bayan"],
                         "tier": 2
                       }
                     ],
@@ -1563,14 +1563,14 @@
                   }
                 },
                 {
-                  "key": "3FEB67B916C4B5F4DAD1743D1C558C8C",
-                  "deckKey": "065E0DAD9D7BAAD5747EF9BCE4F4EA41",
+                  "key": "C755124AE96E08216D30289AF7243DD7",
+                  "deckKey": "960F6F9805A3B38BD969AAEC7E112737",
                   "name": "Blockbuster",
-                  "plays": 6192,
-                  "pickRate": 29.72666748,
-                  "winRate": 25.20026155,
-                  "topRate": 14.60793677,
-                  "avgPlacement": 8,
+                  "plays": 6867,
+                  "pickRate": 28.44902371,
+                  "winRate": 28.66438651,
+                  "topRate": 16.91086296,
+                  "avgPlacement": 7,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -1602,13 +1602,13 @@
                       {
                         "key": "Selene",
                         "coreRank": 1,
-                        "items": ["SilverBullet", "Pendragon’sCrown", "Wygar"],
+                        "items": ["RedHorn", "EagleBonnet", "Nightfang"],
                         "tier": 2
                       },
                       {
                         "key": "Huli Jing",
                         "coreRank": 6,
-                        "items": ["Aetheris", "Kunee", "Aegis"],
+                        "items": ["Simurgh", "Darius", "Bayan"],
                         "tier": 2
                       },
                       {
@@ -1619,7 +1619,7 @@
                       {
                         "key": "Vritra",
                         "coreRank": 2,
-                        "items": ["Excalibur", "Eaglewing", "Evalach"],
+                        "items": ["Raikiri", "Kaminari", "TenguYoroi"],
                         "tier": 2
                       },
                       {
@@ -1631,7 +1631,7 @@
                       {
                         "key": "Freya",
                         "coreRank": 8,
-                        "items": ["Simurgh", "Darius", "Bayan"],
+                        "items": ["Aetheris", "Kunee", "Aegis"],
                         "tier": 2
                       }
                     ],
@@ -1682,14 +1682,14 @@
                   }
                 },
                 {
-                  "key": "48DCFE62D103CFD2EDDCF209FE70817E",
-                  "deckKey": "A41316C8E5CC081D24A4D5B83DFDF81E",
+                  "key": "7EFC1B9E6922CF620C7DC515E6AC7F44",
+                  "deckKey": "58F781FDE063F60EE17B5DFEB0F9096A",
                   "name": "Blockbuster Reroll",
-                  "plays": 7833,
-                  "pickRate": 18.13379841,
-                  "winRate": 12.97611603,
-                  "topRate": 12.59686595,
-                  "avgPlacement": 10,
+                  "plays": 3846,
+                  "pickRate": 28.93642609,
+                  "winRate": 14.54069793,
+                  "topRate": 22.57328305,
+                  "avgPlacement": 7,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -1701,19 +1701,19 @@
                       {
                         "key": "Dargrim",
                         "coreRank": 1,
-                        "items": ["Excalibur", "Eaglewing", "Evalach"],
+                        "items": ["Raikiri", "Kaminari", "TenguYoroi"],
                         "tier": 4
                       },
                       {
                         "key": "Durin",
                         "coreRank": 5,
-                        "items": ["RedHorn", "EagleBonnet", "Nightfang"],
+                        "items": ["KoreanBow", "ScaleHelmet", "GayaArmor"],
                         "tier": 4
                       },
                       {
                         "key": "Aello",
                         "coreRank": 2,
-                        "items": ["Gladius", "Galea", "Vesta"],
+                        "items": ["EyeOfRa", "Sekhem", "Osirian"],
                         "tier": 4
                       },
                       {
@@ -1724,7 +1724,7 @@
                       {
                         "key": "Sepulcris",
                         "coreRank": 1,
-                        "items": ["Excalibur", "Eaglewing", "Evalach"],
+                        "items": ["Raikiri", "Kaminari", "TenguYoroi"],
                         "tier": 2
                       },
                       {
