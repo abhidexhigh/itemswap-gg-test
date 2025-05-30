@@ -26,14 +26,14 @@
               "plays": 3439072,
               "metaDecks": [
                 {
-                  "key": "6409414B0F1C60BD4C73ABD95EABA444",
-                  "deckKey": "7F2A387D5EF325A32E77B5C018E352AD",
+                  "key": "149C113AD9C94991AFD52FB8A3F984B4",
+                  "deckKey": "6EBE76605F9E6C3609AABD536BB82178",
                   "name": "Guardian",
-                  "plays": 3756,
-                  "pickRate": 19.31759944,
-                  "winRate": 15.0438562,
-                  "topRate": 28.27638636,
-                  "avgPlacement": 7,
+                  "plays": 5243,
+                  "pickRate": 19.64562325,
+                  "winRate": 29.57733239,
+                  "topRate": 20.41401077,
+                  "avgPlacement": 8,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -71,12 +71,12 @@
                       {
                         "key": "Tiamat",
                         "coreRank": 6,
+                        "items": ["Excalibur", "Eaglewing", "Evalach"],
                         "tier": 2
                       },
                       {
                         "key": "Ravos",
                         "coreRank": 10,
-                        "items": ["Gladius", "Galea", "Vesta"],
                         "tier": 2
                       },
                       {
@@ -145,13 +145,13 @@
                   }
                 },
                 {
-                  "key": "0D14613CFE0CA2A0839FBD20557CCD56",
-                  "deckKey": "A390001E8E5F0E0F7F84C24311FB2F0E",
+                  "key": "3429F351EE43CA6339C08E009F18ED98",
+                  "deckKey": "3408DF7EF3C0DB13CDBADA8246BD4A0F",
                   "name": "Guardian Reroll",
-                  "plays": 5832,
-                  "pickRate": 27.97739276,
-                  "winRate": 17.55393327,
-                  "topRate": 10.82700115,
+                  "plays": 5462,
+                  "pickRate": 12.83373131,
+                  "winRate": 18.17979398,
+                  "topRate": 13.83438086,
                   "avgPlacement": 6,
                   "deck": {
                     "augments": [
@@ -246,14 +246,14 @@
                   }
                 },
                 {
-                  "key": "8B8CBC05D1DD1BF6B298ED7C8986881B",
-                  "deckKey": "5210BA89770C05166BABEDD7C2CF9A8E",
+                  "key": "F2B3705F0DD542B3B2B52636ABB53129",
+                  "deckKey": "1A5B3450EC90DD50284A6449AF6D080A",
                   "name": "Chaos",
-                  "plays": 7843,
-                  "pickRate": 23.30405403,
-                  "winRate": 12.30610665,
-                  "topRate": 22.10881864,
-                  "avgPlacement": 1,
+                  "plays": 9203,
+                  "pickRate": 20.9455551,
+                  "winRate": 14.10642044,
+                  "topRate": 24.2714682,
+                  "avgPlacement": 3,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -361,14 +361,14 @@
                   }
                 },
                 {
-                  "key": "65B188F97A0BD1826D68501C96717025",
-                  "deckKey": "192067B95F8A1F2651A0781CDD2D1A00",
+                  "key": "781A303A6A829795DFA13B0ABC7C0019",
+                  "deckKey": "722C3A7326472A225B814536DFE00EAE",
                   "name": "Chaos Reroll",
-                  "plays": 4324,
-                  "pickRate": 24.2701757,
-                  "winRate": 12.05799616,
-                  "topRate": 24.61172947,
-                  "avgPlacement": 3,
+                  "plays": 4088,
+                  "pickRate": 29.41001806,
+                  "winRate": 12.38601997,
+                  "topRate": 24.94691982,
+                  "avgPlacement": 8,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -418,13 +418,12 @@
                       {
                         "key": "Siren",
                         "coreRank": 2,
-                        "items": ["EyeOfRa", "Sekhem", "Osirian"],
                         "tier": 2
                       },
                       {
                         "key": "Ember",
                         "coreRank": 8,
-                        "items": ["KoreanBow", "ScaleHelmet", "GayaArmor"],
+                        "items": ["Excalibur", "Eaglewing", "Evalach"],
                         "tier": 2
                       }
                     ],
@@ -467,14 +466,14 @@
                   }
                 },
                 {
-                  "key": "C84DC4FDE3BCDFB583951F6065316F92",
-                  "deckKey": "2ED744ED9BA37DB4AF80E655B3C8C5DD",
+                  "key": "E8CA4476BACC2870C388034C714D02CA",
+                  "deckKey": "1F3F81A78E8C9DCB0CF240A546E1E18F",
                   "name": "WildRush",
-                  "plays": 7337,
-                  "pickRate": 14.64276447,
-                  "winRate": 16.67949116,
-                  "topRate": 20.94031883,
-                  "avgPlacement": 2,
+                  "plays": 8307,
+                  "pickRate": 11.98642924,
+                  "winRate": 18.84930727,
+                  "topRate": 23.60594222,
+                  "avgPlacement": 8,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -501,7 +500,7 @@
                       {
                         "key": "Solarius",
                         "coreRank": 3,
-                        "items": ["Excalibur", "Eaglewing", "Evalach"],
+                        "items": ["KoreanBow", "ScaleHelmet", "GayaArmor"],
                         "tier": 2
                       },
                       {
@@ -582,14 +581,14 @@
                   }
                 },
                 {
-                  "key": "CEF2A677A7F3B5AFD380FB1D7F7F6A93",
-                  "deckKey": "ECD8EC5BDE1127ECB7079569924B093D",
+                  "key": "57CF2FE7E4A45091203C42181F2AD789",
+                  "deckKey": "D117F1A6A53C188D42188FD99EFCED2D",
                   "name": "WildRush Reroll",
-                  "plays": 8728,
-                  "pickRate": 12.8368848,
-                  "winRate": 15.52846243,
-                  "topRate": 15.62439036,
-                  "avgPlacement": 3,
+                  "plays": 8876,
+                  "pickRate": 26.15627989,
+                  "winRate": 13.03913171,
+                  "topRate": 25.7738626,
+                  "avgPlacement": 2,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -679,14 +678,14 @@
                   }
                 },
                 {
-                  "key": "352ABD601F6615833CA4B04271D1EA5D",
-                  "deckKey": "3D8C908E67C0F5E4450531A36A44AD98",
+                  "key": "C7928CCF85D7E2968ADAB782A6A3044D",
+                  "deckKey": "DE8E536FB856A01E04A912F4DC40D8D8",
                   "name": "GirlCrush",
-                  "plays": 5771,
-                  "pickRate": 11.44635833,
-                  "winRate": 28.55792751,
-                  "topRate": 24.24497498,
-                  "avgPlacement": 1,
+                  "plays": 5538,
+                  "pickRate": 11.47654554,
+                  "winRate": 21.6917588,
+                  "topRate": 24.89148034,
+                  "avgPlacement": 10,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -724,6 +723,7 @@
                       {
                         "key": "Akane",
                         "coreRank": 6,
+                        "items": ["Raikiri", "Kaminari", "TenguYoroi"],
                         "tier": 2
                       },
                       {
@@ -735,7 +735,6 @@
                       {
                         "key": "Miho",
                         "coreRank": 2,
-                        "items": ["Aetheris", "Kunee", "Aegis"],
                         "tier": 2
                       },
                       {
@@ -790,14 +789,14 @@
                   }
                 },
                 {
-                  "key": "20E069FBC2A9442B3334B43762AEFFBC",
-                  "deckKey": "C305EB384DE508D1E7AC5C1B618CD6E1",
+                  "key": "C4CF9F44193D5DBAAD5454D42973716F",
+                  "deckKey": "9683DDCF48C2BDB021582D0457EFCFCA",
                   "name": "GirlCrush Reroll",
-                  "plays": 1471,
-                  "pickRate": 10.09913495,
-                  "winRate": 24.51701486,
-                  "topRate": 14.62473059,
-                  "avgPlacement": 9,
+                  "plays": 2827,
+                  "pickRate": 12.60978691,
+                  "winRate": 22.17916088,
+                  "topRate": 27.47505805,
+                  "avgPlacement": 5,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -900,14 +899,14 @@
                   }
                 },
                 {
-                  "key": "E1E7C4BE9B5E798437639DC638D11E6B",
-                  "deckKey": "37ED9926F462FFE421F9F56091F16EB2",
+                  "key": "0F93D3BE002E1C4B27B9C23A778118CC",
+                  "deckKey": "D2BEDABAD54B420335F9B8FAC19F9F83",
                   "name": "Mirage",
-                  "plays": 6696,
-                  "pickRate": 20.43491106,
-                  "winRate": 27.61559918,
-                  "topRate": 28.1167658,
-                  "avgPlacement": 3,
+                  "plays": 6323,
+                  "pickRate": 13.27807198,
+                  "winRate": 18.28237834,
+                  "topRate": 28.09225717,
+                  "avgPlacement": 10,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -1015,14 +1014,14 @@
                   }
                 },
                 {
-                  "key": "44756D6D3EFFBF158DA3D83B2DC32652",
-                  "deckKey": "1DE1A656BDC298C7E82638FF6D1EB472",
+                  "key": "C40593EBD56E5CED429ACD505ADEF641",
+                  "deckKey": "59B8B7E697EC4740DDB8DA14CC5A9443",
                   "name": "Mirage Reroll",
-                  "plays": 1941,
-                  "pickRate": 19.27671578,
-                  "winRate": 21.05030266,
-                  "topRate": 11.21535013,
-                  "avgPlacement": 8,
+                  "plays": 1408,
+                  "pickRate": 15.11140229,
+                  "winRate": 16.02592594,
+                  "topRate": 26.73786725,
+                  "avgPlacement": 4,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -1034,7 +1033,8 @@
                       {
                         "key": "Magnus",
                         "coreRank": 1,
-                        "tier": 2
+                        "items": ["EyeOfRa", "Sekhem", "Osirian"],
+                        "tier": 4
                       },
                       {
                         "key": "Varcolac",
@@ -1072,7 +1072,6 @@
                       {
                         "key": "Oinari",
                         "coreRank": 2,
-                        "items": ["Aetheris", "Kunee", "Aegis"],
                         "tier": 2
                       },
                       {
@@ -1121,14 +1120,14 @@
                   }
                 },
                 {
-                  "key": "EB9C5747C6D7FF67DD3085B3C216BB9C",
-                  "deckKey": "D218CAB5C65E63AC46FCB11B70C5FAF1",
+                  "key": "31A463DDEA5B533611CCF54D34E6EC50",
+                  "deckKey": "3B00F83801332530AA2154EBAA9D89F0",
                   "name": "Druid",
-                  "plays": 1605,
-                  "pickRate": 23.90537732,
-                  "winRate": 28.04437408,
-                  "topRate": 17.96175044,
-                  "avgPlacement": 5,
+                  "plays": 9120,
+                  "pickRate": 11.54249759,
+                  "winRate": 29.53560958,
+                  "topRate": 13.7892707,
+                  "avgPlacement": 2,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -1236,14 +1235,14 @@
                   }
                 },
                 {
-                  "key": "E77EBC14277F56E762377A3BA0D6ADAE",
-                  "deckKey": "8B238DFC796E6D405E1537415363E878",
+                  "key": "2D56B2690156301AB8C2684133DDE0BE",
+                  "deckKey": "8E9D92D7A5C46BB1F0519E508F9092E8",
                   "name": "Druid Reroll",
-                  "plays": 2734,
-                  "pickRate": 20.97791094,
-                  "winRate": 11.98768855,
-                  "topRate": 10.74846538,
-                  "avgPlacement": 3,
+                  "plays": 9990,
+                  "pickRate": 19.4847871,
+                  "winRate": 26.66547553,
+                  "topRate": 28.41777794,
+                  "avgPlacement": 2,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -1333,14 +1332,14 @@
                   }
                 },
                 {
-                  "key": "AC26A4BFD2FBEC3D0E4EE1D015FE8CF1",
-                  "deckKey": "905473DDEF96FF6E5F49D34008009185",
+                  "key": "66894ECEF83277983375A989F71CEAF5",
+                  "deckKey": "9DFDBBBC1CE8B4BC0BD40C059EBC1D19",
                   "name": "Fury",
-                  "plays": 6605,
-                  "pickRate": 17.7378093,
-                  "winRate": 27.36451561,
-                  "topRate": 15.22400089,
-                  "avgPlacement": 10,
+                  "plays": 5390,
+                  "pickRate": 15.39995532,
+                  "winRate": 26.18356116,
+                  "topRate": 11.05152115,
+                  "avgPlacement": 6,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -1378,6 +1377,7 @@
                       {
                         "key": "Kazuha",
                         "coreRank": 6,
+                        "items": ["Raikiri", "Kaminari", "TenguYoroi"],
                         "tier": 2
                       },
                       {
@@ -1401,7 +1401,6 @@
                       {
                         "key": "Ignatius",
                         "coreRank": 8,
-                        "items": ["KoreanBow", "ScaleHelmet", "GayaArmor"],
                         "tier": 2
                       }
                     ],
@@ -1452,14 +1451,14 @@
                   }
                 },
                 {
-                  "key": "DA77466876790668EE19E36FE1D839F1",
-                  "deckKey": "02F408DEA65873E59204FCE5938749BF",
+                  "key": "B09E792C10E881280D818F4A627EF4B1",
+                  "deckKey": "016BB4B97C3D4FDA28330FB1E218A6A9",
                   "name": "Fury Reroll",
-                  "plays": 8959,
-                  "pickRate": 20.24072013,
-                  "winRate": 15.97414374,
-                  "topRate": 19.84549559,
-                  "avgPlacement": 7,
+                  "plays": 8424,
+                  "pickRate": 16.07540694,
+                  "winRate": 25.99994984,
+                  "topRate": 16.77212934,
+                  "avgPlacement": 8,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -1563,14 +1562,14 @@
                   }
                 },
                 {
-                  "key": "C755124AE96E08216D30289AF7243DD7",
-                  "deckKey": "960F6F9805A3B38BD969AAEC7E112737",
+                  "key": "AA97E87E65AF711EDB65C69723447235",
+                  "deckKey": "3392F5E5BAD8954089E8FE07DF57CF95",
                   "name": "Blockbuster",
-                  "plays": 6867,
-                  "pickRate": 28.44902371,
-                  "winRate": 28.66438651,
-                  "topRate": 16.91086296,
-                  "avgPlacement": 7,
+                  "plays": 3649,
+                  "pickRate": 28.79769217,
+                  "winRate": 26.61720259,
+                  "topRate": 10.25699801,
+                  "avgPlacement": 4,
                   "deck": {
                     "augments": [
                       "SavageMomentum",
@@ -1682,13 +1681,13 @@
                   }
                 },
                 {
-                  "key": "7EFC1B9E6922CF620C7DC515E6AC7F44",
-                  "deckKey": "58F781FDE063F60EE17B5DFEB0F9096A",
+                  "key": "75095535B38F264CDCC22D862A61C64E",
+                  "deckKey": "90C9397D54FD840BCAE0ACD033998CA6",
                   "name": "Blockbuster Reroll",
-                  "plays": 3846,
-                  "pickRate": 28.93642609,
-                  "winRate": 14.54069793,
-                  "topRate": 22.57328305,
+                  "plays": 4910,
+                  "pickRate": 16.90234972,
+                  "winRate": 10.0703816,
+                  "topRate": 20.24259561,
                   "avgPlacement": 7,
                   "deck": {
                     "augments": [
