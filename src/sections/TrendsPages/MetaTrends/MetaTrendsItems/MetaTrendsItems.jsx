@@ -8,14 +8,9 @@ import React, {
   useRef,
   useEffect,
 } from "react";
-import TraitTooltip from "src/components/tooltip/TraitTooltip";
 import "react-tooltip/dist/react-tooltip.css";
-import GirlCrush from "@assets/image/traits/GirlCrush.svg";
 import MetaTrendsCard from "../MetaTrendsCard/MetaTrendsCard";
-import augment from "@assets/image/augments/1.png";
-import arrowRight from "@assets/image/icons/arrow-right.svg";
 import { PiEye, PiEyeClosed } from "react-icons/pi";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import Comps from "../../../../data/compsNew.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
@@ -84,20 +79,19 @@ const TabButton = memo(({ active, label, onClick }) => (
   </button>
 ));
 
-// PERFORMANCE OPTIMIZATION: Heavily optimized TraitItem with immediate image loading
+// PERFORMANCE OPTIMIZATION: Heavily optimized TraitItem with scroll-aware intersection observer
 const TraitItem = memo(({ trait, selectedTrait, onSelect, i, t }) => {
-  const [isVisible, setIsVisible] = useState(true); // Changed: Start as visible for immediate rendering
-  const [hasBeenVisible, setHasBeenVisible] = useState(true); // Changed: Start as true for immediate rendering
+  const [isVisible, setIsVisible] = useState(true); // Start visible for immediate loading
+  const [hasBeenVisible, setHasBeenVisible] = useState(false);
   const itemRef = useRef(null);
 
   useEffect(() => {
-    // PERFORMANCE OPTIMIZATION: Keep intersection observer for scroll performance optimizations
-    // but don't use it to control initial visibility
     const observer = createOptimizedObserver((entry, isScrolling) => {
-      // Only use for performance hints, not visibility control
-      if (entry.isIntersecting) {
-        setIsVisible(true);
+      // Track visibility for potential future optimizations, but don't block content
+      if (entry.isIntersecting && !hasBeenVisible) {
         setHasBeenVisible(true);
+        // Disconnect after first visibility
+        if (itemRef.current) observer.unobserve(itemRef.current);
       }
     });
 
@@ -108,7 +102,7 @@ const TraitItem = memo(({ trait, selectedTrait, onSelect, i, t }) => {
     return () => {
       if (itemRef.current) observer.unobserve(itemRef.current);
     };
-  }, []);
+  }, [hasBeenVisible]);
 
   const handleClick = useCallback(() => {
     onSelect("trait", trait?.key);
@@ -130,7 +124,8 @@ const TraitItem = memo(({ trait, selectedTrait, onSelect, i, t }) => {
           src={trait?.imageUrl}
           className="w-full h-full object-cover rounded-lg"
           data-tooltip-id={`${trait?.key}-${i}`}
-          priority={true} // Changed: Use priority for immediate loading
+          loading="eager"
+          priority={i < 8} // Prioritize first 8 images
         />
         {trait?.key === selectedTrait && (
           <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
@@ -145,21 +140,20 @@ const TraitItem = memo(({ trait, selectedTrait, onSelect, i, t }) => {
   );
 });
 
-// PERFORMANCE OPTIMIZATION: Optimized ForceItem with immediate image loading
+// PERFORMANCE OPTIMIZATION: Optimized ForceItem with better state management
 const ForceItem = memo(({ force, selectedTrait, onSelect, i, t }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isVisible, setIsVisible] = useState(true); // Changed: Start as visible for immediate rendering
-  const [hasBeenVisible, setHasBeenVisible] = useState(true); // Changed: Start as true for immediate rendering
+  const [isVisible, setIsVisible] = useState(true); // Start visible for immediate loading
+  const [hasBeenVisible, setHasBeenVisible] = useState(false);
   const itemRef = useRef(null);
 
   useEffect(() => {
-    // PERFORMANCE OPTIMIZATION: Keep intersection observer for scroll performance optimizations
-    // but don't use it to control initial visibility
     const observer = createOptimizedObserver((entry, isScrolling) => {
-      // Only use for performance hints, not visibility control
-      if (entry.isIntersecting) {
-        setIsVisible(true);
+      // Track visibility for potential future optimizations, but don't block content
+      if (entry.isIntersecting && !hasBeenVisible) {
         setHasBeenVisible(true);
+        // Disconnect after first visibility
+        if (itemRef.current) observer.unobserve(itemRef.current);
       }
     });
 
@@ -170,7 +164,7 @@ const ForceItem = memo(({ force, selectedTrait, onSelect, i, t }) => {
     return () => {
       if (itemRef.current) observer.unobserve(itemRef.current);
     };
-  }, []);
+  }, [hasBeenVisible]);
 
   const handleClick = useCallback(() => {
     onSelect("force", force?.key);
@@ -193,9 +187,9 @@ const ForceItem = memo(({ force, selectedTrait, onSelect, i, t }) => {
         <ForceIcon
           force={force}
           size="xxlarge"
-          className="w-full h-full"
-          data-tooltip-id={`${force?.key}-${i}`}
           isHovered={isHovered}
+          className="w-full h-full object-cover rounded-lg"
+          data-tooltip-id={`${force?.key}-${i}`}
         />
         {force?.key === selectedTrait && (
           <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
@@ -203,27 +197,26 @@ const ForceItem = memo(({ force, selectedTrait, onSelect, i, t }) => {
           </div>
         )}
       </div>
-      <span className="hidden lg:block text-sm md:text-base text-[#D9A876] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
+      <span className="hidden lg:block text-sm md:text-base text-[#cccccc] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
         {force?.name}
       </span>
     </div>
   );
 });
 
-// PERFORMANCE OPTIMIZATION: Optimized SkillTreeItem with immediate image loading
+// PERFORMANCE OPTIMIZATION: Optimized SkillTreeItem with lazy loading
 const SkillTreeItem = memo(({ skill, selectedSkillTree, onSelect, i }) => {
-  const [isVisible, setIsVisible] = useState(true); // Changed: Start as visible for immediate rendering
-  const [hasBeenVisible, setHasBeenVisible] = useState(true); // Changed: Start as true for immediate rendering
+  const [isVisible, setIsVisible] = useState(true); // Start visible for immediate loading
+  const [hasBeenVisible, setHasBeenVisible] = useState(false);
   const itemRef = useRef(null);
 
   useEffect(() => {
-    // PERFORMANCE OPTIMIZATION: Keep intersection observer for scroll performance optimizations
-    // but don't use it to control initial visibility
     const observer = createOptimizedObserver((entry, isScrolling) => {
-      // Only use for performance hints, not visibility control
-      if (entry.isIntersecting) {
-        setIsVisible(true);
+      // Track visibility for potential future optimizations, but don't block content
+      if (entry.isIntersecting && !hasBeenVisible) {
         setHasBeenVisible(true);
+        // Disconnect after first visibility
+        if (itemRef.current) observer.unobserve(itemRef.current);
       }
     });
 
@@ -234,7 +227,7 @@ const SkillTreeItem = memo(({ skill, selectedSkillTree, onSelect, i }) => {
     return () => {
       if (itemRef.current) observer.unobserve(itemRef.current);
     };
-  }, []);
+  }, [hasBeenVisible]);
 
   const handleClick = useCallback(() => {
     onSelect("skillTree", skill?.key);
@@ -267,7 +260,8 @@ const SkillTreeItem = memo(({ skill, selectedSkillTree, onSelect, i }) => {
             src={skill?.imageUrl}
             className="w-[80%] h-[80%] object-cover rounded-md"
             data-tooltip-id={`skill-${skill?.key}-${i}`}
-            priority={true} // Changed: Use priority for immediate loading
+            loading="eager"
+            priority={i < 6} // Prioritize first 6 skills
           />
         </div>
         {skill?.key === selectedSkillTree && (
@@ -283,20 +277,19 @@ const SkillTreeItem = memo(({ skill, selectedSkillTree, onSelect, i }) => {
   );
 });
 
-// PERFORMANCE OPTIMIZATION: Optimized ItemIcon with immediate image loading
+// PERFORMANCE OPTIMIZATION: Optimized ItemIcon with intersection observer
 const ItemIcon = memo(({ item, selectedItem, onSelect, i }) => {
-  const [isVisible, setIsVisible] = useState(true); // Changed: Start as visible for immediate rendering
-  const [hasBeenVisible, setHasBeenVisible] = useState(true); // Changed: Start as true for immediate rendering
+  const [isVisible, setIsVisible] = useState(true); // Start visible for immediate loading
+  const [hasBeenVisible, setHasBeenVisible] = useState(false);
   const itemRef = useRef(null);
 
   useEffect(() => {
-    // PERFORMANCE OPTIMIZATION: Keep intersection observer for scroll performance optimizations
-    // but don't use it to control initial visibility
     const observer = createOptimizedObserver((entry, isScrolling) => {
-      // Only use for performance hints, not visibility control
-      if (entry.isIntersecting) {
-        setIsVisible(true);
+      // Track visibility for potential future optimizations, but don't block content
+      if (entry.isIntersecting && !hasBeenVisible) {
         setHasBeenVisible(true);
+        // Disconnect after first visibility
+        if (itemRef.current) observer.unobserve(itemRef.current);
       }
     });
 
@@ -307,7 +300,7 @@ const ItemIcon = memo(({ item, selectedItem, onSelect, i }) => {
     return () => {
       if (itemRef.current) observer.unobserve(itemRef.current);
     };
-  }, []);
+  }, [hasBeenVisible]);
 
   const handleClick = useCallback(() => {
     onSelect("item", item?.key);
@@ -329,7 +322,8 @@ const ItemIcon = memo(({ item, selectedItem, onSelect, i }) => {
           src={item?.imageUrl}
           className="w-full h-full object-contain rounded-lg !border !border-[#ffffff20]"
           data-tooltip-id={`${item?.key}-${i}`}
-          priority={true} // Changed: Use priority for immediate loading
+          loading="eager"
+          priority={i < 12} // Prioritize first 12 items
         />
         {item?.key === selectedItem && (
           <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
@@ -404,7 +398,7 @@ const ChampionWithItems = memo(
                   isScrolling ? "" : "hover:scale-150"
                 }`}
                 data-tooltip-id={`${itemDetails.key}-${idx}`}
-                priority={true}
+                loading="eager"
               />
             </div>
           ))}
@@ -414,7 +408,7 @@ const ChampionWithItems = memo(
   }
 );
 
-// PERFORMANCE OPTIMIZATION: Memoized AugmentIcon with immediate loading
+// PERFORMANCE OPTIMIZATION: Memoized AugmentIcon with better caching
 const AugmentIcon = memo(({ augment, augments }) => {
   const augmentDetails = useMemo(() => {
     return augments?.find((a) => a.key === augment);
@@ -431,14 +425,14 @@ const AugmentIcon = memo(({ augment, augments }) => {
         src={augmentDetails.imageUrl}
         className="w-full h-full"
         data-tooltip-id={augment}
-        priority={true} // Changed: Use priority for immediate loading
+        loading="eager"
       />
       <ReactTltp variant="augment" content={augmentDetails} id={augment} />
     </div>
   );
 });
 
-// PERFORMANCE OPTIMIZATION: Memoized SkillTreeIcon with immediate loading
+// PERFORMANCE OPTIMIZATION: Memoized SkillTreeIcon with better caching
 const SkillTreeIcon = memo(({ skillTree, skills }) => {
   const skillDetails = useMemo(() => {
     return skills?.find((s) => s.key === skillTree);
@@ -462,7 +456,7 @@ const SkillTreeIcon = memo(({ skillTree, skills }) => {
           src={skillDetails.imageUrl}
           className="w-8 h-8 md:w-10 md:h-10 rounded-md"
           data-tooltip-id={skillTree}
-          priority={true} // Changed: Use priority for immediate loading
+          loading="eager"
         />
       </div>
       <ReactTltp variant="skillTree" content={skillDetails} id={skillTree} />
@@ -575,7 +569,7 @@ const DeckHeader = memo(
                   src={trait.tier.imageUrl}
                   className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center w-[38px] md:w-[56px]"
                   data-tooltip-id={`${trait.key}-${index}`}
-                  priority={true}
+                  loading="eager"
                 />
                 <ReactTltp
                   variant="trait"
@@ -601,13 +595,13 @@ const DeckHeader = memo(
   }
 );
 
-// PERFORMANCE OPTIMIZATION: Heavily optimized MetaDeck with immediate initial rendering
+// PERFORMANCE OPTIMIZATION: Heavily optimized MetaDeck with intersection observer and lazy loading
 const MetaDeck = memo(
   ({
     metaDeck,
     i,
     isClosed,
-    handleIsClosed: toggleClosed,
+    handleIsClosed,
     champions,
     items,
     traits,
@@ -616,19 +610,26 @@ const MetaDeck = memo(
     others,
     skills,
   }) => {
-    const [isVisible, setIsVisible] = useState(true); // Changed: Start as visible for immediate rendering
-    const [hasBeenVisible, setHasBeenVisible] = useState(true); // Changed: Start as true for immediate rendering
+    // PERFORMANCE OPTIMIZATION: Stable toggle function
+    const toggleClosed = useCallback(
+      (e) => {
+        handleIsClosed(e);
+      },
+      [handleIsClosed]
+    );
+
+    // PERFORMANCE OPTIMIZATION: Enhanced intersection observer with better thresholds
     const deckRef = useRef(null);
+    const [isVisible, setIsVisible] = useState(true); // Start visible for better UX
+    const [hasBeenVisible, setHasBeenVisible] = useState(false);
 
     useEffect(() => {
-      // PERFORMANCE OPTIMIZATION: Keep intersection observer for scroll performance optimizations
-      // but don't use it to control initial visibility
+      // PERFORMANCE OPTIMIZATION: Use intersection observer for optimization, not blocking visibility
       const observer = createOptimizedObserver(
         (entry, isScrolling) => {
-          // Only use for performance hints, not visibility control
-          if (entry.isIntersecting) {
-            setIsVisible(true);
+          if (entry.isIntersecting && !hasBeenVisible) {
             setHasBeenVisible(true);
+            // Can add additional optimizations here based on visibility
           }
         },
         { threshold: 0.05, rootMargin: "100px" }
@@ -641,7 +642,7 @@ const MetaDeck = memo(
       return () => {
         if (deckRef.current) observer.unobserve(deckRef.current);
       };
-    }, []);
+    }, [hasBeenVisible]);
 
     // PERFORMANCE OPTIMIZATION: Memoize sorted champions to prevent re-sorting
     const sortedChampions = useMemo(() => {
@@ -680,7 +681,7 @@ const MetaDeck = memo(
           skills={skills}
         />
 
-        {!isClosed[i] && ( // Removed isVisible condition for immediate rendering
+        {!isClosed[i] && isVisible && (
           <div className="flex flex-col bg-center bg-no-repeat mt-[-1px]">
             <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#111111] py-[16px] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6">
               <div className="mb-[16px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[80%] lg:flex-shrink-0">

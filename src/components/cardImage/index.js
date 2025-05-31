@@ -165,7 +165,6 @@ const CardImage = ({
                   height={10}
                   className="w-[10px] h-[10px] md:w-[14px] md:h-[14px]"
                   alt="Star"
-                  priority={true}
                 />
               ))}
             </div>
@@ -205,6 +204,7 @@ const CardImage = ({
                     width={96}
                     height={96}
                     className="w-full h-full object-cover object-center rounded-lg"
+                    loading="eager"
                     priority={true}
                   />
                 )}
@@ -238,6 +238,7 @@ const CardImage = ({
                 alt="Cost Frame"
                 width={200}
                 height={200}
+                loading="eager"
                 priority={true}
               />
 
@@ -253,6 +254,7 @@ const CardImage = ({
                       width={10}
                       height={10}
                       className="w-3 h-3 object-contain"
+                      loading="eager"
                       priority={true}
                     />
                     <div className="text-xs font-medium text-white md:text-sm md:font-semibold ">

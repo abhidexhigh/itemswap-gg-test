@@ -87,7 +87,8 @@ const ForceIcon = ({
         width={60}
         height={60}
         className={`rounded-full ${containerClass} ${contentPadding} ${showVideo ? "opacity-0 absolute" : "opacity-100"}`}
-        priority={true}
+        loading="eager"
+        fetchPriority="high"
       />
 
       {/* Render video element only if needed, but keep it hidden until ready */}
@@ -109,7 +110,8 @@ const ForceIcon = ({
         alt="Border Image"
         width={200}
         height={200}
-        priority={true}
+        loading="eager"
+        fetchPriority="high"
       />
     </div>
   );

@@ -265,24 +265,22 @@ const ChampionsCostSection = memo(
     others,
     selectedChampion,
   }) => {
-    // Optimization: use refs for intersection observer to lazily render
+    // Start all sections as visible for immediate loading
     const sectionRef = useRef(null);
-    const [isVisible, setIsVisible] = useState(costIndex < 2); // Eagerly load first 2 sections
+    const [isVisible, setIsVisible] = useState(true); // All sections visible immediately
 
     // Store the processed champions to prevent reshuffling
     const processedChampionsRef = useRef(null);
 
+    // Remove intersection observer - no longer needed for visibility
+    // Keep ref for potential future optimizations
     useEffect(() => {
-      // Skip for already visible sections (first 2)
-      if (isVisible) return;
-
+      // Optional: Add intersection observer for analytics or other optimizations
+      // but don't use it to control visibility
       const observer = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            // Once visible, no need to observe anymore
-            if (sectionRef.current) observer.unobserve(sectionRef.current);
-          }
+          // Can track visibility for analytics or other purposes
+          // but don't change isVisible state
         },
         { threshold: 0.1, rootMargin: "100px" }
       );
@@ -294,7 +292,7 @@ const ChampionsCostSection = memo(
       return () => {
         if (sectionRef.current) observer.unobserve(sectionRef.current);
       };
-    }, [isVisible]);
+    }, []);
 
     // Process champions only once and store in ref
     const sortedChampions = useMemo(() => {
@@ -333,19 +331,11 @@ const ChampionsCostSection = memo(
       [setSelectedChampion, forces, selectedChampion]
     );
 
-    if (!isVisible) {
-      return (
-        <div
-          ref={sectionRef}
-          className="min-h-[100px] bg-[#1a1b30] rounded mb-4 animate-pulse"
-        />
-      );
-    }
-
+    // Always render content immediately
     return (
       <React.Fragment>
         <CostHeader costLevel={costIndex} others={others} />
-        <div className="mx-auto w-full">
+        <div className="mx-auto w-full" ref={sectionRef}>
           <div
             className="flex items-center flex-wrap mb-2 justify-center rounded-tl-none rounded-tr-none"
             style={{
@@ -354,7 +344,7 @@ const ChampionsCostSection = memo(
           >
             <div className="hidden lg:flex items-center">
               {costIndex < coinIcons.length && (
-                <CoinIcon index={costIndex} priority={costIndex < 2} />
+                <CoinIcon index={costIndex} priority={true} />
               )}
             </div>
             {sortedChampions.map((champion, j) => renderChampion(champion, j))}
