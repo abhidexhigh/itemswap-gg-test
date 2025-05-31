@@ -161,10 +161,11 @@ const CardImage = ({
                 <OptimizedImage
                   key={index}
                   src={`${tier === 4 ? "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746781271/prismatic_i5en18.webp" : "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746781271/gold_3_atgi3f.webp"}`}
-                  width={12}
-                  height={12}
+                  width={10}
+                  height={10}
                   className="w-[10px] h-[10px] md:w-[14px] md:h-[14px]"
                   alt="Star"
+                  priority={true}
                 />
               ))}
             </div>
@@ -204,8 +205,7 @@ const CardImage = ({
                     width={96}
                     height={96}
                     className="w-full h-full object-cover object-center rounded-lg"
-                    loading={isVisible ? "eager" : "lazy"}
-                    fetchPriority={isVisible ? "high" : "auto"}
+                    priority={true}
                   />
                 )}
               </div>
@@ -238,8 +238,7 @@ const CardImage = ({
                 alt="Cost Frame"
                 width={200}
                 height={200}
-                loading={isVisible ? "eager" : "lazy"}
-                fetchPriority={isVisible ? "high" : "auto"}
+                priority={true}
               />
 
               {/* Cost icon positioned in bottom right corner */}
@@ -254,8 +253,7 @@ const CardImage = ({
                       width={10}
                       height={10}
                       className="w-3 h-3 object-contain"
-                      loading={isVisible ? "eager" : "lazy"}
-                      fetchPriority={isVisible ? "high" : "auto"}
+                      priority={true}
                     />
                     <div className="text-xs font-medium text-white md:text-sm md:font-semibold ">
                       {src.cost}
