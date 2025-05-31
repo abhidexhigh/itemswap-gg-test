@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import React, {
@@ -6,8 +5,6 @@ import React, {
   useCallback,
   useMemo,
   memo,
-  Suspense,
-  lazy,
   useRef,
   useEffect,
 } from "react";
@@ -23,9 +20,10 @@ import { IoMdCheckmarkCircle } from "react-icons/io";
 import Comps from "../../../../data/compsNew.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
-import "chart.js/auto";
 import { OptimizedImage } from "src/utils/imageOptimizer";
 import ForceIcon from "src/components/forceIcon";
+// PERFORMANCE OPTIMIZATION: Direct import for lightweight CSS chart (no dynamic loading needed)
+import MyBarChartComponent from "./BarGraph";
 
 // PERFORMANCE OPTIMIZATION: Enhanced cache with LRU-like behavior
 const MAX_CACHE_SIZE = 100;
@@ -72,25 +70,6 @@ const createOptimizedObserver = (callback, options = {}) => {
     });
   }, defaultOptions);
 };
-
-// PERFORMANCE OPTIMIZATION: Dynamically import heavy components with better loading states
-const Chart = dynamic(() => import("react-apexcharts"), {
-  ssr: false,
-  loading: () => (
-    <div className="animate-pulse bg-gray-700 h-[350px] rounded-lg flex items-center justify-center">
-      <div className="w-8 h-8 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
-    </div>
-  ),
-});
-
-const MyBarChartComponent = dynamic(() => import("./BarGraph"), {
-  ssr: false,
-  loading: () => (
-    <div className="animate-pulse bg-gray-700 h-[350px] rounded-lg flex items-center justify-center">
-      <div className="w-6 h-6 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
-    </div>
-  ),
-});
 
 // PERFORMANCE OPTIMIZATION: Memoized tab button with stable props
 const TabButton = memo(({ active, label, onClick }) => (
@@ -768,13 +747,7 @@ const MetaDeck = memo(
                     }}
                     className="md:hidden mx-auto"
                   >
-                    <Suspense
-                      fallback={
-                        <div className="w-full h-full bg-gray-600 animate-pulse rounded"></div>
-                      }
-                    >
-                      <MyBarChartComponent height={80} width={100} />
-                    </Suspense>
+                    <MyBarChartComponent height={80} width={100} />
                     <p className="text-center mb-0 text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
                       {others?.avgRanking}
                     </p>
@@ -834,14 +807,8 @@ const MetaDeck = memo(
                       }}
                       className="hidden md:block mt-2 mx-auto"
                     >
-                      <Suspense
-                        fallback={
-                          <div className="w-full h-full bg-gray-600 animate-pulse rounded"></div>
-                        }
-                      >
-                        <MyBarChartComponent height={70} width={80} />
-                      </Suspense>
-                      <p className="text-center mb-0 text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                      <MyBarChartComponent height={70} width={80} />
+                      <p className="text-center mb-0 text-[11px] md:text-[14px] font-medium leading-5 text-[999]">
                         {others?.avgRanking}
                       </p>
                     </div>

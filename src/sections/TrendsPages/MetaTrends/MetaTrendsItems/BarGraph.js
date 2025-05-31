@@ -1,62 +1,23 @@
-import React, { memo, useMemo } from "react";
-import {
-  BarChart,
-  Bar,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-} from "recharts";
+import React, { memo, useMemo, useState } from "react";
 
-// PERFORMANCE OPTIMIZATION: Memoize static data to prevent recreation
+// PERFORMANCE OPTIMIZATION: Static data for CSS bar chart (same as original)
 const chartData = [
-  { avg: 8 },
-  { avg: 7 },
-  { avg: 6 },
-  { avg: 5 },
-  { avg: 4 },
-  { avg: 3 },
-  { avg: 2 },
-  { avg: 1 },
+  { avg: 8, label: "8th" },
+  { avg: 7, label: "7th" },
+  { avg: 6, label: "6th" },
+  { avg: 5, label: "5th" },
+  { avg: 4, label: "4th" },
+  { avg: 3, label: "3rd" },
+  { avg: 2, label: "2nd" },
+  { avg: 1, label: "1st" },
 ];
 
-// PERFORMANCE OPTIMIZATION: Memoize tooltip styles to prevent recreation
-const tooltipStyles = {
-  backgroundColor: "#fff",
-  border: "1px solid #ccc",
-  padding: "10px",
-  paddingTop: "2px",
-  paddingBottom: "2px",
-  borderRadius: "8px",
-  boxShadow: "0px 0px 10px rgba(0,0,0,0.1)",
-};
+// PERFORMANCE OPTIMIZATION: CSS-based bar chart component (instant rendering, no delays)
+const MyBarChartComponent = memo(({ height = 80, width = 100 }) => {
+  const [hoveredBar, setHoveredBar] = useState(null);
+  const [tooltipData, setTooltipData] = useState(null);
 
-// PERFORMANCE OPTIMIZATION: Memoized custom tooltip component
-const CustomTooltip = memo(({ active, payload, label }) => {
-  if (active && payload && payload.length) {
-    return (
-      <div style={tooltipStyles}>
-        {payload.map((entry, index) => (
-          <p key={`item-${index}`} style={{ margin: 0, color: entry.color }}>
-            {entry.name}: {entry.value}
-          </p>
-        ))}
-      </div>
-    );
-  }
-  return null;
-});
-
-// PERFORMANCE OPTIMIZATION: Memoized chart margins to prevent recreation
-const chartMargins = { top: 0, right: 0, left: 0, bottom: 0 };
-
-// PERFORMANCE OPTIMIZATION: Memoized bar radius to prevent recreation
-const barRadius = [8, 8, 0, 0];
-
-// PERFORMANCE OPTIMIZATION: Heavily memoized BarChart component
-const MyBarChartComponent = memo(({ height, width }) => {
-  // PERFORMANCE OPTIMIZATION: Memoize container styles to prevent recreation
+  // PERFORMANCE OPTIMIZATION: Memoize container styles
   const containerStyle = useMemo(
     () => ({
       width: `${width}%`,
@@ -67,18 +28,157 @@ const MyBarChartComponent = memo(({ height, width }) => {
     [width, height]
   );
 
+  const handleBarHover = (data, event) => {
+    setHoveredBar(data.avg);
+    setTooltipData({
+      value: data.avg,
+      label: data.label,
+      x: event.currentTarget.offsetLeft,
+      y: event.currentTarget.offsetTop,
+    });
+  };
+
+  const handleBarLeave = () => {
+    setHoveredBar(null);
+    setTooltipData(null);
+  };
+
   return (
-    <div className="mx-auto" style={containerStyle}>
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={chartData} margin={chartMargins}>
-          {/* <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" /> */}
-          {/* Hiding the axes */}
-          <XAxis dataKey="name" hide />
-          <YAxis hide />
-          <Tooltip content={<CustomTooltip />} />
-          <Bar dataKey="avg" fill="#8884d8" radius={barRadius} />
-        </BarChart>
-      </ResponsiveContainer>
+    <div className="css-bar-chart !mx-auto" style={containerStyle}>
+      <div className="bar-chart-container">
+        {chartData.map((data, index) => {
+          const barHeight = (data.avg / 8) * 100; // Normalize to percentage
+          const isHovered = hoveredBar === data.avg;
+
+          return (
+            <div
+              key={data.avg}
+              className="bar-wrapper"
+              onMouseEnter={(e) => handleBarHover(data, e)}
+              onMouseLeave={handleBarLeave}
+            >
+              <div
+                className={`bar ${isHovered ? "hovered" : ""}`}
+                style={{
+                  height: `${barHeight}%`,
+                  animationDelay: "0ms",
+                }}
+              />
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Custom CSS Tooltip */}
+      {tooltipData && (
+        <div
+          className="chart-tooltip"
+          style={{
+            left: `${tooltipData.x}px`,
+            top: `${tooltipData.y - 30}px`,
+          }}
+        >
+          Rank: {tooltipData.value}
+        </div>
+      )}
+
+      <style jsx>{`
+        .css-bar-chart {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: transparent;
+        }
+
+        .bar-chart-container {
+          display: flex;
+          align-items: flex-end;
+          justify-content: center;
+          height: 100%;
+          width: 100%;
+          gap: 2px;
+          padding: 4px;
+        }
+
+        .bar-wrapper {
+          flex: 1;
+          height: 100%;
+          display: flex;
+          align-items: flex-end;
+          cursor: pointer;
+          position: relative;
+        }
+
+        .bar {
+          width: 100%;
+          background: linear-gradient(180deg, #8884d8 0%, #6366f1 100%);
+          border-radius: 2px 2px 0 0;
+          transition: all 0.2s ease;
+          animation: barGrow 0.3s ease-out forwards;
+          transform-origin: bottom;
+          min-height: 2px;
+        }
+
+        .bar:hover,
+        .bar.hovered {
+          background: linear-gradient(180deg, #a5a8ff 0%, #7c7fff 100%);
+          transform: scaleY(1.05);
+          box-shadow: 0 2px 8px rgba(136, 132, 216, 0.3);
+        }
+
+        @keyframes barGrow {
+          from {
+            transform: scaleY(0);
+            opacity: 0;
+          }
+          to {
+            transform: scaleY(1);
+            opacity: 1;
+          }
+        }
+
+        .chart-tooltip {
+          position: absolute;
+          background: #fff;
+          border: 1px solid #ccc;
+          padding: 4px 8px;
+          border-radius: 4px;
+          font-size: 11px;
+          color: #333;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+          pointer-events: none;
+          z-index: 1000;
+          white-space: nowrap;
+        }
+
+        .chart-tooltip::after {
+          content: "";
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          transform: translateX(-50%);
+          border: 4px solid transparent;
+          border-top-color: #fff;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+          .bar-chart-container {
+            gap: 1px;
+            padding: 2px;
+          }
+
+          .bar {
+            border-radius: 1px 1px 0 0;
+          }
+
+          .chart-tooltip {
+            font-size: 10px;
+            padding: 2px 6px;
+          }
+        }
+      `}</style>
     </div>
   );
 });
