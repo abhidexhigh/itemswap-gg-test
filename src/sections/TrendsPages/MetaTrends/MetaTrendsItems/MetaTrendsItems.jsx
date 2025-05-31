@@ -688,7 +688,7 @@ const MetaDeck = memo(
       <div
         ref={deckRef}
         key={i}
-        className="flex flex-col gap-[1px] !border border-[#6936ff]/30 rounded-lg overflow-hidden shadow-lg bg-[#00000099] mb-4"
+        className="flex flex-col gap-[1px] !border border-[#FFFFFF]/30 rounded-lg overflow-hidden shadow-lg bg-[#00000099] mb-4"
         style={{
           background: "rgba(0, 0, 0, 0.6)",
         }}

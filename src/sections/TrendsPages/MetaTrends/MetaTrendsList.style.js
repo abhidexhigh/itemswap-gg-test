@@ -4,12 +4,12 @@ const ProjectsListStyleWrapper = styled.section`
   height: auto;
   // PERFORMANCE OPTIMIZATION: Replaced backdrop-filter with performance-friendly alternative
   // backdrop-filter: blur(2px); // REMOVED - causes severe scroll lag
-  background: rgba(
-    9,
-    10,
-    26,
-    0.95
-  ); // Semi-transparent background for similar effect
+  // background: rgba(
+  //   9,
+  //   10,
+  //   26,
+  //   0.95
+  // ); // Semi-transparent background for similar effect
   position: relative;
 
   // PERFORMANCE OPTIMIZATION: Add will-change for better scroll performance
