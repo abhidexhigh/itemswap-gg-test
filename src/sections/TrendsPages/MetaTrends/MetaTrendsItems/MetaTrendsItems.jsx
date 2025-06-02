@@ -17,6 +17,7 @@ import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
 import { OptimizedImage } from "src/utils/imageOptimizer";
 import ForceIcon from "src/components/forceIcon";
+import TraitImage from "src/components/TraitImage/TraitImage";
 // PERFORMANCE OPTIMIZATION: Direct import for lightweight CSS chart (no dynamic loading needed)
 import MyBarChartComponent from "./BarGraph";
 
@@ -117,18 +118,14 @@ const TraitItem = memo(({ trait, selectedTrait, onSelect, i, t }) => {
     >
       <ReactTltp variant="trait" content={trait} id={`${trait?.key}-${i}`} />
       <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
-        <OptimizedImage
-          alt={trait?.name}
-          width={96}
-          height={96}
-          src={trait?.imageUrl}
-          className="w-full h-full object-cover rounded-lg"
+        <TraitImage
+          trait={trait}
+          size="xlarge"
+          className="w-full h-full rounded-lg"
           data-tooltip-id={`${trait?.key}-${i}`}
-          loading="eager"
-          priority={i < 8} // Prioritize first 8 images
         />
         {trait?.key === selectedTrait && (
-          <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+          <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center z-20">
             <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
           </div>
         )}
@@ -558,18 +555,12 @@ const DeckHeader = memo(
           </span>
           <div className="flex flex-wrap gap-1 md:gap-0 md:inline-flex md:flex-wrap justify-start md:justify-end md:mr-0">
             {traitDetails.map((trait, index) => (
-              <div
-                key={`${trait.key}-${index}`}
-                className="relative w-[38px] h-[38px] md:w-[56px] md:h-[56px]"
-              >
-                <OptimizedImage
-                  alt={trait.name || "Trait"}
-                  width={50}
-                  height={50}
-                  src={trait.tier.imageUrl}
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center w-[38px] md:w-[56px]"
+              <div key={`${trait.key}-${index}`} className="relative">
+                <TraitImage
+                  trait={trait}
+                  size="default"
+                  className="w-[38px] h-[38px] md:w-[56px] md:h-[56px]"
                   data-tooltip-id={`${trait.key}-${index}`}
-                  loading="eager"
                 />
                 <ReactTltp
                   variant="trait"

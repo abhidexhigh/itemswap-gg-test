@@ -10,6 +10,10 @@ import ReactTltp from "../tooltip/ReactTltp";
 import ForceIcon from "../forceIcon";
 import costWiseFrameData from "../../data/costWiseFrame.json";
 
+// Global video loading queue to prevent too many simultaneous downloads
+const videoLoadingQueue = new Set();
+const MAX_CONCURRENT_VIDEOS = 3;
+
 const CardImage = ({
   src,
   imgStyle = "w-[48px] md:w-[96px]",
@@ -21,13 +25,16 @@ const CardImage = ({
   showCost = false,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isVisible, setIsVisible] = useState(true); // Default to true to show initial image
+  const [isVisible, setIsVisible] = useState(false); // Start with false for better performance
   const containerRef = useRef(null);
   const videoRef = useRef(null);
   const imageRef = useRef(null);
   const [videoAvailable, setVideoAvailable] = useState(true);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const [isVideoFullyLoaded, setIsVideoFullyLoaded] = useState(false);
+  const hoverTimeoutRef = useRef(null);
+  const preloadTimeoutRef = useRef(null);
 
   // Check if source has a video
   const hasVideo = useMemo(() => Boolean(src?.cardVideo), [src?.cardVideo]);
@@ -66,9 +73,21 @@ const CardImage = ({
           setIsVisible(false);
           // Reset hover state when not visible
           setIsHovered(false);
+          // Clear any pending timeouts
+          if (hoverTimeoutRef.current) {
+            clearTimeout(hoverTimeoutRef.current);
+            hoverTimeoutRef.current = null;
+          }
+          if (preloadTimeoutRef.current) {
+            clearTimeout(preloadTimeoutRef.current);
+            preloadTimeoutRef.current = null;
+          }
         }
       },
-      { threshold: 0.1 }
+      {
+        threshold: 0.1,
+        rootMargin: "50px", // Start loading slightly before element is visible
+      }
     );
 
     observer.observe(containerRef.current);
@@ -77,46 +96,104 @@ const CardImage = ({
       if (containerRef.current) {
         observer.unobserve(containerRef.current);
       }
+      // Cleanup timeouts
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+      if (preloadTimeoutRef.current) {
+        clearTimeout(preloadTimeoutRef.current);
+      }
     };
   }, []);
 
-  // Preload video when component mounts to make hover transition smoother
+  // Optimized preload: Only load metadata initially, delay full video loading
   useEffect(() => {
-    if (hasVideo && src?.cardVideo && isVisible) {
-      const videoPreload = document.createElement("video");
-      videoPreload.src = src.cardVideo;
-      videoPreload.preload = "auto";
-      videoPreload.muted = true;
-      videoPreload.onloadeddata = () => {
-        setVideoLoaded(true);
-      };
-      videoPreload.onerror = () => {
-        setVideoAvailable(false);
-        setVideoError(true);
-      };
-    }
-  }, [hasVideo, src?.cardVideo, isVisible]);
+    if (hasVideo && src?.cardVideo && isVisible && !videoError) {
+      // Clear any existing timeout
+      if (preloadTimeoutRef.current) {
+        clearTimeout(preloadTimeoutRef.current);
+      }
 
-  // Enhanced video handling logic
+      // Delay preloading to avoid overwhelming the network
+      preloadTimeoutRef.current = setTimeout(() => {
+        if (videoLoadingQueue.size < MAX_CONCURRENT_VIDEOS) {
+          videoLoadingQueue.add(src.cardVideo);
+
+          const videoPreload = document.createElement("video");
+          videoPreload.src = src.cardVideo;
+          videoPreload.preload = "metadata"; // Only load metadata initially
+          videoPreload.muted = true;
+
+          videoPreload.onloadedmetadata = () => {
+            setVideoLoaded(true);
+          };
+
+          videoPreload.onerror = () => {
+            setVideoAvailable(false);
+            setVideoError(true);
+            videoLoadingQueue.delete(src.cardVideo);
+          };
+
+          // Clean up after some time if not used
+          setTimeout(() => {
+            videoLoadingQueue.delete(src.cardVideo);
+          }, 10000);
+        }
+      }, Math.random() * 1000); // Random delay to spread out requests
+    }
+
+    return () => {
+      if (preloadTimeoutRef.current) {
+        clearTimeout(preloadTimeoutRef.current);
+      }
+    };
+  }, [hasVideo, src?.cardVideo, isVisible, videoError]);
+
+  // Load full video only when hovering is likely (with debouncing)
+  const loadFullVideo = useCallback(() => {
+    if (!hasVideo || !src?.cardVideo || videoError || isVideoFullyLoaded)
+      return;
+
+    if (videoRef.current && videoLoadingQueue.size < MAX_CONCURRENT_VIDEOS) {
+      videoLoadingQueue.add(`${src.cardVideo}-full`);
+
+      // Change preload to auto to download full video
+      videoRef.current.preload = "auto";
+      videoRef.current.load();
+
+      const handleCanPlayThrough = () => {
+        setIsVideoFullyLoaded(true);
+        videoLoadingQueue.delete(`${src.cardVideo}-full`);
+        videoRef.current.removeEventListener(
+          "canplaythrough",
+          handleCanPlayThrough
+        );
+      };
+
+      videoRef.current.addEventListener("canplaythrough", handleCanPlayThrough);
+    }
+  }, [hasVideo, src?.cardVideo, videoError, isVideoFullyLoaded]);
+
+  // Enhanced video handling logic with better performance
   useEffect(() => {
     if (!isVisible || !hasVideo || !videoRef.current) return;
 
     if (isHovered && videoAvailable && !videoError) {
-      // Make sure video is loaded
-      if (videoRef.current.readyState < 2) {
-        videoRef.current.load();
-      }
+      // Only play if video is sufficiently loaded
+      if (videoRef.current.readyState >= 2 || isVideoFullyLoaded) {
+        const playPromise = videoRef.current.play();
 
-      const playPromise = videoRef.current.play();
-
-      if (playPromise !== undefined) {
-        playPromise.catch((error) => {
-          console.error("Error playing video:", error);
-          if (error.name === "NotAllowedError" || error.name === "AbortError") {
-            // Browser policy prevented autoplay or user interrupted
-            setVideoAvailable(false);
-          }
-        });
+        if (playPromise !== undefined) {
+          playPromise.catch((error) => {
+            console.error("Error playing video:", error);
+            if (
+              error.name === "NotAllowedError" ||
+              error.name === "AbortError"
+            ) {
+              setVideoAvailable(false);
+            }
+          });
+        }
       }
     } else if (videoRef.current) {
       videoRef.current.pause();
@@ -125,21 +202,45 @@ const CardImage = ({
         videoRef.current.currentTime = 0;
       }
     }
-  }, [isHovered, isVisible, hasVideo, videoAvailable, videoError]);
+  }, [
+    isHovered,
+    isVisible,
+    hasVideo,
+    videoAvailable,
+    videoError,
+    isVideoFullyLoaded,
+  ]);
 
   const handleMouseEnter = useCallback(() => {
-    setIsHovered(true);
-  }, []);
+    // Clear any existing timeout
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+
+    // Debounce hover to avoid unnecessary video loading
+    hoverTimeoutRef.current = setTimeout(() => {
+      setIsHovered(true);
+      // Start loading full video on hover intent
+      loadFullVideo();
+    }, 100); // Small delay to filter out accidental hovers
+  }, [loadFullVideo]);
 
   const handleMouseLeave = useCallback(() => {
+    // Clear hover timeout if mouse leaves quickly
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
     setIsHovered(false);
   }, []);
 
   const handleVideoError = useCallback(() => {
     setVideoAvailable(false);
     setVideoError(true);
+    videoLoadingQueue.delete(src?.cardVideo);
+    videoLoadingQueue.delete(`${src?.cardVideo}-full`);
     console.warn(`Video not available for: ${src?.name || "Unknown"}`);
-  }, [src?.name]);
+  }, [src?.name, src?.cardVideo]);
 
   // Create array of star count based on tier
   const starArray = useMemo(() => {
@@ -227,7 +328,8 @@ const CardImage = ({
                     loop
                     onError={handleVideoError}
                     className="w-full h-full object-cover object-center rounded-lg"
-                    preload="auto"
+                    preload="metadata"
+                    poster={src?.cardImage} // Use static image as poster
                   />
                 </div>
               )}
