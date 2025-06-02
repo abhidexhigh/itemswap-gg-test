@@ -273,7 +273,7 @@ const CardImage = ({
           <div className="flex flex-col rounded-lg w-full relative">
             <div
               ref={containerRef}
-              className={`relative !bg-black rounded-lg aspect-square ${cardSize}`}
+              className={`relative !bg-black rounded-lg aspect-square overflow-visible ${cardSize}`}
               style={{
                 position: "relative",
                 width: "100%",
@@ -370,20 +370,21 @@ const CardImage = ({
             {/* Force icon positioned outside container without overflow:hidden */}
             {forceObject && (
               <div
-                className="absolute z-30"
+                className="absolute z-30 transition-all duration-300 ease-in-out"
                 style={{
                   top: "-6px",
                   right: "-6px",
                   width: "30px",
                   height: "30px",
+                  transform: isHovered ? "scale(1.1)" : "scale(1)",
                 }}
               >
                 <ForceIcon
                   force={forceObject}
                   isHovered={isHovered}
                   size="small"
-                  showImageOnly={!isVisible || !isHovered}
-                  className="w-full h-full rounded-full"
+                  showImageOnly={false} // Always allow video to show
+                  className="w-full h-full rounded-full transition-all duration-300 ease-in-out"
                 />
               </div>
             )}
