@@ -1,0 +1,502 @@
+[
+  {
+    "key": "",
+    "name": "",
+    "imageUrl": ""
+  },
+  {
+    "key": "Sword",
+    "name": "Sword",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285350/sword_irngdm.png"
+  },
+  {
+    "key": "Wooden Bow",
+    "name": "Wooden Bow",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285347/gsgsg_vbnvle.png"
+  },
+  {
+    "key": "Plate Armor",
+    "name": "Plate Armor",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285349/plate_armor_pbtt2n.png"
+  },
+  {
+    "key": "Wooden Wand",
+    "name": "Wooden Wand",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285369/wooden_wand_vagg5g.png"
+  },
+  {
+    "key": "Wizard Hat",
+    "name": "Wizard Hat",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285350/Wizard_hat_ytr90h.png"
+  },
+  {
+    "key": "Helmet",
+    "name": "Helmet",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285350/helmet_b20crg.png"
+  },
+  {
+    "key": "Cloak",
+    "name": "Cloak",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285349/cloak_blpzgh.png"
+  },
+  {
+    "key": "Leader Armor",
+    "name": "Leader Armor",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285347/leader_armor_y7un05.png"
+  },
+  {
+    "key": "Key",
+    "name": "Key",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719909514/key_cj2ne1.png"
+  },
+  {
+    "key": "Sword",
+    "name": "Sword",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285350/sword_irngdm.png"
+  },
+  {
+    "key": "Raikiri",
+    "name": "Raikiri",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285354/Japanese_Weapon_ooaviq.png"
+  },
+  {
+    "key": "Raikiri",
+    "name": "Raikiri",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285353/Indian_Weapon_l3n5us.png"
+  },
+  {
+    "key": "Bloodaxe",
+    "name": "Bloodaxe",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285356/viking_weapon_rd3jfm.png"
+  },
+  {
+    "key": "Simurgh",
+    "name": "Simurgh",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285351/Persian_Weapon_bbwl83.png"
+  },
+  {
+    "key": "Gladius",
+    "name": "Gladius",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285360/roman_weapon_mrb4mq.png"
+  },
+  {
+    "key": "Pendragon’s Crown",
+    "name": "Pendragon’s Crown",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285346/England_Helmet_xyuy4q.png"
+  },
+  {
+    "key": "Osirian",
+    "name": "Osirian",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285361/Egyptian_Armor_wwxemg.png"
+  },
+  {
+    "key": "Excalibur",
+    "name": "Excalibur",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285356/Knight_weapon_b4bnhb.png"
+  },
+  {
+    "key": "Chaos",
+    "name": "Chaos",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719909503/chaos_emblem_jsvqwq.png"
+  },
+  {
+    "key": "Wooden Bow",
+    "name": "Wooden Bow",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285347/gsgsg_vbnvle.png"
+  },
+  {
+    "key": "Raikiri",
+    "name": "Raikiri",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285353/Indian_Weapon_l3n5us.png"
+  },
+  {
+    "key": "Korean Bow",
+    "name": "Korean Bow",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285369/korean_bow_fz7m1n.png"
+  },
+  {
+    "key": "Nightfang",
+    "name": "Nightfang",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285363/Native_American_Armor_zvtpbb.png"
+  },
+  {
+    "key": "Silver Bullet",
+    "name": "Silver Bullet",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285355/england_weapon_lvewfq.png"
+  },
+  {
+    "key": "Darius",
+    "name": "Darius",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285341/Persian_Helmet_b9wnqi.png"
+  },
+  {
+    "key": "Frostguard",
+    "name": "Frostguard",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285358/viking_armor_r5yluy.png"
+  },
+  {
+    "key": "Sekhem",
+    "name": "Sekhem",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285341/egyptian_helmet_kfnzul.png"
+  },
+  {
+    "key": "Gaya Armor",
+    "name": "Gaya Armor",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285361/Korean_Armor_betupo.png"
+  },
+  {
+    "key": "Fury",
+    "name": "Fury",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719909504/fury_emblem_tmz67w.png"
+  },
+  {
+    "key": "Plate Armor",
+    "name": "Plate Armor",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285349/plate_armor_pbtt2n.png"
+  },
+  {
+    "key": "Bloodaxe",
+    "name": "Bloodaxe",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285356/viking_weapon_rd3jfm.png"
+  },
+  {
+    "key": "Nightfang",
+    "name": "Nightfang",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285363/Native_American_Armor_zvtpbb.png"
+  },
+  {
+    "key": "Evalach",
+    "name": "Evalach",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285363/knight_armor_aczftg.png"
+  },
+  {
+    "key": "Aegis",
+    "name": "Aegis",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285356/greek_armor_tohbsw.png"
+  },
+  {
+    "key": "Kunee",
+    "name": "Kunee",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285342/Greek_Helmet_xxiym2.png"
+  },
+  {
+    "key": "Eaglewing",
+    "name": "Eaglewing",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285342/Knight_Helmet_y7dnmn.png"
+  },
+  {
+    "key": "Vesta",
+    "name": "Vesta",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285358/Roman_armor_vvoann.png"
+  },
+  {
+    "key": "Tengu Yoroi",
+    "name": "Tengu Yoroi",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285360/Japanese_Armor_qjh2gp.png"
+  },
+  {
+    "key": "Guardian",
+    "name": "Guardian",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719909505/guardian_emblem_akl6yi.png"
+  },
+  {
+    "key": "Wooden Wand",
+    "name": "Wooden Wand",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285369/wooden_wand_vagg5g.png"
+  },
+  {
+    "key": "Simurgh",
+    "name": "Simurgh",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285351/Persian_Weapon_bbwl83.png"
+  },
+  {
+    "key": "Silver Bullet",
+    "name": "Silver Bullet",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285355/england_weapon_lvewfq.png"
+  },
+  {
+    "key": "Aegis",
+    "name": "Aegis",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285356/greek_armor_tohbsw.png"
+  },
+  {
+    "key": "Aetheris",
+    "name": "Aetheris",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285355/Greek_Magic_Weapon_yqalp8.png"
+  },
+  {
+    "key": "Nandaka",
+    "name": "Nandaka",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285351/Native_American_Weapon_rtd1el.png"
+  },
+  {
+    "key": "Kaminari",
+    "name": "Kaminari",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285341/japanese_helmet_xbavpe.png"
+  },
+  {
+    "key": "Scale Helmet",
+    "name": "Scale Helmet",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285345/korean_helmet_a7jp6d.png"
+  },
+  {
+    "key": "Ruyi Bang",
+    "name": "Ruyi Bang",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285355/chinese_weapon_x9ldz7.png"
+  },
+  {
+    "key": "GirlCrush",
+    "name": "GirlCrush",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719909505/girlcrush_emblem_wnfofy.png"
+  },
+  {
+    "key": "Wizard Hat",
+    "name": "Wizard Hat",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285350/Wizard_hat_ytr90h.png"
+  },
+  {
+    "key": "Gladius",
+    "name": "Gladius",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285360/roman_weapon_mrb4mq.png"
+  },
+  {
+    "key": "Darius",
+    "name": "Darius",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285341/Persian_Helmet_b9wnqi.png"
+  },
+  {
+    "key": "Kunee",
+    "name": "Kunee",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285342/Greek_Helmet_xxiym2.png"
+  },
+  {
+    "key": "Nandaka",
+    "name": "Nandaka",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285351/Native_American_Weapon_rtd1el.png"
+  },
+  {
+    "key": "Eye of Ra",
+    "name": "Eye of Ra",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285350/egyptian_weapon_edy1ts.png"
+  },
+  {
+    "key": "Jingong",
+    "name": "Jingong",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285341/chinese_helmet_sa1dro.png"
+  },
+  {
+    "key": "Eagle Bonnet",
+    "name": "Eagle Bonnet",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285341/Native_American_Helmet_rqbbcf.png"
+  },
+  {
+    "key": "Kavacha",
+    "name": "Kavacha",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285363/Indian_armor_fcbufc.png"
+  },
+  {
+    "key": "Blockbuster",
+    "name": "Blockbuster",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719909503/blockbuster_emblem_rx0acu.png"
+  },
+  {
+    "key": "Helmet",
+    "name": "Helmet",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285350/helmet_b20crg.png"
+  },
+  {
+    "key": "Pendragon’s Crown",
+    "name": "Pendragon’s Crown",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285346/England_Helmet_xyuy4q.png"
+  },
+  {
+    "key": "Frostguard",
+    "name": "Frostguard",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285358/viking_armor_r5yluy.png"
+  },
+  {
+    "key": "Eaglewing",
+    "name": "Eaglewing",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285342/Knight_Helmet_y7dnmn.png"
+  },
+  {
+    "key": "Kaminari",
+    "name": "Kaminari",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285341/japanese_helmet_xbavpe.png"
+  },
+  {
+    "key": "Jingong",
+    "name": "Jingong",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285341/chinese_helmet_sa1dro.png"
+  },
+  {
+    "key": "Stormhorn",
+    "name": "Stormhorn",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285342/Viking_Helmet_d2myyg.png"
+  },
+  {
+    "key": "Galea",
+    "name": "Galea",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285342/Roman_Helmet_ehlihi.png"
+  },
+  {
+    "key": "Kiriti",
+    "name": "Kiriti",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285341/Indian_Helmet_mwmncw.png"
+  },
+  {
+    "key": "Wildrush",
+    "name": "Wildrush",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719909526/wildrush_emblem_eiy2dv.png"
+  },
+  {
+    "key": "Cloak",
+    "name": "Cloak",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285349/cloak_blpzgh.png"
+  },
+  {
+    "key": "Osirian",
+    "name": "Osirian",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285361/Egyptian_Armor_wwxemg.png"
+  },
+  {
+    "key": "Sekhem",
+    "name": "Sekhem",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285341/egyptian_helmet_kfnzul.png"
+  },
+  {
+    "key": "Vesta",
+    "name": "Vesta",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285358/Roman_armor_vvoann.png"
+  },
+  {
+    "key": "Scale Helmet",
+    "name": "Scale Helmet",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285345/korean_helmet_a7jp6d.png"
+  },
+  {
+    "key": "Nightfang",
+    "name": "Nightfang",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285363/Native_American_Armor_zvtpbb.png"
+  },
+  {
+    "key": "Galea",
+    "name": "Galea",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285342/Roman_Helmet_ehlihi.png"
+  },
+  {
+    "key": "Bayan",
+    "name": "Bayan",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285362/Persian_armor_xx3yio.png"
+  },
+  {
+    "key": "Wygar",
+    "name": "Wygar",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285356/England_Armor_qvkjcc.png"
+  },
+  {
+    "key": "Druid",
+    "name": "Druid",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719909504/druid_emblem_jt7fq9.png"
+  },
+  {
+    "key": "Leader Armor",
+    "name": "Leader Armor",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285347/leader_armor_y7un05.png"
+  },
+  {
+    "key": "Excalibur",
+    "name": "Excalibur",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285356/Knight_weapon_b4bnhb.png"
+  },
+  {
+    "key": "Gaya Armor",
+    "name": "Gaya Armor",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285361/Korean_Armor_betupo.png"
+  },
+  {
+    "key": "Tengu Yoroi",
+    "name": "Tengu Yoroi",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285360/Japanese_Armor_qjh2gp.png"
+  },
+  {
+    "key": "Ruyi Bang",
+    "name": "Ruyi Bang",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285355/chinese_weapon_x9ldz7.png"
+  },
+  {
+    "key": "Kavacha",
+    "name": "Kavacha",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285363/Indian_armor_fcbufc.png"
+  },
+  {
+    "key": "Kiriti",
+    "name": "Kiriti",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285341/Indian_Helmet_mwmncw.png"
+  },
+  {
+    "key": "Wygar",
+    "name": "Wygar",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285356/England_Armor_qvkjcc.png"
+  },
+  {
+    "key": "Jin Jia",
+    "name": "Jin Jia",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1721285362/Chinese_Armor_zumr1z.png"
+  },
+  {
+    "key": "Mirage",
+    "name": "Mirage",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719909518/mirage_emblem_b6pse9.png"
+  },
+  {
+    "key": "Key",
+    "name": "Key",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719909514/key_cj2ne1.png"
+  },
+  {
+    "key": "Chaos",
+    "name": "Chaos",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719909503/chaos_emblem_jsvqwq.png"
+  },
+  {
+    "key": "Fury",
+    "name": "Fury",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719909504/fury_emblem_tmz67w.png"
+  },
+  {
+    "key": "Guardian",
+    "name": "Guardian",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719909505/guardian_emblem_akl6yi.png"
+  },
+  {
+    "key": "GirlCrush",
+    "name": "GirlCrush",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719909505/girlcrush_emblem_wnfofy.png"
+  },
+  {
+    "key": "Blockbuster",
+    "name": "Blockbuster",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719909503/blockbuster_emblem_rx0acu.png"
+  },
+  {
+    "key": "Wildrush",
+    "name": "Wildrush",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719909526/wildrush_emblem_eiy2dv.png"
+  },
+  {
+    "key": "Druid",
+    "name": "Druid",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719909504/druid_emblem_jt7fq9.png"
+  },
+  {
+    "key": "Mirage",
+    "name": "Mirage",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719909518/mirage_emblem_b6pse9.png"
+  },
+  {
+    "key": "Seal",
+    "name": "Seal",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719909522/stamp_seal_ujroap.png"
+  }
+]

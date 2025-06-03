@@ -6,6 +6,7 @@ import data from "@assets/data/tutorial/dataV2";
 import earthThumb from "@assets/images/icons/earthBg.svg";
 import lockerThumb from "@assets/images/icons/locker-dynamic-color.png";
 import TutorialStyleWrapper from "./Tutorial.style";
+import { SectionTitleWrapper } from "@components/sectionTitleWrapper";
 
 const Tutorial = () => {
   return (
@@ -13,17 +14,18 @@ const Tutorial = () => {
       <div className="container">
         <div className="row">
           <div className="col-md-6 left_content">
-            <SectionTitle title="HOW TO PARTICIPATE" subtitle="3 EASY STEPS" />
+            <SectionTitleWrapper>
+              <SectionTitle
+                title="HOW TO PARTICIPATE"
+                subtitle="3 EASY STEPS"
+              />
+            </SectionTitleWrapper>
             <p>
               we denounce with righteous indignation and dislike men who are so
               beguiled and demoralized by the charms of pleasure of the moment.
               so blinded by desire, that they cannot foresee the pain and
               trouble
             </p>
-            <Button href="/kyc-1" sm variant="outline">
-              {" "}
-              Verify KYC <FiChevronRight />
-            </Button>
           </div>
           <div className="col-md-6 right_content">
             {data?.map((step, i) => (
