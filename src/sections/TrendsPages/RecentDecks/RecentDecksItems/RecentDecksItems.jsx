@@ -35,7 +35,7 @@ const TabButton = memo(({ active, label, onClick }) => (
   <button
     type="button"
     className={`px-6 py-3 text-sm md:text-base font-medium transition-colors duration-200 ${
-      active ? "bg-[#ffffff] text-[#1a1b30]" : "text-white hover:bg-[#ffffff20]"
+      active ? "bg-[#ffffff] text-[#111111]" : "text-white hover:bg-[#ffffff20]"
     }`}
     onClick={onClick}
   >
@@ -247,7 +247,7 @@ const DeckHeader = memo(
     const [hoveredForce, setHoveredForce] = useState(null);
 
     return (
-      <header className="relative flex flex-col md:flex-col justify-between items-start md:items-end bg-[#1a1b30] py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px]">
+      <header className="relative flex flex-col md:flex-col justify-between items-start md:items-end bg-[#111111] py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px]">
         <div className="inline-flex flex-col flex-wrap gap-[8px] w-full md:w-auto md:flex-row md:items-center md:gap-[4px]">
           <div className="flex items-center gap-x-2">
             <PlacementBadge placement={metaDeck?.placement} />
@@ -294,7 +294,6 @@ const DeckHeader = memo(
                     customSize="w-[30px] h-[30px] md:w-[40px] md:h-[40px]"
                     className="mr-1"
                     data-tooltip-id={`${force?.key}-${i}`}
-                    isHovered={hoveredForce === force?.key}
                   />
                   <ReactTltp content={force?.key} id={`${force?.key}-${i}`} />
                   <span className="text-[18px]">{force?.numUnits}</span>
@@ -327,7 +326,6 @@ const DeckHeader = memo(
                     customSize="w-full h-full"
                     className="aspect-square"
                     data-tooltip-id={`${force?.key}-${i}`}
-                    isHovered={hoveredForce === force?.key}
                   />
                   <ReactTltp content={force?.key} id={`${force?.key}-${i}`} />
                 </div>
@@ -369,25 +367,29 @@ const DeckHeader = memo(
 
                 return (
                   <div key={i} className="flex-shrink-0">
-                    <div className="relative w-[32px] h-[32px]">
-                      <OptimizedImage
+                    {/* <OptimizedImage
                         alt={traitDetails.name || "Trait"}
                         width={50}
                         height={50}
                         src={tier.imageUrl}
-                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center w-[32px]"
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center w-[36px]"
                         data-tooltip-id={`mobile-trait-${traitDetails.key}-${i}`}
                         loading="lazy"
-                      />
-                      <ReactTltp
-                        variant="trait"
-                        id={`mobile-trait-${traitDetails.key}-${i}`}
-                        content={{
-                          ...traitDetails,
-                          numUnits: trait?.numUnits,
-                        }}
-                      />
-                    </div>
+                      /> */}
+                    <TraitImage
+                      trait={traitDetails}
+                      size="small"
+                      className="w-[36px] h-[36px]"
+                      data-tooltip-id={`mobile-trait-${traitDetails.key}-${i}`}
+                    />
+                    <ReactTltp
+                      variant="trait"
+                      id={`mobile-trait-${traitDetails.key}-${i}`}
+                      content={{
+                        ...traitDetails,
+                        numUnits: trait?.numUnits,
+                      }}
+                    />
                   </div>
                 );
               })}
@@ -489,7 +491,7 @@ const MetaDeck = memo(
 
     return (
       <div
-        className="flex flex-col gap-[1px] !border border-cardBorder/30 rounded-lg overflow-hidden shadow-lg bg-[#00000099] mb-4"
+        className="flex flex-col gap-[1px] !border border-[#ffffff4d] rounded-lg overflow-hidden shadow-lg bg-[#00000099] mb-4"
         style={{
           background: "rgba(0, 0, 0, 0.6)",
           backdropFilter: "blur(2px)",
@@ -887,7 +889,7 @@ const RecentDecksItems = () => {
         );
       case "Traits":
         return (
-          <div className="p-3 md:p-6 bg-[#1a1b30] rounded-lg">
+          <div className="p-3 md:p-6 bg-[#111111] rounded-lg">
             {/* Mobile Sub-tabs for Origin and Forces */}
             <div className="lg:hidden mb-4">
               <div className="flex justify-center">
@@ -993,7 +995,7 @@ const RecentDecksItems = () => {
         );
       case "Items":
         return (
-          <div className="p-3 md:p-6 bg-[#1a1b30] rounded-lg">
+          <div className="p-3 md:p-6 bg-[#111111] rounded-lg max-h-[184px] overflow-y-auto scrollbar-hide">
             <div className="grid grid-cols-5 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:!flex justify-center xl:!flex-wrap gap-2 lg:gap-4">
               {filteredItems.map((item, i) => (
                 <ItemIcon
@@ -1009,24 +1011,24 @@ const RecentDecksItems = () => {
         );
       case "SkillTree":
         return (
-          <div className="p-3 md:p-6 bg-[#1a1b30] rounded-lg">
+          <div className="p-3 md:p-6 bg-[#111111] rounded-lg">
             {/* Mobile Sub-tabs for Skill Variants */}
             <div className="lg:hidden mb-4">
               {Object.keys(skillsByVariant).length > 1 && (
                 <div className="flex justify-center">
-                  <div className="flex gap-2 overflow-x-auto pb-2">
+                  <div className="inline-flex rounded-lg overflow-x-auto border border-[#2D2F37] bg-[#1D1D1D]">
                     {Object.keys(skillsByVariant).map((variant) => (
                       <button
                         key={variant}
                         type="button"
-                        className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 whitespace-nowrap ${
+                        className={`px-3 py-2 text-sm font-medium transition-colors duration-200 ${
                           activeSkillsSubTab === variant
                             ? "bg-[#2D2F37] text-[#D9A876]"
-                            : "text-[#999] hover:bg-[#2D2F37] bg-[#1D1D1D]"
+                            : "text-[#999] hover:bg-[#2D2F37]"
                         }`}
                         onClick={() => handleSkillsSubTabChange(variant)}
                       >
-                        {variant} ({skillsByVariant[variant].length})
+                        {variant}
                       </button>
                     ))}
                   </div>
@@ -1096,10 +1098,10 @@ const RecentDecksItems = () => {
 
   return (
     <div className="mx-auto md:px-6 lg:px-8 py-6">
-      <div className="space-y-6">
+      <div className="space-y-2">
         {/* Tabs Section */}
         <div className="flex justify-center md:justify-start">
-          <div className="inline-flex rounded-lg overflow-hidden border border-[#ffffff20] bg-[#1a1b30]">
+          <div className="inline-flex rounded-lg overflow-hidden border border-[#ffffff20] bg-[#111111]">
             <TabButton
               active={activeTab === "Champions"}
               label={others?.champions}
@@ -1124,7 +1126,7 @@ const RecentDecksItems = () => {
         </div>
 
         {/* Content Sections */}
-        <div className="bg-[#1a1b30] md:bg-transparent rounded-lg shadow-lg">
+        <div className="bg-[#111111] md:bg-transparent rounded-lg shadow-lg">
           {tabContent}
         </div>
 

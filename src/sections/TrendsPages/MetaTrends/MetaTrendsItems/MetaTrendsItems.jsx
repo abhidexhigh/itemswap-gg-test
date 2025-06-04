@@ -527,7 +527,7 @@ const DeckHeader = memo(
         {/* Mobile: Single row with force icons and skill tree */}
         <div className="flex md:hidden flex-col gap-y-3 mt-2 w-full items-center">
           {/* First row: Force icons and skill tree */}
-          <div className="flex items-center gap-x-2 w-fit overflow-x-auto scrollbar-hide !border !border-[#ffffff40] rounded-lg p-1">
+          <div className="flex items-center gap-x-2 w-fit overflow-hidden !border !border-[#ffffff40] rounded-lg p-1">
             {/* Force icons only (no background, border, count) */}
             {forceDetails.map((force, index) => (
               <div
@@ -1287,7 +1287,7 @@ const MetaTrendsItems = () => {
         />
       ),
       Traits: () => (
-        <div className="p-3 md:p-6 bg-[#1a1b30] rounded-lg">
+        <div className="p-3 md:p-6 bg-[#111111] rounded-lg mt-2">
           {/* Mobile Sub-tabs for Origin and Forces */}
           <div className="lg:hidden mb-4">
             <div className="flex justify-center">
@@ -1392,8 +1392,8 @@ const MetaTrendsItems = () => {
         </div>
       ),
       Items: () => (
-        <div className="p-3 md:p-6 bg-[#1a1b30] rounded-lg">
-          <div className="grid grid-cols-5 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:!flex justify-center xl:!flex-wrap gap-2 lg:gap-4">
+        <div className="p-3 md:p-6 bg-[#111111] rounded-lg mt-2 max-h-[184px] overflow-y-auto scrollbar-hide">
+          <div className="grid grid-cols-6 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:!flex justify-center xl:!flex-wrap gap-2 lg:gap-4">
             {filteredItems.map((item, i) => (
               <ItemIcon
                 key={`item-${item.key}-${i}`}
@@ -1407,24 +1407,24 @@ const MetaTrendsItems = () => {
         </div>
       ),
       SkillTree: () => (
-        <div className="p-3 md:p-6 bg-[#1a1b30] rounded-lg">
+        <div className="p-3 px-0 md:p-6 bg-[#111111] rounded-lg mt-2">
           {/* Mobile Sub-tabs for Skill Variants */}
           <div className="lg:hidden mb-4">
             {Object.keys(skillsByVariant).length > 1 && (
               <div className="flex justify-center">
-                <div className="flex gap-2 overflow-x-auto pb-2">
+                <div className="inline-flex rounded-lg overflow-x-auto border border-[#2D2F37] bg-[#1D1D1D]">
                   {Object.keys(skillsByVariant).map((variant) => (
                     <button
                       key={variant}
                       type="button"
-                      className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 whitespace-nowrap ${
+                      className={`px-3 py-2 text-sm font-medium transition-colors duration-200 ${
                         activeSkillsSubTab === variant
                           ? "bg-[#2D2F37] text-[#D9A876]"
-                          : "text-[#999] hover:bg-[#2D2F37] bg-[#1D1D1D]"
+                          : "text-[#999] hover:bg-[#2D2F37]"
                       }`}
                       onClick={() => handleSkillsSubTabChange(variant)}
                     >
-                      {variant} ({skillsByVariant[variant].length})
+                      {variant}
                     </button>
                   ))}
                 </div>
