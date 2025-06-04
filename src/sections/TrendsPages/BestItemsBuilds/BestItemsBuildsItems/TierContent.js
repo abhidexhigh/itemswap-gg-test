@@ -62,17 +62,17 @@ const TierCard = ({ cost, itemsData }) => {
                           imgStyle="w-[68px] md:w-[84px]"
                           identificationImageStyle="w=[16px] md:w-[32px]"
                           textStyle="text-[10px] md:text-[16px] hidden"
-                          cardSize="!w-[80px] !h-[80px] md:!w-[86px] md:!h-[86px]"
+                          cardSize="!w-[96px] !h-[96px] md:!w-[86px] md:!h-[86px]"
                         />
                       </div>
 
-                      <div className="flex flex-wrap gap-[4px] items-center max-w-[180px] md:max-w-[220px]">
+                      <div className="flex flex-wrap gap-[4px] items-center max-w-[220px] md:max-w-[220px]">
                         {champion?.championItemPairStats[0]?.keys
                           .slice(0, 3)
                           .map((item, idx) => (
                             <div key={idx} className="flex-shrink-0">
                               <div
-                                className="relative overflow-hidden w-[56px] md:w-[36px] group"
+                                className="relative overflow-hidden w-[60px] md:w-[36px] group"
                                 data-tooltip-id={item}
                               >
                                 <OptimizedImage

@@ -23,7 +23,7 @@ const ProjectItems = () => {
               <ul className="flex flex-wrap -mb-px justify-between">
                 <li className="w-[20%]" onClick={() => setActiveTab("Tier 1")}>
                   <div
-                    className={`inline-block w-full py-2 text-base font-bold transition-all duration-200 ${
+                    className={`inline-block w-full py-2 !text-base font-bold transition-all duration-200 ${
                       activeTab === "Tier 1"
                         ? "text-[#121212] border-b-2 border-blue-600 active bg-[#ffffff] rounded-t-lg"
                         : "border-transparent text-gray-300 hover:text-blue-400 hover:border-blue-400"
@@ -34,7 +34,7 @@ const ProjectItems = () => {
                 </li>
                 <li className="w-[20%]" onClick={() => setActiveTab("Tier 2")}>
                   <div
-                    className={`inline-block w-full py-2 text-base font-bold transition-all duration-200 ${
+                    className={`inline-block w-full py-2 !text-base font-bold transition-all duration-200 ${
                       activeTab === "Tier 2"
                         ? "text-[#121212] border-b-2 border-blue-600 active bg-[#ffffff] rounded-t-lg"
                         : "border-transparent text-gray-300 hover:text-blue-400 hover:border-blue-400"
@@ -46,7 +46,7 @@ const ProjectItems = () => {
                 </li>
                 <li className="w-[20%]" onClick={() => setActiveTab("Tier 3")}>
                   <div
-                    className={`inline-block w-full py-2 text-base font-bold transition-all duration-200 ${
+                    className={`inline-block w-full py-2 !text-base font-bold transition-all duration-200 ${
                       activeTab === "Tier 3"
                         ? "text-[#121212] border-b-2 border-blue-600 active bg-[#ffffff] rounded-t-lg"
                         : "border-transparent text-gray-300 hover:text-blue-400 hover:border-blue-400"
@@ -58,7 +58,7 @@ const ProjectItems = () => {
                 </li>
                 <li className="w-[20%]" onClick={() => setActiveTab("Tier 4")}>
                   <div
-                    className={`inline-block w-full py-2 text-base font-bold transition-all duration-200 ${
+                    className={`inline-block w-full py-2 !text-base font-bold transition-all duration-200 ${
                       activeTab === "Tier 4"
                         ? "text-[#121212] border-b-2 border-blue-600 active bg-[#ffffff] rounded-t-lg"
                         : "border-transparent text-gray-300 hover:text-blue-400 hover:border-blue-400"
@@ -69,7 +69,7 @@ const ProjectItems = () => {
                 </li>
                 <li className="w-[20%]" onClick={() => setActiveTab("Tier 5")}>
                   <div
-                    className={`inline-block w-full py-2 text-base font-bold transition-all duration-200 ${
+                    className={`inline-block w-full py-2 !text-base font-bold transition-all duration-200 ${
                       activeTab === "Tier 5"
                         ? "text-[#121212] border-b-2 border-blue-600 active bg-[#ffffff] rounded-t-lg"
                         : "border-transparent text-gray-300 hover:text-blue-400 hover:border-blue-400"

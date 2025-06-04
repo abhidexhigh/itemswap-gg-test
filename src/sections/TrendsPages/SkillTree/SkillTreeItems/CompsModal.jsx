@@ -5,6 +5,8 @@ import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import ForceIcon from "src/components/forceIcon";
+import SkillTreeImage from "src/components/SkillTreeImage";
+import TraitImage from "src/components/TraitImage/TraitImage";
 
 // ChampionWithItems component for displaying champions in the comps modal
 export const ChampionWithItems = ({
@@ -78,25 +80,12 @@ export const ChampionWithItems = ({
 };
 
 // SkillTreeIcon component for displaying skill tree in the comps modal
-export const SkillTreeIcon = ({ skillTree, skills }) => {
+export const SkillTreeIcon = ({ skillTree, skills, size = "small" }) => {
   const skillDetails = skills?.find((s) => s.key === skillTree);
   if (!skillDetails) return null;
 
   return (
-    <div className="flex justify-center items-center relative">
-      <div className="bg-gradient-to-br from-[#232339] to-[#1a1a2a] p-0.5 sm:p-1 rounded-lg border border-white/10 hover:border-white/30 transition-all duration-200 hover:shadow-lg hover:-translate-y-[2px] cursor-pointer">
-        <OptimizedImage
-          alt={skillDetails.name || "Skill"}
-          width={80}
-          height={80}
-          src={skillDetails.imageUrl}
-          className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-md"
-          data-tooltip-id={skillTree}
-          loading="lazy"
-        />
-      </div>
-      <ReactTltp variant="skillTree" content={skillDetails} id={skillTree} />
-    </div>
+    <SkillTreeImage skill={skillDetails} size={size} tooltipId={skillTree} />
   );
 };
 
@@ -112,15 +101,19 @@ export const CompCard = ({
 }) => {
   if (!comp) return null;
 
+  // Add hover state management for force icons
+  const [hoveredForce, setHoveredForce] = useState(null);
+
   return (
-    <div className="flex flex-col gap-[1px] !border border-[#2D2F37] rounded-lg overflow-hidden shadow-lg bg-[#00000099] mb-2 sm:mb-4 hover:bg-[#0a0a0a] transition-colors duration-200">
+    <div className="flex flex-col gap-[1px] !border border-[#FFFFFF]/30 rounded-lg overflow-hidden shadow-lg bg-[#00000099] mb-2 sm:mb-4">
       {/* Comp Header */}
-      <header className="relative flex flex-col sm:flex-row justify-between items-start sm:items-center p-2 sm:py-[15px] sm:pl-4 sm:pr-[16px] lg:min-h-[50px] bg-[#111111] border-b border-[#2D2F37]">
-        <div className="inline-flex flex-col sm:flex-row items-start sm:items-center gap-[4px] sm:gap-[8px] mb-2 sm:mb-0">
-          <strong className="text-lg sm:text-[26px] font-semibold leading-none text-[#D9A876]">
-            {comp.name}
+      <header className="relative flex flex-col md:flex-col justify-between items-start md:items-end py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px]">
+        <div className="inline-flex flex-col flex-wrap gap-[8px] w-full md:w-auto md:flex-row md:items-center md:gap-[4px]">
+          <strong className="text-[26px] font-semibold leading-none text-[#F2A03D] text-center md:text-left">
+            {comp?.name}
           </strong>
-          <span className="flex flex-wrap justify-start items-center gap-1 sm:gap-0">
+          {/* Desktop force icons with count and border */}
+          <span className="hidden md:flex justify-start md:justify-center items-center">
             {comp.deck?.forces?.map((force, i) => {
               const forceDetails = forces?.find(
                 (t) => t.key.toLowerCase() === force?.key.toLowerCase()
@@ -131,54 +124,149 @@ export const CompCard = ({
                 <div
                   key={i}
                   className="flex justify-center items-center bg-[#000] rounded-full mx-1 pr-2 border-[1px] border-[#ffffff50]"
+                  onMouseEnter={() => setHoveredForce(force?.key)}
+                  onMouseLeave={() => setHoveredForce(null)}
                 >
                   <ForceIcon
                     force={forceDetails}
                     size="custom"
-                    customSize="w-[20px] h-[20px] sm:w-[24px] sm:h-[24px] md:w-[40px] md:h-[40px]"
+                    customSize="w-[30px] h-[30px] md:w-[40px] md:h-[40px]"
                     className="mr-1"
                     data-tooltip-id={`force-${force?.key}-${i}`}
+                    isHovered={hoveredForce === force?.key}
                   />
                   <ReactTltp
                     content={force?.key}
                     id={`force-${force?.key}-${i}`}
                   />
-                  <span className="text-sm sm:text-[18px]">
-                    {force?.numUnits}
-                  </span>
+                  <span className="text-[18px]">{force?.numUnits}</span>
                 </div>
               );
             })}
           </span>
         </div>
-        <div className="inline-flex gap-[10px] sm:gap-[22px]">
-          <span className="flex justify-center gap-x-1 sm:gap-x-2 items-center">
+        <OptimizedImage
+          src={
+            "https://res.cloudinary.com/dg0cmj6su/image/upload/v1736245309/rule_1_1_otljzg.png"
+          }
+          alt={"border"}
+          width={100}
+          height={100}
+          className="w-[100px] mx-auto rounded-lg md:hidden"
+        />
+        {/* Mobile: Single row with force icons and skill tree */}
+        <div className="flex md:hidden flex-col gap-y-3 mt-2 w-full items-center">
+          {/* First row: Force icons and skill tree */}
+          <div className="flex items-center gap-x-2 w-fit overflow-x-auto scrollbar-hide !border !border-[#ffffff40] rounded-lg p-1">
+            {/* Force icons only (no background, border, count) */}
+            {comp.deck?.forces?.map((force, i) => {
+              const forceDetails = forces?.find(
+                (t) => t.key.toLowerCase() === force?.key.toLowerCase()
+              );
+              if (!forceDetails) return null;
+
+              return (
+                <div
+                  key={i}
+                  className="flex-shrink-0 w-[24px] h-[24px]"
+                  onMouseEnter={() => setHoveredForce(force?.key)}
+                  onMouseLeave={() => setHoveredForce(null)}
+                >
+                  <ForceIcon
+                    force={forceDetails}
+                    size="custom"
+                    customSize="w-full h-full"
+                    className="aspect-square"
+                    data-tooltip-id={`force-${force?.key}-${i}`}
+                    isHovered={hoveredForce === force?.key}
+                  />
+                  <ReactTltp
+                    content={force?.key}
+                    id={`force-${force?.key}-${i}`}
+                  />
+                </div>
+              );
+            })}
+            {/* Vertical divider */}
+            {comp.deck?.forces?.length > 0 &&
+              comp.deck?.skillTree?.length > 0 && (
+                <div className="flex-shrink-0 h-6 w-px bg-[#ffffff30] mx-1"></div>
+              )}
+            {/* Skill tree icons */}
             {comp.deck?.skillTree?.map((skill, i) => (
-              <SkillTreeIcon key={i} skillTree={skill} skills={skillTree} />
+              <div
+                key={i}
+                className="flex-shrink-0 w-[24px] h-[24px] shadow-md rounded-full shadow-[#ffffff20]"
+              >
+                <SkillTreeIcon skillTree={skill} skills={skillTree} />
+              </div>
+            ))}
+          </div>
+          {/* Second row: Traits */}
+          {comp.deck?.traits && comp.deck?.traits.length > 0 && (
+            <div className="flex items-center gap-x-1 w-fit overflow-x-auto scrollbar-hide">
+              {comp.deck?.traits?.map((trait, i) => {
+                const traitDetails = traits?.find((t) => t.key === trait?.key);
+                const tier = traitDetails?.tiers?.find(
+                  (t) => trait?.numUnits >= t?.min && trait?.numUnits <= t?.max
+                );
+
+                if (!traitDetails || !tier?.imageUrl) return null;
+
+                return (
+                  <div key={i} className="flex-shrink-0">
+                    <TraitImage
+                      trait={{
+                        ...traitDetails,
+                        tier,
+                        numUnits: trait?.numUnits,
+                      }}
+                      size="small"
+                      className="w-[24px] h-[24px]"
+                      data-tooltip-id={`mobile-trait-${traitDetails.key}-${i}`}
+                    />
+                    <ReactTltp
+                      variant="trait"
+                      id={`mobile-trait-${traitDetails.key}-${i}`}
+                      content={{
+                        ...traitDetails,
+                        numUnits: trait?.numUnits,
+                      }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+        {/* Desktop layout */}
+        <div className="hidden md:inline-flex flex-shrink-0 justify-between gap-1 !gap-x-6 md:mt-1">
+          <span className="flex justify-center gap-x-1 items-center">
+            {comp.deck?.skillTree?.map((skill, i) => (
+              <SkillTreeIcon
+                key={i}
+                skillTree={skill}
+                skills={skillTree}
+                size="large"
+              />
             ))}
           </span>
-          <div className="inline-flex flex-wrap">
+          <div className="flex flex-wrap gap-1 md:gap-0 md:inline-flex md:flex-wrap justify-start md:justify-end md:mr-0">
             {comp.deck?.traits?.map((trait, i) => {
               const traitDetails = traits?.find((t) => t.key === trait?.key);
               const tier = traitDetails?.tiers?.find(
-                (t) => t?.min >= trait?.numUnits
+                (t) => trait?.numUnits >= t?.min && trait?.numUnits <= t?.max
               );
 
               if (!traitDetails || !tier?.imageUrl) return null;
 
               return (
-                <div
-                  key={i}
-                  className="relative w-[24px] h-[24px] sm:w-[30px] sm:h-[30px] md:w-[56px] md:h-[56px]"
-                >
-                  <OptimizedImage
-                    alt={traitDetails.name || "Trait"}
-                    width={50}
-                    height={50}
-                    src={tier.imageUrl}
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center w-[24px] sm:w-[30px] md:w-[56px]"
+                <div key={i} className="relative">
+                  <TraitImage
+                    trait={{ ...traitDetails, tier, numUnits: trait?.numUnits }}
+                    size="default"
+                    className="w-[38px] h-[38px] md:w-[48px] md:h-[48px]"
                     data-tooltip-id={`trait-${traitDetails.key}-${i}`}
-                    loading="lazy"
                   />
                   <ReactTltp
                     variant="trait"
@@ -194,12 +282,21 @@ export const CompCard = ({
           </div>
         </div>
       </header>
+      <OptimizedImage
+        src={
+          "https://res.cloudinary.com/dg0cmj6su/image/upload/v1738605248/Frame_18_1_otofdu.png"
+        }
+        alt={"border"}
+        width={300}
+        height={300}
+        className="w-[90%] mx-auto md:hidden"
+      />
 
       {/* Comp Champions */}
-      <div className="flex flex-col sm:flex bg-center bg-no-repeat mt-[-1px]">
-        <div className="flex flex-col sm:flex-row w-full min-h-[150px] justify-between items-center bg-[#111111] py-3 px-2 sm:py-4 sm:px-6 gap-3 sm:gap-4">
-          <div className="flex-grow flex justify-center w-full">
-            <div className="flex flex-wrap justify-center sm:justify-start gap-2 w-full">
+      <div className="flex flex-col bg-center bg-no-repeat mt-[-1px]">
+        <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#111111] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6">
+          <div className="mb-[16px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[80%] lg:flex-shrink-0">
+            <div className="flex flex-wrap justify-center lg:justify-center gap-2 w-full">
               {comp.deck?.champions.map((champion, i) => (
                 <ChampionWithItems
                   key={i}

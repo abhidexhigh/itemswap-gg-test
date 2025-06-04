@@ -334,7 +334,7 @@ const ChampionsCostSection = memo(
     // Always render content immediately
     return (
       <React.Fragment>
-        <CostHeader costLevel={costIndex} others={others} />
+        {/* <CostHeader costLevel={costIndex} others={others} /> */}
         <div className="mx-auto w-full" ref={sectionRef}>
           <div
             className="flex items-center flex-wrap mb-2 justify-center rounded-tl-none rounded-tr-none"
@@ -370,21 +370,86 @@ const MetaTrendsCard = ({
   const { t } = useTranslation();
   const others = t("others");
 
-  return (
-    <div className="rounded-[4px]">
-      <div className="grid grid-cols-1 m-2">
-        {console.log("championsByCost", championsByCost)}
-        {championsByCost.map((champions, i) => (
-          <ChampionsCostSection
-            key={`cost-${i}`}
-            champions={champions}
-            costIndex={i}
-            setSelectedChampion={setSelectedChampion}
-            forces={forces}
-            others={others}
-            selectedChampion={selectedChampion}
+  // State for mobile tabs
+  const [activeTab, setActiveTab] = useState(0);
+
+  // Tab button component for mobile
+  const TabButton = memo(({ index, isActive, onClick, championCount }) => (
+    <button
+      onClick={() => onClick(index)}
+      className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 ${
+        isActive
+          ? "bg-[#2d2f37] text-[#FFC528] border border-[#FFC528]"
+          : "bg-[#1D1D1D] text-gray-400 hover:bg-[#2D2F37] border border-gray-600"
+      }`}
+    >
+      {index < coinIcons.length && (
+        <OptimizedImage
+          src={coinIcons[index]}
+          className="w-6 h-6"
+          alt={`Cost ${index + 1} Icon`}
+          width={24}
+          height={24}
+          priority={true}
+        />
+      )}
+    </button>
+  ));
+
+  // Mobile tabs navigation
+  const MobileTabsNav = memo(() => (
+    <div className="lg:hidden mx-3">
+      <div className="flex gap-2 overflow-x-auto pb-2 pt-2 justify-center">
+        {championsByCost.map((champions, index) => (
+          <TabButton
+            key={`tab-${index}`}
+            index={index}
+            isActive={activeTab === index}
+            onClick={setActiveTab}
+            championCount={champions?.length}
           />
         ))}
+      </div>
+    </div>
+  ));
+
+  return (
+    <div className="rounded-[4px]">
+      {/* Mobile Tabs Navigation */}
+      <MobileTabsNav />
+
+      <div className="grid grid-cols-1 m-2">
+        {console.log("championsByCost", championsByCost)}
+
+        {/* Mobile View - Show only active tab */}
+        <div className="lg:hidden">
+          {championsByCost[activeTab] && (
+            <ChampionsCostSection
+              key={`mobile-cost-${activeTab}`}
+              champions={championsByCost[activeTab]}
+              costIndex={activeTab}
+              setSelectedChampion={setSelectedChampion}
+              forces={forces}
+              others={others}
+              selectedChampion={selectedChampion}
+            />
+          )}
+        </div>
+
+        {/* Desktop View - Show all sections */}
+        <div className="hidden lg:block">
+          {championsByCost.map((champions, i) => (
+            <ChampionsCostSection
+              key={`desktop-cost-${i}`}
+              champions={champions}
+              costIndex={i}
+              setSelectedChampion={setSelectedChampion}
+              forces={forces}
+              others={others}
+              selectedChampion={selectedChampion}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

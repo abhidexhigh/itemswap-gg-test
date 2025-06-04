@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import "../../../../../i18n";
-import React, { useState, useCallback, useMemo, memo } from "react";
+import React, { useState, useCallback, useMemo, memo, useEffect } from "react";
 import { Tooltip } from "react-tooltip";
 import moment from "moment";
 import TraitTooltip from "src/components/tooltip/TraitTooltip";
@@ -17,27 +17,16 @@ import RecentDecksHistory from "../../../../data/newData/recentDecksHistory.json
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import { OptimizedImage } from "src/utils/imageOptimizer";
 import ForceIcon from "src/components/forceIcon";
+import SkillTreeImage from "src/components/SkillTreeImage";
+import TraitImage from "src/components/TraitImage/TraitImage";
 
 // Add SkillTreeIcon component
-const SkillTreeIcon = memo(({ skillTree, skills }) => {
+const SkillTreeIcon = memo(({ skillTree, skills, size = "default" }) => {
   const skillDetails = skills?.find((s) => s.key === skillTree);
   if (!skillDetails) return null;
 
   return (
-    <div className="relative inline-block">
-      <div className="bg-gradient-to-br from-[#232339] to-[#1a1a2a] p-1 rounded-lg border border-white/10 hover:border-white/30 transition-all duration-200 hover:shadow-lg hover:-translate-y-[2px] cursor-pointer">
-        <OptimizedImage
-          alt={skillDetails.name || "Skill"}
-          width={80}
-          height={80}
-          src={skillDetails.imageUrl}
-          className="w-8 h-8 md:w-10 md:h-10 rounded-md"
-          data-tooltip-id={skillTree}
-          loading="lazy"
-        />
-      </div>
-      <ReactTltp variant="skillTree" content={skillDetails} id={skillTree} />
-    </div>
+    <SkillTreeImage skill={skillDetails} size={size} tooltipId={skillTree} />
   );
 });
 
@@ -55,44 +44,48 @@ const TabButton = memo(({ active, label, onClick }) => (
 ));
 
 // Trait item component
-const TraitItem = memo(({ trait, selectedTrait, onSelect, i }) => (
+const TraitItem = memo(({ trait, selectedTrait, onSelect, i, t }) => (
   <div
     className="flex flex-col items-center gap-2 cursor-pointer group"
     onClick={() => onSelect("trait", trait?.key)}
   >
     <ReactTltp variant="trait" content={trait} id={`${trait?.key}-${i}`} />
     <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
-      <OptimizedImage
-        alt={trait?.name || "Trait"}
-        width={96}
-        height={96}
-        src={trait?.imageUrl}
-        className="w-full h-full object-cover rounded-lg"
+      <TraitImage
+        trait={trait}
+        size="xlarge"
+        className="w-full h-full rounded-lg"
         data-tooltip-id={`${trait?.key}-${i}`}
-        loading="lazy"
       />
       {trait?.key === selectedTrait && (
-        <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+        <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center z-20">
           <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
         </div>
       )}
     </div>
-    <span className="hidden lg:block text-sm md:text-base text-white bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
+    <span className="hidden lg:block text-sm md:text-base text-[#D9A876] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
       {trait?.name}
     </span>
   </div>
 ));
 
 // Force item component
-const ForceItem = memo(({ force, selectedTrait, onSelect, i }) => {
+const ForceItem = memo(({ force, selectedTrait, onSelect, i, t }) => {
   const [isHovered, setIsHovered] = useState(false);
+
+  const handleClick = useCallback(() => {
+    onSelect("force", force?.key);
+  }, [onSelect, force?.key]);
+
+  const handleMouseEnter = useCallback(() => setIsHovered(true), []);
+  const handleMouseLeave = useCallback(() => setIsHovered(false), []);
 
   return (
     <div
       className="flex flex-col items-center gap-2 cursor-pointer group"
-      onClick={() => onSelect("force", force?.key)}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <ReactTltp variant="force" content={force} id={`${force?.key}-${i}`} />
       <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
@@ -280,7 +273,8 @@ const DeckHeader = memo(
               </div>
             </Link>
           </div>
-          <span className="flex justify-start md:justify-center items-center">
+          {/* Desktop force icons with count and border */}
+          <span className="hidden md:flex justify-start md:justify-center items-center">
             {metaDeck?.deck?.forces?.map((force, i) => {
               const forceDetails = forces?.find(
                 (t) => t.key.toLowerCase() === force?.key.toLowerCase()
@@ -309,7 +303,99 @@ const DeckHeader = memo(
             })}
           </span>
         </div>
-        <div className="inline-flex flex-shrink-0 justify-between gap-1 mt-3 md:mt-0">
+        {/* Mobile: Single row with force icons and skill tree */}
+        <div className="flex md:hidden flex-col gap-y-2 mt-3 w-full">
+          {/* First row: Force icons and skill tree */}
+          <div className="flex items-center gap-x-2 w-full overflow-x-auto scrollbar-hide">
+            {/* Force icons only (no background, border, count) */}
+            {metaDeck?.deck?.forces?.map((force, i) => {
+              const forceDetails = forces?.find(
+                (t) => t.key.toLowerCase() === force?.key.toLowerCase()
+              );
+              if (!forceDetails) return null;
+
+              return (
+                <div
+                  key={i}
+                  className="flex-shrink-0 w-[30px] h-[30px]"
+                  onMouseEnter={() => setHoveredForce(force?.key)}
+                  onMouseLeave={() => setHoveredForce(null)}
+                >
+                  <ForceIcon
+                    force={forceDetails}
+                    size="custom"
+                    customSize="w-full h-full"
+                    className="aspect-square"
+                    data-tooltip-id={`${force?.key}-${i}`}
+                    isHovered={hoveredForce === force?.key}
+                  />
+                  <ReactTltp content={force?.key} id={`${force?.key}-${i}`} />
+                </div>
+              );
+            })}
+            {/* Vertical divider */}
+            {metaDeck?.deck?.forces?.length > 0 &&
+              metaDeck?.deck?.skillTree?.length > 0 && (
+                <div className="flex-shrink-0 h-8 w-px bg-[#ffffff30] mx-1"></div>
+              )}
+            {/* Skill tree icons */}
+            {metaDeck?.deck?.skillTree &&
+              metaDeck?.deck?.skillTree.length > 0 &&
+              metaDeck?.deck?.skillTree?.map((skill, i) => {
+                const skillDetails = skills?.find((s) => s.key === skill);
+                if (!skillDetails) return null;
+
+                return (
+                  <div key={i} className="flex-shrink-0">
+                    <SkillTreeIcon
+                      skillTree={skill}
+                      skills={skills}
+                      size="default"
+                    />
+                  </div>
+                );
+              })}
+          </div>
+          {/* Second row: Traits */}
+          {metaDeck?.deck?.traits && metaDeck?.deck?.traits.length > 0 && (
+            <div className="flex items-center gap-x-1 w-full overflow-x-auto scrollbar-hide">
+              {metaDeck?.deck?.traits?.map((trait, i) => {
+                const traitDetails = traits?.find((t) => t.key === trait?.key);
+                const tier = traitDetails?.tiers?.find(
+                  (t) => trait?.numUnits >= t?.min && trait?.numUnits <= t?.max
+                );
+
+                if (!traitDetails || !tier?.imageUrl) return null;
+
+                return (
+                  <div key={i} className="flex-shrink-0">
+                    <div className="relative w-[32px] h-[32px]">
+                      <OptimizedImage
+                        alt={traitDetails.name || "Trait"}
+                        width={50}
+                        height={50}
+                        src={tier.imageUrl}
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center w-[32px]"
+                        data-tooltip-id={`mobile-trait-${traitDetails.key}-${i}`}
+                        loading="lazy"
+                      />
+                      <ReactTltp
+                        variant="trait"
+                        id={`mobile-trait-${traitDetails.key}-${i}`}
+                        content={{
+                          ...traitDetails,
+                          numUnits: trait?.numUnits,
+                        }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+        {/* Desktop layout */}
+        <div className="hidden md:inline-flex flex-shrink-0 justify-between gap-1 mt-3 md:mt-0">
           {metaDeck?.deck?.skillTree &&
             metaDeck?.deck?.skillTree.length > 0 && (
               <span className="flex justify-center gap-x-1 items-center">
@@ -318,24 +404,12 @@ const DeckHeader = memo(
                   if (!skillDetails) return null;
 
                   return (
-                    <div key={i} className="relative inline-block">
-                      <div className="bg-gradient-to-br from-[#232339] to-[#1a1a2a] p-1 rounded-lg border border-white/10 hover:border-white/30 transition-all duration-200 hover:shadow-lg hover:-translate-y-[2px] cursor-pointer">
-                        <OptimizedImage
-                          alt={skillDetails.name || "Skill"}
-                          width={80}
-                          height={80}
-                          src={skillDetails.imageUrl}
-                          className="w-8 h-8 md:w-10 md:h-10 rounded-md"
-                          data-tooltip-id={skill}
-                          loading="lazy"
-                        />
-                      </div>
-                      <ReactTltp
-                        variant="skillTree"
-                        content={skillDetails}
-                        id={skill}
-                      />
-                    </div>
+                    <SkillTreeIcon
+                      key={i}
+                      skillTree={skill}
+                      skills={skills}
+                      size="medium"
+                    />
                   );
                 })}
               </span>
@@ -469,39 +543,41 @@ const MetaDeck = memo(
 );
 
 // SkillTreeItem component (used in the filter section)
-const SkillTreeItem = memo(({ skill, selectedSkillTree, onSelect, i }) => (
-  <div
-    className="flex flex-col items-center gap-1 cursor-pointer group max-w-[70px] md:max-w-[96px]"
-    onClick={() => onSelect("skillTree", skill?.key)}
-  >
-    <ReactTltp
-      variant="skillTree"
-      content={skill}
-      id={`skill-${skill?.key}-${i}`}
-    />
-    <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-105">
-      <div className="bg-gradient-to-br from-[#232339] to-[#1a1a2a] p-1 rounded-lg border border-white/10 hover:border-white/30 transition-all duration-200 w-full h-full flex items-center justify-center">
-        <OptimizedImage
-          alt={skill?.name || "Skill"}
-          width={80}
-          height={80}
-          src={skill?.imageUrl}
-          className="w-[80%] h-[80%] object-cover rounded-md"
-          data-tooltip-id={`skill-${skill?.key}-${i}`}
-          loading="lazy"
+const SkillTreeItem = memo(({ skill, selectedSkillTree, onSelect, i }) => {
+  const handleClick = useCallback(() => {
+    onSelect("skillTree", skill?.key);
+  }, [onSelect, skill?.key]);
+
+  return (
+    <div
+      className="flex flex-col items-center gap-1 cursor-pointer group w-16 md:w-20 lg:w-24 flex-shrink-0"
+      onClick={handleClick}
+    >
+      <ReactTltp
+        variant="skillTree"
+        content={skill}
+        id={`skill-${skill?.key}-${i}`}
+      />
+      <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-105">
+        <SkillTreeImage
+          skill={skill}
+          size="large"
+          tooltipId={`skill-${skill?.key}-${i}`}
+          className="w-full h-full"
+          showTooltip={false}
         />
+        {skill?.key === selectedSkillTree && (
+          <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+            <IoMdCheckmarkCircle className="text-[#86efac] text-3xl z-50" />
+          </div>
+        )}
       </div>
-      {skill?.key === selectedSkillTree && (
-        <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
-          <IoMdCheckmarkCircle className="text-[#86efac] text-3xl z-50" />
-        </div>
-      )}
+      <span className="text-xs truncate max-w-full text-center text-[#cccccc] mt-1">
+        {skill?.name}
+      </span>
     </div>
-    <span className="hidden lg:block text-xs truncate max-w-full text-center text-[#cccccc]">
-      {skill?.name}
-    </span>
-  </div>
-));
+  );
+});
 
 const RecentDecksItems = () => {
   const { t } = useTranslation();
@@ -512,6 +588,12 @@ const RecentDecksItems = () => {
   const [selectedSkillTree, setSelectedSkillTree] = useState(null);
   const [isClosed, setIsClosed] = useState({});
   const [activeTab, setActiveTab] = useState("Champions");
+
+  // State for mobile sub-tabs within Traits
+  const [activeTraitsSubTab, setActiveTraitsSubTab] = useState("Origin");
+
+  // State for mobile sub-tabs within Skills
+  const [activeSkillsSubTab, setActiveSkillsSubTab] = useState(null);
 
   // Extract data once from the JSON structure using useMemo
   const { metaDecks, champions, items, traits, augments, forces, skillTree } =
@@ -697,6 +779,99 @@ const RecentDecksItems = () => {
     setActiveTab(tab);
   }, []);
 
+  // Stable handler for traits sub-tab changes
+  const handleTraitsSubTabChange = useCallback((subTab) => {
+    setActiveTraitsSubTab(subTab);
+  }, []);
+
+  // Stable handler for skills sub-tab changes
+  const handleSkillsSubTabChange = useCallback((subTab) => {
+    setActiveSkillsSubTab(subTab);
+  }, []);
+
+  // Group skills by variant/category for mobile tabs
+  const skillsByVariant = useMemo(() => {
+    if (!skillTree || skillTree.length === 0) return {};
+
+    const grouped = {};
+    const validSkills = skillTree.filter((skill) => skill?.imageUrl);
+
+    validSkills.forEach((skill) => {
+      // Try to extract variant from skill name or use a default category
+      let variant = "General";
+
+      // Check if skill has a category/type property
+      if (skill.category) {
+        variant = skill.category;
+      } else if (skill.type) {
+        variant = skill.type;
+      } else if (skill.variant) {
+        variant = skill.variant;
+      } else if (skill.name) {
+        // Try to infer variant from skill name patterns
+        const skillName = skill.name.toLowerCase();
+        if (
+          skillName.includes("fire") ||
+          skillName.includes("flame") ||
+          skillName.includes("burn")
+        ) {
+          variant = "Fire";
+        } else if (
+          skillName.includes("water") ||
+          skillName.includes("ice") ||
+          skillName.includes("frost")
+        ) {
+          variant = "Water";
+        } else if (
+          skillName.includes("earth") ||
+          skillName.includes("stone") ||
+          skillName.includes("rock")
+        ) {
+          variant = "Earth";
+        } else if (
+          skillName.includes("air") ||
+          skillName.includes("wind") ||
+          skillName.includes("storm")
+        ) {
+          variant = "Air";
+        } else if (
+          skillName.includes("light") ||
+          skillName.includes("holy") ||
+          skillName.includes("divine")
+        ) {
+          variant = "Light";
+        } else if (
+          skillName.includes("dark") ||
+          skillName.includes("shadow") ||
+          skillName.includes("void")
+        ) {
+          variant = "Dark";
+        } else if (
+          skillName.includes("nature") ||
+          skillName.includes("plant") ||
+          skillName.includes("forest")
+        ) {
+          variant = "Nature";
+        }
+      }
+
+      if (!grouped[variant]) {
+        grouped[variant] = [];
+      }
+      grouped[variant].push(skill);
+    });
+
+    return grouped;
+  }, [skillTree]);
+
+  // Initialize skills sub-tab when variants are available
+  useEffect(() => {
+    if (Object.keys(skillsByVariant).length > 0 && !activeSkillsSubTab) {
+      const firstVariant = Object.keys(skillsByVariant)[0];
+      setActiveSkillsSubTab(firstVariant);
+    }
+  }, [skillsByVariant, activeSkillsSubTab]);
+
   // Memoize tab content to avoid unnecessary rerenders
   const tabContent = useMemo(() => {
     switch (activeTab) {
@@ -713,36 +888,102 @@ const RecentDecksItems = () => {
       case "Traits":
         return (
           <div className="p-3 md:p-6 bg-[#1a1b30] rounded-lg">
-            <div className="space-y-6">
+            {/* Mobile Sub-tabs for Origin and Forces */}
+            <div className="lg:hidden mb-4">
+              <div className="flex justify-center">
+                <div className="inline-flex rounded-lg overflow-hidden border border-[#2D2F37] bg-[#1D1D1D]">
+                  <button
+                    type="button"
+                    className={`px-4 py-2 text-sm font-medium transition-colors duration-200 ${
+                      activeTraitsSubTab === "Origin"
+                        ? "bg-[#2D2F37] text-[#D9A876]"
+                        : "text-[#999] hover:bg-[#2D2F37]"
+                    }`}
+                    onClick={() => handleTraitsSubTabChange("Origin")}
+                  >
+                    {others?.origin}
+                  </button>
+                  <button
+                    type="button"
+                    className={`px-4 py-2 text-sm font-medium transition-colors duration-200 ${
+                      activeTraitsSubTab === "Forces"
+                        ? "bg-[#2D2F37] text-[#D9A876]"
+                        : "text-[#999] hover:bg-[#2D2F37]"
+                    }`}
+                    onClick={() => handleTraitsSubTabChange("Forces")}
+                  >
+                    {others?.forces}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile View - Show only active sub-tab */}
+            <div className="lg:hidden">
+              {activeTraitsSubTab === "Origin" && (
+                <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 gap-4 w-full">
+                  {traits?.map((trait, i) => (
+                    <TraitItem
+                      key={`trait-${trait.key}-${i}`}
+                      trait={trait}
+                      selectedTrait={selectedTrait}
+                      onSelect={handleFilterChange}
+                      i={i}
+                      t={t}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {activeTraitsSubTab === "Forces" && (
+                <div className="grid grid-cols-5 sm:grid-cols-3 md:grid-cols-4 gap-4 w-full">
+                  {forces?.map((force, i) => (
+                    <ForceItem
+                      key={`force-${force.key}-${i}`}
+                      force={force}
+                      selectedTrait={selectedTrait}
+                      onSelect={handleFilterChange}
+                      i={i}
+                      t={t}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Desktop View - Show both sections */}
+            <div className="hidden lg:block space-y-6">
               <div className="flex flex-col lg:flex-row items-center gap-4">
-                <div className="p-1 rounded-lg text-white font-semibold text-center min-w-[100px]">
+                <div className="p-1 rounded-lg text-[#D9A876] font-semibold text-center min-w-[100px]">
                   {others?.origin}
                 </div>
                 <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 w-full">
                   {traits?.map((trait, i) => (
                     <TraitItem
-                      key={i}
+                      key={`trait-${trait.key}-${i}`}
                       trait={trait}
                       selectedTrait={selectedTrait}
                       onSelect={handleFilterChange}
                       i={i}
+                      t={t}
                     />
                   ))}
                 </div>
               </div>
 
               <div className="flex flex-col lg:flex-row items-center gap-4">
-                <div className="p-1 rounded-lg text-white font-semibold text-center min-w-[100px]">
+                <div className="p-1 rounded-lg text-[#D9A876] font-semibold text-center min-w-[100px]">
                   {others?.forces}
                 </div>
                 <div className="grid grid-cols-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 w-full">
                   {forces?.map((force, i) => (
                     <ForceItem
-                      key={i}
+                      key={`force-${force.key}-${i}`}
                       force={force}
                       selectedTrait={selectedTrait}
                       onSelect={handleFilterChange}
                       i={i}
+                      t={t}
                     />
                   ))}
                 </div>
@@ -769,18 +1010,63 @@ const RecentDecksItems = () => {
       case "SkillTree":
         return (
           <div className="p-3 md:p-6 bg-[#1a1b30] rounded-lg">
-            <div className="flex flex-wrap justify-center gap-2 mx-auto w-full">
-              {skillTree
-                ?.filter((skill) => skill?.imageUrl)
-                ?.map((skill, i) => (
-                  <SkillTreeItem
-                    key={i}
-                    skill={skill}
-                    selectedSkillTree={selectedSkillTree}
-                    onSelect={handleFilterChange}
-                    i={i}
-                  />
-                ))}
+            {/* Mobile Sub-tabs for Skill Variants */}
+            <div className="lg:hidden mb-4">
+              {Object.keys(skillsByVariant).length > 1 && (
+                <div className="flex justify-center">
+                  <div className="flex gap-2 overflow-x-auto pb-2">
+                    {Object.keys(skillsByVariant).map((variant) => (
+                      <button
+                        key={variant}
+                        type="button"
+                        className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 whitespace-nowrap ${
+                          activeSkillsSubTab === variant
+                            ? "bg-[#2D2F37] text-[#D9A876]"
+                            : "text-[#999] hover:bg-[#2D2F37] bg-[#1D1D1D]"
+                        }`}
+                        onClick={() => handleSkillsSubTabChange(variant)}
+                      >
+                        {variant} ({skillsByVariant[variant].length})
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Mobile View - Show only active sub-tab */}
+            <div className="lg:hidden">
+              {activeSkillsSubTab && skillsByVariant[activeSkillsSubTab] && (
+                <div className="flex flex-wrap justify-center gap-2 w-full">
+                  {skillsByVariant[activeSkillsSubTab].map((skill, i) => (
+                    <SkillTreeImage
+                      key={`mobile-skill-${skill.key}-${i}`}
+                      skill={skill}
+                      size="xlarge"
+                      selectedSkillTree={selectedSkillTree}
+                      onSelect={handleFilterChange}
+                      i={i}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Desktop View - Show all skills */}
+            <div className="hidden lg:block">
+              <div className="flex flex-wrap justify-center gap-3 w-full">
+                {skillTree
+                  ?.filter((skill) => skill?.imageUrl)
+                  ?.map((skill, i) => (
+                    <SkillTreeItem
+                      key={`desktop-skill-${skill.key}-${i}`}
+                      skill={skill}
+                      selectedSkillTree={selectedSkillTree}
+                      onSelect={handleFilterChange}
+                      i={i}
+                    />
+                  ))}
+              </div>
             </div>
           </div>
         );
@@ -789,8 +1075,13 @@ const RecentDecksItems = () => {
     }
   }, [
     activeTab,
+    activeTraitsSubTab,
+    activeSkillsSubTab,
+    skillsByVariant,
     groupedArray,
     handleFilterChange,
+    handleTraitsSubTabChange,
+    handleSkillsSubTabChange,
     forces,
     traits,
     skillTree,
@@ -800,6 +1091,7 @@ const RecentDecksItems = () => {
     selectedItem,
     others,
     selectedChampion,
+    t,
   ]);
 
   return (

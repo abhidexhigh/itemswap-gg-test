@@ -18,6 +18,7 @@ import CardImage from "src/components/cardImage";
 import { OptimizedImage } from "src/utils/imageOptimizer";
 import ForceIcon from "src/components/forceIcon";
 import TraitImage from "src/components/TraitImage/TraitImage";
+import SkillTreeImage from "src/components/SkillTreeImage";
 // PERFORMANCE OPTIMIZATION: Direct import for lightweight CSS chart (no dynamic loading needed)
 import MyBarChartComponent from "./BarGraph";
 
@@ -233,7 +234,7 @@ const SkillTreeItem = memo(({ skill, selectedSkillTree, onSelect, i }) => {
   return (
     <div
       ref={itemRef}
-      className="flex flex-col items-center gap-1 cursor-pointer group max-w-[70px] md:max-w-[96px]"
+      className="flex flex-col items-center gap-1 cursor-pointer group w-16 md:w-20 lg:w-24 flex-shrink-0"
       onClick={handleClick}
       style={{ willChange: isScrolling ? "auto" : "transform" }}
     >
@@ -243,31 +244,20 @@ const SkillTreeItem = memo(({ skill, selectedSkillTree, onSelect, i }) => {
         id={`skill-${skill?.key}-${i}`}
       />
       <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-105">
-        <div
-          className={`bg-gradient-to-br from-[#232339] to-[#1a1a2a] p-1 rounded-lg border border-white/10 transition-all duration-200 cursor-pointer ${
-            isScrolling
-              ? ""
-              : "hover:border-white/30 hover:shadow-lg hover:-translate-y-[2px]"
-          }`}
-        >
-          <OptimizedImage
-            alt={skill?.name || "Skill"}
-            width={80}
-            height={80}
-            src={skill?.imageUrl}
-            className="w-[80%] h-[80%] object-cover rounded-md"
-            data-tooltip-id={`skill-${skill?.key}-${i}`}
-            loading="eager"
-            priority={i < 6} // Prioritize first 6 skills
-          />
-        </div>
+        <SkillTreeImage
+          skill={skill}
+          size="large"
+          tooltipId={`skill-${skill?.key}-${i}`}
+          className="w-full h-full"
+          showTooltip={false}
+        />
         {skill?.key === selectedSkillTree && (
           <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
             <IoMdCheckmarkCircle className="text-[#86efac] text-3xl z-50" />
           </div>
         )}
       </div>
-      <span className="hidden lg:block text-xs truncate max-w-full text-center text-[#cccccc]">
+      <span className="text-xs truncate max-w-full text-center text-[#cccccc] mt-1">
         {skill?.name}
       </span>
     </div>
@@ -430,7 +420,7 @@ const AugmentIcon = memo(({ augment, augments }) => {
 });
 
 // PERFORMANCE OPTIMIZATION: Memoized SkillTreeIcon with better caching
-const SkillTreeIcon = memo(({ skillTree, skills }) => {
+const SkillTreeIcon = memo(({ skillTree, skills, size = "default" }) => {
   const skillDetails = useMemo(() => {
     return skills?.find((s) => s.key === skillTree);
   }, [skills, skillTree]);
@@ -438,26 +428,7 @@ const SkillTreeIcon = memo(({ skillTree, skills }) => {
   if (!skillDetails) return null;
 
   return (
-    <div className="flex justify-center items-center relative">
-      <div
-        className={`bg-gradient-to-br from-[#232339] to-[#1a1a2a] p-1 rounded-lg border border-white/10 transition-all duration-200 cursor-pointer ${
-          isScrolling
-            ? ""
-            : "hover:border-white/30 hover:shadow-lg hover:-translate-y-[2px]"
-        }`}
-      >
-        <OptimizedImage
-          alt={skillDetails.name || "Skill"}
-          width={80}
-          height={80}
-          src={skillDetails.imageUrl}
-          className="w-8 h-8 md:w-10 md:h-10 rounded-md"
-          data-tooltip-id={skillTree}
-          loading="eager"
-        />
-      </div>
-      <ReactTltp variant="skillTree" content={skillDetails} id={skillTree} />
-    </div>
+    <SkillTreeImage skill={skillDetails} size={size} tooltipId={skillTree} />
   );
 });
 
@@ -518,10 +489,11 @@ const DeckHeader = memo(
     return (
       <header className="relative flex flex-col md:flex-col justify-between items-start md:items-end py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px]">
         <div className="inline-flex flex-col flex-wrap gap-[8px] w-full md:w-auto md:flex-row md:items-center md:gap-[4px]">
-          <strong className="text-[26px] font-semibold leading-none text-[#F2A03D] pr-8 md:pr-0">
+          <strong className="text-[26px] font-semibold leading-none text-[#F2A03D] text-center md:text-left">
             {metaDeck?.name}
           </strong>
-          <span className="flex justify-start md:justify-center items-center">
+          {/* Desktop force icons with count and border */}
+          <span className="hidden md:flex justify-start md:justify-center items-center">
             {forceDetails.map((force, index) => (
               <div
                 key={`${force.key}-${index}`}
@@ -543,13 +515,86 @@ const DeckHeader = memo(
             ))}
           </span>
         </div>
-        <div className="inline-flex flex-shrink-0 justify-between gap-1 !gap-x-6 mt-3 md:mt-0">
+        <OptimizedImage
+          src={
+            "https://res.cloudinary.com/dg0cmj6su/image/upload/v1736245309/rule_1_1_otljzg.png"
+          }
+          alt={"border"}
+          width={100}
+          height={100}
+          className="w-[100px] mx-auto rounded-lg md:hidden"
+        />
+        {/* Mobile: Single row with force icons and skill tree */}
+        <div className="flex md:hidden flex-col gap-y-3 mt-2 w-full items-center">
+          {/* First row: Force icons and skill tree */}
+          <div className="flex items-center gap-x-2 w-fit overflow-x-auto scrollbar-hide !border !border-[#ffffff40] rounded-lg p-1">
+            {/* Force icons only (no background, border, count) */}
+            {forceDetails.map((force, index) => (
+              <div
+                key={`${force.key}-${index}`}
+                className="flex-shrink-0 w-[30px] h-[30px]"
+                onMouseEnter={() => handleMouseEnter(force?.key)}
+                onMouseLeave={handleMouseLeave}
+              >
+                <ForceIcon
+                  force={force.details}
+                  size="custom"
+                  customSize="w-full h-full"
+                  className="aspect-square"
+                  data-tooltip-id={`${force?.key}-${index}`}
+                  isHovered={hoveredForce === force?.key}
+                />
+                <ReactTltp content={force?.key} id={`${force?.key}-${index}`} />
+              </div>
+            ))}
+            {/* Vertical divider */}
+            {forceDetails.length > 0 && skillDetails.length > 0 && (
+              <div className="flex-shrink-0 h-8 w-px bg-[#ffffff30] mx-1"></div>
+            )}
+            {/* Skill tree icons */}
+            {skillDetails.map((skill, index) => (
+              <div
+                key={`${skill.key}-${index}`}
+                className="flex-shrink-0 w-[30px] h-[30px] shadow-md rounded-full shadow-[#ffffff20]"
+              >
+                <SkillTreeIcon
+                  skillTree={skill.key}
+                  skills={skills}
+                  size="default"
+                />
+              </div>
+            ))}
+          </div>
+          {/* Second row: Traits */}
+          {traitDetails.length > 0 && (
+            <div className="flex items-center gap-x-1 w-fit overflow-x-auto scrollbar-hide">
+              {traitDetails.map((trait, index) => (
+                <div key={`${trait.key}-${index}`} className="flex-shrink-0">
+                  <TraitImage
+                    trait={trait}
+                    size="small"
+                    className="w-[32px] h-[32px]"
+                    data-tooltip-id={`${trait.key}-${index}`}
+                  />
+                  <ReactTltp
+                    variant="trait"
+                    id={`${trait.key}-${index}`}
+                    content={trait}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        {/* Desktop layout */}
+        <div className="hidden md:inline-flex flex-shrink-0 justify-between gap-1 !gap-x-6 md:mt-1">
           <span className="flex justify-center gap-x-1 items-center">
             {skillDetails.map((skill, index) => (
               <SkillTreeIcon
                 key={`${skill.key}-${index}`}
                 skillTree={skill.key}
                 skills={skills}
+                size="large"
               />
             ))}
           </span>
@@ -559,7 +604,7 @@ const DeckHeader = memo(
                 <TraitImage
                   trait={trait}
                   size="default"
-                  className="w-[38px] h-[38px] md:w-[56px] md:h-[56px]"
+                  className="w-[38px] h-[38px] md:w-[48px] md:h-[48px]"
                   data-tooltip-id={`${trait.key}-${index}`}
                 />
                 <ReactTltp
@@ -671,10 +716,18 @@ const MetaDeck = memo(
           i={i}
           skills={skills}
         />
-
+        <OptimizedImage
+          src={
+            "https://res.cloudinary.com/dg0cmj6su/image/upload/v1738605248/Frame_18_1_otofdu.png"
+          }
+          alt={"border"}
+          width={300}
+          height={300}
+          className="w-[90%] mx-auto md:hidden"
+        />
         {!isClosed[i] && isVisible && (
           <div className="flex flex-col bg-center bg-no-repeat mt-[-1px]">
-            <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#111111] py-[16px] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6">
+            <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#111111] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6">
               <div className="mb-[16px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[80%] lg:flex-shrink-0">
                 <div className="flex flex-wrap justify-center lg:justify-center gap-2 w-full">
                   {sortedChampions.map((champion, index) => (
@@ -804,6 +857,12 @@ const MetaTrendsItems = () => {
   const [selectedSkillTree, setSelectedSkillTree] = useState(null);
   const [isClosed, setIsClosed] = useState({});
   const [activeTab, setActiveTab] = useState("Champions");
+
+  // State for mobile sub-tabs within Traits
+  const [activeTraitsSubTab, setActiveTraitsSubTab] = useState("Origin");
+
+  // State for mobile sub-tabs within Skills
+  const [activeSkillsSubTab, setActiveSkillsSubTab] = useState(null);
 
   // PERFORMANCE OPTIMIZATION: Enhanced data extraction with better memoization
   const { metaDecks, champions, items, traits, augments, forces, skillTree } =
@@ -1097,7 +1156,125 @@ const MetaTrendsItems = () => {
     setActiveTab(tab);
   }, []);
 
+  // Stable handler for traits sub-tab changes
+  const handleTraitsSubTabChange = useCallback((subTab) => {
+    setActiveTraitsSubTab(subTab);
+  }, []);
+
+  // Stable handler for skills sub-tab changes
+  const handleSkillsSubTabChange = useCallback((subTab) => {
+    setActiveSkillsSubTab(subTab);
+  }, []);
+
   // PERFORMANCE OPTIMIZATION: Heavily memoized tab content with lazy loading
+
+  // Group skills by variant/category for mobile tabs
+  const skillsByVariant = useMemo(() => {
+    if (!skillTree || skillTree.length === 0) return {};
+
+    const grouped = {};
+    const validSkills = skillTree.filter((skill) => skill?.imageUrl);
+
+    validSkills.forEach((skill) => {
+      // Try to extract variant from skill name or use a default category
+      let variant = "General";
+
+      // Check if skill has a category/type property
+      if (skill.category) {
+        variant = skill.category;
+      } else if (skill.type) {
+        variant = skill.type;
+      } else if (skill.variant) {
+        variant = skill.variant;
+      } else if (skill.name) {
+        // Try to infer variant from skill name patterns
+        const skillName = skill.name.toLowerCase();
+        if (
+          skillName.includes("fire") ||
+          skillName.includes("flame") ||
+          skillName.includes("burn")
+        ) {
+          variant = "Fire";
+        } else if (
+          skillName.includes("water") ||
+          skillName.includes("ice") ||
+          skillName.includes("frost")
+        ) {
+          variant = "Water";
+        } else if (
+          skillName.includes("earth") ||
+          skillName.includes("stone") ||
+          skillName.includes("rock")
+        ) {
+          variant = "Earth";
+        } else if (
+          skillName.includes("air") ||
+          skillName.includes("wind") ||
+          skillName.includes("storm")
+        ) {
+          variant = "Air";
+        } else if (
+          skillName.includes("light") ||
+          skillName.includes("holy") ||
+          skillName.includes("divine")
+        ) {
+          variant = "Light";
+        } else if (
+          skillName.includes("dark") ||
+          skillName.includes("shadow") ||
+          skillName.includes("void")
+        ) {
+          variant = "Dark";
+        } else if (
+          skillName.includes("nature") ||
+          skillName.includes("plant") ||
+          skillName.includes("forest")
+        ) {
+          variant = "Nature";
+        }
+      }
+
+      if (!grouped[variant]) {
+        grouped[variant] = [];
+      }
+      grouped[variant].push(skill);
+    });
+
+    return grouped;
+  }, [skillTree]);
+
+  // Initialize skills sub-tab when variants are available
+  useEffect(() => {
+    if (Object.keys(skillsByVariant).length > 0 && !activeSkillsSubTab) {
+      const firstVariant = Object.keys(skillsByVariant)[0];
+      setActiveSkillsSubTab(firstVariant);
+    }
+  }, [skillsByVariant, activeSkillsSubTab]);
+
+  // Auto-scroll to meta-trends-items section on component load
+  useEffect(() => {
+    const scrollToResults = () => {
+      const element = document.getElementById("meta-trends-items");
+      if (element) {
+        // Get element position and add offset for fixed tabs
+        const elementPosition =
+          element.getBoundingClientRect().top + window.pageYOffset;
+        const offset = 120; // Adjust this value based on your fixed tabs height
+        const targetPosition = elementPosition - offset;
+
+        window.scrollTo({
+          top: targetPosition,
+          behavior: "smooth",
+        });
+      }
+    };
+
+    // Small delay to ensure content is rendered
+    const timer = setTimeout(scrollToResults, 100);
+
+    return () => clearTimeout(timer);
+  }, []); // Empty dependency array means this runs once on mount
+
   const handleTabContent = useMemo(() => {
     const tabComponents = {
       Champions: () => (
@@ -1111,7 +1288,71 @@ const MetaTrendsItems = () => {
       ),
       Traits: () => (
         <div className="p-3 md:p-6 bg-[#1a1b30] rounded-lg">
-          <div className="space-y-6">
+          {/* Mobile Sub-tabs for Origin and Forces */}
+          <div className="lg:hidden mb-4">
+            <div className="flex justify-center">
+              <div className="inline-flex rounded-lg overflow-hidden border border-[#2D2F37] bg-[#1D1D1D]">
+                <button
+                  type="button"
+                  className={`px-4 py-2 text-sm font-medium transition-colors duration-200 ${
+                    activeTraitsSubTab === "Origin"
+                      ? "bg-[#2D2F37] text-[#D9A876]"
+                      : "text-[#999] hover:bg-[#2D2F37]"
+                  }`}
+                  onClick={() => handleTraitsSubTabChange("Origin")}
+                >
+                  {others?.origin}
+                </button>
+                <button
+                  type="button"
+                  className={`px-4 py-2 text-sm font-medium transition-colors duration-200 ${
+                    activeTraitsSubTab === "Forces"
+                      ? "bg-[#2D2F37] text-[#D9A876]"
+                      : "text-[#999] hover:bg-[#2D2F37]"
+                  }`}
+                  onClick={() => handleTraitsSubTabChange("Forces")}
+                >
+                  {others?.forces}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile View - Show only active sub-tab */}
+          <div className="lg:hidden">
+            {activeTraitsSubTab === "Origin" && (
+              <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 gap-4 w-full">
+                {traits?.map((trait, i) => (
+                  <TraitItem
+                    key={`trait-${trait.key}-${i}`}
+                    trait={trait}
+                    selectedTrait={selectedTrait}
+                    onSelect={handleFilterChange}
+                    i={i}
+                    t={t}
+                  />
+                ))}
+              </div>
+            )}
+
+            {activeTraitsSubTab === "Forces" && (
+              <div className="grid grid-cols-5 sm:grid-cols-3 md:grid-cols-4 gap-4 w-full">
+                {forces?.map((force, i) => (
+                  <ForceItem
+                    key={`force-${force.key}-${i}`}
+                    force={force}
+                    selectedTrait={selectedTrait}
+                    onSelect={handleFilterChange}
+                    i={i}
+                    t={t}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Desktop View - Show both sections */}
+          <div className="hidden lg:block space-y-6">
             <div className="flex flex-col lg:flex-row items-center gap-4">
               <div className="p-1 rounded-lg text-[#D9A876] font-semibold text-center min-w-[100px]">
                 {others?.origin}
@@ -1167,18 +1408,63 @@ const MetaTrendsItems = () => {
       ),
       SkillTree: () => (
         <div className="p-3 md:p-6 bg-[#1a1b30] rounded-lg">
-          <div className="flex flex-wrap justify-center gap-2 mx-auto w-full">
-            {skillTree
-              ?.filter((skill) => skill?.imageUrl)
-              ?.map((skill, i) => (
-                <SkillTreeItem
-                  key={`skill-${skill.key}-${i}`}
-                  skill={skill}
-                  selectedSkillTree={selectedSkillTree}
-                  onSelect={handleFilterChange}
-                  i={i}
-                />
-              ))}
+          {/* Mobile Sub-tabs for Skill Variants */}
+          <div className="lg:hidden mb-4">
+            {Object.keys(skillsByVariant).length > 1 && (
+              <div className="flex justify-center">
+                <div className="flex gap-2 overflow-x-auto pb-2">
+                  {Object.keys(skillsByVariant).map((variant) => (
+                    <button
+                      key={variant}
+                      type="button"
+                      className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 whitespace-nowrap ${
+                        activeSkillsSubTab === variant
+                          ? "bg-[#2D2F37] text-[#D9A876]"
+                          : "text-[#999] hover:bg-[#2D2F37] bg-[#1D1D1D]"
+                      }`}
+                      onClick={() => handleSkillsSubTabChange(variant)}
+                    >
+                      {variant} ({skillsByVariant[variant].length})
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Mobile View - Show only active sub-tab */}
+          <div className="lg:hidden">
+            {activeSkillsSubTab && skillsByVariant[activeSkillsSubTab] && (
+              <div className="flex flex-wrap justify-center gap-2 w-full">
+                {skillsByVariant[activeSkillsSubTab].map((skill, i) => (
+                  <SkillTreeImage
+                    key={`mobile-skill-${skill.key}-${i}`}
+                    skill={skill}
+                    size="xlarge"
+                    selectedSkillTree={selectedSkillTree}
+                    onSelect={handleFilterChange}
+                    i={i}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Desktop View - Show all skills */}
+          <div className="hidden lg:block">
+            <div className="flex flex-wrap justify-center gap-3 w-full">
+              {skillTree
+                ?.filter((skill) => skill?.imageUrl)
+                ?.map((skill, i) => (
+                  <SkillTreeItem
+                    key={`desktop-skill-${skill.key}-${i}`}
+                    skill={skill}
+                    selectedSkillTree={selectedSkillTree}
+                    onSelect={handleFilterChange}
+                    i={i}
+                  />
+                ))}
+            </div>
           </div>
         </div>
       ),
@@ -1187,8 +1473,13 @@ const MetaTrendsItems = () => {
     return tabComponents[activeTab]?.() || null;
   }, [
     activeTab,
+    activeTraitsSubTab,
+    activeSkillsSubTab,
+    skillsByVariant,
     championsWithSelection,
     handleFilterChange,
+    handleTraitsSubTabChange,
+    handleSkillsSubTabChange,
     forces,
     traits,
     skillTree,
@@ -1251,7 +1542,7 @@ const MetaTrendsItems = () => {
         </div>
 
         {/* PERFORMANCE OPTIMIZATION: Single scroll results section with intersection observer optimization */}
-        <div className="space-y-4">
+        <div className="space-y-4" id="meta-trends-items">
           {compsData.length > 0 ? (
             <div className="space-y-4">
               {compsData.map((metaDeck, index) => (

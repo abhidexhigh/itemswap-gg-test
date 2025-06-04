@@ -253,4 +253,19 @@ body > .tooltip-portal .react-tooltip,
   transform: translateZ(0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  -webkit-backdrop-filter: blur(5px);
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  /* IE and Edge */
+  -ms-overflow-style: none;
+  
+  /* Firefox */
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  /* Safari and Chrome */
+  display: none;
 }

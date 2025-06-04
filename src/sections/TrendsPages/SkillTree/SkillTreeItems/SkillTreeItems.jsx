@@ -21,6 +21,7 @@ import ColoredValue from "src/components/ColoredValue";
 import ForceIcon from "src/components/forceIcon";
 import CompsModal from "./CompsModal";
 import GradientText from "src/components/gradientText/GradientText";
+import SkillTreeImage from "src/components/SkillTreeImage";
 
 const ProjectItems = () => {
   const { t } = useTranslation();
@@ -245,7 +246,7 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold min-w-[200px] sm:min-w-[220px] md:min-w-[200px] ${sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[160px] md:min-w-[200px] ${sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("key")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -336,16 +337,13 @@ const ProjectItems = () => {
                       <div>
                         <div className="flex justify-start items-center space-x-1 sm:space-x-2">
                           <>
-                            <OptimizedImage
-                              src={
-                                items?.find((i) => i?.key === item?.key)
-                                  ?.imageUrl || item?.imageUrl
-                              }
-                              alt="icon"
-                              width={80}
-                              height={80}
-                              className="w-[40px] h-[40px] sm:w-[50px] sm:h-[50px] md:w-[84px] md:h-[84px] !border !border-[#ffffff60] rounded-md flex-shrink-0"
-                              data-tooltip-id={`${item?.key}`}
+                            <SkillTreeImage
+                              skill={skillTree?.find(
+                                (i) => i?.key === item?.key
+                              )}
+                              size="medium"
+                              tooltipId={`${item?.key}`}
+                              className="w-14 h-14 md:w-20 md:h-20"
                             />
                             <ReactTltp
                               variant="item"
@@ -421,7 +419,7 @@ const ProjectItems = () => {
                         {item?.plays.toLocaleString("en-US")}
                       </p>
                     </td>
-                    <td className="p-2 font-semibold min-w-[140px]">
+                    <td className="p-2 font-semibold min-w-[120px]">
                       <div className="flex items-center justify-center flex-wrap gap-1">
                         {item?.bestPairs?.map((skillKey, index) => {
                           const skill = skillTree.find(
@@ -430,18 +428,11 @@ const ProjectItems = () => {
                           if (!skill) return null;
                           return (
                             <React.Fragment key={`skill-${index}`}>
-                              <OptimizedImage
-                                alt={skill.name}
-                                width={80}
-                                height={80}
-                                src={skill.imageUrl}
-                                className="w-6 h-6 sm:w-8 sm:h-8 md:w-14 md:h-14"
-                                data-tooltip-id={`skill-${skill.key}-${index}`}
-                              />
-                              <ReactTltp
-                                variant="skillTree"
-                                id={`skill-${skill.key}-${index}`}
-                                content={skill}
+                              <SkillTreeImage
+                                skill={skill}
+                                size="medium"
+                                tooltipId={`skill-${skill.key}-${index}`}
+                                className="w-12 h-12 md:w-14 md:h-14"
                               />
                             </React.Fragment>
                           );
