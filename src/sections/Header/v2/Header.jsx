@@ -12,6 +12,7 @@ import {
 import NavWrapper from "./Header.style";
 import Button from "@components/button";
 import MobileMenu from "../MobileMenu/MobileMenu";
+import { OptimizedImage } from "src/utils/imageOptimizer";
 
 import data from "@assets/data/menu/menuData";
 import logo from "@assets/image/logo.png";
@@ -45,7 +46,16 @@ const Header = () => {
         <div className="gamfi_menu_sect">
           <div className="gamfi_menu_right_sect gamfi_v1_menu_right_sect !w-1/4 md:!w-1/2 md:!hidden ">
             <Link href={"https://itemswap-guild-test.vercel.app/champions"}>
-              <Badge3 value="RPG" />
+              {/* <Badge3 value="RPG" /> */}
+              <OptimizedImage
+                src={
+                  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1749039461/enhanced_ChatGPT_Image_Jun_4_2025_05_38_32_PM_fkwrcl.png"
+                }
+                alt="RPG"
+                width={100}
+                height={100}
+                className="w-16"
+              />
             </Link>
           </div>
           <div className="gamfi_menu_left_sect mx-auto !justify-center md:!justify-start">

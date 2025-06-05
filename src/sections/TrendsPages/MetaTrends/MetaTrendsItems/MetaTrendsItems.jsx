@@ -12,6 +12,7 @@ import "react-tooltip/dist/react-tooltip.css";
 import MetaTrendsCard from "../MetaTrendsCard/MetaTrendsCard";
 import { PiEye, PiEyeClosed } from "react-icons/pi";
 import { IoMdCheckmarkCircle } from "react-icons/io";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import Comps from "../../../../data/compsNew.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
@@ -654,6 +655,14 @@ const MetaDeck = memo(
       [handleIsClosed]
     );
 
+    // State for champions collapse/expand
+    const [isChampionsCollapsed, setIsChampionsCollapsed] = useState(true);
+
+    // Toggle function for champions section
+    const toggleChampionsSection = useCallback(() => {
+      setIsChampionsCollapsed((prev) => !prev);
+    }, []);
+
     // PERFORMANCE OPTIMIZATION: Enhanced intersection observer with better thresholds
     const deckRef = useRef(null);
     const [isVisible, setIsVisible] = useState(true); // Start visible for better UX
@@ -689,6 +698,20 @@ const MetaDeck = memo(
         return (champA?.cost || 0) - (champB?.cost || 0);
       });
     }, [metaDeck?.deck?.champions, champions]);
+
+    // Calculate champions to display based on collapse state
+    const championsToDisplay = useMemo(() => {
+      if (!sortedChampions.length) return [];
+
+      // Show first 4 champions when collapsed, all when expanded
+      const maxChampionsInFirstRow = 4;
+      return isChampionsCollapsed
+        ? sortedChampions.slice(0, maxChampionsInFirstRow)
+        : sortedChampions;
+    }, [sortedChampions, isChampionsCollapsed]);
+
+    // Check if there are more champions to show
+    const hasMoreChampions = sortedChampions.length > 4;
 
     // PERFORMANCE OPTIMIZATION: Memoize augment details
     const augmentDetails = useMemo(() => {
@@ -729,17 +752,82 @@ const MetaDeck = memo(
           <div className="flex flex-col bg-center bg-no-repeat mt-[-1px]">
             <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#111111] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6">
               <div className="mb-[16px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[80%] lg:flex-shrink-0">
-                <div className="flex flex-wrap justify-center lg:justify-center gap-2 w-full">
-                  {sortedChampions.map((champion, index) => (
-                    <ChampionWithItems
-                      key={`${champion.key}-${index}`}
-                      champion={champion}
-                      champions={champions}
-                      items={items}
-                      forces={forces}
-                      tier={champion.tier}
-                    />
-                  ))}
+                <div className="flex flex-col">
+                  <div className="flex flex-wrap justify-center lg:justify-center gap-2 w-full">
+                    {/* First 4 champions - always visible */}
+                    {sortedChampions.slice(0, 4).map((champion, index) => (
+                      <ChampionWithItems
+                        key={`${champion.key}-${index}`}
+                        champion={champion}
+                        champions={champions}
+                        items={items}
+                        forces={forces}
+                        tier={champion.tier}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Additional champions with smooth animation */}
+                  {hasMoreChampions && (
+                    <div
+                      className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                        isChampionsCollapsed
+                          ? "max-h-0 opacity-0 transform translate-y-[-10px]"
+                          : "max-h-96 opacity-100 transform translate-y-0"
+                      }`}
+                    >
+                      <div className="flex flex-wrap justify-center lg:justify-center gap-2 w-full pt-2 transition-all duration-300 ease-in-out">
+                        {sortedChampions.slice(4).map((champion, index) => (
+                          <div
+                            key={`${champion.key}-${index + 4}`}
+                            className={`transition-all duration-500 ease-in-out ${
+                              isChampionsCollapsed
+                                ? "opacity-0 transform scale-95 translate-y-[-5px]"
+                                : "opacity-100 transform scale-100 translate-y-0"
+                            }`}
+                            style={{
+                              transitionDelay: isChampionsCollapsed
+                                ? "0ms"
+                                : `${index * 50}ms`,
+                            }}
+                          >
+                            <ChampionWithItems
+                              champion={champion}
+                              champions={champions}
+                              items={items}
+                              forces={forces}
+                              tier={champion.tier}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Line with toggle button at the center */}
+                  {hasMoreChampions && (
+                    <div className="flex items-center justify-center mt-1 w-full transition-all duration-300 ease-in-out">
+                      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
+                      <button
+                        onClick={toggleChampionsSection}
+                        className="mx-3 w-7 h-7 bg-[#2D2F37] hover:bg-[#3D3F47] text-[#D9A876] rounded-full transition-all duration-300 ease-in-out flex items-center justify-center shadow-md border border-[#ffffff20] flex-shrink-0 hover:scale-110 active:scale-95"
+                        title={
+                          isChampionsCollapsed
+                            ? `Show ${sortedChampions.length - championsToDisplay.length} more champions`
+                            : "Show fewer champions"
+                        }
+                      >
+                        <div className="transition-transform duration-300 ease-in-out">
+                          {isChampionsCollapsed ? (
+                            <FaChevronDown className="text-xs" />
+                          ) : (
+                            <FaChevronUp className="text-xs" />
+                          )}
+                        </div>
+                      </button>
+                      <div className="flex-1 h-px bg-gradient-to-l from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
+                    </div>
+                  )}
                 </div>
               </div>
 
