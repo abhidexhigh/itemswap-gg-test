@@ -354,7 +354,7 @@ const ChampionWithItems = memo(
                 imgStyle="w-[68px] md:w-[84px]"
                 identificationImageStyle="w=[16px] md:w-[32px]"
                 textStyle="text-[10px] md:text-[16px] hidden"
-                cardSize="!w-[80px] !h-[80px] md:!w-[96px] md:!h-[96px]"
+                cardSize="!w-[80px] !h-[80px] md:!w-[106px] md:!h-[106px]"
                 showCost={true}
               />
             </div>
@@ -435,7 +435,17 @@ const SkillTreeIcon = memo(({ skillTree, skills, size = "default" }) => {
 
 // PERFORMANCE OPTIMIZATION: Heavily optimized DeckHeader with stable references
 const DeckHeader = memo(
-  ({ metaDeck, forces, traits, toggleClosed, isClosed, i, skills }) => {
+  ({
+    metaDeck,
+    forces,
+    traits,
+    toggleClosed,
+    isClosed,
+    i,
+    skills,
+    augments,
+    augmentDetails,
+  }) => {
     // PERFORMANCE OPTIMIZATION: Memoize hover state to prevent unnecessary re-renders
     const [hoveredForce, setHoveredForce] = useState(null);
 
@@ -488,33 +498,11 @@ const DeckHeader = memo(
     }, []);
 
     return (
-      <header className="relative flex flex-col md:flex-col justify-between items-start md:items-end py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px]">
+      <header className="relative flex flex-col md:flex-col justify-between items-start md:items-end py-[10px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px]">
         <div className="inline-flex flex-col flex-wrap gap-[8px] w-full md:w-auto md:flex-row md:items-center md:gap-[4px]">
           <strong className="text-[26px] font-semibold leading-none text-[#F2A03D] text-center md:text-left">
             {metaDeck?.name}
           </strong>
-          {/* Desktop force icons with count and border */}
-          <span className="hidden md:flex justify-start md:justify-center items-center">
-            {forceDetails.map((force, index) => (
-              <div
-                key={`${force.key}-${index}`}
-                className="flex justify-center items-center bg-[#000] rounded-full mx-1 pr-2 border-[1px] border-[#ffffff50]"
-                onMouseEnter={() => handleMouseEnter(force?.key)}
-                onMouseLeave={handleMouseLeave}
-              >
-                <ForceIcon
-                  force={force.details}
-                  size="custom"
-                  customSize="w-[30px] h-[30px] md:w-[40px] md:h-[40px]"
-                  className="mr-1"
-                  data-tooltip-id={`${force?.key}-${index}`}
-                  isHovered={hoveredForce === force?.key}
-                />
-                <ReactTltp content={force?.key} id={`${force?.key}-${index}`} />
-                <span className="text-[18px]">{force?.numUnits}</span>
-              </div>
-            ))}
-          </span>
         </div>
         <OptimizedImage
           src={
@@ -566,30 +554,81 @@ const DeckHeader = memo(
               </div>
             ))}
           </div>
-          {/* Second row: Traits */}
-          {traitDetails.length > 0 && (
-            <div className="flex items-center gap-x-1 w-fit overflow-x-auto scrollbar-hide">
-              {traitDetails.map((trait, index) => (
-                <div key={`${trait.key}-${index}`} className="flex-shrink-0">
-                  <TraitImage
-                    trait={trait}
-                    size="small"
-                    className="w-[32px] h-[32px]"
-                    data-tooltip-id={`${trait.key}-${index}`}
-                  />
-                  <ReactTltp
-                    variant="trait"
-                    id={`${trait.key}-${index}`}
-                    content={trait}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
+          {/* Second row: Traits and Augments */}
+          <div className="flex items-center gap-x-1 w-fit overflow-x-auto scrollbar-hide">
+            {traitDetails.map((trait, index) => (
+              <div key={`${trait.key}-${index}`} className="flex-shrink-0">
+                <TraitImage
+                  trait={trait}
+                  size="small"
+                  className="!w-[34px] !h-[34px]"
+                  data-tooltip-id={`${trait.key}-${index}`}
+                />
+                <ReactTltp
+                  variant="trait"
+                  id={`${trait.key}-${index}`}
+                  content={trait}
+                />
+              </div>
+            ))}
+            {/* Vertical separator between traits and augments */}
+            {traitDetails.length > 0 && augmentDetails.length > 0 && (
+              <div className="flex-shrink-0 h-8 w-px bg-[#ffffff30] mx-2"></div>
+            )}
+            {/* Augments */}
+            {augmentDetails.map((augment, index) => (
+              <div
+                key={`augment-${augment.key}-${index}`}
+                className="flex-shrink-0"
+              >
+                <OptimizedImage
+                  alt={augment.name || "Augment"}
+                  width={32}
+                  height={32}
+                  src={augment.imageUrl}
+                  className="!w-[30px] !h-[30px] rounded-md mx-0.5"
+                  data-tooltip-id={`augment-${augment.key}-${index}`}
+                  loading="eager"
+                />
+                <ReactTltp
+                  variant="augment"
+                  content={augment}
+                  id={`augment-${augment.key}-${index}`}
+                />
+              </div>
+            ))}
+          </div>
         </div>
         {/* Desktop layout */}
         <div className="hidden md:inline-flex flex-shrink-0 justify-between gap-1 !gap-x-6 md:mt-1">
-          <span className="flex justify-center gap-x-1 items-center">
+          <div className="flex flex-wrap gap-1 md:gap-0 md:inline-flex md:flex-wrap justify-start md:justify-end items-center md:mr-0">
+            {/* Force icons with count and border */}
+            {forceDetails.map((force, index) => (
+              <div
+                key={`${force.key}-${index}`}
+                className="flex justify-center items-center bg-[#000] rounded-full mx-1 pr-2 border-[1px] border-[#ffffff50] h-[90%]"
+                onMouseEnter={() => handleMouseEnter(force?.key)}
+                onMouseLeave={handleMouseLeave}
+              >
+                <ForceIcon
+                  force={force.details}
+                  size="custom"
+                  customSize="w-[30px] h-[30px] md:w-[40px] md:h-[40px]"
+                  className="mr-1"
+                  data-tooltip-id={`${force?.key}-${index}`}
+                  isHovered={hoveredForce === force?.key}
+                />
+                <ReactTltp content={force?.key} id={`${force?.key}-${index}`} />
+                <span className="text-[18px]">{force?.numUnits}</span>
+              </div>
+            ))}
+            {/* Vertical separator between forces and skills */}
+            {forceDetails.length > 0 && skillDetails.length > 0 && (
+              <div className="flex items-center mx-2">
+                <div className="h-12 w-px bg-[#ffffff30]"></div>
+              </div>
+            )}
+            {/* Skill tree icons */}
             {skillDetails.map((skill, index) => (
               <SkillTreeIcon
                 key={`${skill.key}-${index}`}
@@ -598,8 +637,13 @@ const DeckHeader = memo(
                 size="large"
               />
             ))}
-          </span>
-          <div className="flex flex-wrap gap-1 md:gap-0 md:inline-flex md:flex-wrap justify-start md:justify-end md:mr-0">
+            {/* Vertical separator between skills and traits */}
+            {skillDetails.length > 0 && traitDetails.length > 0 && (
+              <div className="flex items-center mx-2">
+                <div className="h-12 w-px bg-[#ffffff30]"></div>
+              </div>
+            )}
+            {/* Traits */}
             {traitDetails.map((trait, index) => (
               <div key={`${trait.key}-${index}`} className="relative">
                 <TraitImage
@@ -612,6 +656,31 @@ const DeckHeader = memo(
                   variant="trait"
                   id={`${trait.key}-${index}`}
                   content={trait}
+                />
+              </div>
+            ))}
+            {/* Vertical separator between traits and augments */}
+            {traitDetails.length > 0 && augmentDetails.length > 0 && (
+              <div className="flex items-center mx-2">
+                <div className="h-12 w-px bg-[#ffffff30]"></div>
+              </div>
+            )}
+            {/* Augments */}
+            {augmentDetails.map((augment, index) => (
+              <div key={`augment-${augment.key}-${index}`} className="relative">
+                <OptimizedImage
+                  alt={augment.name || "Augment"}
+                  width={48}
+                  height={48}
+                  src={augment.imageUrl}
+                  className="w-[38px] h-[38px] md:w-[42px] md:h-[42px] mx-0.5 rounded-md"
+                  data-tooltip-id={`augment-${augment.key}-${index}`}
+                  loading="eager"
+                />
+                <ReactTltp
+                  variant="augment"
+                  content={augment}
+                  id={`augment-${augment.key}-${index}`}
                 />
               </div>
             ))}
@@ -738,190 +807,210 @@ const MetaDeck = memo(
           isClosed={isClosed[i]}
           i={i}
           skills={skills}
+          augments={augments}
+          augmentDetails={augmentDetails}
         />
-        <OptimizedImage
-          src={
-            "https://res.cloudinary.com/dg0cmj6su/image/upload/v1738605248/Frame_18_1_otofdu.png"
-          }
-          alt={"border"}
-          width={300}
-          height={300}
-          className="w-[90%] mx-auto md:hidden"
-        />
+        <div className="flex items-center justify-center mt-1 w-full transition-all duration-300 ease-in-out">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
+          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
+        </div>
         {!isClosed[i] && isVisible && (
           <div className="flex flex-col bg-center bg-no-repeat mt-[-1px]">
             <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#111111] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6">
-              <div className="mb-[16px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[80%] lg:flex-shrink-0">
+              <div className="-mb-[8px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[87%] lg:flex-shrink-0">
                 <div className="flex flex-col">
-                  <div className="flex flex-wrap justify-center lg:justify-center gap-2 w-full">
-                    {/* First 4 champions - always visible */}
-                    {sortedChampions.slice(0, 4).map((champion, index) => (
-                      <ChampionWithItems
-                        key={`${champion.key}-${index}`}
-                        champion={champion}
-                        champions={champions}
-                        items={items}
-                        forces={forces}
-                        tier={champion.tier}
-                      />
-                    ))}
-                  </div>
-
-                  {/* Additional champions with smooth animation */}
-                  {hasMoreChampions && (
-                    <div
-                      className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                        isChampionsCollapsed
-                          ? "max-h-0 opacity-0 transform translate-y-[-10px]"
-                          : "max-h-96 opacity-100 transform translate-y-0"
-                      }`}
-                    >
-                      <div className="flex flex-wrap justify-center lg:justify-center gap-2 w-full pt-2 transition-all duration-300 ease-in-out">
-                        {sortedChampions.slice(4).map((champion, index) => (
-                          <div
-                            key={`${champion.key}-${index + 4}`}
-                            className={`transition-all duration-500 ease-in-out ${
-                              isChampionsCollapsed
-                                ? "opacity-0 transform scale-95 translate-y-[-5px]"
-                                : "opacity-100 transform scale-100 translate-y-0"
-                            }`}
-                            style={{
-                              transitionDelay: isChampionsCollapsed
-                                ? "0ms"
-                                : `${index * 50}ms`,
-                            }}
-                          >
-                            <ChampionWithItems
-                              champion={champion}
-                              champions={champions}
-                              items={items}
-                              forces={forces}
-                              tier={champion.tier}
-                            />
-                          </div>
+                  <div className="flex flex-wrap justify-center my-1 lg:justify-center gap-2 w-full">
+                    {/* Mobile view: Collapsible champions */}
+                    <div className="lg:hidden">
+                      <div className="flex flex-wrap justify-center gap-2 w-full">
+                        {/* First 4 champions - always visible */}
+                        {sortedChampions.slice(0, 4).map((champion, index) => (
+                          <ChampionWithItems
+                            key={`${champion.key}-${index}`}
+                            champion={champion}
+                            champions={champions}
+                            items={items}
+                            forces={forces}
+                            tier={champion.tier}
+                          />
                         ))}
                       </div>
-                    </div>
-                  )}
 
-                  {/* Line with toggle button at the center */}
-                  {hasMoreChampions && (
-                    <div className="flex items-center justify-center mt-1 w-full transition-all duration-300 ease-in-out">
-                      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
-                      <button
-                        onClick={toggleChampionsSection}
-                        className="mx-3 w-7 h-7 bg-[#2D2F37] hover:bg-[#3D3F47] text-[#D9A876] rounded-full transition-all duration-300 ease-in-out flex items-center justify-center shadow-md border border-[#ffffff20] flex-shrink-0 hover:scale-110 active:scale-95"
-                        title={
-                          isChampionsCollapsed
-                            ? `Show ${sortedChampions.length - championsToDisplay.length} more champions`
-                            : "Show fewer champions"
-                        }
-                      >
-                        <div className="transition-transform duration-300 ease-in-out">
-                          {isChampionsCollapsed ? (
-                            <FaChevronDown className="text-xs" />
-                          ) : (
-                            <FaChevronUp className="text-xs" />
-                          )}
+                      {/* Additional champions with smooth animation */}
+                      {hasMoreChampions && (
+                        <div
+                          className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                            isChampionsCollapsed
+                              ? "max-h-0 opacity-0 transform translate-y-[-10px]"
+                              : "max-h-96 opacity-100 transform translate-y-0"
+                          }`}
+                        >
+                          <div className="flex flex-wrap justify-center gap-2 w-full pt-2 transition-all duration-300 ease-in-out">
+                            {sortedChampions.slice(4).map((champion, index) => (
+                              <div
+                                key={`${champion.key}-${index + 4}`}
+                                className={`transition-all duration-500 ease-in-out ${
+                                  isChampionsCollapsed
+                                    ? "opacity-0 transform scale-95 translate-y-[-5px]"
+                                    : "opacity-100 transform scale-100 translate-y-0"
+                                }`}
+                                style={{
+                                  transitionDelay: isChampionsCollapsed
+                                    ? "0ms"
+                                    : `${index * 50}ms`,
+                                }}
+                              >
+                                <ChampionWithItems
+                                  champion={champion}
+                                  champions={champions}
+                                  items={items}
+                                  forces={forces}
+                                  tier={champion.tier}
+                                />
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </button>
-                      <div className="flex-1 h-px bg-gradient-to-l from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
+                      )}
+
+                      {/* Line with toggle button at the center - Mobile only */}
+                      {hasMoreChampions && (
+                        <div className="flex items-center justify-center mt-1 w-full transition-all duration-300 ease-in-out">
+                          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
+                          <button
+                            onClick={toggleChampionsSection}
+                            className="mx-3 w-7 h-7 bg-[#2D2F37] hover:bg-[#3D3F47] text-[#D9A876] rounded-full transition-all duration-300 ease-in-out flex items-center justify-center shadow-md border border-[#ffffff20] flex-shrink-0 hover:scale-110 active:scale-95"
+                            title={
+                              isChampionsCollapsed
+                                ? `Show ${sortedChampions.length - championsToDisplay.length} more champions`
+                                : "Show fewer champions"
+                            }
+                          >
+                            <div className="transition-transform duration-300 ease-in-out">
+                              {isChampionsCollapsed ? (
+                                <FaChevronDown className="text-xs" />
+                              ) : (
+                                <FaChevronUp className="text-xs" />
+                              )}
+                            </div>
+                          </button>
+                          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
+                        </div>
+                      )}
                     </div>
-                  )}
+
+                    {/* Desktop view: All champions visible */}
+                    <div className="hidden lg:flex flex-wrap justify-center gap-2 w-full">
+                      {sortedChampions.map((champion, index) => (
+                        <ChampionWithItems
+                          key={`desktop-${champion.key}-${index}`}
+                          champion={champion}
+                          champions={champions}
+                          items={items}
+                          forces={forces}
+                          tier={champion.tier}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className="mb-[12px] grid w-full grid-cols-3 md:grip-cols-4 gap-[12px] sm:w-auto md:mb-0 md:!flex md:items-center">
-                <div className="md:!hidden flex h-[98px] flex-col justify-between rounded-[4px] bg-[#1D1D1D] py-[12px] sm:w-[126px] sm:px-[6px] lg:w-[130px]">
-                  <div className="flex justify-center gap-[2px]">
-                    <span className="text-[12px] leading-none text-[#999]">
-                      {others?.bestAugments}
-                    </span>
-                  </div>
-                  <div className="flex justify-center gap-[2px] lg:py-[8px] lg:px-[6px]">
-                    {augmentDetails.map((augment, index) => (
-                      <AugmentIcon
-                        key={`${augment.key}-${index}`}
-                        augment={augment.key}
-                        augments={augments}
-                      />
-                    ))}
-                  </div>
-                </div>
+              {/* Mobile view: Stats */}
+              <div className=" md:hidden flex text-center w-full h-full justify-between pb-1 px-[16px] sm:px-[18px]">
+                <dl className="flex flex-col justify-between">
+                  <dt className="text-[12px] font-medium leading-5 text-[#999]">
+                    {others?.top4}
+                  </dt>
+                  <dd className="text-base font-medium leading-4 text-[#D9A876]">
+                    <span>65.3%</span>
+                  </dd>
+                </dl>
+                <dl className="flex flex-col justify-between">
+                  <dt className="text-[12px] font-medium leading-5 text-[#999]">
+                    {others?.winPercentage}
+                  </dt>
+                  <dd className="text-base font-medium leading-4 text-[#D9A876]">
+                    <span>26.6%</span>
+                  </dd>
+                </dl>
+                <dl className="flex flex-col justify-between">
+                  <dt className="text-[12px] font-medium leading-5 text-[#999]">
+                    {others?.pickPercentage}
+                  </dt>
+                  <dd className="text-base font-medium leading-4 text-[#D9A876]">
+                    <span>0.39%</span>
+                  </dd>
+                </dl>
+                <dl className="flex flex-col justify-between">
+                  <dt className="text-[12px] font-medium leading-5 text-[#999]">
+                    {others?.avgPlacement}
+                  </dt>
+                  <dd className="text-base font-medium leading-4 text-[#D9A876]">
+                    <span>4.52</span>
+                  </dd>
+                </dl>
 
-                <div className="flex w-full flex-col justify-between rounded-[4px] bg-[#1D1D1D] pt-[10px] pb-1">
+                <div
+                  style={{
+                    width: "150px",
+                    height: "80px",
+                  }}
+                  className="hidden mt-2 mx-auto"
+                >
+                  <MyBarChartComponent height={70} width={80} />
+                  <p className="text-center mb-0 text-[11px] md:text-[12px] font-medium leading-5 text-[999]">
+                    {others?.avgRanking}
+                  </p>
+                </div>
+              </div>
+              {/* Desktop view: Stats */}
+              <div className="md:flex flex-col hidden">
+                <div className="flex w-full flex-col gap-y-4 h-full justify-between rounded-[4px] bg-[#1D1D1D] pt-[10px] pb-1 px-[16px] sm:px-[18px]">
+                  <dl className="flex justify-between gap-x-6">
+                    <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                      {others?.top4}
+                    </dt>
+                    <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-[#D9A876]">
+                      <span>65.3%</span>
+                    </dd>
+                  </dl>
+                  <dl className="flex justify-between gap-x-6">
+                    <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                      {others?.winPercentage}
+                    </dt>
+                    <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-[#D9A876]">
+                      <span>26.6%</span>
+                    </dd>
+                  </dl>
+                  <dl className="flex justify-between gap-x-6">
+                    <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                      {others?.pickPercentage}
+                    </dt>
+                    <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-[#D9A876]">
+                      <span>0.39%</span>
+                    </dd>
+                  </dl>
+                  <dl className="flex justify-between gap-x-6">
+                    <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                      {others?.avgPlacement}
+                    </dt>
+                    <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-[#D9A876]">
+                      <span>4.52</span>
+                    </dd>
+                  </dl>
+
                   <div
                     style={{
-                      width: "113px",
-                      height: "75px",
+                      width: "150px",
+                      height: "80px",
                     }}
-                    className="md:hidden mx-auto"
+                    className="hidden mt-2 mx-auto"
                   >
-                    <MyBarChartComponent height={80} width={100} />
-                    <p className="text-center mb-0 text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                    <MyBarChartComponent height={70} width={80} />
+                    <p className="text-center mb-0 text-[11px] md:text-[14px] font-medium leading-5 text-[999]">
                       {others?.avgRanking}
                     </p>
-                  </div>
-                </div>
-
-                <div className="hidden md:flex md:flex-col justify-center gap-y-[2px] lg:py-[8px]">
-                  {augmentDetails.map((augment, index) => (
-                    <div
-                      key={`${augment.key}-${index}`}
-                      className="flex justify-center items-center md:w-[48px] relative"
-                    >
-                      <AugmentIcon augment={augment.key} augments={augments} />
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex flex-col">
-                  <div className="flex w-full flex-col h-full justify-between rounded-[4px] bg-[#1D1D1D] pt-[10px] pb-1 px-[16px] sm:px-[18px]">
-                    <dl className="flex justify-between">
-                      <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
-                        {others?.top4}
-                      </dt>
-                      <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-[#D9A876]">
-                        <span>65.3%</span>
-                      </dd>
-                    </dl>
-                    <dl className="flex justify-between">
-                      <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
-                        {others?.winPercentage}
-                      </dt>
-                      <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-[#D9A876]">
-                        <span>26.6%</span>
-                      </dd>
-                    </dl>
-                    <dl className="flex justify-between">
-                      <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
-                        {others?.pickPercentage}
-                      </dt>
-                      <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-[#D9A876]">
-                        <span>0.39%</span>
-                      </dd>
-                    </dl>
-                    <dl className="flex justify-between">
-                      <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
-                        {others?.avgPlacement}
-                      </dt>
-                      <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-[#D9A876]">
-                        <span>4.52</span>
-                      </dd>
-                    </dl>
-
-                    <div
-                      style={{
-                        width: "150px",
-                        height: "80px",
-                      }}
-                      className="hidden md:block mt-2 mx-auto"
-                    >
-                      <MyBarChartComponent height={70} width={80} />
-                      <p className="text-center mb-0 text-[11px] md:text-[14px] font-medium leading-5 text-[999]">
-                        {others?.avgRanking}
-                      </p>
-                    </div>
                   </div>
                 </div>
               </div>
