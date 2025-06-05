@@ -503,6 +503,24 @@ const DeckHeader = memo(
           <strong className="text-[26px] font-semibold leading-none text-[#F2A03D] text-center md:text-left">
             {metaDeck?.name}
           </strong>
+          {/* Desktop: Traits on left side */}
+          <div className="hidden md:flex items-center gap-1 ml-4">
+            {traitDetails.map((trait, index) => (
+              <div key={`${trait.key}-${index}`} className="relative">
+                <TraitImage
+                  trait={trait}
+                  size="default"
+                  className="w-[38px] h-[38px] md:w-[36px] md:h-[36px]"
+                  data-tooltip-id={`${trait.key}-${index}`}
+                />
+                <ReactTltp
+                  variant="trait"
+                  id={`${trait.key}-${index}`}
+                  content={trait}
+                />
+              </div>
+            ))}
+          </div>
         </div>
         <OptimizedImage
           src={
@@ -606,14 +624,14 @@ const DeckHeader = memo(
             {forceDetails.map((force, index) => (
               <div
                 key={`${force.key}-${index}`}
-                className="flex justify-center items-center bg-[#000] rounded-full mx-1 pr-2 border-[1px] border-[#ffffff50] h-[90%]"
+                className="flex justify-center items-center bg-[#000] rounded-full mx-1 pr-2 border-[1px] border-[#ffffff30] h-[90%]"
                 onMouseEnter={() => handleMouseEnter(force?.key)}
                 onMouseLeave={handleMouseLeave}
               >
                 <ForceIcon
                   force={force.details}
                   size="custom"
-                  customSize="w-[30px] h-[30px] md:w-[40px] md:h-[40px]"
+                  customSize="w-[30px] h-[30px] md:w-[36px] md:h-[36px]"
                   className="mr-1"
                   data-tooltip-id={`${force?.key}-${index}`}
                   isHovered={hoveredForce === force?.key}
@@ -634,33 +652,11 @@ const DeckHeader = memo(
                 key={`${skill.key}-${index}`}
                 skillTree={skill.key}
                 skills={skills}
-                size="large"
+                size="medium"
               />
             ))}
-            {/* Vertical separator between skills and traits */}
-            {skillDetails.length > 0 && traitDetails.length > 0 && (
-              <div className="flex items-center mx-2">
-                <div className="h-12 w-px bg-[#ffffff30]"></div>
-              </div>
-            )}
-            {/* Traits */}
-            {traitDetails.map((trait, index) => (
-              <div key={`${trait.key}-${index}`} className="relative">
-                <TraitImage
-                  trait={trait}
-                  size="default"
-                  className="w-[38px] h-[38px] md:w-[48px] md:h-[48px]"
-                  data-tooltip-id={`${trait.key}-${index}`}
-                />
-                <ReactTltp
-                  variant="trait"
-                  id={`${trait.key}-${index}`}
-                  content={trait}
-                />
-              </div>
-            ))}
-            {/* Vertical separator between traits and augments */}
-            {traitDetails.length > 0 && augmentDetails.length > 0 && (
+            {/* Vertical separator between skills and augments */}
+            {skillDetails.length > 0 && augmentDetails.length > 0 && (
               <div className="flex items-center mx-2">
                 <div className="h-12 w-px bg-[#ffffff30]"></div>
               </div>
@@ -673,7 +669,7 @@ const DeckHeader = memo(
                   width={48}
                   height={48}
                   src={augment.imageUrl}
-                  className="w-[38px] h-[38px] md:w-[42px] md:h-[42px] mx-0.5 rounded-md"
+                  className="w-[38px] h-[38px] md:w-[36px] md:h-[36px] mx-0.5 rounded-md"
                   data-tooltip-id={`augment-${augment.key}-${index}`}
                   loading="eager"
                 />
@@ -1569,7 +1565,7 @@ const MetaTrendsItems = () => {
         </div>
       ),
       Items: () => (
-        <div className="p-3 md:p-6 bg-[#111111] rounded-lg mt-2 max-h-[184px] overflow-y-auto scrollbar-hide">
+        <div className="p-3 md:p-6 bg-[#111111] rounded-lg mt-2 max-h-[170px] overflow-y-auto">
           <div className="grid grid-cols-6 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:!flex justify-center xl:!flex-wrap gap-2 lg:gap-4">
             {filteredItems.map((item, i) => (
               <ItemIcon
