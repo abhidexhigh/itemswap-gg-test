@@ -768,15 +768,42 @@ const MetaDeck = memo(
     const championsToDisplay = useMemo(() => {
       if (!sortedChampions.length) return [];
 
-      // Show first 4 champions when collapsed, all when expanded
-      const maxChampionsInFirstRow = 4;
-      return isChampionsCollapsed
-        ? sortedChampions.slice(0, maxChampionsInFirstRow)
-        : sortedChampions;
-    }, [sortedChampions, isChampionsCollapsed]);
+      if (isChampionsCollapsed) {
+        // For mobile collapsed view: Prioritize by 4 stars, high cost, and champions with items
+        const prioritizedChampions = sortedChampions.sort((a, b) => {
+          const champA = champions.find((c) => c.key === a.key);
+          const champB = champions.find((c) => c.key === b.key);
+
+          // Priority 1: 4-star champions (tier 4 and above)
+          const isAFourStar = (a?.tier || 0) >= 4;
+          const isBFourStar = (b?.tier || 0) >= 4;
+          if (isAFourStar && !isBFourStar) return -1;
+          if (!isAFourStar && isBFourStar) return 1;
+
+          // Priority 2: High cost (descending order)
+          const costDiff = (champB?.cost || 0) - (champA?.cost || 0);
+          if (costDiff !== 0) return costDiff;
+
+          // Priority 3: Champions with items
+          const aHasItems = a.items && a.items.length > 0;
+          const bHasItems = b.items && b.items.length > 0;
+          if (aHasItems && !bHasItems) return -1;
+          if (!aHasItems && bHasItems) return 1;
+
+          return 0;
+        });
+
+        return prioritizedChampions.slice(0, 4);
+      }
+
+      // When expanded, show all champions in their current order
+      return sortedChampions;
+    }, [sortedChampions, isChampionsCollapsed, champions]);
 
     // Check if there are more champions to show
-    const hasMoreChampions = sortedChampions.length > 4;
+    const hasMoreChampions =
+      sortedChampions.length > championsToDisplay.length &&
+      isChampionsCollapsed;
 
     // PERFORMANCE OPTIMIZATION: Memoize augment details
     const augmentDetails = useMemo(() => {
@@ -817,12 +844,11 @@ const MetaDeck = memo(
                       {/* Mobile view: Collapsible champions */}
                       <div className="lg:hidden">
                         <div className="flex flex-wrap justify-center gap-2 w-full">
-                          {/* First 4 champions - always visible */}
-                          {sortedChampions
-                            .slice(0, 4)
-                            .map((champion, index) => (
+                          {/* Collapsed: Show 4 champions with items & higher cost */}
+                          {isChampionsCollapsed &&
+                            championsToDisplay.map((champion, index) => (
                               <ChampionWithItems
-                                key={`${champion.key}-${index}`}
+                                key={`collapsed-${champion.key}-${index}`}
                                 champion={champion}
                                 champions={champions}
                                 items={items}
@@ -830,49 +856,30 @@ const MetaDeck = memo(
                                 tier={champion.tier}
                               />
                             ))}
+
+                          {/* Expanded: Show all champions */}
+                          {!isChampionsCollapsed &&
+                            sortedChampions.map((champion, index) => (
+                              <div
+                                key={`expanded-${champion.key}-${index}`}
+                                className="transition-all duration-500 ease-in-out opacity-100 transform scale-100 translate-y-0"
+                                style={{
+                                  transitionDelay: `${index * 30}ms`,
+                                }}
+                              >
+                                <ChampionWithItems
+                                  champion={champion}
+                                  champions={champions}
+                                  items={items}
+                                  forces={forces}
+                                  tier={champion.tier}
+                                />
+                              </div>
+                            ))}
                         </div>
 
-                        {/* Additional champions with smooth animation */}
-                        {hasMoreChampions && (
-                          <div
-                            className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                              isChampionsCollapsed
-                                ? "max-h-0 opacity-0 transform translate-y-[-10px]"
-                                : "max-h-96 opacity-100 transform translate-y-0"
-                            }`}
-                          >
-                            <div className="flex flex-wrap justify-center gap-2 w-full pt-2 transition-all duration-300 ease-in-out">
-                              {sortedChampions
-                                .slice(4)
-                                .map((champion, index) => (
-                                  <div
-                                    key={`${champion.key}-${index + 4}`}
-                                    className={`transition-all duration-500 ease-in-out ${
-                                      isChampionsCollapsed
-                                        ? "opacity-0 transform scale-95 translate-y-[-5px]"
-                                        : "opacity-100 transform scale-100 translate-y-0"
-                                    }`}
-                                    style={{
-                                      transitionDelay: isChampionsCollapsed
-                                        ? "0ms"
-                                        : `${index * 50}ms`,
-                                    }}
-                                  >
-                                    <ChampionWithItems
-                                      champion={champion}
-                                      champions={champions}
-                                      items={items}
-                                      forces={forces}
-                                      tier={champion.tier}
-                                    />
-                                  </div>
-                                ))}
-                            </div>
-                          </div>
-                        )}
-
                         {/* Line with toggle button at the center - Mobile only */}
-                        {hasMoreChampions && (
+                        {sortedChampions.length > 4 && (
                           <div className="flex items-center justify-center mt-1 w-full transition-all duration-300 ease-in-out">
                             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
                             <button
@@ -880,7 +887,7 @@ const MetaDeck = memo(
                               className="mx-3 w-7 h-7 bg-[#2D2F37] hover:bg-[#3D3F47] text-[#D9A876] rounded-full transition-all duration-300 ease-in-out flex items-center justify-center shadow-md border border-[#ffffff20] flex-shrink-0 hover:scale-110 active:scale-95"
                               title={
                                 isChampionsCollapsed
-                                  ? `Show ${sortedChampions.length - championsToDisplay.length} more champions`
+                                  ? `Show all ${sortedChampions.length} champions`
                                   : "Show fewer champions"
                               }
                             >
