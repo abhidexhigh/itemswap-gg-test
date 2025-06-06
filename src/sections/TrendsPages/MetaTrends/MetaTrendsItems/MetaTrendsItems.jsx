@@ -790,39 +790,118 @@ const MetaDeck = memo(
       <div
         ref={deckRef}
         key={i}
-        className="flex flex-col gap-[1px] !border border-[#FFFFFF]/30 rounded-lg overflow-hidden shadow-lg bg-[#00000099] mb-4"
-        style={{
-          background: "rgba(0, 0, 0, 0.6)",
-        }}
+        className="flex flex-col gap-[1px] bg-gradient-to-r from-[#5f5525] to-[#6D4600] p-[1px] rounded-lg overflow-hidden shadow-lg mb-4 md:!mb-10"
       >
-        <DeckHeader
-          metaDeck={metaDeck}
-          forces={forces}
-          traits={traits}
-          toggleClosed={toggleClosed}
-          isClosed={isClosed[i]}
-          i={i}
-          skills={skills}
-          augments={augments}
-          augmentDetails={augmentDetails}
-        />
-        <div className="flex items-center justify-center mt-1 w-full transition-all duration-300 ease-in-out">
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
-          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
-        </div>
-        {!isClosed[i] && isVisible && (
-          <div className="flex flex-col bg-center bg-no-repeat mt-[-1px]">
-            <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#111111] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6">
-              <div className="-mb-[8px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[87%] lg:flex-shrink-0">
-                <div className="flex flex-col">
-                  <div className="flex flex-wrap justify-center my-1 lg:justify-center gap-2 w-full">
-                    {/* Mobile view: Collapsible champions */}
-                    <div className="lg:hidden">
-                      <div className="flex flex-wrap justify-center gap-2 w-full">
-                        {/* First 4 champions - always visible */}
-                        {sortedChampions.slice(0, 4).map((champion, index) => (
+        <div className="bg-[#000000] rounded-lg">
+          <DeckHeader
+            metaDeck={metaDeck}
+            forces={forces}
+            traits={traits}
+            toggleClosed={toggleClosed}
+            isClosed={isClosed[i]}
+            i={i}
+            skills={skills}
+            augments={augments}
+            augmentDetails={augmentDetails}
+          />
+          <div className="flex items-center justify-center mt-1 w-full transition-all duration-300 ease-in-out">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
+            <div className="flex-1 h-px bg-gradient-to-l from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
+          </div>
+          {!isClosed[i] && isVisible && (
+            <div className="flex flex-col bg-center bg-no-repeat mt-[-1px]">
+              <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#111111] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6 rounded-b-lg">
+                <div className="-mb-[8px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[87%] lg:flex-shrink-0">
+                  <div className="flex flex-col">
+                    <div className="flex flex-wrap justify-center my-1 lg:justify-center gap-2 w-full">
+                      {/* Mobile view: Collapsible champions */}
+                      <div className="lg:hidden">
+                        <div className="flex flex-wrap justify-center gap-2 w-full">
+                          {/* First 4 champions - always visible */}
+                          {sortedChampions
+                            .slice(0, 4)
+                            .map((champion, index) => (
+                              <ChampionWithItems
+                                key={`${champion.key}-${index}`}
+                                champion={champion}
+                                champions={champions}
+                                items={items}
+                                forces={forces}
+                                tier={champion.tier}
+                              />
+                            ))}
+                        </div>
+
+                        {/* Additional champions with smooth animation */}
+                        {hasMoreChampions && (
+                          <div
+                            className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                              isChampionsCollapsed
+                                ? "max-h-0 opacity-0 transform translate-y-[-10px]"
+                                : "max-h-96 opacity-100 transform translate-y-0"
+                            }`}
+                          >
+                            <div className="flex flex-wrap justify-center gap-2 w-full pt-2 transition-all duration-300 ease-in-out">
+                              {sortedChampions
+                                .slice(4)
+                                .map((champion, index) => (
+                                  <div
+                                    key={`${champion.key}-${index + 4}`}
+                                    className={`transition-all duration-500 ease-in-out ${
+                                      isChampionsCollapsed
+                                        ? "opacity-0 transform scale-95 translate-y-[-5px]"
+                                        : "opacity-100 transform scale-100 translate-y-0"
+                                    }`}
+                                    style={{
+                                      transitionDelay: isChampionsCollapsed
+                                        ? "0ms"
+                                        : `${index * 50}ms`,
+                                    }}
+                                  >
+                                    <ChampionWithItems
+                                      champion={champion}
+                                      champions={champions}
+                                      items={items}
+                                      forces={forces}
+                                      tier={champion.tier}
+                                    />
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Line with toggle button at the center - Mobile only */}
+                        {hasMoreChampions && (
+                          <div className="flex items-center justify-center mt-1 w-full transition-all duration-300 ease-in-out">
+                            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
+                            <button
+                              onClick={toggleChampionsSection}
+                              className="mx-3 w-7 h-7 bg-[#2D2F37] hover:bg-[#3D3F47] text-[#D9A876] rounded-full transition-all duration-300 ease-in-out flex items-center justify-center shadow-md border border-[#ffffff20] flex-shrink-0 hover:scale-110 active:scale-95"
+                              title={
+                                isChampionsCollapsed
+                                  ? `Show ${sortedChampions.length - championsToDisplay.length} more champions`
+                                  : "Show fewer champions"
+                              }
+                            >
+                              <div className="transition-transform duration-300 ease-in-out">
+                                {isChampionsCollapsed ? (
+                                  <FaChevronDown className="text-xs" />
+                                ) : (
+                                  <FaChevronUp className="text-xs" />
+                                )}
+                              </div>
+                            </button>
+                            <div className="flex-1 h-px bg-gradient-to-l from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Desktop view: All champions visible */}
+                      <div className="hidden lg:flex flex-wrap justify-center gap-2 w-full">
+                        {sortedChampions.map((champion, index) => (
                           <ChampionWithItems
-                            key={`${champion.key}-${index}`}
+                            key={`desktop-${champion.key}-${index}`}
                             champion={champion}
                             champions={champions}
                             items={items}
@@ -831,167 +910,41 @@ const MetaDeck = memo(
                           />
                         ))}
                       </div>
-
-                      {/* Additional champions with smooth animation */}
-                      {hasMoreChampions && (
-                        <div
-                          className={`overflow-hidden transition-all duration-500 ease-in-out ${
-                            isChampionsCollapsed
-                              ? "max-h-0 opacity-0 transform translate-y-[-10px]"
-                              : "max-h-96 opacity-100 transform translate-y-0"
-                          }`}
-                        >
-                          <div className="flex flex-wrap justify-center gap-2 w-full pt-2 transition-all duration-300 ease-in-out">
-                            {sortedChampions.slice(4).map((champion, index) => (
-                              <div
-                                key={`${champion.key}-${index + 4}`}
-                                className={`transition-all duration-500 ease-in-out ${
-                                  isChampionsCollapsed
-                                    ? "opacity-0 transform scale-95 translate-y-[-5px]"
-                                    : "opacity-100 transform scale-100 translate-y-0"
-                                }`}
-                                style={{
-                                  transitionDelay: isChampionsCollapsed
-                                    ? "0ms"
-                                    : `${index * 50}ms`,
-                                }}
-                              >
-                                <ChampionWithItems
-                                  champion={champion}
-                                  champions={champions}
-                                  items={items}
-                                  forces={forces}
-                                  tier={champion.tier}
-                                />
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Line with toggle button at the center - Mobile only */}
-                      {hasMoreChampions && (
-                        <div className="flex items-center justify-center mt-1 w-full transition-all duration-300 ease-in-out">
-                          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
-                          <button
-                            onClick={toggleChampionsSection}
-                            className="mx-3 w-7 h-7 bg-[#2D2F37] hover:bg-[#3D3F47] text-[#D9A876] rounded-full transition-all duration-300 ease-in-out flex items-center justify-center shadow-md border border-[#ffffff20] flex-shrink-0 hover:scale-110 active:scale-95"
-                            title={
-                              isChampionsCollapsed
-                                ? `Show ${sortedChampions.length - championsToDisplay.length} more champions`
-                                : "Show fewer champions"
-                            }
-                          >
-                            <div className="transition-transform duration-300 ease-in-out">
-                              {isChampionsCollapsed ? (
-                                <FaChevronDown className="text-xs" />
-                              ) : (
-                                <FaChevronUp className="text-xs" />
-                              )}
-                            </div>
-                          </button>
-                          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Desktop view: All champions visible */}
-                    <div className="hidden lg:flex flex-wrap justify-center gap-2 w-full">
-                      {sortedChampions.map((champion, index) => (
-                        <ChampionWithItems
-                          key={`desktop-${champion.key}-${index}`}
-                          champion={champion}
-                          champions={champions}
-                          items={items}
-                          forces={forces}
-                          tier={champion.tier}
-                        />
-                      ))}
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Mobile view: Stats */}
-              <div className=" md:hidden flex text-center w-full h-full justify-between pb-1 px-[16px] sm:px-[18px]">
-                <dl className="flex flex-col justify-between">
-                  <dt className="text-[12px] font-medium leading-5 text-[#999]">
-                    {others?.top4}
-                  </dt>
-                  <dd className="text-base font-medium leading-4 text-[#D9A876]">
-                    <span>65.3%</span>
-                  </dd>
-                </dl>
-                <dl className="flex flex-col justify-between">
-                  <dt className="text-[12px] font-medium leading-5 text-[#999]">
-                    {others?.winPercentage}
-                  </dt>
-                  <dd className="text-base font-medium leading-4 text-[#D9A876]">
-                    <span>26.6%</span>
-                  </dd>
-                </dl>
-                <dl className="flex flex-col justify-between">
-                  <dt className="text-[12px] font-medium leading-5 text-[#999]">
-                    {others?.pickPercentage}
-                  </dt>
-                  <dd className="text-base font-medium leading-4 text-[#D9A876]">
-                    <span>0.39%</span>
-                  </dd>
-                </dl>
-                <dl className="flex flex-col justify-between">
-                  <dt className="text-[12px] font-medium leading-5 text-[#999]">
-                    {others?.avgPlacement}
-                  </dt>
-                  <dd className="text-base font-medium leading-4 text-[#D9A876]">
-                    <span>4.52</span>
-                  </dd>
-                </dl>
-
-                <div
-                  style={{
-                    width: "150px",
-                    height: "80px",
-                  }}
-                  className="hidden mt-2 mx-auto"
-                >
-                  <MyBarChartComponent height={70} width={80} />
-                  <p className="text-center mb-0 text-[11px] md:text-[12px] font-medium leading-5 text-[999]">
-                    {others?.avgRanking}
-                  </p>
-                </div>
-              </div>
-              {/* Desktop view: Stats */}
-              <div className="md:flex flex-col hidden">
-                <div className="flex w-full flex-col gap-y-4 h-full justify-between rounded-[4px] bg-[#1D1D1D] pt-[10px] pb-1 px-[16px] sm:px-[18px]">
-                  <dl className="flex justify-between gap-x-6">
-                    <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                {/* Mobile view: Stats */}
+                <div className=" md:hidden flex text-center w-full h-full justify-between pb-1 px-[16px] sm:px-[18px]">
+                  <dl className="flex flex-col justify-between">
+                    <dt className="text-[12px] font-medium leading-5 text-[#999]">
                       {others?.top4}
                     </dt>
-                    <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-[#D9A876]">
+                    <dd className="text-base font-medium leading-4 text-[#D9A876]">
                       <span>65.3%</span>
                     </dd>
                   </dl>
-                  <dl className="flex justify-between gap-x-6">
-                    <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                  <dl className="flex flex-col justify-between">
+                    <dt className="text-[12px] font-medium leading-5 text-[#999]">
                       {others?.winPercentage}
                     </dt>
-                    <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-[#D9A876]">
+                    <dd className="text-base font-medium leading-4 text-[#D9A876]">
                       <span>26.6%</span>
                     </dd>
                   </dl>
-                  <dl className="flex justify-between gap-x-6">
-                    <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                  <dl className="flex flex-col justify-between">
+                    <dt className="text-[12px] font-medium leading-5 text-[#999]">
                       {others?.pickPercentage}
                     </dt>
-                    <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-[#D9A876]">
+                    <dd className="text-base font-medium leading-4 text-[#D9A876]">
                       <span>0.39%</span>
                     </dd>
                   </dl>
-                  <dl className="flex justify-between gap-x-6">
-                    <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                  <dl className="flex flex-col justify-between">
+                    <dt className="text-[12px] font-medium leading-5 text-[#999]">
                       {others?.avgPlacement}
                     </dt>
-                    <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-[#D9A876]">
+                    <dd className="text-base font-medium leading-4 text-[#D9A876]">
                       <span>4.52</span>
                     </dd>
                   </dl>
@@ -1004,15 +957,65 @@ const MetaDeck = memo(
                     className="hidden mt-2 mx-auto"
                   >
                     <MyBarChartComponent height={70} width={80} />
-                    <p className="text-center mb-0 text-[11px] md:text-[14px] font-medium leading-5 text-[999]">
+                    <p className="text-center mb-0 text-[11px] md:text-[12px] font-medium leading-5 text-[999]">
                       {others?.avgRanking}
                     </p>
                   </div>
                 </div>
+                {/* Desktop view: Stats */}
+                <div className="md:flex flex-col hidden">
+                  <div className="flex w-full flex-col gap-y-4 h-full justify-between rounded-[4px] bg-[#1D1D1D] pt-[10px] pb-1 px-[16px] sm:px-[18px]">
+                    <dl className="flex justify-between gap-x-6">
+                      <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                        {others?.top4}
+                      </dt>
+                      <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-[#D9A876]">
+                        <span>65.3%</span>
+                      </dd>
+                    </dl>
+                    <dl className="flex justify-between gap-x-6">
+                      <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                        {others?.winPercentage}
+                      </dt>
+                      <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-[#D9A876]">
+                        <span>26.6%</span>
+                      </dd>
+                    </dl>
+                    <dl className="flex justify-between gap-x-6">
+                      <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                        {others?.pickPercentage}
+                      </dt>
+                      <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-[#D9A876]">
+                        <span>0.39%</span>
+                      </dd>
+                    </dl>
+                    <dl className="flex justify-between gap-x-6">
+                      <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                        {others?.avgPlacement}
+                      </dt>
+                      <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-[#D9A876]">
+                        <span>4.52</span>
+                      </dd>
+                    </dl>
+
+                    <div
+                      style={{
+                        width: "150px",
+                        height: "80px",
+                      }}
+                      className="hidden mt-2 mx-auto"
+                    >
+                      <MyBarChartComponent height={70} width={80} />
+                      <p className="text-center mb-0 text-[11px] md:text-[14px] font-medium leading-5 text-[999]">
+                        {others?.avgRanking}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     );
   }
@@ -1565,7 +1568,7 @@ const MetaTrendsItems = () => {
         </div>
       ),
       Items: () => (
-        <div className="p-3 md:p-6 bg-[#111111] rounded-lg mt-2 max-h-[170px] overflow-y-auto">
+        <div className="p-3 md:p-6 bg-[#111111] rounded-lg mt-2 max-h-[170px] md:max-h-full overflow-y-auto">
           <div className="grid grid-cols-6 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:!flex justify-center xl:!flex-wrap gap-2 lg:gap-4">
             {filteredItems.map((item, i) => (
               <ItemIcon

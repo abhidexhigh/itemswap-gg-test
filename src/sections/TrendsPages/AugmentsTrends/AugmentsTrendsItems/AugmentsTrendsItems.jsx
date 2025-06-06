@@ -224,52 +224,59 @@ const ProjectItems = () => {
               onButtonClick={handleButtonClick}
             />
           </div>
-          <div className="w-full sm:w-auto px-4 sm:px-0">
-            <SearchBar
-              searchValue={searchValue}
-              setSearchValue={setSearchValue}
-              placeholder="Search augment..."
-            />
-          </div>
-        </div>
+          {/* Mobile Filter Buttons - Only visible on mobile */}
+          <div className="block md:hidden px-4 mb-2">
+            <div className="flex justify-center items-center">
+              <div className="inline-flex flex-wrap gap-y-2 justify-center">
+                {mobileFilterOptions.map((option, index) => {
+                  const isFirst = index === 0;
+                  const isLast = index === mobileFilterOptions.length - 1;
+                  const isActive = mobileFilter === option.key;
 
-        {/* Mobile Filter Buttons - Only visible on mobile */}
-        <div className="block md:hidden px-4 mb-4">
-          <div className="inline-flex flex-wrap gap-y-2">
-            {mobileFilterOptions.map((option, index) => {
-              const isFirst = index === 0;
-              const isLast = index === mobileFilterOptions.length - 1;
-              const isActive = mobileFilter === option.key;
+                  // Assuming ~4 buttons per line on typical mobile screens
+                  const isFirstLineEnd = index === 3; // "Top 4%" button (4th button, index 3)
+                  const isSecondLineStart = index === 4; // "Win %" button (5th button, index 4)
 
-              return (
-                <button
-                  key={option.key}
-                  onClick={() => handleMobileFilterClick(option.key)}
-                  className={`
+                  return (
+                    <button
+                      key={option.key}
+                      onClick={() => handleMobileFilterClick(option.key)}
+                      className={`
                     px-3 py-2 text-xs font-medium transition-colors flex items-center space-x-1 border
                     ${isFirst ? "rounded-l-lg" : ""} 
                     ${isLast ? "rounded-r-lg" : ""} 
-                    ${!isFirst ? "-ml-px" : ""} 
+                    ${isFirstLineEnd ? "rounded-r-lg" : ""} 
+                    ${isSecondLineStart ? "rounded-l-lg" : ""} 
+                    ${!isFirst && !isSecondLineStart ? "-ml-px" : ""} 
                     ${
                       isActive
                         ? "bg-[#D9A876] text-black border-[#D9A876] z-10 relative"
                         : "bg-[#2D2F37] text-white border-[#404040] hover:bg-[#3D3F47] hover:border-[#4A4A4A]"
                     }
                   `}
-                >
-                  <span>{option.label}</span>
-                  {isActive && sortConfig.key === option.key && (
-                    <span className="ml-1">
-                      {sortConfig.direction === "ascending" ? (
-                        <HiArrowSmUp className="w-3 h-3" />
-                      ) : (
-                        <HiArrowSmDown className="w-3 h-3" />
+                    >
+                      <span>{option.label}</span>
+                      {isActive && sortConfig.key === option.key && (
+                        <span className="ml-1">
+                          {sortConfig.direction === "ascending" ? (
+                            <HiArrowSmUp className="w-3 h-3" />
+                          ) : (
+                            <HiArrowSmDown className="w-3 h-3" />
+                          )}
+                        </span>
                       )}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+          <div className="w-full sm:w-auto px-4 sm:px-0">
+            <SearchBar
+              searchValue={searchValue}
+              setSearchValue={setSearchValue}
+              placeholder="Search augment..."
+            />
           </div>
         </div>
 
@@ -507,7 +514,7 @@ const ProjectItems = () => {
               {/* Mobile Table Header */}
               <div
                 className="grid gap-1 p-3 bg-[#1a1a1a] text-white font-semibold text-sm border-b border-[#2D2F37]"
-                style={{ gridTemplateColumns: "15% 45% 20% 20%" }}
+                style={{ gridTemplateColumns: "10% 45% 20% 22%" }}
               >
                 <div className="text-center">#</div>
                 <div
