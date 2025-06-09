@@ -579,7 +579,8 @@ const MetaDeck = memo(
 
       if (isChampionsCollapsed) {
         // For mobile collapsed view: Prioritize by 4 stars, high cost, and champions with items
-        const prioritizedChampions = sortedChampions.sort((a, b) => {
+        // Create a copy to avoid mutating the original sortedChampions array
+        const prioritizedChampions = [...sortedChampions].sort((a, b) => {
           const champA = champions.find((c) => c.key === a.key);
           const champB = champions.find((c) => c.key === b.key);
 
@@ -605,7 +606,7 @@ const MetaDeck = memo(
         return prioritizedChampions.slice(0, 4);
       }
 
-      // When expanded, show all champions in their current order
+      // When expanded, show all champions sorted low to high cost
       return sortedChampions;
     }, [sortedChampions, isChampionsCollapsed, champions]);
 
