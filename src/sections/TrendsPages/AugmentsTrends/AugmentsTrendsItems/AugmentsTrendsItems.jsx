@@ -285,16 +285,16 @@ const ProjectItems = () => {
           {/* Desktop Table - Hidden on mobile */}
           <div className="hidden md:block overflow-auto">
             <ScrollableTable>
-              <table className="w-full min-w-[900px] relative lg:border-separate lg:border-spacing-y-2">
+              <table className="w-full min-w-[900px] relative border-collapse">
                 <thead className="sticky top-0 z-50">
                   <tr className="bg-[#000000]">
-                    <th className="lg:rounded-l-lg p-2 font-semibold">
-                      <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px]">
+                    <th className="p-2 font-semibold text-center border-b border-[#2D2F37]">
+                      <p className="p-0 text-sm sm:text-base md:text-[16px] mb-0 py-2">
                         {others.rank}
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""}`}
                       onClick={() => requestSort("key")}
                     >
                       <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -303,7 +303,7 @@ const ProjectItems = () => {
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "avgPlacement" ? "bg-[#2D2F37]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "avgPlacement" ? "bg-[#2D2F37]" : ""}`}
                       onClick={() => requestSort("avgPlacement")}
                     >
                       <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -314,7 +314,7 @@ const ProjectItems = () => {
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "roundOnePickRate" ? "bg-[#2D2F37]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "roundOnePickRate" ? "bg-[#2D2F37]" : ""}`}
                       onClick={() => requestSort("roundOnePickRate")}
                     >
                       <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -325,7 +325,7 @@ const ProjectItems = () => {
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "roundTwoPickRate" ? "bg-[#2D2F37]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "roundTwoPickRate" ? "bg-[#2D2F37]" : ""}`}
                       onClick={() => requestSort("roundTwoPickRate")}
                     >
                       <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -336,7 +336,7 @@ const ProjectItems = () => {
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "roundThreePickRate" ? "bg-[#2D2F37]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "roundThreePickRate" ? "bg-[#2D2F37]" : ""}`}
                       onClick={() => requestSort("roundThreePickRate")}
                     >
                       <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -347,7 +347,7 @@ const ProjectItems = () => {
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "tops" ? "bg-[#2D2F37]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "tops" ? "bg-[#2D2F37]" : ""}`}
                       onClick={() => requestSort("tops")}
                     >
                       <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -356,7 +356,7 @@ const ProjectItems = () => {
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "wins" ? "bg-[#2D2F37]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "wins" ? "bg-[#2D2F37]" : ""}`}
                       onClick={() => requestSort("wins")}
                     >
                       <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -365,7 +365,7 @@ const ProjectItems = () => {
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 font-semibold ${sortConfig?.key === "pickRate" ? "bg-[#2D2F37]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "pickRate" ? "bg-[#2D2F37]" : ""}`}
                       onClick={() => requestSort("pickRate")}
                     >
                       <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -376,7 +376,7 @@ const ProjectItems = () => {
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 lg:rounded-r-lg font-semibold ${sortConfig?.key === "plays" ? "bg-[#2D2F37]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "plays" ? "bg-[#2D2F37]" : ""}`}
                       onClick={() => requestSort("plays")}
                     >
                       <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -395,10 +395,10 @@ const ProjectItems = () => {
                           item.key?.split("_")[item?.key?.split("_").length - 1]
                       )?.key && (
                         <tr
-                          className="m-2 hover:bg-[#2D2F37] transition-colors duration-200 md:border-[1px] md:border-[#2D2F37]"
+                          className="hover:bg-[#2D2F37] transition-colors duration-200 border-b border-[#2D2F37]"
                           key={index}
                         >
-                          <td className="p-2 lg:rounded-l-lg">
+                          <td className="p-2 text-center">
                             <div className="text-center text-base">
                               {index + 1}
                             </div>
@@ -493,9 +493,7 @@ const ProjectItems = () => {
                               {(item?.pickRate * 100).toFixed(2)}%
                             </p>
                           </td>
-                          <td
-                            className={`p-2 lg:rounded-r-lg ${getCellClass("plays")}`}
-                          >
+                          <td className={`p-2 ${getCellClass("plays")}`}>
                             <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
                               {item?.plays.toLocaleString("en-US")}
                             </p>

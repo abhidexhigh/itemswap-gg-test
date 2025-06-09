@@ -49,6 +49,11 @@ const ItemDisplay = ({
       frame: "h-full w-full",
       image: "h-[48px] w-[48px] md:h-[64px] md:w-[64px]",
     },
+    midMedium: {
+      container: "h-[60px] w-[60px] md:h-[80px] md:w-[80px]",
+      frame: "h-full w-full",
+      image: "h-[52px] w-[52px] md:h-[72px] md:w-[72px]",
+    },
     medium: {
       container: "h-[64px] w-[64px] md:h-[96px] md:w-[96px]",
       frame: "h-full w-full",

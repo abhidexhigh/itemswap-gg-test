@@ -49,11 +49,11 @@ const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
       },
       dropShadow: {
         enabled: true,
-        top: 5,
-        left: 2,
-        blur: 6,
-        opacity: 0.2,
-        color: "#6c5ce7",
+        top: 3,
+        left: 1,
+        blur: 4,
+        opacity: 0.1,
+        color: "#6936ff",
       },
       animations: {
         enabled: true,
@@ -69,14 +69,14 @@ const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
         },
       },
       background: "transparent",
-      fontFamily: "'Poppins', sans-serif",
+      fontFamily: "'CeraPro', sans-serif",
     },
     plotOptions: {
       bar: {
         horizontal: false,
-        columnWidth: "90%",
+        columnWidth: "85%",
         endingShape: "rounded",
-        borderRadius: 4,
+        borderRadius: 2,
         distributed: true,
         dataLabels: {
           position: "top",
@@ -84,16 +84,16 @@ const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
       },
     },
     dataLabels: {
-      enabled: false, // Disable data labels for cleaner look with many bars
+      enabled: false,
       formatter: function (val) {
         return val + "%";
       },
       offsetY: -15,
       style: {
         fontSize: "8px",
-        colors: ["#fff"],
-        fontWeight: "bold",
-        textShadow: "0px 0px 6px rgba(0,0,0,0.5)",
+        colors: ["rgba(255, 255, 255, 0.8)"],
+        fontWeight: "500",
+        textShadow: "0px 0px 4px rgba(0,0,0,0.8)",
       },
       background: {
         enabled: false,
@@ -101,8 +101,8 @@ const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
     },
     stroke: {
       show: true,
-      width: 0,
-      colors: ["transparent"],
+      width: 1,
+      colors: ["rgba(105, 54, 255, 0.3)"],
     },
     xaxis: {
       categories: [
@@ -139,11 +139,11 @@ const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
         show: false,
       },
       labels: {
-        show: false, // Hide x-axis labels for cleaner look
+        show: false,
         style: {
-          colors: Array(28).fill("#ffffff"),
+          colors: Array(28).fill("rgba(255, 255, 255, 0.7)"),
           fontSize: "8px",
-          fontWeight: 500,
+          fontWeight: 400,
         },
         offsetY: 3,
         rotate: 90,
@@ -158,9 +158,9 @@ const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
         show: true,
         position: "back",
         stroke: {
-          color: "#6c5ce7",
+          color: "#6936ff",
           width: 1,
-          dashArray: 3,
+          dashArray: 2,
         },
       },
       tooltip: {
@@ -171,23 +171,24 @@ const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
       title: {
         text: `% ${others?.ofPlayers}`,
         style: {
-          color: "white",
+          color: "rgba(255, 255, 255, 0.7)",
           fontSize: "10px",
-          fontWeight: 500,
+          fontWeight: 400,
         },
         offsetX: -5,
       },
       labels: {
         style: {
-          colors: "white",
+          colors: "rgba(255, 255, 255, 0.7)",
           fontSize: "9px",
+          fontWeight: 400,
         },
         formatter: function (val) {
           return val.toFixed(0) + "%";
         },
       },
       min: 0,
-      max: Math.max(...expandedSeriesData) * 1.2, // Add some padding above the highest value
+      max: Math.max(...expandedSeriesData) * 1.2,
       tickAmount: 4,
       forceNiceScale: true,
     },
@@ -196,18 +197,18 @@ const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
       gradient: {
         shade: "dark",
         type: "vertical",
-        shadeIntensity: 0.5,
+        shadeIntensity: 0.3,
         gradientToColors: undefined,
         inverseColors: false,
-        opacityFrom: 0.9,
-        opacityTo: 1,
-        stops: [0, 90, 100],
+        opacityFrom: 0.8,
+        opacityTo: 0.95,
+        stops: [0, 85, 100],
       },
     },
     colors: generateTierColors(),
     grid: {
-      borderColor: "rgba(255,255,255,0.1)",
-      strokeDashArray: 3,
+      borderColor: "rgba(255, 255, 255, 0.08)",
+      strokeDashArray: 2,
       padding: {
         top: 0,
         right: 0,
@@ -230,6 +231,7 @@ const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
       theme: "dark",
       style: {
         fontSize: "11px",
+        fontFamily: "'CeraPro', sans-serif",
       },
       x: {
         show: true,
@@ -261,36 +263,36 @@ const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
       hover: {
         filter: {
           type: "lighten",
-          value: 0.15,
+          value: 0.1,
         },
       },
       active: {
         allowMultipleDataPointsSelection: false,
         filter: {
           type: "darken",
-          value: 0.35,
+          value: 0.2,
         },
       },
     },
   });
 
-  // Generate colors for each tier
+  // Generate colors for each tier - matching theme colors
   function generateTierColors() {
     const colors = [];
-    // Master - Pink/Purple
-    colors.push("#ff9ff3", "#ff9ff3", "#ff9ff3", "#ff9ff3");
+    // Master - Purple/Violet (matching theme accent)
+    colors.push("#8b5cf6", "#8b5cf6", "#8b5cf6", "#8b5cf6");
     // Diamond - Blue
-    colors.push("#70a1ff", "#70a1ff", "#70a1ff", "#70a1ff");
-    // Platinum - Green
-    colors.push("#7bed9f", "#7bed9f", "#7bed9f", "#7bed9f");
-    // Gold - Yellow/Orange
-    colors.push("#ffa502", "#ffa502", "#ffa502", "#ffa502");
-    // Silver - Light Grey
-    colors.push("#ced6e0", "#ced6e0", "#ced6e0", "#ced6e0");
-    // Bronze - Dark Grey
-    colors.push("#a4b0be", "#a4b0be", "#a4b0be", "#a4b0be");
-    // Iron - Darker Grey
-    colors.push("#747d8c", "#747d8c", "#747d8c", "#747d8c");
+    colors.push("#3b82f6", "#3b82f6", "#3b82f6", "#3b82f6");
+    // Platinum - Cyan
+    colors.push("#06b6d4", "#06b6d4", "#06b6d4", "#06b6d4");
+    // Gold - Amber
+    colors.push("#f59e0b", "#f59e0b", "#f59e0b", "#f59e0b");
+    // Silver - Gray
+    colors.push("#9ca3af", "#9ca3af", "#9ca3af", "#9ca3af");
+    // Bronze - Orange/Brown
+    colors.push("#ea580c", "#ea580c", "#ea580c", "#ea580c");
+    // Iron - Dark Gray
+    colors.push("#6b7280", "#6b7280", "#6b7280", "#6b7280");
 
     return colors;
   }
@@ -302,15 +304,15 @@ const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
     },
   ]);
 
-  // Group labels for the chart
+  // Group labels for the chart - updated colors to match theme
   const tierLabels = [
-    { tier: "Master", color: "#ff9ff3" },
-    { tier: "Diamond", color: "#70a1ff" },
-    { tier: "Platinum", color: "#7bed9f" },
-    { tier: "Gold", color: "#ffa502" },
-    { tier: "Silver", color: "#ced6e0" },
-    { tier: "Bronze", color: "#a4b0be" },
-    { tier: "Iron", color: "#747d8c" },
+    { tier: "Master", color: "#8b5cf6" },
+    { tier: "Diamond", color: "#3b82f6" },
+    { tier: "Platinum", color: "#06b6d4" },
+    { tier: "Gold", color: "#f59e0b" },
+    { tier: "Silver", color: "#9ca3af" },
+    { tier: "Bronze", color: "#ea580c" },
+    { tier: "Iron", color: "#6b7280" },
   ];
 
   return (
@@ -318,25 +320,25 @@ const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
       <div
         className="zone-graph"
         style={{
-          background: "#101010",
-          boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
-          backdropFilter: "blur(8px)",
-          border: "1px solid rgba(123, 97, 255, 0.3)",
-          borderRadius: "10px",
+          background: "rgba(30, 31, 53, 0.8)",
+          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
+          backdropFilter: "blur(10px)",
+          border: "1px solid rgba(105, 54, 255, 0.3)",
+          borderRadius: "8px",
           overflow: "hidden",
           padding: "16px",
         }}
       >
-        <h3 className="text-base font-bold mb-2 text-white">
+        <h3 className="text-base font-semibold mb-3 text-white">
           {others?.playerDistribution}
         </h3>
 
         {/* Tier labels */}
-        <div className="flex justify-between mb-1 px-2">
+        <div className="flex justify-between mb-2 px-1">
           {tierLabels.map((label, index) => (
             <div key={index} className="text-center">
               <span
-                className="text-[9px] font-semibold"
+                className="text-[9px] font-medium"
                 style={{ color: label.color }}
               >
                 {label.tier}
@@ -345,7 +347,7 @@ const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
           ))}
         </div>
 
-        <div id="chart" className="mt-1">
+        <div id="chart" className="mt-2">
           <ReactApexChart
             options={options}
             series={series}
@@ -353,8 +355,8 @@ const ZoneGraph = ({ activeZone, seriesData, handleBarClick }) => {
             height={220}
           />
         </div>
-        <div className="text-xs text-gray-400 mt-1 text-center">
-          <p className="text-[10px] md:text-sm mb-0">
+        <div className="text-xs text-gray-400 mt-2 text-center">
+          <p className="text-[10px] md:text-sm mb-0 opacity-70">
             {others?.playerRankDistributionStats}
           </p>
         </div>
