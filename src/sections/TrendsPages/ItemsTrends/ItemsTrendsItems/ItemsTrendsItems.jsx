@@ -401,7 +401,7 @@ const ProjectItems = () => {
                       </p>
                     </th>
                     <th className="p-2 font-semibold min-w-[120px] border-b border-[#2D2F37]">
-                      <p className="p-0 text-sm sm:text-base md:text-[16px] mb-0">
+                      <p className="p-0 text-sm sm:text-base md:text-[16px] mb-0 text-center">
                         {others.synergy} {others.items}
                       </p>
                     </th>
@@ -509,7 +509,7 @@ const ProjectItems = () => {
                             </p>
                           </td>
                           <td className="p-2">
-                            <div className="flex flex-wrap justify-start items-center gap-1">
+                            <div className="flex flex-wrap justify-center items-center gap-1">
                               {item?.itemSynergyStats
                                 ?.slice(0, 3)
                                 .map((synergy, w) => (
@@ -540,11 +540,11 @@ const ProjectItems = () => {
                                           (champ) => champ.key === champion
                                         ),
                                       }}
-                                      imgStyle="w-[32px] sm:w-[40px] md:w-[60px] lg:w-[84px]"
+                                      imgStyle="w-[32px] md:w-[64px]"
                                       identificationImageStyle="w-[10px] sm:w-[12px] md:w-[16px] lg:w-[32px]"
                                       textStyle="text-[6px] sm:text-[8px] md:text-[10px] lg:text-[16px]"
                                       forces={forces}
-                                      cardSize="!w-[72px] !h-[72px] md:!w-[80px] md:!h-[80px]"
+                                      cardSize="!w-[72px] !h-[72px] md:!w-[64px] md:!h-[64px]"
                                     />
                                   </div>
                                 ))}

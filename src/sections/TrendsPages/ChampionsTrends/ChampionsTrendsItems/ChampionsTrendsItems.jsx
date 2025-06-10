@@ -458,7 +458,7 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th className="p-2 font-semibold border-b border-[#2D2F37]">
-                    <p className="p-0 text-base my-auto md:text-[16px] text-left">
+                    <p className="p-0 text-base my-auto md:text-[16px] text-center">
                       {others?.recommended} {others.items}
                     </p>
                   </th>
@@ -482,11 +482,11 @@ const ProjectItems = () => {
                               src={champions.find(
                                 (champ) => champ.key === champion.key
                               )}
-                              imgStyle="w-[68px] md:w-[84px]"
+                              imgStyle="md:w-[80px]"
                               identificationImageStyle="w=[16px] md:w-[32px]"
                               textStyle="text-[10px] md:text-[16px] hidden"
                               forces={forces}
-                              cardSize="!w-[80px] !h-[80px] md:!w-[96px] md:!h-[96px]"
+                              cardSize="md:!w-[80px] md:!h-[80px]"
                             />
                             <p className="p-0 text-left text-base md:text-xl mb-0 ml-2 text-[#fff]">
                               {
@@ -543,7 +543,7 @@ const ProjectItems = () => {
                         </p>
                       </td>
                       <td className="p-2">
-                        <div className="flex justify-start items-center gap-1">
+                        <div className="flex justify-center items-center gap-1">
                           {champions
                             .find((champ) => champ.key === champion.key)
                             ?.recommendItems.map((item) =>

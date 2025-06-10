@@ -443,7 +443,7 @@ const ProjectItems = () => {
                     className={`cursor-pointer p-2 font-semibold min-w-[160px] md:min-w-[200px] border-b border-[#2D2F37] ${sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("key")}
                   >
-                    <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
+                    <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center ml-[10px]">
                       {others.items}
                       <span className="ml-2">{renderSortIcon("key")}</span>
                     </p>

@@ -474,11 +474,11 @@ const ProjectItems = () => {
                                   src={champions?.find(
                                     (champ) => champ?.key === champion
                                   )}
-                                  imgStyle="w-[40px] sm:w-[60px] md:w-[84px]"
+                                  imgStyle="md:w-[64px]"
                                   identificationImageStyle="w-[12px] sm:w-[16px] md:w-[32px]"
                                   textStyle="text-[8px] sm:text-[10px] md:text-[12px]"
                                   forces={forces}
-                                  cardSize="md:!w-[72px] md:!h-[72px]"
+                                  cardSize="md:!w-[64px] md:!h-[64px]"
                                 />
                               </div>
                             ))}

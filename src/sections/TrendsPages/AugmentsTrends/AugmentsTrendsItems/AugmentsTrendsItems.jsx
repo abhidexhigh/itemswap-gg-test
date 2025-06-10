@@ -419,7 +419,7 @@ const ProjectItems = () => {
                                   alt="icon"
                                   width={80}
                                   height={80}
-                                  className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mr-1 rounded-md"
+                                  className="w-12 h-12 sm:w-14 sm:h-14 md:w-[80px] md:h-[80px] mr-1 rounded-md"
                                   data-tooltip-id={item?.key}
                                 />
                                 <ReactTltp
