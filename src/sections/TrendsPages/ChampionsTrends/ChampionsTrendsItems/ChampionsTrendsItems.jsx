@@ -519,12 +519,12 @@ const ChampionsTrendsItems = () => {
                           {champion?.plays.toLocaleString("en-US")}
                         </p>
                       </td>
-                      <td className="py-0.5 md:py-2">
+                      <td className="p-2">
                         <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
                           {(champion?.threeStarPercentage * 100).toFixed(2)}%
                         </p>
                       </td>
-                      <td className="py-0.5 md:py-2">
+                      <td className="p-2">
                         <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
                           #{(champion?.threeStarRank).toFixed(2)}
                         </p>

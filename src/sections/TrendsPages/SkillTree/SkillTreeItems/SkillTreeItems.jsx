@@ -9,23 +9,16 @@ import {
   HiChevronDown,
   HiChevronUp,
 } from "react-icons/hi";
-import { IoMdClose } from "react-icons/io";
 import { PiEye } from "react-icons/pi";
-import { IoMdCheckmarkCircle } from "react-icons/io";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
-import { createPortal } from "react-dom";
 import metaDeckSkillTreeStats from "../../../../data/newData/metaDeckSkillTree.json";
 import Comps from "../../../../data/compsNew.json";
-import Forces from "../../../../data/newData/force.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
 import ScrollableTable from "src/utils/ScrollableTable";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
 import ColoredValue from "src/components/ColoredValue";
-import ForceIcon from "src/components/forceIcon";
 import CompsModal from "./CompsModal";
-import GradientText from "src/components/gradientText/GradientText";
 import SkillTreeImage from "src/components/SkillTreeImage";
 
 const SkillTreeItems = () => {
