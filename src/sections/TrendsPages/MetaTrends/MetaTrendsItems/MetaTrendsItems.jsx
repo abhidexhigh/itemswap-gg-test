@@ -20,56 +20,9 @@ import { OptimizedImage } from "src/utils/imageOptimizer";
 import ForceIcon from "src/components/forceIcon";
 import TraitImage from "src/components/TraitImage/TraitImage";
 import SkillTreeImage from "src/components/SkillTreeImage";
-// PERFORMANCE OPTIMIZATION: Direct import for lightweight CSS chart (no dynamic loading needed)
-import MyBarChartComponent from "./BarGraph";
 
-// PERFORMANCE OPTIMIZATION: Enhanced cache with LRU-like behavior
-const MAX_CACHE_SIZE = 100;
 const filterCache = new Map();
 
-// PERFORMANCE OPTIMIZATION: Clear cache when it gets too large
-const clearCacheIfNeeded = () => {
-  if (filterCache.size > MAX_CACHE_SIZE) {
-    const firstKey = filterCache.keys().next().value;
-    filterCache.delete(firstKey);
-  }
-};
-
-// PERFORMANCE OPTIMIZATION: Scroll-aware intersection observer optimization
-let isScrolling = false;
-let scrollTimeout;
-
-const handleScroll = () => {
-  isScrolling = true;
-  clearTimeout(scrollTimeout);
-  scrollTimeout = setTimeout(() => {
-    isScrolling = false;
-  }, 150); // Debounce scroll end detection
-};
-
-// Add scroll listener once
-if (typeof window !== "undefined") {
-  window.addEventListener("scroll", handleScroll, { passive: true });
-}
-
-// PERFORMANCE OPTIMIZATION: Optimized intersection observer with scroll awareness
-const createOptimizedObserver = (callback, options = {}) => {
-  const defaultOptions = {
-    threshold: 0.1,
-    rootMargin: "100px",
-    ...options,
-  };
-
-  return new IntersectionObserver((entries) => {
-    // Always process visibility for initial detection, but skip expensive operations during scroll
-    entries.forEach((entry) => {
-      // Allow callback to decide what to do based on scroll state
-      callback(entry, isScrolling);
-    });
-  }, defaultOptions);
-};
-
-// PERFORMANCE OPTIMIZATION: Memoized tab button with stable props
 const TabButton = memo(({ active, label, onClick }) => (
   <button
     type="button"
@@ -82,41 +35,15 @@ const TabButton = memo(({ active, label, onClick }) => (
   </button>
 ));
 
-// PERFORMANCE OPTIMIZATION: Heavily optimized TraitItem with scroll-aware intersection observer
-const TraitItem = memo(({ trait, selectedTrait, onSelect, i, t }) => {
-  const [isVisible, setIsVisible] = useState(true); // Start visible for immediate loading
-  const [hasBeenVisible, setHasBeenVisible] = useState(false);
-  const itemRef = useRef(null);
-
-  useEffect(() => {
-    const observer = createOptimizedObserver((entry, isScrolling) => {
-      // Track visibility for potential future optimizations, but don't block content
-      if (entry.isIntersecting && !hasBeenVisible) {
-        setHasBeenVisible(true);
-        // Disconnect after first visibility
-        if (itemRef.current) observer.unobserve(itemRef.current);
-      }
-    });
-
-    if (itemRef.current) {
-      observer.observe(itemRef.current);
-    }
-
-    return () => {
-      if (itemRef.current) observer.unobserve(itemRef.current);
-    };
-  }, [hasBeenVisible]);
-
+const TraitItem = memo(({ trait, selectedTrait, onSelect, i }) => {
   const handleClick = useCallback(() => {
     onSelect("trait", trait?.key);
   }, [onSelect, trait?.key]);
 
   return (
     <div
-      ref={itemRef}
       className="flex flex-col items-center gap-2 cursor-pointer group"
       onClick={handleClick}
-      style={{ willChange: isScrolling ? "auto" : "transform" }}
     >
       <ReactTltp variant="trait" content={trait} id={`${trait?.key}-${i}`} />
       <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
@@ -139,31 +66,8 @@ const TraitItem = memo(({ trait, selectedTrait, onSelect, i, t }) => {
   );
 });
 
-// PERFORMANCE OPTIMIZATION: Optimized ForceItem with better state management
-const ForceItem = memo(({ force, selectedTrait, onSelect, i, t }) => {
+const ForceItem = memo(({ force, selectedTrait, onSelect, i }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [isVisible, setIsVisible] = useState(true); // Start visible for immediate loading
-  const [hasBeenVisible, setHasBeenVisible] = useState(false);
-  const itemRef = useRef(null);
-
-  useEffect(() => {
-    const observer = createOptimizedObserver((entry, isScrolling) => {
-      // Track visibility for potential future optimizations, but don't block content
-      if (entry.isIntersecting && !hasBeenVisible) {
-        setHasBeenVisible(true);
-        // Disconnect after first visibility
-        if (itemRef.current) observer.unobserve(itemRef.current);
-      }
-    });
-
-    if (itemRef.current) {
-      observer.observe(itemRef.current);
-    }
-
-    return () => {
-      if (itemRef.current) observer.unobserve(itemRef.current);
-    };
-  }, [hasBeenVisible]);
 
   const handleClick = useCallback(() => {
     onSelect("force", force?.key);
@@ -174,12 +78,10 @@ const ForceItem = memo(({ force, selectedTrait, onSelect, i, t }) => {
 
   return (
     <div
-      ref={itemRef}
       className="flex flex-col items-center gap-2 cursor-pointer group"
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      style={{ willChange: isScrolling ? "auto" : "transform" }}
     >
       <ReactTltp variant="force" content={force} id={`${force?.key}-${i}`} />
       <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
@@ -203,41 +105,15 @@ const ForceItem = memo(({ force, selectedTrait, onSelect, i, t }) => {
   );
 });
 
-// PERFORMANCE OPTIMIZATION: Optimized SkillTreeItem with lazy loading
 const SkillTreeItem = memo(({ skill, selectedSkillTree, onSelect, i }) => {
-  const [isVisible, setIsVisible] = useState(true); // Start visible for immediate loading
-  const [hasBeenVisible, setHasBeenVisible] = useState(false);
-  const itemRef = useRef(null);
-
-  useEffect(() => {
-    const observer = createOptimizedObserver((entry, isScrolling) => {
-      // Track visibility for potential future optimizations, but don't block content
-      if (entry.isIntersecting && !hasBeenVisible) {
-        setHasBeenVisible(true);
-        // Disconnect after first visibility
-        if (itemRef.current) observer.unobserve(itemRef.current);
-      }
-    });
-
-    if (itemRef.current) {
-      observer.observe(itemRef.current);
-    }
-
-    return () => {
-      if (itemRef.current) observer.unobserve(itemRef.current);
-    };
-  }, [hasBeenVisible]);
-
   const handleClick = useCallback(() => {
     onSelect("skillTree", skill?.key);
   }, [onSelect, skill?.key]);
 
   return (
     <div
-      ref={itemRef}
       className="flex flex-col items-center gap-1 cursor-pointer group w-16 md:w-20 lg:w-24 flex-shrink-0"
       onClick={handleClick}
-      style={{ willChange: isScrolling ? "auto" : "transform" }}
     >
       <ReactTltp
         variant="skillTree"
@@ -265,41 +141,15 @@ const SkillTreeItem = memo(({ skill, selectedSkillTree, onSelect, i }) => {
   );
 });
 
-// PERFORMANCE OPTIMIZATION: Optimized ItemIcon with intersection observer
 const ItemIcon = memo(({ item, selectedItem, onSelect, i }) => {
-  const [isVisible, setIsVisible] = useState(true); // Start visible for immediate loading
-  const [hasBeenVisible, setHasBeenVisible] = useState(false);
-  const itemRef = useRef(null);
-
-  useEffect(() => {
-    const observer = createOptimizedObserver((entry, isScrolling) => {
-      // Track visibility for potential future optimizations, but don't block content
-      if (entry.isIntersecting && !hasBeenVisible) {
-        setHasBeenVisible(true);
-        // Disconnect after first visibility
-        if (itemRef.current) observer.unobserve(itemRef.current);
-      }
-    });
-
-    if (itemRef.current) {
-      observer.observe(itemRef.current);
-    }
-
-    return () => {
-      if (itemRef.current) observer.unobserve(itemRef.current);
-    };
-  }, [hasBeenVisible]);
-
   const handleClick = useCallback(() => {
     onSelect("item", item?.key);
   }, [onSelect, item?.key]);
 
   return (
     <div
-      ref={itemRef}
       className="flex flex-col items-center gap-2 cursor-pointer group max-w-[84px]"
       onClick={handleClick}
-      style={{ willChange: isScrolling ? "auto" : "transform" }}
     >
       <ReactTltp variant="item" content={item} id={`${item?.key}-${i}`} />
       <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-110">
@@ -311,7 +161,7 @@ const ItemIcon = memo(({ item, selectedItem, onSelect, i }) => {
           className="w-full h-full object-contain rounded-lg !border !border-[#ffffff20]"
           data-tooltip-id={`${item?.key}-${i}`}
           loading="eager"
-          priority={i < 12} // Prioritize first 12 items
+          priority={i < 12}
         />
         {item?.key === selectedItem && (
           <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
@@ -323,7 +173,6 @@ const ItemIcon = memo(({ item, selectedItem, onSelect, i }) => {
   );
 });
 
-// PERFORMANCE OPTIMIZATION: Heavily optimized ChampionWithItems component
 const ChampionWithItems = memo(
   ({ champion, champions, items, forces, tier }) => {
     const championDetails = useMemo(() => {
@@ -382,9 +231,7 @@ const ChampionWithItems = memo(
                 width={20}
                 height={20}
                 src={itemDetails.imageUrl}
-                className={`w-[20px] md:w-[30px] rounded-lg transition-all duration-300 ${
-                  isScrolling ? "" : "hover:scale-150"
-                }`}
+                className="w-[20px] md:w-[30px] rounded-lg transition-all duration-300 hover:scale-150"
                 data-tooltip-id={`${itemDetails.key}-${idx}`}
                 loading="eager"
               />
@@ -396,7 +243,6 @@ const ChampionWithItems = memo(
   }
 );
 
-// PERFORMANCE OPTIMIZATION: Memoized AugmentIcon with better caching
 const AugmentIcon = memo(({ augment, augments }) => {
   const augmentDetails = useMemo(() => {
     return augments?.find((a) => a.key === augment);
@@ -420,7 +266,6 @@ const AugmentIcon = memo(({ augment, augments }) => {
   );
 });
 
-// PERFORMANCE OPTIMIZATION: Memoized SkillTreeIcon with better caching
 const SkillTreeIcon = memo(({ skillTree, skills, size = "default" }) => {
   const skillDetails = useMemo(() => {
     return skills?.find((s) => s.key === skillTree);
@@ -433,7 +278,6 @@ const SkillTreeIcon = memo(({ skillTree, skills, size = "default" }) => {
   );
 });
 
-// PERFORMANCE OPTIMIZATION: Heavily optimized DeckHeader with stable references
 const DeckHeader = memo(
   ({
     metaDeck,
@@ -446,10 +290,8 @@ const DeckHeader = memo(
     augments,
     augmentDetails,
   }) => {
-    // PERFORMANCE OPTIMIZATION: Memoize hover state to prevent unnecessary re-renders
     const [hoveredForce, setHoveredForce] = useState(null);
 
-    // PERFORMANCE OPTIMIZATION: Memoize force details to prevent recalculation
     const forceDetails = useMemo(() => {
       if (!metaDeck?.deck?.forces || !forces) return [];
       return metaDeck.deck.forces
@@ -462,7 +304,6 @@ const DeckHeader = memo(
         .filter((force) => force.details);
     }, [metaDeck?.deck?.forces, forces]);
 
-    // PERFORMANCE OPTIMIZATION: Memoize skill details
     const skillDetails = useMemo(() => {
       if (!metaDeck?.deck?.skillTree || !skills) return [];
       return metaDeck.deck.skillTree
@@ -470,7 +311,6 @@ const DeckHeader = memo(
         .filter(Boolean);
     }, [metaDeck?.deck?.skillTree, skills]);
 
-    // PERFORMANCE OPTIMIZATION: Memoize trait details with tiers
     const traitDetails = useMemo(() => {
       if (!metaDeck?.deck?.traits || !traits) return [];
       return metaDeck.deck.traits
@@ -697,7 +537,6 @@ const DeckHeader = memo(
   }
 );
 
-// PERFORMANCE OPTIMIZATION: Heavily optimized MetaDeck with intersection observer and lazy loading
 const MetaDeck = memo(
   ({
     metaDeck,
@@ -712,7 +551,6 @@ const MetaDeck = memo(
     others,
     skills,
   }) => {
-    // PERFORMANCE OPTIMIZATION: Stable toggle function
     const toggleClosed = useCallback(
       (e) => {
         handleIsClosed(e);
@@ -720,41 +558,12 @@ const MetaDeck = memo(
       [handleIsClosed]
     );
 
-    // State for champions collapse/expand
     const [isChampionsCollapsed, setIsChampionsCollapsed] = useState(true);
 
-    // Toggle function for champions section
     const toggleChampionsSection = useCallback(() => {
       setIsChampionsCollapsed((prev) => !prev);
     }, []);
 
-    // PERFORMANCE OPTIMIZATION: Enhanced intersection observer with better thresholds
-    const deckRef = useRef(null);
-    const [isVisible, setIsVisible] = useState(true); // Start visible for better UX
-    const [hasBeenVisible, setHasBeenVisible] = useState(false);
-
-    useEffect(() => {
-      // PERFORMANCE OPTIMIZATION: Use intersection observer for optimization, not blocking visibility
-      const observer = createOptimizedObserver(
-        (entry, isScrolling) => {
-          if (entry.isIntersecting && !hasBeenVisible) {
-            setHasBeenVisible(true);
-            // Can add additional optimizations here based on visibility
-          }
-        },
-        { threshold: 0.05, rootMargin: "100px" }
-      );
-
-      if (deckRef.current) {
-        observer.observe(deckRef.current);
-      }
-
-      return () => {
-        if (deckRef.current) observer.unobserve(deckRef.current);
-      };
-    }, [hasBeenVisible]);
-
-    // PERFORMANCE OPTIMIZATION: Memoize sorted champions to prevent re-sorting
     const sortedChampions = useMemo(() => {
       if (!metaDeck?.deck?.champions || !champions) return [];
       return metaDeck.deck.champions.slice().sort((a, b) => {
@@ -801,12 +610,10 @@ const MetaDeck = memo(
       return sortedChampions;
     }, [sortedChampions, isChampionsCollapsed, champions]);
 
-    // Check if there are more champions to show
     const hasMoreChampions =
       sortedChampions.length > championsToDisplay.length &&
       isChampionsCollapsed;
 
-    // PERFORMANCE OPTIMIZATION: Memoize augment details
     const augmentDetails = useMemo(() => {
       if (!metaDeck?.deck?.augments || !augments) return [];
       return metaDeck.deck.augments
@@ -816,7 +623,6 @@ const MetaDeck = memo(
 
     return (
       <div
-        ref={deckRef}
         key={i}
         className="flex flex-col gap-[1px] bg-gradient-to-r from-[#5f5525] to-[#6D4600] p-[1px] rounded-lg overflow-hidden shadow-lg mb-4 md:!mb-10"
       >
@@ -836,7 +642,7 @@ const MetaDeck = memo(
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
             <div className="flex-1 h-px bg-gradient-to-l from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
           </div>
-          {!isClosed[i] && isVisible && (
+          {!isClosed[i] && (
             <div className="flex flex-col bg-center bg-no-repeat mt-[-1px]">
               <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#111111] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6 rounded-b-lg">
                 <div className="-mb-[8px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[87%] lg:flex-shrink-0">
@@ -956,19 +762,6 @@ const MetaDeck = memo(
                       <span>4.52</span>
                     </dd>
                   </dl>
-
-                  <div
-                    style={{
-                      width: "150px",
-                      height: "80px",
-                    }}
-                    className="hidden mt-2 mx-auto"
-                  >
-                    <MyBarChartComponent height={70} width={80} />
-                    <p className="text-center mb-0 text-[11px] md:text-[12px] font-medium leading-5 text-[999]">
-                      {others?.avgRanking}
-                    </p>
-                  </div>
                 </div>
                 {/* Desktop view: Stats */}
                 <div className="md:flex flex-col hidden">
@@ -1005,19 +798,6 @@ const MetaDeck = memo(
                         <span>4.52</span>
                       </dd>
                     </dl>
-
-                    <div
-                      style={{
-                        width: "150px",
-                        height: "80px",
-                      }}
-                      className="hidden mt-2 mx-auto"
-                    >
-                      <MyBarChartComponent height={70} width={80} />
-                      <p className="text-center mb-0 text-[11px] md:text-[14px] font-medium leading-5 text-[999]">
-                        {others?.avgRanking}
-                      </p>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -1029,11 +809,9 @@ const MetaDeck = memo(
   }
 );
 
-// PERFORMANCE OPTIMIZATION: Main component with single scroll optimization
 const MetaTrendsItems = () => {
   const { t } = useTranslation();
-  const othersRef = useRef(t("others"));
-  const others = othersRef.current;
+  const others = t("others");
 
   const [selectedChampion, setSelectedChampion] = useState(null);
   const [selectedTrait, setSelectedTrait] = useState(null);
@@ -1041,14 +819,9 @@ const MetaTrendsItems = () => {
   const [selectedSkillTree, setSelectedSkillTree] = useState(null);
   const [isClosed, setIsClosed] = useState({});
   const [activeTab, setActiveTab] = useState("Champions");
-
-  // State for mobile sub-tabs within Traits
   const [activeTraitsSubTab, setActiveTraitsSubTab] = useState("Origin");
-
-  // State for mobile sub-tabs within Skills
   const [activeSkillsSubTab, setActiveSkillsSubTab] = useState(null);
 
-  // PERFORMANCE OPTIMIZATION: Enhanced data extraction with better memoization
   const { metaDecks, champions, items, traits, augments, forces, skillTree } =
     useMemo(() => {
       try {
@@ -1085,53 +858,30 @@ const MetaTrendsItems = () => {
       }
     }, []);
 
-  // PERFORMANCE OPTIMIZATION: State for filtered comps data with stable reference
   const [compsData, setCompsData] = useState(() => metaDecks);
 
-  // PERFORMANCE OPTIMIZATION: Stable reference to original metaDecks
   const metaDecksRef = useRef(metaDecks);
   useEffect(() => {
     metaDecksRef.current = metaDecks;
     setCompsData(metaDecks);
   }, [metaDecks]);
 
-  // PERFORMANCE OPTIMIZATION: Enhanced shuffle function with WeakMap caching
-  const shuffleRef = useRef(null);
   const shuffle = useCallback((array) => {
     if (!array || !array.length) return [];
 
-    // Enhanced caching with WeakMap
-    if (!shuffleRef.current) {
-      shuffleRef.current = new WeakMap();
-    }
-
-    if (shuffleRef.current.has(array)) {
-      return shuffleRef.current.get(array);
-    }
-
-    // Fisher-Yates shuffle algorithm
     const newArray = [...array];
     for (let i = newArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
     }
-
-    shuffleRef.current.set(array, newArray);
     return newArray;
   }, []);
 
-  // PERFORMANCE OPTIMIZATION: Heavily optimized champion processing with stable references
-  const processedChampionsRef = useRef(null);
   const { filteredChampions, groupedArray } = useMemo(() => {
-    if (processedChampionsRef.current) {
-      return processedChampionsRef.current;
-    }
-
     if (!champions || !champions.length) {
       return { filteredChampions: [], groupedArray: [] };
     }
 
-    // PERFORMANCE OPTIMIZATION: Use Map for O(1) lookups
     const championsByType = new Map();
     champions.forEach((champion) => {
       if (!champion.type) return;
@@ -1142,7 +892,6 @@ const MetaTrendsItems = () => {
       championsByType.get(champion.type).push(champion);
     });
 
-    // PERFORMANCE OPTIMIZATION: Optimized selection and grouping
     const filtered = [];
     for (const [_, group] of championsByType) {
       const selected = shuffle([...group]).slice(0, 2);
@@ -1161,18 +910,14 @@ const MetaTrendsItems = () => {
       });
     });
 
-    const result = {
+    return {
       filteredChampions: filtered,
       groupedArray: Array.from(groupedByCost.entries())
         .sort(([costA], [costB]) => costA - costB)
         .map(([cost, champions]) => champions),
     };
-
-    processedChampionsRef.current = result;
-    return result;
   }, [champions, shuffle]);
 
-  // PERFORMANCE OPTIMIZATION: Optimized selection state management
   const championsWithSelection = useMemo(() => {
     if (!groupedArray.length) return groupedArray;
 
@@ -1184,26 +929,18 @@ const MetaTrendsItems = () => {
     );
   }, [groupedArray, selectedChampion]);
 
-  // PERFORMANCE OPTIMIZATION: Memoized filtered items with stable reference
   const filteredItems = useMemo(() => {
     return items?.filter((item) => !item?.isFromItem) || [];
   }, [items]);
 
-  // PERFORMANCE OPTIMIZATION: Enhanced cache key generation
-  const getFilterCacheKey = useCallback((type, key) => {
-    return `${type}:${key}`;
-  }, []);
-
-  // PERFORMANCE OPTIMIZATION: Optimized filter handler with better caching strategy
   const handleFilterChange = useCallback(
     (type, key) => {
       const metaDecks = metaDecksRef.current;
       if (!metaDecks?.length) return;
 
       let newCompsData;
-      const cacheKey = getFilterCacheKey(type, key);
+      const cacheKey = `${type}:${key}`;
 
-      // PERFORMANCE OPTIMIZATION: Enhanced filtering logic with better cache management
       const filterLogic = {
         trait: () => {
           if (selectedTrait === key) {
@@ -1217,7 +954,6 @@ const MetaTrendsItems = () => {
             const filtered = metaDecks.filter((deck) =>
               deck.deck.traits.some((trait) => trait.key === key)
             );
-            clearCacheIfNeeded();
             filterCache.set(cacheKey, filtered);
             return filtered;
           }
@@ -1236,7 +972,6 @@ const MetaTrendsItems = () => {
                 (force) => force.key.toLowerCase() === key.toLowerCase()
               )
             );
-            clearCacheIfNeeded();
             filterCache.set(cacheKey, filtered);
             return filtered;
           }
@@ -1253,7 +988,6 @@ const MetaTrendsItems = () => {
             const filtered = metaDecks.filter((deck) =>
               deck.deck.champions.some((champion) => champion.key === key)
             );
-            clearCacheIfNeeded();
             filterCache.set(cacheKey, filtered);
             return filtered;
           }
@@ -1273,7 +1007,6 @@ const MetaTrendsItems = () => {
                   champion.items && champion.items.some((item) => item === key)
               )
             );
-            clearCacheIfNeeded();
             filterCache.set(cacheKey, filtered);
             return filtered;
           }
@@ -1290,7 +1023,6 @@ const MetaTrendsItems = () => {
             const filtered = metaDecks.filter((deck) =>
               deck.deck?.skillTree?.includes(key)
             );
-            clearCacheIfNeeded();
             filterCache.set(cacheKey, filtered);
             return filtered;
           }
@@ -1299,7 +1031,6 @@ const MetaTrendsItems = () => {
 
       newCompsData = filterLogic[type]?.() || metaDecks;
 
-      // PERFORMANCE OPTIMIZATION: Reset other selections efficiently
       if (type === "trait" || type === "force") {
         setSelectedChampion(null);
         setSelectedItem(null);
@@ -1320,37 +1051,25 @@ const MetaTrendsItems = () => {
 
       setCompsData(newCompsData);
     },
-    [
-      getFilterCacheKey,
-      selectedChampion,
-      selectedItem,
-      selectedTrait,
-      selectedSkillTree,
-    ]
+    [selectedChampion, selectedItem, selectedTrait, selectedSkillTree]
   );
 
-  // PERFORMANCE OPTIMIZATION: Stable callback for deck closing
   const handleIsClosed = useCallback((event) => {
     const buttonId = event.currentTarget.id;
     setIsClosed((prev) => ({ ...prev, [buttonId]: !prev[buttonId] }));
   }, []);
 
-  // PERFORMANCE OPTIMIZATION: Stable tab change handler
   const handleTabChange = useCallback((tab) => {
     setActiveTab(tab);
   }, []);
 
-  // Stable handler for traits sub-tab changes
   const handleTraitsSubTabChange = useCallback((subTab) => {
     setActiveTraitsSubTab(subTab);
   }, []);
 
-  // Stable handler for skills sub-tab changes
   const handleSkillsSubTabChange = useCallback((subTab) => {
     setActiveSkillsSubTab(subTab);
   }, []);
-
-  // PERFORMANCE OPTIMIZATION: Heavily memoized tab content with lazy loading
 
   // Group skills by variant/category for mobile tabs
   const skillsByVariant = useMemo(() => {
@@ -1513,7 +1232,6 @@ const MetaTrendsItems = () => {
                     selectedTrait={selectedTrait}
                     onSelect={handleFilterChange}
                     i={i}
-                    t={t}
                   />
                 ))}
               </div>
@@ -1528,7 +1246,6 @@ const MetaTrendsItems = () => {
                     selectedTrait={selectedTrait}
                     onSelect={handleFilterChange}
                     i={i}
-                    t={t}
                   />
                 ))}
               </div>
@@ -1549,7 +1266,6 @@ const MetaTrendsItems = () => {
                     selectedTrait={selectedTrait}
                     onSelect={handleFilterChange}
                     i={i}
-                    t={t}
                   />
                 ))}
               </div>
@@ -1567,7 +1283,6 @@ const MetaTrendsItems = () => {
                     selectedTrait={selectedTrait}
                     onSelect={handleFilterChange}
                     i={i}
-                    t={t}
                   />
                 ))}
               </div>
@@ -1676,7 +1391,6 @@ const MetaTrendsItems = () => {
     t,
   ]);
 
-  // PERFORMANCE OPTIMIZATION: Memoized deck props to prevent object recreation
   const deckProps = useMemo(() => {
     return {
       champions,
@@ -1689,7 +1403,6 @@ const MetaTrendsItems = () => {
     };
   }, [champions, items, traits, forces, augments, skillTree, others]);
 
-  // PERFORMANCE OPTIMIZATION: Memoized tab buttons to prevent recreation
   const tabButtons = useMemo(() => {
     const tabs = [
       { key: "Champions", label: others?.champions },
@@ -1713,19 +1426,16 @@ const MetaTrendsItems = () => {
       <div className="space-y-6">
         <div>
           <div className="">
-            {/* PERFORMANCE OPTIMIZATION: Optimized tabs section */}
             <div className="flex justify-center md:justify-start">
               <div className="inline-flex rounded-lg overflow-hidden border border-[#2D2F37] bg-[#1D1D1D]">
                 {tabButtons}
               </div>
             </div>
 
-            {/* PERFORMANCE OPTIMIZATION: Memoized content sections */}
             <div className="rounded-lg shadow-lg">{handleTabContent}</div>
           </div>
         </div>
 
-        {/* PERFORMANCE OPTIMIZATION: Single scroll results section with intersection observer optimization */}
         <div className="space-y-4" id="meta-trends-items">
           {compsData.length > 0 ? (
             <div className="space-y-4">
