@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import "react-tooltip/dist/react-tooltip.css";
-import ReactTltp from "src/components/tooltip/ReactTltp";
 import {
   HiArrowSmUp,
   HiArrowSmDown,
@@ -15,12 +13,11 @@ import Comps from "../../../../data/compsNew.json";
 import CardImage from "src/components/cardImage";
 import TrendFilters from "src/components/trendFilters";
 import ScrollableTable from "src/utils/ScrollableTable";
-import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
 import ColoredValue from "src/components/ColoredValue";
 import ItemDisplay from "src/components/item/ItemDisplay";
 
-const ProjectItems = () => {
+const ChampionsTrendsItems = () => {
   const { t } = useTranslation();
   const others = t("others");
 
@@ -197,13 +194,6 @@ const ProjectItems = () => {
                 (itemImg, idx) =>
                   itemImg && (
                     <div key={idx} className="relative">
-                      {/* <OptimizedImage
-                        src={itemImg}
-                        alt="icon"
-                        width={32}
-                        height={32}
-                        className="w-8 h-8 rounded border border-[#ffffff40]"
-                      /> */}
                       <ItemDisplay
                         item={itemImg}
                         size="xSmall"
@@ -233,11 +223,10 @@ const ProjectItems = () => {
   const { items } = data?.refs;
   const { forces } = data?.refs;
 
-  const lookup = new Map(champions.map((champion) => [champion.key, champion]));
-
-  // Merge objects from arr1 with matching objects from arr2
+  // Merge champion stats with champion details
   const merged = metaDeckChampionsStats.map((champion) => {
-    return { ...champion, ...(lookup.get(champion.key) || {}) };
+    const championDetails = champions.find((c) => c.key === champion.key);
+    return { ...champion, ...championDetails };
   });
 
   const handleButtonClick = (button) => {
@@ -277,7 +266,6 @@ const ProjectItems = () => {
   };
 
   return (
-    // <ProjectItemsStyleWrapper>
     <div className="pt-2 bg-[#111111] md:bg-transparent">
       <div className="md:flex md:justify-between md:items-center bg-[#111111] md:bg-transparent mb-2.5 md:mb-0">
         <div className="flex items-center mx-auto md:!ml-0 md:!mr-0 justify-center md:justify-start">
@@ -333,7 +321,6 @@ const ProjectItems = () => {
             {/* Second Row - Remaining buttons */}
             <div className="flex gap-0">
               {mobileFilterOptions.slice(4).map((option, index) => {
-                const actualIndex = index + 4;
                 const isFirst = index === 0;
                 const isLast =
                   index === mobileFilterOptions.slice(4).length - 1;
@@ -556,18 +543,19 @@ const ProjectItems = () => {
                             .map(
                               (item) =>
                                 item && (
-                                  <>
-                                    <div className="relative z-10 hover:z-20 aspect-square rounded-lg">
-                                      <ItemDisplay
-                                        item={item}
-                                        size="small"
-                                        borderRadius="rounded-[4px]"
-                                        backgroundRadius="rounded-[4px]"
-                                        tooltipId={item?.name}
-                                        showTooltip={true}
-                                      />
-                                    </div>
-                                  </>
+                                  <div
+                                    key={item.key}
+                                    className="relative z-10 hover:z-20 aspect-square rounded-lg"
+                                  >
+                                    <ItemDisplay
+                                      item={item}
+                                      size="small"
+                                      borderRadius="rounded-[4px]"
+                                      backgroundRadius="rounded-[4px]"
+                                      tooltipId={item?.name}
+                                      showTooltip={true}
+                                    />
+                                  </div>
                                 )
                             )}
                         </div>
@@ -693,8 +681,7 @@ const ProjectItems = () => {
         </div>
       </div>
     </div>
-    // </ProjectItemsStyleWrapper>
   );
 };
 
-export default ProjectItems;
+export default ChampionsTrendsItems;

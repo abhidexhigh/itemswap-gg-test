@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import "react-tooltip/dist/react-tooltip.css";
-import GirlCrush from "@assets/image/traits/GirlCrush.svg";
 import TrendFilters from "src/components/trendFilters";
 import {
   HiArrowSmUp,
@@ -19,7 +17,7 @@ import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
 import ColoredValue from "src/components/ColoredValue";
 
-const ProjectItems = () => {
+const AugmentsTrendsItems = () => {
   const { t } = useTranslation();
   const others = t("others");
   const { augmentStats } = metaDeckAugments;
@@ -634,4 +632,4 @@ const ProjectItems = () => {
   );
 };
 
-export default ProjectItems;
+export default AugmentsTrendsItems;

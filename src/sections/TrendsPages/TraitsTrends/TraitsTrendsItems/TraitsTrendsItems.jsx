@@ -1,6 +1,4 @@
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import CardImage from "src/components/cardImage";
@@ -14,16 +12,13 @@ import {
 } from "react-icons/hi";
 import metaDeckTraitStats from "../../../../data/newData/metaDeckTraits.json";
 import Comps from "../../../../data/compsNew.json";
-import ReactTltp from "src/components/tooltip/ReactTltp";
 import ScrollableTable from "src/utils/ScrollableTable";
-import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
 import ColoredValue from "src/components/ColoredValue";
 import TraitImage from "src/components/TraitImage/TraitImage";
 
-const ProjectItems = () => {
+const TraitsTrendsItems = () => {
   const { t } = useTranslation();
-  const { i18n } = useTranslation();
   const others = t("others");
 
   // const { metaDeckTraitStats } = MetaDeckTraits?.metaDeckTrait;
@@ -423,9 +418,6 @@ const ProjectItems = () => {
                                   )?.name
                                 }
                               </p>
-                              <p className="m-0 text-xs font-extralight">
-                                {/* Commented code removed for brevity */}
-                              </p>
                             </div>
                           </div>
                         </div>
@@ -604,4 +596,4 @@ const ProjectItems = () => {
   );
 };
 
-export default ProjectItems;
+export default TraitsTrendsItems;

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import "react-tooltip/dist/react-tooltip.css";
@@ -12,7 +11,6 @@ import {
 } from "react-icons/hi";
 import metaDeckItemStats from "../../../../data/newData/metaDeckItems.json";
 import Comps from "../../../../data/compsNew.json";
-import Forces from "../../../../data/newData/force.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
 import ScrollableTable from "src/utils/ScrollableTable";
@@ -21,7 +19,7 @@ import SearchBar from "src/components/searchBar";
 import ColoredValue from "src/components/ColoredValue";
 import ItemDisplay from "src/components/item/ItemDisplay";
 
-const ProjectItems = () => {
+const ItemsTrendsItems = () => {
   const { t } = useTranslation();
   const others = t("others");
   const {
@@ -621,15 +619,6 @@ const ProjectItems = () => {
 
                         {/* Image & Name */}
                         <div className="flex items-center space-x-2 min-w-0">
-                          {/* <OptimizedImage
-                            src={
-                              items?.find((i) => i?.key === item?.key)?.imageUrl
-                            }
-                            alt="icon"
-                            width={32}
-                            height={32}
-                            className="w-7 h-7 border border-[#ffffff60] rounded-md flex-shrink-0"
-                          /> */}
                           <ItemDisplay
                             item={items.find((i) => i.key === item.key)}
                             size="midMedium"
@@ -675,4 +664,4 @@ const ProjectItems = () => {
   );
 };
 
-export default ProjectItems;
+export default ItemsTrendsItems;

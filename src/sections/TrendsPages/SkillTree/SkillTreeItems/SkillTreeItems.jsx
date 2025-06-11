@@ -28,7 +28,7 @@ import CompsModal from "./CompsModal";
 import GradientText from "src/components/gradientText/GradientText";
 import SkillTreeImage from "src/components/SkillTreeImage";
 
-const ProjectItems = () => {
+const SkillTreeItems = () => {
   const { t } = useTranslation();
   const others = t("others");
   const {
@@ -46,8 +46,6 @@ const ProjectItems = () => {
   const { items } = data?.refs;
   const { forces } = data?.refs;
   const { skillTree } = data?.refs;
-
-  console.log("skillTree", skillTree);
 
   const [metaDeckSkillTreeStatsData, setMetaDeckSkillTreeStatsData] = useState(
     metaDeckSkillTreeStats
@@ -152,7 +150,6 @@ const ProjectItems = () => {
         return 0;
       });
     }
-    console.log("sortedData", sortedData);
     setMetaDeckSkillTreeStatsData(sortedData);
   }, [metaDeckSkillTreeStats, sortConfig]);
 
@@ -515,10 +512,6 @@ const ProjectItems = () => {
                 </tr>
               </thead>
               <tbody className="bg-[#111111]">
-                {console.log(
-                  "metaDeckSkillTreeStatsData",
-                  metaDeckSkillTreeStatsData
-                )}
                 {metaDeckSkillTreeStatsData.map((item, index) => (
                   <tr
                     className="hover:bg-[#2D2F37] transition-colors duration-200 border-b border-[#2D2F37]"
@@ -640,7 +633,7 @@ const ProjectItems = () => {
                             (c) => c.key === champKey || c.name === champKey
                           );
                           if (!champion) return null;
-                          console.log("champion", champion);
+
                           return (
                             <React.Fragment key={`champ-${index}`}>
                               <CardImage
@@ -663,13 +656,7 @@ const ProjectItems = () => {
                         title="View top comps"
                       >
                         <PiEye className="text-lg group-hover:scale-110 transition-all duration-200" />
-                        <span className="truncate">
-                          {/* {item?.top3Comps?.join(", ") || "N/A"} */}
-                          {/* <GradientText
-                            value={item?.top3Comps?.join(", ") || "N/A"}
-                          /> */}
-                        </span>
-                        {/* <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-[#D9A876] group-hover:w-3/4 transition-all duration-300"></span> */}
+                        <span className="truncate"></span>
                         <img
                           src="/images/rule_1_1.png"
                           alt="rule"
@@ -829,4 +816,4 @@ const ProjectItems = () => {
   );
 };
 
-export default ProjectItems;
+export default SkillTreeItems;
