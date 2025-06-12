@@ -310,36 +310,36 @@ export const CompCard = ({
             </div>
           </div>
 
-          <div className="flex-shrink-0 w-full sm:w-[180px] bg-[#1D1D1D] rounded-[4px] p-3 sm:p-4">
-            <dl className="flex justify-between mb-2">
-              <dt className="text-[12px] sm:text-[14px] font-medium text-[#999]">
+          <div className="flex md:flex-col justify-between w-full sm:w-[180px] bg-[#1D1D1D] rounded-[4px] p-3 sm:p-4">
+            <dl className="flex flex-col md:flex-row justify-between mb-2 text-center">
+              <dt className="text-sm sm:text-[14px] font-medium text-[#999]">
                 {others?.top4}
               </dt>
-              <dd className="text-[12px] sm:text-[14px] font-medium text-[#D9A876]">
+              <dd className="text-lg sm:text-[14px] font-medium text-[#D9A876]">
                 <span>{((comp.topRate * 100) / comp.plays).toFixed(2)}%</span>
               </dd>
             </dl>
-            <dl className="flex justify-between mb-2">
-              <dt className="text-[12px] sm:text-[14px] font-medium text-[#999]">
+            <dl className="flex flex-col md:flex-row justify-between mb-2 text-center">
+              <dt className="text-sm sm:text-[14px] font-medium text-[#999]">
                 {others?.winPercentage}
               </dt>
-              <dd className="text-[12px] sm:text-[14px] font-medium text-[#D9A876]">
+              <dd className="text-lg sm:text-[14px] font-medium text-[#D9A876]">
                 <span>{((comp.winRate * 100) / comp.plays).toFixed(2)}%</span>
               </dd>
             </dl>
-            <dl className="flex justify-between mb-2">
-              <dt className="text-[12px] sm:text-[14px] font-medium text-[#999]">
+            <dl className="flex flex-col md:flex-row justify-between mb-2 text-center">
+              <dt className="text-sm sm:text-[14px] font-medium text-[#999]">
                 {others?.pickPercentage}
               </dt>
-              <dd className="text-[12px] sm:text-[14px] font-medium text-[#D9A876]">
+              <dd className="text-lg sm:text-[14px] font-medium text-[#D9A876]">
                 <span>{(comp.pickRate * 100).toFixed(2)}%</span>
               </dd>
             </dl>
-            <dl className="flex justify-between">
-              <dt className="text-[12px] sm:text-[14px] font-medium text-[#999]">
+            <dl className="flex flex-col md:flex-row justify-between mb-2 text-center">
+              <dt className="text-sm sm:text-[14px] font-medium text-[#999]">
                 {others?.avgPlacement}
               </dt>
-              <dd className="text-[12px] sm:text-[14px] font-medium text-[#D9A876]">
+              <dd className="text-lg sm:text-[14px] font-medium text-[#D9A876]">
                 <span>{comp.avgPlacement.toFixed(2)}</span>
               </dd>
             </dl>

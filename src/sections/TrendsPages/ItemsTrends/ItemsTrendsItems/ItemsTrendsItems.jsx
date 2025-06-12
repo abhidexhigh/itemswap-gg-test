@@ -272,12 +272,12 @@ const ProjectItems = () => {
       <div className="pt-2 bg-[#111111] md:bg-transparent w-full">
         {/* Header section with filters and search */}
         <div className="flex flex-col sm:flex-row justify-between items-center bg-[#111111] md:bg-transparent px-2 sm:px-4 mb-2.5 md:mb-0">
-          <div className="w-full sm:w-auto sm:mb-0">
+          {/* <div className="w-full sm:w-auto sm:mb-0">
             <TrendFilters
               buttons={["All", "Normal"]}
               onButtonClick={handleButtonClick}
             />
-          </div>
+          </div> */}
           {/* Mobile Filter Buttons - Only visible on mobile */}
           <div className="block md:hidden mb-2">
             <div className="flex flex-col items-center gap-2 px-4">

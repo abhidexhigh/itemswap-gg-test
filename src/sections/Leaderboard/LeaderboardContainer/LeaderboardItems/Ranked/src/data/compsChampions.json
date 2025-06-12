@@ -1,0 +1,432 @@
+[
+  [
+    {
+      "name": "Nicothoe",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719662727/Harpy_Updated_V3_1_er7dzy.webp",
+      "borderColor": "#C0C0C0",
+      "cost": 1,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/one_v7t2oz.webp"
+    },
+    {
+      "name": "Celaeno",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719921880/final4up_ekgr1i.webp",
+      "borderColor": "#C0C0C0",
+      "cost": 1,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/one_v7t2oz.webp"
+    },
+    {
+      "name": "Pyralia",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719999771/00646-609178461_fcxp2m.webp",
+      "borderColor": "#C0C0C0",
+      "cost": 1,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/one_v7t2oz.webp"
+    },
+    {
+      "name": "Aello",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720080846/Harpy_Storm_wgaezk.webp",
+      "borderColor": "#C0C0C0",
+      "cost": 1,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/one_v7t2oz.webp"
+    },
+    {
+      "name": "Ocypete",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719999771/final6_vrpuhj.webp",
+      "borderColor": "#C0C0C0",
+      "cost": 1,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/one_v7t2oz.webp"
+    },
+    {
+      "name": "Artemis",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720498931/Magic_Archer_Light_zvfs4n.webp",
+      "borderColor": "#C0C0C0",
+      "cost": 1,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/one_v7t2oz.webp"
+    },
+    {
+      "name": "Hecate",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720498931/Magic_Archer_Dark_ojfius.webp",
+      "borderColor": "#C0C0C0",
+      "cost": 1,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/one_v7t2oz.webp"
+    },
+    {
+      "name": "Hestial",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720498931/Magic_Archer_Fire_2_xkhinq.webp",
+      "borderColor": "#C0C0C0",
+      "cost": 1,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/one_v7t2oz.webp"
+    },
+    {
+      "name": "Rhiannon",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720585221/Magic_Archer_Storm_uesxay.webp",
+      "borderColor": "#C0C0C0",
+      "cost": 1,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/one_v7t2oz.webp"
+    },
+    {
+      "name": "Selene",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720585221/Magic_Archer_Water_2_otkuaa.webp",
+      "borderColor": "#C0C0C0",
+      "cost": 1,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/one_v7t2oz.webp"
+    },
+    {
+      "name": "Aetheria",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720680047/DRYAD_Light_doyy7c.webp",
+      "borderColor": "#C0C0C0",
+      "cost": 1,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/one_v7t2oz.webp"
+    },
+    {
+      "name": "Orphne",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720680047/Dryad_Dark_et9pfr.webp",
+      "borderColor": "#C0C0C0",
+      "cost": 1,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/one_v7t2oz.webp"
+    }
+  ],
+  [
+    {
+      "name": "Nicothoe",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719662727/Harpy_Updated_V3_1_er7dzy.webp",
+      "borderColor": "#90EE90",
+      "cost": 2,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/two_lq4qkg.webp"
+    },
+    {
+      "name": "Celaeno",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719921880/final4up_ekgr1i.webp",
+      "borderColor": "#90EE90",
+      "cost": 2,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/two_lq4qkg.webp"
+    },
+    {
+      "name": "Pyralia",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719999771/00646-609178461_fcxp2m.webp",
+      "borderColor": "#90EE90",
+      "cost": 2,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/two_lq4qkg.webp"
+    },
+    {
+      "name": "Aello",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720080846/Harpy_Storm_wgaezk.webp",
+      "borderColor": "#90EE90",
+      "cost": 2,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/two_lq4qkg.webp"
+    },
+    {
+      "name": "Ocypete",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719999771/final6_vrpuhj.webp",
+      "borderColor": "#90EE90",
+      "cost": 2,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/two_lq4qkg.webp"
+    },
+    {
+      "name": "Artemis",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720498931/Magic_Archer_Light_zvfs4n.webp",
+      "borderColor": "#90EE90",
+      "cost": 2,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/two_lq4qkg.webp"
+    },
+    {
+      "name": "Hecate",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720498931/Magic_Archer_Dark_ojfius.webp",
+      "borderColor": "#90EE90",
+      "cost": 2,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/two_lq4qkg.webp"
+    },
+    {
+      "name": "Hestial",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720498931/Magic_Archer_Fire_2_xkhinq.webp",
+      "borderColor": "#90EE90",
+      "cost": 2,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/two_lq4qkg.webp"
+    },
+    {
+      "name": "Rhiannon",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720585221/Magic_Archer_Storm_uesxay.webp",
+      "borderColor": "#90EE90",
+      "cost": 2,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/two_lq4qkg.webp"
+    },
+    {
+      "name": "Selene",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720585221/Magic_Archer_Water_2_otkuaa.webp",
+      "borderColor": "#90EE90",
+      "cost": 2,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/two_lq4qkg.webp"
+    },
+    {
+      "name": "Aetheria",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720680047/DRYAD_Light_doyy7c.webp",
+      "borderColor": "#90EE90",
+      "cost": 2,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/two_lq4qkg.webp"
+    },
+    {
+      "name": "Orphne",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720680047/Dryad_Dark_et9pfr.webp",
+      "borderColor": "#90EE90",
+      "cost": 2,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/two_lq4qkg.webp"
+    }
+  ],
+  [
+    {
+      "name": "Nicothoe",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719662727/Harpy_Updated_V3_1_er7dzy.webp",
+      "borderColor": "#0c9fff",
+      "cost": 3,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/three_seducd.webp"
+    },
+    {
+      "name": "Celaeno",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719921880/final4up_ekgr1i.webp",
+      "borderColor": "#0c9fff",
+      "cost": 3,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/three_seducd.webp"
+    },
+    {
+      "name": "Pyralia",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719999771/00646-609178461_fcxp2m.webp",
+      "borderColor": "#0c9fff",
+      "cost": 3,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/three_seducd.webp"
+    },
+    {
+      "name": "Aello",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720080846/Harpy_Storm_wgaezk.webp",
+      "borderColor": "#0c9fff",
+      "cost": 3,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/three_seducd.webp"
+    },
+    {
+      "name": "Ocypete",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719999771/final6_vrpuhj.webp",
+      "borderColor": "#0c9fff",
+      "cost": 3,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/three_seducd.webp"
+    },
+    {
+      "name": "Artemis",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720498931/Magic_Archer_Light_zvfs4n.webp",
+      "borderColor": "#0c9fff",
+      "cost": 3,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/three_seducd.webp"
+    },
+    {
+      "name": "Hecate",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720498931/Magic_Archer_Dark_ojfius.webp",
+      "borderColor": "#0c9fff",
+      "cost": 3,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/three_seducd.webp"
+    },
+    {
+      "name": "Hestial",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720498931/Magic_Archer_Fire_2_xkhinq.webp",
+      "borderColor": "#0c9fff",
+      "cost": 3,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/three_seducd.webp"
+    },
+    {
+      "name": "Rhiannon",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720585221/Magic_Archer_Storm_uesxay.webp",
+      "borderColor": "#0c9fff",
+      "cost": 3,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/three_seducd.webp"
+    },
+    {
+      "name": "Selene",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720585221/Magic_Archer_Water_2_otkuaa.webp",
+      "borderColor": "#0c9fff",
+      "cost": 3,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/three_seducd.webp"
+    },
+    {
+      "name": "Aetheria",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720680047/DRYAD_Light_doyy7c.webp",
+      "borderColor": "#0c9fff",
+      "cost": 3,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/three_seducd.webp"
+    },
+    {
+      "name": "Orphne",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720680047/Dryad_Dark_et9pfr.webp",
+      "borderColor": "#0c9fff",
+      "cost": 3,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780550/three_seducd.webp"
+    }
+  ],
+  [
+    {
+      "name": "Nicothoe",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719662727/Harpy_Updated_V3_1_er7dzy.webp",
+      "borderColor": "#b330d5",
+      "cost": 4,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780377/four_nvxjwh.webp"
+    },
+    {
+      "name": "Celaeno",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719921880/final4up_ekgr1i.webp",
+      "borderColor": "#b330d5",
+      "cost": 4,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780377/four_nvxjwh.webp"
+    },
+    {
+      "name": "Pyralia",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719999771/00646-609178461_fcxp2m.webp",
+      "borderColor": "#b330d5",
+      "cost": 4,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780377/four_nvxjwh.webp"
+    },
+    {
+      "name": "Aello",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720080846/Harpy_Storm_wgaezk.webp",
+      "borderColor": "#b330d5",
+      "cost": 4,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780377/four_nvxjwh.webp"
+    },
+    {
+      "name": "Ocypete",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719999771/final6_vrpuhj.webp",
+      "borderColor": "#b330d5",
+      "cost": 4,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780377/four_nvxjwh.webp"
+    },
+    {
+      "name": "Artemis",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720498931/Magic_Archer_Light_zvfs4n.webp",
+      "borderColor": "#b330d5",
+      "cost": 4,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780377/four_nvxjwh.webp"
+    },
+    {
+      "name": "Hecate",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720498931/Magic_Archer_Dark_ojfius.webp",
+      "borderColor": "#b330d5",
+      "cost": 4,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780377/four_nvxjwh.webp"
+    },
+    {
+      "name": "Hestial",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720498931/Magic_Archer_Fire_2_xkhinq.webp",
+      "borderColor": "#b330d5",
+      "cost": 4,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780377/four_nvxjwh.webp"
+    },
+    {
+      "name": "Rhiannon",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720585221/Magic_Archer_Storm_uesxay.webp",
+      "borderColor": "#b330d5",
+      "cost": 4,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780377/four_nvxjwh.webp"
+    },
+    {
+      "name": "Selene",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720585221/Magic_Archer_Water_2_otkuaa.webp",
+      "borderColor": "#b330d5",
+      "cost": 4,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780377/four_nvxjwh.webp"
+    },
+    {
+      "name": "Aetheria",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720680047/DRYAD_Light_doyy7c.webp",
+      "borderColor": "#b330d5",
+      "cost": 4,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780377/four_nvxjwh.webp"
+    },
+    {
+      "name": "Pyra",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720586017/Fire_Corrected_rpswrx.webp",
+      "borderColor": "#b330d5",
+      "cost": 4,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780377/four_nvxjwh.webp"
+    }
+  ],
+  [
+    {
+      "name": "Nicothoe",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719662727/Harpy_Updated_V3_1_er7dzy.webp",
+      "borderColor": "#FFD700",
+      "cost": 5,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780551/five_om2xqr.webp"
+    },
+    {
+      "name": "Celaeno",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719921880/final4up_ekgr1i.webp",
+      "borderColor": "#FFD700",
+      "cost": 5,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780551/five_om2xqr.webp"
+    },
+    {
+      "name": "Pyralia",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719999771/00646-609178461_fcxp2m.webp",
+      "borderColor": "#FFD700",
+      "cost": 5,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780551/five_om2xqr.webp"
+    },
+    {
+      "name": "Aello",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720080846/Harpy_Storm_wgaezk.webp",
+      "borderColor": "#FFD700",
+      "cost": 5,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780551/five_om2xqr.webp"
+    },
+    {
+      "name": "Ocypete",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1719999771/final6_vrpuhj.webp",
+      "borderColor": "#FFD700",
+      "cost": 5,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780551/five_om2xqr.webp"
+    },
+    {
+      "name": "Artemis",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720498931/Magic_Archer_Light_zvfs4n.webp",
+      "borderColor": "#FFD700",
+      "cost": 5,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780551/five_om2xqr.webp"
+    },
+    {
+      "name": "Hecate",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720498931/Magic_Archer_Dark_ojfius.webp",
+      "borderColor": "#FFD700",
+      "cost": 5,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780551/five_om2xqr.webp"
+    },
+    {
+      "name": "Hestial",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720498931/Magic_Archer_Fire_2_xkhinq.webp",
+      "borderColor": "#FFD700",
+      "cost": 5,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780551/five_om2xqr.webp"
+    },
+    {
+      "name": "Rhiannon",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720585221/Magic_Archer_Storm_uesxay.webp",
+      "borderColor": "#FFD700",
+      "cost": 5,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780551/five_om2xqr.webp"
+    },
+    {
+      "name": "Pyra",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720586017/Fire_Corrected_rpswrx.webp",
+      "borderColor": "#FFD700",
+      "cost": 5,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780551/five_om2xqr.webp"
+    },
+    {
+      "name": "Pyra",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720586017/Fire_Corrected_rpswrx.webp",
+      "borderColor": "#FFD700",
+      "cost": 5,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780551/five_om2xqr.webp"
+    },
+    {
+      "name": "Pyra",
+      "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1720586017/Fire_Corrected_rpswrx.webp",
+      "borderColor": "#FFD700",
+      "cost": 5,
+      "coinImageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/c_crop,w_280/v1720780551/five_om2xqr.webp"
+    }
+  ]
+]

@@ -9,23 +9,16 @@ import {
   HiChevronDown,
   HiChevronUp,
 } from "react-icons/hi";
-import { IoMdClose } from "react-icons/io";
 import { PiEye } from "react-icons/pi";
-import { IoMdCheckmarkCircle } from "react-icons/io";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
-import { createPortal } from "react-dom";
 import metaDeckSkillTreeStats from "../../../../data/newData/metaDeckSkillTree.json";
 import Comps from "../../../../data/compsNew.json";
-import Forces from "../../../../data/newData/force.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
 import ScrollableTable from "src/utils/ScrollableTable";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
 import ColoredValue from "src/components/ColoredValue";
-import ForceIcon from "src/components/forceIcon";
 import CompsModal from "./CompsModal";
-import GradientText from "src/components/gradientText/GradientText";
 import SkillTreeImage from "src/components/SkillTreeImage";
 
 const ProjectItems = () => {
@@ -308,10 +301,10 @@ const ProjectItems = () => {
             </div>
           ))}
         </div>
-        <div className="flex justify-between items-center p-4">
+        <div className="flex justify-between items-center px-4">
           {/* Best Pairs */}
           <div className="flex flex-col">
-            <span className="text-xs text-gray-400 mb-2">
+            <span className="text-xs text-gray-400 mb-2 text-center">
               {others?.best} {others?.pairs}
             </span>
             <div className="flex flex-wrap gap-1">
@@ -335,7 +328,7 @@ const ProjectItems = () => {
           </div>
           {/* Top 3 Champions */}
           <div className="flex flex-col">
-            <span className="text-xs text-gray-400 mb-2">
+            <span className="text-xs text-gray-400 mb-2 text-center">
               {others?.top3} {others?.champions}
             </span>
             <div className="flex gap-1">

@@ -224,7 +224,7 @@ const ProjectItems = () => {
     const filteredData = hiddenData.filter((data) => data.key !== mobileFilter);
 
     return (
-      <div className="grid grid-cols-3 gap-3 p-4 bg-[#1a1a1a] border-t border-[#2D2F37]">
+      <div className="grid grid-cols-3 gap-3 p-4 bg-[#1a1a1a] border-t border-[#2D2F37] text-center">
         {filteredData.map((data, index) => (
           <div key={index} className="flex flex-col">
             <span className="text-xs text-gray-400 mb-1">{data.label}</span>
@@ -232,11 +232,11 @@ const ProjectItems = () => {
           </div>
         ))}
         {/* Top 3 Champions */}
-        <div className="col-span-3 flex flex-col">
-          <span className="text-xs text-gray-400 mb-2">
+        <div className="col-span-3 flex flex-col mt-2">
+          {/* <span className="text-xs text-gray-400 mb-2">
             {others?.top3} {others?.champions}
-          </span>
-          <div className="flex flex-wrap gap-1">
+          </span> */}
+          <div className="flex mx-auto flex-wrap gap-3">
             {item?.traitChampionStats?.slice(0, 3)?.map((champion, idx) => (
               <div key={idx}>
                 <CardImage
@@ -245,7 +245,7 @@ const ProjectItems = () => {
                   identificationImageStyle="w-1"
                   textStyle="text-[6px]"
                   forces={forces}
-                  cardSize="!w-12 !h-12"
+                  cardSize="!w-16 !h-16"
                 />
               </div>
             ))}
