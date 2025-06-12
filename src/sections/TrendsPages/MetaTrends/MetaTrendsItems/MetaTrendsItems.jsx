@@ -521,7 +521,7 @@ const DeckHeader = memo(
               </div>
             ))}
           </div>
-          {/* <div className="absolute right-[16px] top-[16px] inline-flex gap-[8px] lg:relative lg:right-[0px] lg:top-[0px]">
+          <div className="absolute right-[16px] top-[16px] inline-flex gap-[8px] lg:relative lg:right-[0px] lg:top-[0px]">
             <button
               className="inline-flex w-[16px] cursor-pointer items-center text-[#D9A876]"
               title="Hide"
@@ -530,7 +530,7 @@ const DeckHeader = memo(
             >
               {!isClosed ? <PiEye /> : <PiEyeClosed />}
             </button>
-          </div> */}
+          </div>
         </div>
       </header>
     );

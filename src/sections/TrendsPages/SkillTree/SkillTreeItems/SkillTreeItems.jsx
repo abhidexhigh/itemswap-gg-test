@@ -9,19 +9,26 @@ import {
   HiChevronDown,
   HiChevronUp,
 } from "react-icons/hi";
+import { IoMdClose } from "react-icons/io";
 import { PiEye } from "react-icons/pi";
+import { IoMdCheckmarkCircle } from "react-icons/io";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
+import { createPortal } from "react-dom";
 import metaDeckSkillTreeStats from "../../../../data/newData/metaDeckSkillTree.json";
 import Comps from "../../../../data/compsNew.json";
+import Forces from "../../../../data/newData/force.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
 import ScrollableTable from "src/utils/ScrollableTable";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
 import ColoredValue from "src/components/ColoredValue";
+import ForceIcon from "src/components/forceIcon";
 import CompsModal from "./CompsModal";
+import GradientText from "src/components/gradientText/GradientText";
 import SkillTreeImage from "src/components/SkillTreeImage";
 
-const SkillTreeItems = () => {
+const ProjectItems = () => {
   const { t } = useTranslation();
   const others = t("others");
   const {
@@ -39,6 +46,8 @@ const SkillTreeItems = () => {
   const { items } = data?.refs;
   const { forces } = data?.refs;
   const { skillTree } = data?.refs;
+
+  console.log("skillTree", skillTree);
 
   const [metaDeckSkillTreeStatsData, setMetaDeckSkillTreeStatsData] = useState(
     metaDeckSkillTreeStats
@@ -143,6 +152,7 @@ const SkillTreeItems = () => {
         return 0;
       });
     }
+    console.log("sortedData", sortedData);
     setMetaDeckSkillTreeStatsData(sortedData);
   }, [metaDeckSkillTreeStats, sortConfig]);
 
@@ -505,6 +515,10 @@ const SkillTreeItems = () => {
                 </tr>
               </thead>
               <tbody className="bg-[#111111]">
+                {console.log(
+                  "metaDeckSkillTreeStatsData",
+                  metaDeckSkillTreeStatsData
+                )}
                 {metaDeckSkillTreeStatsData.map((item, index) => (
                   <tr
                     className="hover:bg-[#2D2F37] transition-colors duration-200 border-b border-[#2D2F37]"
@@ -516,33 +530,23 @@ const SkillTreeItems = () => {
                     <td className={`p-2 ${getCellClass("key")}`}>
                       <div>
                         <div className="flex justify-start items-center space-x-1 sm:space-x-2">
-                          {(() => {
-                            const skillData = skillTree?.find(
-                              (i) => i?.key === item?.key
-                            );
-                            const itemData = items.find(
-                              (i) => i.key === item.key
-                            );
-                            const tooltipId = `skill-${item?.key}-${index}`;
-
-                            return (
-                              <>
-                                <SkillTreeImage
-                                  skill={skillData}
-                                  size="medium"
-                                  tooltipId={tooltipId}
-                                  className="w-14 h-14 md:w-20 md:h-20"
-                                />
-                                {(itemData || item) && (
-                                  <ReactTltp
-                                    variant="item"
-                                    id={tooltipId}
-                                    content={itemData || item}
-                                  />
-                                )}
-                              </>
-                            );
-                          })()}
+                          <>
+                            <SkillTreeImage
+                              skill={skillTree?.find(
+                                (i) => i?.key === item?.key
+                              )}
+                              size="medium"
+                              tooltipId={`${item?.key}`}
+                              className="w-14 h-14 md:w-20 md:h-20"
+                            />
+                            <ReactTltp
+                              variant="item"
+                              id={`${item?.key}`}
+                              content={
+                                items.find((i) => i.key === item.key) || item
+                              }
+                            />
+                          </>
                           <div className="min-w-0 flex-1">
                             <p className="p-0 text-sm sm:text-sm md:text-base mb-1 md:mb-2 text-[#fff] truncate max-w-[90px] sm:max-w-[150px] md:max-w-full">
                               {items.find((i) => i.key === item.key)?.name ||
@@ -551,34 +555,32 @@ const SkillTreeItems = () => {
                             <div className="flex items-center flex-wrap gap-1">
                               {items
                                 .find((i) => i.key === item.key)
-                                ?.compositions?.map((comp, compIndex) => {
+                                ?.compositions?.map((comp, index) => {
                                   const compItem = items.find(
                                     (i) => i.key === comp
                                   );
                                   if (!compItem) return null;
-                                  const tooltipId = `comp-${compItem.key}-${index}-${compIndex}`;
                                   return (
-                                    <React.Fragment key={compIndex}>
+                                    <React.Fragment key={index}>
                                       <OptimizedImage
                                         alt="Item Image"
                                         width={80}
                                         height={80}
                                         src={compItem.imageUrl}
                                         className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 !border !border-[#ffffff60] rounded-md"
-                                        data-tooltip-id={tooltipId}
+                                        data-tooltip-id={`${compItem.key}_${index}`}
                                       />
-                                      {compIndex === 0 && (
+                                      {index === 0 && (
                                         <span className="mx-1">+</span>
                                       )}
                                       <ReactTltp
                                         variant="item"
-                                        id={tooltipId}
+                                        id={`${compItem.key}_${index}`}
                                         content={compItem}
                                       />
                                     </React.Fragment>
                                   );
-                                })
-                                ?.filter(Boolean)}
+                                })}
                             </div>
                           </div>
                         </div>
@@ -638,7 +640,7 @@ const SkillTreeItems = () => {
                             (c) => c.key === champKey || c.name === champKey
                           );
                           if (!champion) return null;
-
+                          console.log("champion", champion);
                           return (
                             <React.Fragment key={`champ-${index}`}>
                               <CardImage
@@ -661,7 +663,13 @@ const SkillTreeItems = () => {
                         title="View top comps"
                       >
                         <PiEye className="text-lg group-hover:scale-110 transition-all duration-200" />
-                        <span className="truncate"></span>
+                        <span className="truncate">
+                          {/* {item?.top3Comps?.join(", ") || "N/A"} */}
+                          {/* <GradientText
+                            value={item?.top3Comps?.join(", ") || "N/A"}
+                          /> */}
+                        </span>
+                        {/* <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-[#D9A876] group-hover:w-3/4 transition-all duration-300"></span> */}
                         <img
                           src="/images/rule_1_1.png"
                           alt="rule"
@@ -744,31 +752,17 @@ const SkillTreeItems = () => {
 
                   {/* Image & Name */}
                   <div className="flex items-center space-x-2 min-w-0">
-                    {(() => {
-                      const skillData = skillTree?.find(
-                        (i) => i?.key === item?.key
-                      );
-                      const itemData = items.find((i) => i.key === item.key);
-                      const tooltipId = `mobile-skill-${item?.key}-${index}`;
-
-                      return (
-                        <>
-                          <SkillTreeImage
-                            skill={skillData}
-                            size="large"
-                            tooltipId={tooltipId}
-                            className="w-12 h-12 flex-shrink-0"
-                          />
-                          {(itemData || item) && (
-                            <ReactTltp
-                              variant="item"
-                              id={tooltipId}
-                              content={itemData || item}
-                            />
-                          )}
-                        </>
-                      );
-                    })()}
+                    <SkillTreeImage
+                      skill={skillTree?.find((i) => i?.key === item?.key)}
+                      size="large"
+                      tooltipId={`${item?.key}`}
+                      className="w-12 h-12 flex-shrink-0"
+                    />
+                    <ReactTltp
+                      variant="item"
+                      id={`${item?.key}`}
+                      content={items.find((i) => i.key === item.key) || item}
+                    />
                     <div className="min-w-0 flex-1">
                       <p className="text-white text-sm truncate leading-tight mb-0">
                         {items.find((i) => i.key === item.key)?.name ||
@@ -835,4 +829,4 @@ const SkillTreeItems = () => {
   );
 };
 
-export default SkillTreeItems;
+export default ProjectItems;

@@ -48,8 +48,8 @@ const SkillTreeImage = memo(
         <div className="absolute inset-0 flex items-center justify-center">
           <OptimizedImage
             alt={skillDetails.name || "Skill"}
-            width={96}
-            height={96}
+            width={40}
+            height={40}
             src={skillDetails.imageUrl}
             className="w-full h-full object-cover aspect-square"
             data-tooltip-id={showTooltip ? uniqueTooltipId : undefined}

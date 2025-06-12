@@ -69,38 +69,33 @@ const TierCard = ({ cost, itemsData }) => {
                       <div className="flex flex-wrap gap-[4px] items-center max-w-[220px] md:max-w-[220px]">
                         {champion?.championItemPairStats[0]?.keys
                           .slice(0, 3)
-                          .map((item, idx) => {
-                            const itemData = items?.find(
-                              (i) => i?.key === item
-                            );
-                            if (!itemData) return null;
-                            const tooltipId = `main-item-${item}-${index}-${idx}`;
-                            return (
-                              <div key={idx} className="flex-shrink-0">
-                                <div
-                                  className="relative overflow-hidden w-[60px] md:w-[36px] group"
-                                  data-tooltip-id={tooltipId}
-                                >
-                                  <OptimizedImage
-                                    src={itemData.imageUrl}
-                                    alt={"item"}
-                                    width={30}
-                                    height={30}
-                                    loading="lazy"
-                                    placeholder="blur"
-                                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"
-                                    className="w-full border-[1px] rounded-lg border-[#ffffff60] hover:border-[#ffffff90] transition-all duration-300 shadow-md group-hover:scale-105"
-                                  />
-                                </div>
-                                <ReactTltp
-                                  variant="item"
-                                  id={tooltipId}
-                                  content={itemData}
+                          .map((item, idx) => (
+                            <div key={idx} className="flex-shrink-0">
+                              <div
+                                className="relative overflow-hidden w-[60px] md:w-[36px] group"
+                                data-tooltip-id={item}
+                              >
+                                <OptimizedImage
+                                  src={
+                                    items?.find((i) => i?.key === item)
+                                      ?.imageUrl
+                                  }
+                                  alt={"item"}
+                                  width={30}
+                                  height={30}
+                                  loading="lazy"
+                                  placeholder="blur"
+                                  blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"
+                                  className="w-full border-[1px] rounded-lg border-[#ffffff60] hover:border-[#ffffff90] transition-all duration-300 shadow-md group-hover:scale-105"
                                 />
                               </div>
-                            );
-                          })
-                          .filter(Boolean)}
+                              <ReactTltp
+                                variant="item"
+                                id={item}
+                                content={items?.find((i) => i?.key === item)}
+                              />
+                            </div>
+                          ))}
                       </div>
                     </div>
 
@@ -144,42 +139,39 @@ const TierCard = ({ cost, itemsData }) => {
                               >
                                 <td className="pt-[6px] pr-0 pb-[6px] pl-[8px] text-left text-[#d0d0d0] whitespace-nowrap">
                                   <div className="flex justify-start items-center gap-[6px]">
-                                    {item?.keys
-                                      .map((itemKey, keyIndex) => {
-                                        const itemData = items?.find(
-                                          (i) => i?.key === itemKey
-                                        );
-                                        if (!itemData) return null;
-                                        const tooltipId = `accordion-item-${itemKey}-${itemIndex}-${keyIndex}`;
-                                        return (
-                                          <div
-                                            key={keyIndex}
-                                            className="rounded-lg overflow-hidden border-[1px] border-[#ffffff60] hover:border-[#ffffff90] transition-all duration-300 group"
-                                          >
-                                            <div
-                                              className="relative overflow-hidden"
-                                              data-tooltip-id={tooltipId}
-                                            >
-                                              <OptimizedImage
-                                                src={itemData.imageUrl}
-                                                alt={"item"}
-                                                width={30}
-                                                height={30}
-                                                loading="lazy"
-                                                placeholder="blur"
-                                                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"
-                                                className="w-[56px] md:w-[44px] group-hover:scale-105 transition-transform duration-300 shadow-md"
-                                              />
-                                            </div>
-                                            <ReactTltp
-                                              variant="item"
-                                              id={tooltipId}
-                                              content={itemData}
-                                            />
-                                          </div>
-                                        );
-                                      })
-                                      .filter(Boolean)}
+                                    {item?.keys.map((itemKey, keyIndex) => (
+                                      <div
+                                        key={keyIndex}
+                                        className="rounded-lg overflow-hidden border-[1px] border-[#ffffff60] hover:border-[#ffffff90] transition-all duration-300 group"
+                                      >
+                                        <div
+                                          className="relative overflow-hidden"
+                                          data-tooltip-id={itemKey}
+                                        >
+                                          <OptimizedImage
+                                            src={
+                                              items?.find(
+                                                (i) => i?.key === itemKey
+                                              )?.imageUrl
+                                            }
+                                            alt={"item"}
+                                            width={30}
+                                            height={30}
+                                            loading="lazy"
+                                            placeholder="blur"
+                                            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"
+                                            className="w-[56px] md:w-[44px] group-hover:scale-105 transition-transform duration-300 shadow-md"
+                                          />
+                                        </div>
+                                        <ReactTltp
+                                          variant="item"
+                                          id={itemKey}
+                                          content={items?.find(
+                                            (i) => i?.key === itemKey
+                                          )}
+                                        />
+                                      </div>
+                                    ))}
                                   </div>
                                 </td>
                                 <td

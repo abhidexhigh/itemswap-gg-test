@@ -1,0 +1,34 @@
+[
+  {
+    "tier": "IRON",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747306807/Iron_Emblem_1_ahiicg.webp"
+  },
+  {
+    "tier": "BRONZE",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747289694/Bronze_Emblem_auybqg.webp"
+  },
+  {
+    "tier": "SILVER",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747289694/Silver_Emblem_wsme2l.webp"
+  },
+  {
+    "tier": "GOLD",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747289695/Gold_Emblem_odau8h.webp"
+  },
+  {
+    "tier": "PLATINUM",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747289694/Platinum_Emblem_with_effect_ixwafm.webp"
+  },
+  {
+    "tier": "DIAMOND",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747289694/Diomond_Emblem_with_effect_g6lssd.webp"
+  },
+  {
+    "tier": "MASTER",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747291235/Master_Emblem_with_effect_rd2xt6.webp"
+  },
+  {
+    "tier": "CHALLENGER",
+    "imageUrl": "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747289694/Challenger_Emblem_with_effect_dvl3ei.webp"
+  }
+]

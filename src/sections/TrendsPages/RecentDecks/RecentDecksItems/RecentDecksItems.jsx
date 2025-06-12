@@ -1,9 +1,20 @@
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import "../../../../../i18n";
-import React, { useState, useCallback, useMemo, memo, useEffect } from "react";
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  memo,
+  useEffect,
+  useRef,
+} from "react";
+import { Tooltip } from "react-tooltip";
 import moment from "moment";
+import TraitTooltip from "src/components/tooltip/TraitTooltip";
 import "react-tooltip/dist/react-tooltip.css";
+import GirlCrush from "@assets/image/traits/GirlCrush.svg";
+import RecentDecksCard from "../RecentDecksCard/RecentDecksCard";
 import MetaTrendsCard from "../../MetaTrends/MetaTrendsCard/MetaTrendsCard";
 import { PiEye, PiEyeClosed } from "react-icons/pi";
 import { IoMdCheckmarkCircle } from "react-icons/io";
@@ -17,6 +28,7 @@ import ForceIcon from "src/components/forceIcon";
 import SkillTreeImage from "src/components/SkillTreeImage";
 import TraitImage from "src/components/TraitImage/TraitImage";
 
+// Add SkillTreeIcon component
 const SkillTreeIcon = memo(({ skillTree, skills, size = "default" }) => {
   const skillDetails = skills?.find((s) => s.key === skillTree);
   if (!skillDetails) return null;
@@ -26,6 +38,7 @@ const SkillTreeIcon = memo(({ skillTree, skills, size = "default" }) => {
   );
 });
 
+// Reusable tab button component
 const TabButton = memo(({ active, label, onClick }) => (
   <button
     type="button"
@@ -38,7 +51,8 @@ const TabButton = memo(({ active, label, onClick }) => (
   </button>
 ));
 
-const TraitItem = memo(({ trait, selectedTrait, onSelect, i }) => (
+// Trait item component
+const TraitItem = memo(({ trait, selectedTrait, onSelect, i, t }) => (
   <div
     className="flex flex-col items-center gap-2 cursor-pointer group"
     onClick={() => onSelect("trait", trait?.key)}
@@ -63,7 +77,8 @@ const TraitItem = memo(({ trait, selectedTrait, onSelect, i }) => (
   </div>
 ));
 
-const ForceItem = memo(({ force, selectedTrait, onSelect, i }) => {
+// Force item component
+const ForceItem = memo(({ force, selectedTrait, onSelect, i, t }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleClick = useCallback(() => {
@@ -102,6 +117,7 @@ const ForceItem = memo(({ force, selectedTrait, onSelect, i }) => {
   );
 });
 
+// Item icon component
 const ItemIcon = memo(({ item, selectedItem, onSelect, i }) => (
   <div
     className="flex flex-col items-center gap-2 cursor-pointer group max-w-[84px]"
@@ -127,6 +143,7 @@ const ItemIcon = memo(({ item, selectedItem, onSelect, i }) => (
   </div>
 ));
 
+// Champion with items component
 const ChampionWithItems = memo(
   ({ champion, champions, items, forces, tier }) => {
     if (!champion) return null;
@@ -135,7 +152,7 @@ const ChampionWithItems = memo(
     if (!championDetails) return null;
 
     return (
-      <div className="flex flex-col items-center gap-x-4 flex-grow basis-0 min-w-[65px] md:min-w-[80px] max-w-[78px] md:max-w-[120px]">
+      <div className="flex flex-col items-center gap-x-4 flex-grow basis-0 min-w-[65px] md:min-w-[80px] max-w-[78px] md:max-w-[150px]">
         <div className="inline-flex items-center justify-center flex-col">
           <div className="flex flex-col w-full aspect-square rounded-[20px]">
             <div
@@ -193,6 +210,7 @@ const ChampionWithItems = memo(
   }
 );
 
+// Augment icon component
 const AugmentIcon = memo(({ augment, augments }) => {
   const augmentDetails = augments?.find((a) => a.key === augment);
   if (!augmentDetails) return null;
@@ -213,6 +231,7 @@ const AugmentIcon = memo(({ augment, augments }) => {
   );
 });
 
+// Placement badge component
 const PlacementBadge = memo(({ placement }) => (
   <div
     className={`rounded-lg !border-[#ffffff40] !border p-2 py-0 shadow-lg ${
@@ -229,6 +248,7 @@ const PlacementBadge = memo(({ placement }) => (
   </div>
 ));
 
+// Deck header component with mobile UI from MetaTrendsItems
 const DeckHeader = memo(
   ({
     metaDeck,
@@ -241,8 +261,10 @@ const DeckHeader = memo(
     augments,
     augmentDetails,
   }) => {
+    // Add hover state management for force icons
     const [hoveredForce, setHoveredForce] = useState(null);
 
+    // Memoize force details to prevent recalculation
     const forceDetails = useMemo(() => {
       if (!metaDeck?.deck?.forces || !forces) return [];
       return metaDeck.deck.forces
@@ -255,6 +277,7 @@ const DeckHeader = memo(
         .filter((force) => force.details);
     }, [metaDeck?.deck?.forces, forces]);
 
+    // Memoize skill details
     const skillDetails = useMemo(() => {
       if (!metaDeck?.deck?.skillTree || !skills) return [];
       return metaDeck.deck.skillTree
@@ -262,6 +285,7 @@ const DeckHeader = memo(
         .filter(Boolean);
     }, [metaDeck?.deck?.skillTree, skills]);
 
+    // Memoize trait details with tiers
     const traitDetails = useMemo(() => {
       if (!metaDeck?.deck?.traits || !traits) return [];
       return metaDeck.deck.traits
@@ -493,7 +517,7 @@ const DeckHeader = memo(
               </div>
             ))}
           </div>
-          {/* <div className="absolute right-[16px] top-[16px] inline-flex gap-[8px] lg:relative lg:right-[0px] lg:top-[0px]">
+          <div className="absolute right-[16px] top-[16px] inline-flex gap-[8px] lg:relative lg:right-[0px] lg:top-[0px]">
             <button
               className="inline-flex w-[16px] cursor-pointer items-center text-white"
               title="Hide"
@@ -502,13 +526,14 @@ const DeckHeader = memo(
             >
               {!isClosed ? <PiEye /> : <PiEyeClosed />}
             </button>
-          </div> */}
+          </div>
         </div>
       </header>
     );
   }
 );
 
+// Meta deck component with collapsible champions functionality
 const MetaDeck = memo(
   ({
     metaDeck,
@@ -522,6 +547,7 @@ const MetaDeck = memo(
     augments,
     skills,
   }) => {
+    // Avoid re-creating the handler function on every render
     const toggleClosed = useCallback(
       (e) => {
         handleIsClosed(e);
@@ -529,12 +555,15 @@ const MetaDeck = memo(
       [handleIsClosed]
     );
 
+    // State for champions collapse/expand
     const [isChampionsCollapsed, setIsChampionsCollapsed] = useState(true);
 
+    // Toggle function for champions section
     const toggleChampionsSection = useCallback(() => {
       setIsChampionsCollapsed((prev) => !prev);
     }, []);
 
+    // Memoize sorted champions to prevent re-sorting
     const sortedChampions = useMemo(() => {
       if (!metaDeck?.deck?.champions || !champions) return [];
       return metaDeck.deck.champions.slice().sort((a, b) => {
@@ -581,10 +610,12 @@ const MetaDeck = memo(
       return sortedChampions;
     }, [sortedChampions, isChampionsCollapsed, champions]);
 
+    // Check if there are more champions to show
     const hasMoreChampions =
       sortedChampions.length > championsToDisplay.length &&
       isChampionsCollapsed;
 
+    // Memoize augment details
     const augmentDetails = useMemo(() => {
       if (!metaDeck?.deck?.augments || !augments) return [];
       return metaDeck.deck.augments
@@ -676,7 +707,7 @@ const MetaDeck = memo(
                     </div>
 
                     {/* Desktop view: All champions visible */}
-                    <div className="hidden lg:flex flex-wrap justify-center w-full">
+                    <div className="hidden lg:flex flex-wrap justify-center gap-2 w-full">
                       {sortedChampions.map((champion, index) => (
                         <ChampionWithItems
                           key={`desktop-${champion.key}-${index}`}
@@ -711,6 +742,7 @@ const MetaDeck = memo(
   }
 );
 
+// SkillTreeItem component (used in the filter section)
 const SkillTreeItem = memo(({ skill, selectedSkillTree, onSelect, i }) => {
   const handleClick = useCallback(() => {
     onSelect("skillTree", skill?.key);
@@ -756,9 +788,14 @@ const RecentDecksItems = () => {
   const [selectedSkillTree, setSelectedSkillTree] = useState(null);
   const [isClosed, setIsClosed] = useState({});
   const [activeTab, setActiveTab] = useState("Champions");
+
+  // State for mobile sub-tabs within Traits
   const [activeTraitsSubTab, setActiveTraitsSubTab] = useState("Origin");
+
+  // State for mobile sub-tabs within Skills
   const [activeSkillsSubTab, setActiveSkillsSubTab] = useState(null);
 
+  // Extract data once from the JSON structure using useMemo
   const { metaDecks, champions, items, traits, augments, forces, skillTree } =
     useMemo(() => {
       const {
@@ -784,6 +821,7 @@ const RecentDecksItems = () => {
 
   const [compsData, setCompsData] = useState(metaDecks);
 
+  // Memoized shuffle function
   const shuffle = useCallback((array) => {
     if (!array || !array.length) return [];
     const newArray = [...array];
@@ -794,11 +832,13 @@ const RecentDecksItems = () => {
     return newArray;
   }, []);
 
+  // Pre-process and memoize champion data
   const { filteredChampions, groupedArray } = useMemo(() => {
     if (!champions || !champions.length) {
       return { filteredChampions: [], groupedArray: [] };
     }
 
+    // Group champions by type
     const championsByType = {};
     champions.forEach((champion) => {
       if (!championsByType[champion.type]) {
@@ -807,6 +847,7 @@ const RecentDecksItems = () => {
       championsByType[champion.type].push(champion);
     });
 
+    // For each type, shuffle the group and keep only 2 champions
     const filtered = [];
     for (const type in championsByType) {
       const group = championsByType[type];
@@ -814,6 +855,7 @@ const RecentDecksItems = () => {
       filtered.push(...selected);
     }
 
+    // Function to arrange champions by cost
     const groupedByCost = filtered.reduce((acc, champion) => {
       const { cost } = champion;
       if (!acc[cost]) {
@@ -832,10 +874,12 @@ const RecentDecksItems = () => {
     };
   }, [champions, shuffle, selectedChampion]);
 
+  // Memoize the filtered items list
   const filteredItems = useMemo(() => {
     return items?.filter((item) => !item?.isFromItem) || [];
   }, [items]);
 
+  // Optimized filter change handler with proper memoization
   const handleFilterChange = useCallback(
     (type, key) => {
       if (!metaDecks?.length) return;
@@ -925,6 +969,7 @@ const RecentDecksItems = () => {
     ]
   );
 
+  // Optimized function with useCallback to avoid recreation on every render
   const handleIsClosed = useCallback((event) => {
     const buttonId = event.currentTarget.id;
     setIsClosed((prev) => ({ ...prev, [buttonId]: !prev[buttonId] }));
@@ -934,14 +979,17 @@ const RecentDecksItems = () => {
     setActiveTab(tab);
   }, []);
 
+  // Stable handler for traits sub-tab changes
   const handleTraitsSubTabChange = useCallback((subTab) => {
     setActiveTraitsSubTab(subTab);
   }, []);
 
+  // Stable handler for skills sub-tab changes
   const handleSkillsSubTabChange = useCallback((subTab) => {
     setActiveSkillsSubTab(subTab);
   }, []);
 
+  // Group skills by variant/category for mobile tabs
   const skillsByVariant = useMemo(() => {
     if (!skillTree || skillTree.length === 0) return {};
 
@@ -1016,6 +1064,7 @@ const RecentDecksItems = () => {
     return grouped;
   }, [skillTree]);
 
+  // Initialize skills sub-tab when variants are available
   useEffect(() => {
     if (Object.keys(skillsByVariant).length > 0 && !activeSkillsSubTab) {
       const firstVariant = Object.keys(skillsByVariant)[0];
@@ -1023,6 +1072,7 @@ const RecentDecksItems = () => {
     }
   }, [skillsByVariant, activeSkillsSubTab]);
 
+  // Memoize tab content to avoid unnecessary rerenders
   const tabContent = useMemo(() => {
     switch (activeTab) {
       case "Champions":
@@ -1079,6 +1129,7 @@ const RecentDecksItems = () => {
                       selectedTrait={selectedTrait}
                       onSelect={handleFilterChange}
                       i={i}
+                      t={t}
                     />
                   ))}
                 </div>
@@ -1093,6 +1144,7 @@ const RecentDecksItems = () => {
                       selectedTrait={selectedTrait}
                       onSelect={handleFilterChange}
                       i={i}
+                      t={t}
                     />
                   ))}
                 </div>
@@ -1113,6 +1165,7 @@ const RecentDecksItems = () => {
                       selectedTrait={selectedTrait}
                       onSelect={handleFilterChange}
                       i={i}
+                      t={t}
                     />
                   ))}
                 </div>
@@ -1130,6 +1183,7 @@ const RecentDecksItems = () => {
                       selectedTrait={selectedTrait}
                       onSelect={handleFilterChange}
                       i={i}
+                      t={t}
                     />
                   ))}
                 </div>
@@ -1243,6 +1297,7 @@ const RecentDecksItems = () => {
   return (
     <div className="mx-auto md:px-6 lg:px-8 py-6">
       <div className="space-y-2">
+        {/* Tabs Section */}
         <div className="flex justify-center md:justify-start">
           <div className="inline-flex rounded-lg overflow-hidden border border-[#ffffff20] bg-[#111111]">
             <TabButton
@@ -1268,9 +1323,12 @@ const RecentDecksItems = () => {
           </div>
         </div>
 
+        {/* Content Sections */}
         <div className="bg-[#111111] md:bg-transparent rounded-lg shadow-lg">
           {tabContent}
         </div>
+
+        {/* Results Section */}
         <div className="flex flex-col gap-[16px]">
           <div>
             {compsData?.map((metaDeck, i) => (
@@ -1290,6 +1348,31 @@ const RecentDecksItems = () => {
             ))}
           </div>
         </div>
+
+        <Tooltip
+          id="my-tooltip"
+          effect="solid"
+          style={{
+            zIndex: 999,
+            backgroundColor: "#333",
+            opacity: "1 !important",
+            border: "1px solid red",
+            borderRadius: "10px",
+          }}
+        >
+          <TraitTooltip
+            title="Lillia"
+            icon={GirlCrush.src}
+            description={{
+              title: "Confetti Bloom",
+              text: "Deal magic damage to adjacent enemies. Heal Lillia and her nearest ally.",
+            }}
+            magicDamage="180 / 270 / 400"
+            healAmount="180 / 220 / 260"
+            allyHealAmount="90 / 110 / 130"
+            rangeFilled={70}
+          />
+        </Tooltip>
       </div>
     </div>
   );

@@ -18,10 +18,7 @@ const isTouchDevice = () => {
   return (
     "ontouchstart" in window ||
     navigator.maxTouchPoints > 0 ||
-    navigator.msMaxTouchPoints > 0 ||
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    )
+    navigator.msMaxTouchPoints > 0
   );
 };
 
@@ -75,86 +72,76 @@ const TooltipPortal = ({ children }) => {
 
 // Global initialization for tooltips
 if (typeof window !== "undefined") {
-  // Use a more reliable initialization approach
-  const initializeTooltips = () => {
+  // Run once when the component is loaded
+  setTimeout(() => {
     // Force tooltips to be reinitialized
     const event = new Event("mousemove");
     document.dispatchEvent(event);
 
-    // Enhanced mobile touch handling with better production support
+    // Simplified mobile touch handling
     if (isTouchDevice()) {
-      // Remove existing listeners first to avoid duplicates
-      document.removeEventListener("touchstart", handleTouchStart);
+      document.addEventListener(
+        "touchstart",
+        (e) => {
+          const tooltipId =
+            e.target.getAttribute("data-tooltip-id") ||
+            e.target
+              .closest("[data-tooltip-id]")
+              ?.getAttribute("data-tooltip-id");
 
-      document.addEventListener("touchstart", handleTouchStart, {
-        passive: true,
-      });
-    }
-  };
+          if (!tooltipId) return;
 
-  const handleTouchStart = (e) => {
-    const tooltipId =
-      e.target.getAttribute("data-tooltip-id") ||
-      e.target.closest("[data-tooltip-id]")?.getAttribute("data-tooltip-id");
+          // Hide all other tooltips
+          document.querySelectorAll(".react-tooltip").forEach((tooltip) => {
+            if (tooltip.id !== tooltipId) {
+              tooltip.style.opacity = "0";
+            }
+          });
 
-    if (!tooltipId) return;
+          // Show current tooltip
+          const tooltip = document.getElementById(tooltipId);
+          if (tooltip) {
+            const isVisible = tooltip.style.opacity === "1";
+            tooltip.style.opacity = isVisible ? "0" : "1";
 
-    // Hide all other tooltips
-    document.querySelectorAll(".react-tooltip").forEach((tooltip) => {
-      if (tooltip.id !== tooltipId) {
-        tooltip.style.opacity = "0";
-      }
-    });
+            if (!isVisible) {
+              // Position tooltip near touch point
+              const touch = e.touches[0];
+              const targetRect = e.target.getBoundingClientRect();
+              const viewportHeight = window.innerHeight;
+              const viewportWidth = window.innerWidth;
 
-    // Show current tooltip
-    const tooltip = document.getElementById(tooltipId);
-    if (tooltip) {
-      const isVisible = tooltip.style.opacity === "1";
-      tooltip.style.opacity = isVisible ? "0" : "1";
+              let posY = targetRect.bottom + 10;
+              let posX = targetRect.left + targetRect.width / 2;
 
-      if (!isVisible) {
-        // Position tooltip near touch point
-        const touch = e.touches[0];
-        const targetRect = e.target.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-        const viewportWidth = window.innerWidth;
+              // Ensure tooltip stays in viewport
+              requestAnimationFrame(() => {
+                if (!tooltip) return;
 
-        let posY = targetRect.bottom + 10;
-        let posX = targetRect.left + targetRect.width / 2;
+                const tooltipRect = tooltip.getBoundingClientRect();
 
-        // Ensure tooltip stays in viewport
-        requestAnimationFrame(() => {
-          if (!tooltip) return;
+                // Adjust Y position if needed
+                if (posY + tooltipRect.height > viewportHeight - 20) {
+                  posY = Math.max(20, targetRect.top - tooltipRect.height - 10);
+                }
 
-          const tooltipRect = tooltip.getBoundingClientRect();
+                // Adjust X position if needed
+                posX = Math.min(
+                  Math.max(tooltipRect.width / 2 + 10, posX),
+                  viewportWidth - tooltipRect.width / 2 - 10
+                );
 
-          // Adjust Y position if needed
-          if (posY + tooltipRect.height > viewportHeight - 20) {
-            posY = Math.max(20, targetRect.top - tooltipRect.height - 10);
+                tooltip.style.top = `${posY}px`;
+                tooltip.style.left = `${posX}px`;
+                tooltip.style.transform = "translate(-50%, 0)";
+              });
+            }
           }
-
-          // Adjust X position if needed
-          posX = Math.min(
-            Math.max(tooltipRect.width / 2 + 10, posX),
-            viewportWidth - tooltipRect.width / 2 - 10
-          );
-
-          tooltip.style.top = `${posY}px`;
-          tooltip.style.left = `${posX}px`;
-          tooltip.style.transform = "translate(-50%, 0)";
-        });
-      }
+        },
+        { passive: true }
+      );
     }
-  };
-
-  // Initialize immediately and also after DOM is fully loaded
-  initializeTooltips();
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initializeTooltips);
-  } else {
-    setTimeout(initializeTooltips, 100);
-  }
+  }, 100);
 }
 
 const ReactTltp = ({ variant = "", content, id }) => {
@@ -189,35 +176,17 @@ const ReactTltp = ({ variant = "", content, id }) => {
   useEffect(() => {
     createdTooltips.add(tooltipId);
 
-    // Force tooltips to be reinitialized with better production support
+    // Force tooltips to be reinitialized
     const reinitTooltips = () => {
-      try {
-        const event = new Event("mousemove");
-        document.dispatchEvent(event);
-
-        // For production builds, also dispatch mouseenter events
-        if (process.env.NODE_ENV === "production") {
-          const mouseEnterEvent = new Event("mouseenter");
-          document.dispatchEvent(mouseEnterEvent);
-        }
-      } catch (error) {
-        console.warn("Tooltip reinitialization failed:", error);
-      }
+      const event = new Event("mousemove");
+      document.dispatchEvent(event);
     };
 
-    // Multiple initialization attempts for production reliability
     reinitTooltips();
-    const timer1 = setTimeout(reinitTooltips, 100);
-    const timer2 = setTimeout(reinitTooltips, 500);
-
-    // Force reinitialization on window focus (helps with production issues)
-    const handleFocus = () => reinitTooltips();
-    window.addEventListener("focus", handleFocus);
+    const timer = setTimeout(reinitTooltips, 100);
 
     return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      window.removeEventListener("focus", handleFocus);
+      clearTimeout(timer);
 
       // Instead of removing DOM elements directly, just hide this tooltip
       setTooltipVisible(false);
@@ -234,17 +203,13 @@ const ReactTltp = ({ variant = "", content, id }) => {
   const getEventTypes = () => {
     if (typeof window === "undefined") return ["hover"]; // Default for SSR
 
-    // For production builds, always include hover for desktop compatibility
-    // Add touch events for mobile devices
-    const isMobile = isTouchDevice();
-
-    if (isMobile) {
-      // For mobile devices, use both touch and hover as fallback
-      return ["touch", "hover"];
+    // For touch devices, use touch events only
+    if (isTouchDevice()) {
+      return ["touch"];
     }
 
-    // For desktop devices, use hover primarily but add touch as fallback
-    return ["hover", "touch"];
+    // For non-touch devices, use hover only
+    return ["hover"];
   };
 
   // Common tooltip props

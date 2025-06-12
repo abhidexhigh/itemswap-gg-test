@@ -1,4 +1,6 @@
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import CardImage from "src/components/cardImage";
@@ -12,13 +14,16 @@ import {
 } from "react-icons/hi";
 import metaDeckTraitStats from "../../../../data/newData/metaDeckTraits.json";
 import Comps from "../../../../data/compsNew.json";
+import ReactTltp from "src/components/tooltip/ReactTltp";
 import ScrollableTable from "src/utils/ScrollableTable";
+import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
 import ColoredValue from "src/components/ColoredValue";
 import TraitImage from "src/components/TraitImage/TraitImage";
 
-const TraitsTrendsItems = () => {
+const ProjectItems = () => {
   const { t } = useTranslation();
+  const { i18n } = useTranslation();
   const others = t("others");
 
   // const { metaDeckTraitStats } = MetaDeckTraits?.metaDeckTrait;
@@ -219,7 +224,7 @@ const TraitsTrendsItems = () => {
     const filteredData = hiddenData.filter((data) => data.key !== mobileFilter);
 
     return (
-      <div className="grid grid-cols-3 gap-3 p-4 bg-[#1a1a1a] border-t border-[#2D2F37] text-center">
+      <div className="grid grid-cols-3 gap-3 p-4 bg-[#1a1a1a] border-t border-[#2D2F37]">
         {filteredData.map((data, index) => (
           <div key={index} className="flex flex-col">
             <span className="text-xs text-gray-400 mb-1">{data.label}</span>
@@ -227,11 +232,11 @@ const TraitsTrendsItems = () => {
           </div>
         ))}
         {/* Top 3 Champions */}
-        <div className="col-span-3 flex flex-col mt-2">
-          {/* <span className="text-xs text-gray-400 mb-2">
+        <div className="col-span-3 flex flex-col">
+          <span className="text-xs text-gray-400 mb-2">
             {others?.top3} {others?.champions}
-          </span> */}
-          <div className="flex mx-auto flex-wrap gap-3">
+          </span>
+          <div className="flex flex-wrap gap-1">
             {item?.traitChampionStats?.slice(0, 3)?.map((champion, idx) => (
               <div key={idx}>
                 <CardImage
@@ -240,7 +245,7 @@ const TraitsTrendsItems = () => {
                   identificationImageStyle="w-1"
                   textStyle="text-[6px]"
                   forces={forces}
-                  cardSize="!w-16 !h-16"
+                  cardSize="!w-12 !h-12"
                 />
               </div>
             ))}
@@ -407,7 +412,7 @@ const TraitsTrendsItems = () => {
                               size="large"
                               borderRadius="rounded-[4px]"
                               backgroundRadius="rounded-[4px]"
-                              tooltipId={`desktop-trait-${metaTrait?.key}-${index}`}
+                              tooltipId={metaTrait?.key}
                               showTooltip={true}
                             />
                             <div>
@@ -417,6 +422,9 @@ const TraitsTrendsItems = () => {
                                     (trait) => trait?.key === metaTrait?.key
                                   )?.name
                                 }
+                              </p>
+                              <p className="m-0 text-xs font-extralight">
+                                {/* Commented code removed for brevity */}
                               </p>
                             </div>
                           </div>
@@ -549,7 +557,7 @@ const TraitsTrendsItems = () => {
                         size="medium"
                         borderRadius="rounded-[4px]"
                         backgroundRadius="rounded-[4px]"
-                        tooltipId={`mobile-trait-${metaTrait?.key}-${index}`}
+                        tooltipId={metaTrait?.key}
                         showTooltip={true}
                       />
                       <div className="min-w-0 flex-1">
@@ -596,4 +604,4 @@ const TraitsTrendsItems = () => {
   );
 };
 
-export default TraitsTrendsItems;
+export default ProjectItems;

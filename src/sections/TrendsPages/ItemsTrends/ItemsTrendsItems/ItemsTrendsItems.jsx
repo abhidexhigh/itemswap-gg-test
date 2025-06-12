@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import "react-tooltip/dist/react-tooltip.css";
@@ -11,6 +12,7 @@ import {
 } from "react-icons/hi";
 import metaDeckItemStats from "../../../../data/newData/metaDeckItems.json";
 import Comps from "../../../../data/compsNew.json";
+import Forces from "../../../../data/newData/force.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
 import ScrollableTable from "src/utils/ScrollableTable";
@@ -19,7 +21,7 @@ import SearchBar from "src/components/searchBar";
 import ColoredValue from "src/components/ColoredValue";
 import ItemDisplay from "src/components/item/ItemDisplay";
 
-const ItemsTrendsItems = () => {
+const ProjectItems = () => {
   const { t } = useTranslation();
   const others = t("others");
   const {
@@ -270,12 +272,12 @@ const ItemsTrendsItems = () => {
       <div className="pt-2 bg-[#111111] md:bg-transparent w-full">
         {/* Header section with filters and search */}
         <div className="flex flex-col sm:flex-row justify-between items-center bg-[#111111] md:bg-transparent px-2 sm:px-4 mb-2.5 md:mb-0">
-          {/* <div className="w-full sm:w-auto sm:mb-0">
+          <div className="w-full sm:w-auto sm:mb-0">
             <TrendFilters
               buttons={["All", "Normal"]}
               onButtonClick={handleButtonClick}
             />
-          </div> */}
+          </div>
           {/* Mobile Filter Buttons - Only visible on mobile */}
           <div className="block md:hidden mb-2">
             <div className="flex flex-col items-center gap-2 px-4">
@@ -427,14 +429,14 @@ const ItemsTrendsItems = () => {
                             <div>
                               <div className="flex justify-start items-center space-x-1 sm:space-x-2">
                                 <div
-                                  data-tooltip-id={`main-item-${item.key}-${index}`}
+                                  data-tooltip-id={`${items.find((i) => i.key === item.key)?.key}}`}
                                 >
                                   <ItemDisplay
                                     item={items.find((i) => i.key === item.key)}
                                     size="midMedium"
                                     borderRadius="rounded-[4px]"
                                     backgroundRadius="rounded-[4px]"
-                                    tooltipId={`main-item-${item.key}-${index}`}
+                                    tooltipId={`${items.find((i) => i.key === item.key)?.key}}`}
                                     showTooltip={true}
                                   />
                                 </div>
@@ -448,34 +450,31 @@ const ItemsTrendsItems = () => {
                                   <div className="flex items-center flex-wrap gap-1">
                                     {items
                                       .find((i) => i.key === item.key)
-                                      ?.compositions?.map((comp, compIndex) => {
-                                        const compItem = items.find(
-                                          (i) => i.key === comp
-                                        );
-                                        if (!compItem) return null;
-                                        const tooltipId = `comp-${compItem.key}-${index}-${compIndex}`;
-                                        return (
-                                          <React.Fragment key={compIndex}>
-                                            <OptimizedImage
-                                              alt="Item Image"
-                                              width={80}
-                                              height={80}
-                                              src={compItem.imageUrl}
-                                              className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 !border !border-[#ffffff60] rounded-md"
-                                              data-tooltip-id={tooltipId}
-                                            />
-                                            {compIndex === 0 && (
-                                              <span className="mx-1">+</span>
+                                      ?.compositions?.map((comp, index) => (
+                                        <React.Fragment key={index}>
+                                          <OptimizedImage
+                                            alt="Item Image"
+                                            width={80}
+                                            height={80}
+                                            src={
+                                              items.find((i) => i.key === comp)
+                                                .imageUrl
+                                            }
+                                            className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 !border !border-[#ffffff60] rounded-md"
+                                            data-tooltip-id={`${items.find((i) => i.key === comp).key}_${index}`}
+                                          />
+                                          {index === 0 && (
+                                            <span className="mx-1">+</span>
+                                          )}
+                                          <ReactTltp
+                                            variant="item"
+                                            id={`${items.find((i) => i.key === comp).key}_${index}`}
+                                            content={items.find(
+                                              (i) => i.key === comp
                                             )}
-                                            <ReactTltp
-                                              variant="item"
-                                              id={tooltipId}
-                                              content={compItem}
-                                            />
-                                          </React.Fragment>
-                                        );
-                                      })
-                                      .filter(Boolean)}
+                                          />
+                                        </React.Fragment>
+                                      ))}
                                   </div>
                                 </div>
                               </div>
@@ -513,26 +512,20 @@ const ItemsTrendsItems = () => {
                             <div className="flex flex-wrap justify-center items-center gap-1">
                               {item?.itemSynergyStats
                                 ?.slice(0, 3)
-                                .map((synergy, w) => {
-                                  const synergyItem = items.find(
-                                    (i) => i.key === synergy
-                                  );
-                                  if (!synergyItem) return null;
-                                  const tooltipId = `synergy-${synergyItem.key}-${index}-${w}`;
-                                  return (
-                                    <div key={w} className="relative">
-                                      <ItemDisplay
-                                        item={synergyItem}
-                                        size="xSmall"
-                                        borderRadius="rounded-[4px]"
-                                        backgroundRadius="rounded-[4px]"
-                                        tooltipId={tooltipId}
-                                        showTooltip={true}
-                                      />
-                                    </div>
-                                  );
-                                })
-                                .filter(Boolean)}
+                                .map((synergy, w) => (
+                                  <div key={w} className="relative">
+                                    <ItemDisplay
+                                      item={items.find(
+                                        (i) => i.key === synergy
+                                      )}
+                                      size="xSmall"
+                                      borderRadius="rounded-[4px]"
+                                      backgroundRadius="rounded-[4px]"
+                                      tooltipId={`${items.find((i) => i.key === synergy)?.key}_${w}`}
+                                      showTooltip={true}
+                                    />
+                                  </div>
+                                ))}
                             </div>
                           </td>
                           <td className="p-2">
@@ -628,6 +621,15 @@ const ItemsTrendsItems = () => {
 
                         {/* Image & Name */}
                         <div className="flex items-center space-x-2 min-w-0">
+                          {/* <OptimizedImage
+                            src={
+                              items?.find((i) => i?.key === item?.key)?.imageUrl
+                            }
+                            alt="icon"
+                            width={32}
+                            height={32}
+                            className="w-7 h-7 border border-[#ffffff60] rounded-md flex-shrink-0"
+                          /> */}
                           <ItemDisplay
                             item={items.find((i) => i.key === item.key)}
                             size="midMedium"
@@ -673,4 +675,4 @@ const ItemsTrendsItems = () => {
   );
 };
 
-export default ItemsTrendsItems;
+export default ProjectItems;
