@@ -221,6 +221,10 @@ erqDAs .react-tabs .react-tabs__tab {
 /* Ensure tooltip content is above everything */
 .react-tooltip {
   z-index: 999999 !important;
+  /* Production build fixes */
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* Override any stacking context issues */
@@ -229,6 +233,8 @@ body > .tooltip-portal,
   position: fixed !important;
   z-index: 999999 !important;
   pointer-events: none;
+  /* Production build compatibility */
+  isolation: isolate;
 }
 
 /* Allow pointer events on the tooltip itself */
@@ -241,11 +247,27 @@ body > .tooltip-portal .react-tooltip,
 [data-tooltip-id] {
   position: relative;
   z-index: 1;
+  /* Enhanced hover states for desktop production builds */
+  cursor: help;
+}
+
+/* Enhanced hover states for better production compatibility */
+[data-tooltip-id]:hover {
+  position: relative;
+  z-index: 2;
 }
 
 /* Ensure tooltips are rendered at the highest level */
 #__next {
   isolation: auto !important;
+}
+
+/* Production build specific fixes */
+@media (hover: hover) {
+  [data-tooltip-id]:hover {
+    /* Force tooltip visibility on desktop hover */
+    --tooltip-trigger: active;
+  }
 }
 
 /* Fix for backdrop-filter elements */
@@ -254,6 +276,14 @@ body > .tooltip-portal .react-tooltip,
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   -webkit-backdrop-filter: blur(5px);
+  /* Production build isolation */
+  isolation: isolate;
+}
+
+/* Force hardware acceleration for better performance */
+.react-tooltip {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 /* Hide scrollbar utility */

@@ -6,6 +6,7 @@ import "@assets/styles/globalStyles.css";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import { AnimatePresence } from "framer-motion";
+import TooltipDebugger from "src/components/tooltip/TooltipDebugger";
 
 // Configure NProgress
 NProgress.configure({
@@ -61,6 +62,7 @@ const App = ({ Component, pageProps }) => {
       <AnimatePresence mode="wait">
         <Component {...pageProps} key={router.route} />
       </AnimatePresence>
+      <TooltipDebugger />
     </ContextProvider>
   );
 };
