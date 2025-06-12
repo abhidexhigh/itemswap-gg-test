@@ -540,24 +540,26 @@ const ChampionsTrendsItems = () => {
                                   item?.split("_")[item?.split("_").length - 1]
                               )
                             )
-                            .map(
-                              (item) =>
-                                item && (
-                                  <div
-                                    key={item.key}
-                                    className="relative z-10 hover:z-20 aspect-square rounded-lg"
-                                  >
-                                    <ItemDisplay
-                                      item={item}
-                                      size="small"
-                                      borderRadius="rounded-[4px]"
-                                      backgroundRadius="rounded-[4px]"
-                                      tooltipId={item?.name}
-                                      showTooltip={true}
-                                    />
-                                  </div>
-                                )
-                            )}
+                            .map((item, index) => {
+                              if (!item) return null;
+                              const tooltipId = `champion-item-${item.key}-${index}`;
+                              return (
+                                <div
+                                  key={tooltipId}
+                                  className="relative z-10 hover:z-20 aspect-square rounded-lg"
+                                >
+                                  <ItemDisplay
+                                    item={item}
+                                    size="small"
+                                    borderRadius="rounded-[4px]"
+                                    backgroundRadius="rounded-[4px]"
+                                    tooltipId={tooltipId}
+                                    showTooltip={true}
+                                  />
+                                </div>
+                              );
+                            })
+                            .filter(Boolean)}
                         </div>
                       </td>
                     </tr>

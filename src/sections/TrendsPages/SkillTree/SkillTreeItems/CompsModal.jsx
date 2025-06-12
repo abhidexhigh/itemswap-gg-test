@@ -310,8 +310,8 @@ export const CompCard = ({
             </div>
           </div>
 
-          <div className="flex justify-between w-full sm:w-[180px] bg-[#1D1D1D] rounded-[4px] p-3 sm:p-4">
-            <dl className="flex flex-col justify-between mb-2 text-center">
+          <div className="flex md:flex-col justify-between w-full sm:w-[180px] bg-[#1D1D1D] rounded-[4px] p-3 sm:p-4">
+            <dl className="flex flex-col md:flex-row justify-between mb-2 text-center">
               <dt className="text-sm sm:text-[14px] font-medium text-[#999]">
                 {others?.top4}
               </dt>
@@ -319,7 +319,7 @@ export const CompCard = ({
                 <span>{((comp.topRate * 100) / comp.plays).toFixed(2)}%</span>
               </dd>
             </dl>
-            <dl className="flex flex-col justify-between mb-2 text-center">
+            <dl className="flex flex-col md:flex-row justify-between mb-2 text-center">
               <dt className="text-sm sm:text-[14px] font-medium text-[#999]">
                 {others?.winPercentage}
               </dt>
@@ -327,7 +327,7 @@ export const CompCard = ({
                 <span>{((comp.winRate * 100) / comp.plays).toFixed(2)}%</span>
               </dd>
             </dl>
-            <dl className="flex flex-col justify-between mb-2 text-center">
+            <dl className="flex flex-col md:flex-row justify-between mb-2 text-center">
               <dt className="text-sm sm:text-[14px] font-medium text-[#999]">
                 {others?.pickPercentage}
               </dt>
@@ -335,7 +335,7 @@ export const CompCard = ({
                 <span>{(comp.pickRate * 100).toFixed(2)}%</span>
               </dd>
             </dl>
-            <dl className="flex flex-col justify-between mb-2 text-center">
+            <dl className="flex flex-col md:flex-row justify-between mb-2 text-center">
               <dt className="text-sm sm:text-[14px] font-medium text-[#999]">
                 {others?.avgPlacement}
               </dt>

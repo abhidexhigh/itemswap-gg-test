@@ -407,7 +407,7 @@ const TraitsTrendsItems = () => {
                               size="large"
                               borderRadius="rounded-[4px]"
                               backgroundRadius="rounded-[4px]"
-                              tooltipId={metaTrait?.key}
+                              tooltipId={`desktop-trait-${metaTrait?.key}-${index}`}
                               showTooltip={true}
                             />
                             <div>
@@ -549,7 +549,7 @@ const TraitsTrendsItems = () => {
                         size="medium"
                         borderRadius="rounded-[4px]"
                         backgroundRadius="rounded-[4px]"
-                        tooltipId={metaTrait?.key}
+                        tooltipId={`mobile-trait-${metaTrait?.key}-${index}`}
                         showTooltip={true}
                       />
                       <div className="min-w-0 flex-1">

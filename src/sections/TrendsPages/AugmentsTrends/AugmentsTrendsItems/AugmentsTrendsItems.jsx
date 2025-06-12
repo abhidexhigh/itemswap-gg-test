@@ -404,33 +404,36 @@ const AugmentsTrendsItems = () => {
                           <td className={`p-2 ${getCellClass("key")}`}>
                             <div>
                               <div className="flex justify-start items-center">
-                                <OptimizedImage
-                                  src={
-                                    augments.find(
-                                      (augment) =>
-                                        augment.key ===
-                                        item.key?.split("_")[
-                                          item?.key?.split("_").length - 1
-                                        ]
-                                    )?.imageUrl
-                                  }
-                                  alt="icon"
-                                  width={80}
-                                  height={80}
-                                  className="w-12 h-12 sm:w-14 sm:h-14 md:w-[80px] md:h-[80px] mr-1 rounded-md"
-                                  data-tooltip-id={item?.key}
-                                />
-                                <ReactTltp
-                                  variant="augment"
-                                  id={item?.key}
-                                  content={augments.find(
-                                    (augment) =>
-                                      augment.key ===
-                                      item.key?.split("_")[
-                                        item?.key?.split("_").length - 1
-                                      ]
-                                  )}
-                                />
+                                {(() => {
+                                  const augmentKey =
+                                    item.key?.split("_")[
+                                      item?.key?.split("_").length - 1
+                                    ];
+                                  const augmentData = augments.find(
+                                    (augment) => augment.key === augmentKey
+                                  );
+                                  const tooltipId = `augment-${item?.key}-${index}`;
+
+                                  return (
+                                    <>
+                                      <OptimizedImage
+                                        src={augmentData?.imageUrl}
+                                        alt="icon"
+                                        width={80}
+                                        height={80}
+                                        className="w-12 h-12 sm:w-14 sm:h-14 md:w-[80px] md:h-[80px] mr-1 rounded-md"
+                                        data-tooltip-id={tooltipId}
+                                      />
+                                      {augmentData && (
+                                        <ReactTltp
+                                          variant="augment"
+                                          id={tooltipId}
+                                          content={augmentData}
+                                        />
+                                      )}
+                                    </>
+                                  );
+                                })()}
                                 <div>
                                   <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-1 ml-2 truncate max-w-[120px] sm:max-w-full">
                                     {
@@ -571,21 +574,36 @@ const AugmentsTrendsItems = () => {
 
                         {/* Image & Name */}
                         <div className="flex items-center space-x-2 min-w-0">
-                          <OptimizedImage
-                            src={
-                              augments.find(
-                                (augment) =>
-                                  augment.key ===
-                                  item.key?.split("_")[
-                                    item?.key?.split("_").length - 1
-                                  ]
-                              )?.imageUrl
-                            }
-                            alt="icon"
-                            width={32}
-                            height={32}
-                            className="w-7 h-7 rounded-md flex-shrink-0"
-                          />
+                          {(() => {
+                            const augmentKey =
+                              item.key?.split("_")[
+                                item?.key?.split("_").length - 1
+                              ];
+                            const augmentData = augments.find(
+                              (augment) => augment.key === augmentKey
+                            );
+                            const tooltipId = `mobile-augment-${item?.key}-${index}`;
+
+                            return (
+                              <>
+                                <OptimizedImage
+                                  src={augmentData?.imageUrl}
+                                  alt="icon"
+                                  width={32}
+                                  height={32}
+                                  className="w-12 h-12 rounded-md flex-shrink-0"
+                                  data-tooltip-id={tooltipId}
+                                />
+                                {augmentData && (
+                                  <ReactTltp
+                                    variant="augment"
+                                    id={tooltipId}
+                                    content={augmentData}
+                                  />
+                                )}
+                              </>
+                            );
+                          })()}
                           <div className="min-w-0 flex-1">
                             <p className="text-white text-sm truncate leading-tight mb-0">
                               {

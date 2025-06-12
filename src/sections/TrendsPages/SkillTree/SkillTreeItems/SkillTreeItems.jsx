@@ -516,23 +516,33 @@ const SkillTreeItems = () => {
                     <td className={`p-2 ${getCellClass("key")}`}>
                       <div>
                         <div className="flex justify-start items-center space-x-1 sm:space-x-2">
-                          <>
-                            <SkillTreeImage
-                              skill={skillTree?.find(
-                                (i) => i?.key === item?.key
-                              )}
-                              size="medium"
-                              tooltipId={`${item?.key}`}
-                              className="w-14 h-14 md:w-20 md:h-20"
-                            />
-                            <ReactTltp
-                              variant="item"
-                              id={`${item?.key}`}
-                              content={
-                                items.find((i) => i.key === item.key) || item
-                              }
-                            />
-                          </>
+                          {(() => {
+                            const skillData = skillTree?.find(
+                              (i) => i?.key === item?.key
+                            );
+                            const itemData = items.find(
+                              (i) => i.key === item.key
+                            );
+                            const tooltipId = `skill-${item?.key}-${index}`;
+
+                            return (
+                              <>
+                                <SkillTreeImage
+                                  skill={skillData}
+                                  size="medium"
+                                  tooltipId={tooltipId}
+                                  className="w-14 h-14 md:w-20 md:h-20"
+                                />
+                                {(itemData || item) && (
+                                  <ReactTltp
+                                    variant="item"
+                                    id={tooltipId}
+                                    content={itemData || item}
+                                  />
+                                )}
+                              </>
+                            );
+                          })()}
                           <div className="min-w-0 flex-1">
                             <p className="p-0 text-sm sm:text-sm md:text-base mb-1 md:mb-2 text-[#fff] truncate max-w-[90px] sm:max-w-[150px] md:max-w-full">
                               {items.find((i) => i.key === item.key)?.name ||
@@ -541,32 +551,34 @@ const SkillTreeItems = () => {
                             <div className="flex items-center flex-wrap gap-1">
                               {items
                                 .find((i) => i.key === item.key)
-                                ?.compositions?.map((comp, index) => {
+                                ?.compositions?.map((comp, compIndex) => {
                                   const compItem = items.find(
                                     (i) => i.key === comp
                                   );
                                   if (!compItem) return null;
+                                  const tooltipId = `comp-${compItem.key}-${index}-${compIndex}`;
                                   return (
-                                    <React.Fragment key={index}>
+                                    <React.Fragment key={compIndex}>
                                       <OptimizedImage
                                         alt="Item Image"
                                         width={80}
                                         height={80}
                                         src={compItem.imageUrl}
                                         className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 !border !border-[#ffffff60] rounded-md"
-                                        data-tooltip-id={`${compItem.key}_${index}`}
+                                        data-tooltip-id={tooltipId}
                                       />
-                                      {index === 0 && (
+                                      {compIndex === 0 && (
                                         <span className="mx-1">+</span>
                                       )}
                                       <ReactTltp
                                         variant="item"
-                                        id={`${compItem.key}_${index}`}
+                                        id={tooltipId}
                                         content={compItem}
                                       />
                                     </React.Fragment>
                                   );
-                                })}
+                                })
+                                ?.filter(Boolean)}
                             </div>
                           </div>
                         </div>
@@ -732,17 +744,31 @@ const SkillTreeItems = () => {
 
                   {/* Image & Name */}
                   <div className="flex items-center space-x-2 min-w-0">
-                    <SkillTreeImage
-                      skill={skillTree?.find((i) => i?.key === item?.key)}
-                      size="large"
-                      tooltipId={`${item?.key}`}
-                      className="w-12 h-12 flex-shrink-0"
-                    />
-                    <ReactTltp
-                      variant="item"
-                      id={`${item?.key}`}
-                      content={items.find((i) => i.key === item.key) || item}
-                    />
+                    {(() => {
+                      const skillData = skillTree?.find(
+                        (i) => i?.key === item?.key
+                      );
+                      const itemData = items.find((i) => i.key === item.key);
+                      const tooltipId = `mobile-skill-${item?.key}-${index}`;
+
+                      return (
+                        <>
+                          <SkillTreeImage
+                            skill={skillData}
+                            size="large"
+                            tooltipId={tooltipId}
+                            className="w-12 h-12 flex-shrink-0"
+                          />
+                          {(itemData || item) && (
+                            <ReactTltp
+                              variant="item"
+                              id={tooltipId}
+                              content={itemData || item}
+                            />
+                          )}
+                        </>
+                      );
+                    })()}
                     <div className="min-w-0 flex-1">
                       <p className="text-white text-sm truncate leading-tight mb-0">
                         {items.find((i) => i.key === item.key)?.name ||

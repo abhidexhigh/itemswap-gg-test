@@ -427,14 +427,14 @@ const ItemsTrendsItems = () => {
                             <div>
                               <div className="flex justify-start items-center space-x-1 sm:space-x-2">
                                 <div
-                                  data-tooltip-id={`${items.find((i) => i.key === item.key)?.key}}`}
+                                  data-tooltip-id={`main-item-${item.key}-${index}`}
                                 >
                                   <ItemDisplay
                                     item={items.find((i) => i.key === item.key)}
                                     size="midMedium"
                                     borderRadius="rounded-[4px]"
                                     backgroundRadius="rounded-[4px]"
-                                    tooltipId={`${items.find((i) => i.key === item.key)?.key}}`}
+                                    tooltipId={`main-item-${item.key}-${index}`}
                                     showTooltip={true}
                                   />
                                 </div>
@@ -448,31 +448,34 @@ const ItemsTrendsItems = () => {
                                   <div className="flex items-center flex-wrap gap-1">
                                     {items
                                       .find((i) => i.key === item.key)
-                                      ?.compositions?.map((comp, index) => (
-                                        <React.Fragment key={index}>
-                                          <OptimizedImage
-                                            alt="Item Image"
-                                            width={80}
-                                            height={80}
-                                            src={
-                                              items.find((i) => i.key === comp)
-                                                .imageUrl
-                                            }
-                                            className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 !border !border-[#ffffff60] rounded-md"
-                                            data-tooltip-id={`${items.find((i) => i.key === comp).key}_${index}`}
-                                          />
-                                          {index === 0 && (
-                                            <span className="mx-1">+</span>
-                                          )}
-                                          <ReactTltp
-                                            variant="item"
-                                            id={`${items.find((i) => i.key === comp).key}_${index}`}
-                                            content={items.find(
-                                              (i) => i.key === comp
+                                      ?.compositions?.map((comp, compIndex) => {
+                                        const compItem = items.find(
+                                          (i) => i.key === comp
+                                        );
+                                        if (!compItem) return null;
+                                        const tooltipId = `comp-${compItem.key}-${index}-${compIndex}`;
+                                        return (
+                                          <React.Fragment key={compIndex}>
+                                            <OptimizedImage
+                                              alt="Item Image"
+                                              width={80}
+                                              height={80}
+                                              src={compItem.imageUrl}
+                                              className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 !border !border-[#ffffff60] rounded-md"
+                                              data-tooltip-id={tooltipId}
+                                            />
+                                            {compIndex === 0 && (
+                                              <span className="mx-1">+</span>
                                             )}
-                                          />
-                                        </React.Fragment>
-                                      ))}
+                                            <ReactTltp
+                                              variant="item"
+                                              id={tooltipId}
+                                              content={compItem}
+                                            />
+                                          </React.Fragment>
+                                        );
+                                      })
+                                      .filter(Boolean)}
                                   </div>
                                 </div>
                               </div>
@@ -510,20 +513,26 @@ const ItemsTrendsItems = () => {
                             <div className="flex flex-wrap justify-center items-center gap-1">
                               {item?.itemSynergyStats
                                 ?.slice(0, 3)
-                                .map((synergy, w) => (
-                                  <div key={w} className="relative">
-                                    <ItemDisplay
-                                      item={items.find(
-                                        (i) => i.key === synergy
-                                      )}
-                                      size="xSmall"
-                                      borderRadius="rounded-[4px]"
-                                      backgroundRadius="rounded-[4px]"
-                                      tooltipId={`${items.find((i) => i.key === synergy)?.key}_${w}`}
-                                      showTooltip={true}
-                                    />
-                                  </div>
-                                ))}
+                                .map((synergy, w) => {
+                                  const synergyItem = items.find(
+                                    (i) => i.key === synergy
+                                  );
+                                  if (!synergyItem) return null;
+                                  const tooltipId = `synergy-${synergyItem.key}-${index}-${w}`;
+                                  return (
+                                    <div key={w} className="relative">
+                                      <ItemDisplay
+                                        item={synergyItem}
+                                        size="xSmall"
+                                        borderRadius="rounded-[4px]"
+                                        backgroundRadius="rounded-[4px]"
+                                        tooltipId={tooltipId}
+                                        showTooltip={true}
+                                      />
+                                    </div>
+                                  );
+                                })
+                                .filter(Boolean)}
                             </div>
                           </td>
                           <td className="p-2">

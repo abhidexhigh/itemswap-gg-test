@@ -135,7 +135,7 @@ const ChampionWithItems = memo(
     if (!championDetails) return null;
 
     return (
-      <div className="flex flex-col items-center gap-x-4 flex-grow basis-0 min-w-[65px] md:min-w-[80px] max-w-[78px] md:max-w-[150px]">
+      <div className="flex flex-col items-center gap-x-4 flex-grow basis-0 min-w-[65px] md:min-w-[80px] max-w-[78px] md:max-w-[120px]">
         <div className="inline-flex items-center justify-center flex-col">
           <div className="flex flex-col w-full aspect-square rounded-[20px]">
             <div
@@ -493,7 +493,7 @@ const DeckHeader = memo(
               </div>
             ))}
           </div>
-          <div className="absolute right-[16px] top-[16px] inline-flex gap-[8px] lg:relative lg:right-[0px] lg:top-[0px]">
+          {/* <div className="absolute right-[16px] top-[16px] inline-flex gap-[8px] lg:relative lg:right-[0px] lg:top-[0px]">
             <button
               className="inline-flex w-[16px] cursor-pointer items-center text-white"
               title="Hide"
@@ -502,7 +502,7 @@ const DeckHeader = memo(
             >
               {!isClosed ? <PiEye /> : <PiEyeClosed />}
             </button>
-          </div>
+          </div> */}
         </div>
       </header>
     );
@@ -676,7 +676,7 @@ const MetaDeck = memo(
                     </div>
 
                     {/* Desktop view: All champions visible */}
-                    <div className="hidden lg:flex flex-wrap justify-center gap-2 w-full">
+                    <div className="hidden lg:flex flex-wrap justify-center w-full">
                       {sortedChampions.map((champion, index) => (
                         <ChampionWithItems
                           key={`desktop-${champion.key}-${index}`}
