@@ -638,7 +638,7 @@ const ProjectItems = () => {
                             showTooltip={true}
                           />
                           <div className="min-w-0 flex-1">
-                            <p className="text-white text-xs truncate leading-tight">
+                            <p className="text-white text-xs truncate leading-tight mb-0">
                               {items.find((i) => i.key === item.key)?.name}
                             </p>
                           </div>

@@ -273,151 +273,101 @@ const ModernMatchHistory = ({
           </h3> */}
 
           <div className="overflow-x-auto -mx-4">
-            <div className="min-w-[1200px]">
+            <div className="md:min-w-[1200px]">
               {matchHistoryInfo?.participants
                 ?.slice()
                 .sort((a, b) => a.placement - b.placement)
                 ?.map((participant, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.2, delay: i * 0.05 }}
-                    className="bg-[#2d2d42e9] rounded-lg shadow-md !border-b-2 !border-white/30 py-2.5"
-                  >
-                    <div className="px-3 flex items-center gap-2">
-                      {/* Placement Column */}
-                      <div className="flex-shrink-0">
-                        <div
-                          className={`flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg ${
-                            participant?.placement === 1
-                              ? "bg-yellow-300/20 border border-yellow-400"
-                              : participant?.placement === 2
-                                ? "bg-purple-400/20 border border-purple-400"
-                                : participant?.placement === 3
-                                  ? "bg-orange-400/20 border border-orange-400"
-                                  : participant?.placement <= 4
-                                    ? "bg-blue-400/20 border border-blue-400"
-                                    : "bg-gray-400/20 border border-gray-400"
-                          }`}
-                        >
-                          <span
-                            className={`text-xl sm:text-2xl font-bold ${
+                  <>
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.2, delay: i * 0.05 }}
+                      className="hidden md:block bg-[#2d2d42e9] rounded-lg shadow-md !border-b-2 !border-white/30 py-2.5"
+                    >
+                      <div className="px-3 flex items-center gap-2">
+                        {/* Placement Column */}
+                        <div className="flex-shrink-0">
+                          <div
+                            className={`flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg ${
                               participant?.placement === 1
-                                ? "text-yellow-300"
+                                ? "bg-yellow-300/20 border border-yellow-400"
                                 : participant?.placement === 2
-                                  ? "text-purple-400"
+                                  ? "bg-purple-400/20 border border-purple-400"
                                   : participant?.placement === 3
-                                    ? "text-orange-400"
+                                    ? "bg-orange-400/20 border border-orange-400"
                                     : participant?.placement <= 4
-                                      ? "text-blue-400"
-                                      : "text-gray-400"
+                                      ? "bg-blue-400/20 border border-blue-400"
+                                      : "bg-gray-400/20 border border-gray-400"
                             }`}
                           >
-                            {participant?.placement}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Player Info Column */}
-                      <div className="w-[13%] flex-shrink-0">
-                        <div className="flex items-center gap-2">
-                          <div className="relative">
-                            <OptimizedImage
-                              src={
-                                participant?.imageUrl ||
-                                "https://res.cloudinary.com/dg0cmj6su/image/upload/v1722934556/coin_6369589_wbb7uk.png"
-                              }
-                              width={48}
-                              height={48}
-                              className="w-10 sm:w-16 rounded-lg shadow-md"
-                              alt={participant?.name || "Player"}
-                            />
-                            <div className="absolute bottom-0 right-0 px-1.5 sm:px-2 rounded-full bg-[#444] !text-white text-[10px] sm:text-xs">
-                              {/* {participant?.level} */}
-                              {participant?.units?.length}
-                            </div>
-                          </div>
-                          <div>
-                            <div className="font-medium !text-white text-sm sm:text-base truncate max-w-[80px] sm:max-w-[100px]">
-                              {participant?.name}
-                            </div>
-                            <div className="text-xs sm:text-base text-gray-300">
-                              {matchHistoryInfo?.duration}
-                            </div>
+                            <span
+                              className={`text-xl sm:text-2xl font-bold ${
+                                participant?.placement === 1
+                                  ? "text-yellow-300"
+                                  : participant?.placement === 2
+                                    ? "text-purple-400"
+                                    : participant?.placement === 3
+                                      ? "text-orange-400"
+                                      : participant?.placement <= 4
+                                        ? "text-blue-400"
+                                        : "text-gray-400"
+                              }`}
+                            >
+                              {participant?.placement}
+                            </span>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Augments & Traits Column */}
-                      <div className="w-[15%] flex-shrink-0">
-                        <div className="flex flex-col gap-1 sm:gap-2">
-                          {/* Augments */}
-                          <div className="flex flex-wrap gap-1 bg-[#00000020] rounded-md p-1 w-fit">
-                            {participant?.augments?.map((augment, i) => {
-                              const augmentData = augments?.find(
-                                (a) => a.key === augment
-                              );
-                              return augmentData?.imageUrl ? (
-                                <div key={i} className="relative">
-                                  <OptimizedImage
-                                    src={augmentData.imageUrl}
-                                    width={20}
-                                    height={20}
-                                    className="w-6 h-6 md:w-12 md:h-12 rounded-md"
-                                    data-tooltip-id={`part-aug-${participant?.name}-${i}`}
-                                    alt={augment || "Augment"}
-                                    onError={(e) => {
-                                      e.target.onerror = null;
-                                      e.target.src =
-                                        "https://res.cloudinary.com/dg0cmj6su/image/upload/v1722934556/coin_6369589_wbb7uk.png";
-                                    }}
-                                  />
-                                  <ReactTltp
-                                    variant="augment"
-                                    content={augmentData}
-                                    id={`part-aug-${participant?.name}-${i}`}
-                                  />
-                                </div>
-                              ) : null;
-                            })}
-                          </div>
-
-                          {/* Traits */}
-                          <div className="flex flex-wrap gap-1 bg-[#00000030] rounded-md p-1 w-fit">
-                            {participant?.traits
-                              ?.slice(0, 2)
-                              ?.map((trait, i) => {
-                                const traitData = traits?.find(
-                                  (t) => t.key === trait.name
-                                );
-
-                                // Find the correct tier based on numUnits
-                                let tierImage = null;
-                                if (
-                                  traitData?.tiers &&
-                                  traitData.tiers.length > 0
-                                ) {
-                                  // Find the tier that matches the numUnits
-                                  const tier = traitData.tiers.find(
-                                    (t) =>
-                                      trait.numUnits >= t.min &&
-                                      trait.numUnits <= t.max
-                                  );
-                                  if (tier) {
-                                    tierImage = tier.imageUrl;
-                                  }
+                        {/* Player Info Column */}
+                        <div className="w-[13%] flex-shrink-0">
+                          <div className="flex items-center gap-2">
+                            <div className="relative">
+                              <OptimizedImage
+                                src={
+                                  participant?.imageUrl ||
+                                  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1722934556/coin_6369589_wbb7uk.png"
                                 }
+                                width={48}
+                                height={48}
+                                className="w-10 sm:w-16 rounded-lg shadow-md"
+                                alt={participant?.name || "Player"}
+                              />
+                              <div className="absolute bottom-0 right-0 px-1.5 sm:px-2 rounded-full bg-[#444] !text-white text-[10px] sm:text-xs">
+                                {/* {participant?.level} */}
+                                {participant?.units?.length}
+                              </div>
+                            </div>
+                            <div>
+                              <div className="font-medium !text-white text-sm sm:text-base truncate max-w-[80px] sm:max-w-[100px]">
+                                {participant?.name}
+                              </div>
+                              <div className="text-xs sm:text-base text-gray-300">
+                                {matchHistoryInfo?.duration}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
-                                return tierImage ? (
+                        {/* Augments & Traits Column */}
+                        <div className="w-[15%] flex-shrink-0">
+                          <div className="flex flex-col gap-1 sm:gap-2">
+                            {/* Augments */}
+                            <div className="flex flex-wrap gap-1 bg-[#00000020] rounded-md p-1 w-fit">
+                              {participant?.augments?.map((augment, i) => {
+                                const augmentData = augments?.find(
+                                  (a) => a.key === augment
+                                );
+                                return augmentData?.imageUrl ? (
                                   <div key={i} className="relative">
                                     <OptimizedImage
-                                      src={tierImage}
+                                      src={augmentData.imageUrl}
                                       width={20}
                                       height={20}
                                       className="w-6 h-6 md:w-12 md:h-12 rounded-md"
-                                      data-tooltip-id={`part-trait-${participant?.name}-${i}`}
-                                      alt={trait.name || "Trait"}
+                                      data-tooltip-id={`part-aug-${participant?.name}-${i}`}
+                                      alt={augment || "Augment"}
                                       onError={(e) => {
                                         e.target.onerror = null;
                                         e.target.src =
@@ -425,56 +375,107 @@ const ModernMatchHistory = ({
                                       }}
                                     />
                                     <ReactTltp
-                                      variant="trait"
-                                      content={traitData}
-                                      id={`part-trait-${participant?.name}-${i}`}
+                                      variant="augment"
+                                      content={augmentData}
+                                      id={`part-aug-${participant?.name}-${i}`}
                                     />
                                   </div>
                                 ) : null;
                               })}
-                            {participant?.traits?.length > 2 && (
-                              <div
-                                className="w-6 h-6 md:w-12 md:h-12 bg-[#00000040] rounded-full border border-white/20 flex items-center justify-center cursor-pointer"
-                                data-tooltip-id={`more-traits-${participant?.name}`}
-                              >
-                                <span className="text-[10px] sm:text-xs text-white">
-                                  +{participant?.traits?.length - 2}
-                                </span>
-                              </div>
-                            )}
-                            <ReactTltp
-                              content={participant?.traits}
-                              id={`more-traits-${participant?.name}`}
-                              variant="otherTraits"
-                            />
+                            </div>
+
+                            {/* Traits */}
+                            <div className="flex flex-wrap gap-1 bg-[#00000030] rounded-md p-1 w-fit">
+                              {participant?.traits
+                                ?.slice(0, 2)
+                                ?.map((trait, i) => {
+                                  const traitData = traits?.find(
+                                    (t) => t.key === trait.name
+                                  );
+
+                                  // Find the correct tier based on numUnits
+                                  let tierImage = null;
+                                  if (
+                                    traitData?.tiers &&
+                                    traitData.tiers.length > 0
+                                  ) {
+                                    // Find the tier that matches the numUnits
+                                    const tier = traitData.tiers.find(
+                                      (t) =>
+                                        trait.numUnits >= t.min &&
+                                        trait.numUnits <= t.max
+                                    );
+                                    if (tier) {
+                                      tierImage = tier.imageUrl;
+                                    }
+                                  }
+
+                                  return tierImage ? (
+                                    <div key={i} className="relative">
+                                      <OptimizedImage
+                                        src={tierImage}
+                                        width={20}
+                                        height={20}
+                                        className="w-6 h-6 md:w-12 md:h-12 rounded-md"
+                                        data-tooltip-id={`part-trait-${participant?.name}-${i}`}
+                                        alt={trait.name || "Trait"}
+                                        onError={(e) => {
+                                          e.target.onerror = null;
+                                          e.target.src =
+                                            "https://res.cloudinary.com/dg0cmj6su/image/upload/v1722934556/coin_6369589_wbb7uk.png";
+                                        }}
+                                      />
+                                      <ReactTltp
+                                        variant="trait"
+                                        content={traitData}
+                                        id={`part-trait-${participant?.name}-${i}`}
+                                      />
+                                    </div>
+                                  ) : null;
+                                })}
+                              {participant?.traits?.length > 2 && (
+                                <div
+                                  className="w-6 h-6 md:w-12 md:h-12 bg-[#00000040] rounded-full border border-white/20 flex items-center justify-center cursor-pointer"
+                                  data-tooltip-id={`more-traits-${participant?.name}`}
+                                >
+                                  <span className="text-[10px] sm:text-xs text-white">
+                                    +{participant?.traits?.length - 2}
+                                  </span>
+                                </div>
+                              )}
+                              <ReactTltp
+                                content={participant?.traits}
+                                id={`more-traits-${participant?.name}`}
+                                variant="otherTraits"
+                              />
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      {/* Units & Items Column */}
-                      <div className="flex-grow">
-                        <div className="flex flex-wrap gap-1 justify-start">
-                          {participant?.units?.map((unit, i) => (
-                            <div key={i} className="flex flex-col">
-                              <CardImage
-                                src={champions?.find(
-                                  (champion) => champion.key === unit.key
-                                )}
-                                forces={forces}
-                                tier={unit?.tier || 0}
-                                imgStyle="w-[68px] md:w-[84px]"
-                                identificationImageStyle="w=[16px] md:w-[32px]"
-                                textStyle="text-[10px] md:text-[16px] hidden"
-                                cardSize="!w-[80px] !h-[80px] md:!w-[80px] md:!h-[80px]"
-                              />
-                              <div className="flex justify-center gap-[2px]">
-                                {unit?.items?.map((item, j) => {
-                                  const itemData = items?.find(
-                                    (i) => i.key === item
-                                  );
-                                  return itemData?.imageUrl ? (
-                                    <div key={j} className="relative">
-                                      {/* <OptimizedImage
+                        {/* Units & Items Column */}
+                        <div className="flex-grow">
+                          <div className="flex flex-wrap gap-1 justify-start">
+                            {participant?.units?.map((unit, i) => (
+                              <div key={i} className="flex flex-col">
+                                <CardImage
+                                  src={champions?.find(
+                                    (champion) => champion.key === unit.key
+                                  )}
+                                  forces={forces}
+                                  tier={unit?.tier || 0}
+                                  imgStyle="w-[68px] md:w-[84px]"
+                                  identificationImageStyle="w=[16px] md:w-[32px]"
+                                  textStyle="text-[10px] md:text-[16px] hidden"
+                                  cardSize="!w-[80px] !h-[80px] md:!w-[80px] md:!h-[80px]"
+                                />
+                                <div className="flex justify-center gap-[2px]">
+                                  {unit?.items?.map((item, j) => {
+                                    const itemData = items?.find(
+                                      (i) => i.key === item
+                                    );
+                                    return itemData?.imageUrl ? (
+                                      <div key={j} className="relative">
+                                        {/* <OptimizedImage
                                       src={itemData.imageUrl}
                                       width={20}
                                       height={20}
@@ -487,28 +488,261 @@ const ModernMatchHistory = ({
                                           "https://res.cloudinary.com/dg0cmj6su/image/upload/v1722934556/coin_6369589_wbb7uk.png";
                                       }}
                                     /> */}
-                                      <ItemDisplay
-                                        item={itemData}
-                                        size={{
-                                          container:
-                                            "w-[14px] sm:w-[16px] md:w-[24px]",
-                                          frame: "w-full h-full",
-                                          image: "w-full h-full",
+                                        <ItemDisplay
+                                          item={itemData}
+                                          size={{
+                                            container:
+                                              "w-[14px] sm:w-[16px] md:w-[24px]",
+                                            frame: "w-full h-full",
+                                            image: "w-full h-full",
+                                          }}
+                                          backgroundRadius="rounded-none"
+                                          isHovered={true}
+                                          tooltipId={`part-item-${participant?.name}-${unit.key}-${j}`}
+                                        />
+                                      </div>
+                                    ) : null;
+                                  })}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.2, delay: i * 0.05 }}
+                      className="block md:hidden bg-[#2d2d42e9] rounded-lg shadow-md !border-b-2 !border-white/30 py-2.5"
+                    >
+                      <div className="px-3 flex flex-col items-center gap-2">
+                        <div className="flex justify-start w-full items-center gap-2">
+                          {/* Placement Column */}
+                          <div className="flex-shrink-0">
+                            <div
+                              className={`flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-lg ${
+                                participant?.placement === 1
+                                  ? "bg-yellow-300/20 border border-yellow-400"
+                                  : participant?.placement === 2
+                                    ? "bg-purple-400/20 border border-purple-400"
+                                    : participant?.placement === 3
+                                      ? "bg-orange-400/20 border border-orange-400"
+                                      : participant?.placement <= 4
+                                        ? "bg-blue-400/20 border border-blue-400"
+                                        : "bg-gray-400/20 border border-gray-400"
+                              }`}
+                            >
+                              <span
+                                className={`text-xl sm:text-2xl font-bold ${
+                                  participant?.placement === 1
+                                    ? "text-yellow-300"
+                                    : participant?.placement === 2
+                                      ? "text-purple-400"
+                                      : participant?.placement === 3
+                                        ? "text-orange-400"
+                                        : participant?.placement <= 4
+                                          ? "text-blue-400"
+                                          : "text-gray-400"
+                                }`}
+                              >
+                                {participant?.placement}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Player Info Column */}
+                          <div className="flex-shrink-0">
+                            <div className="flex items-center gap-2">
+                              <div className="relative">
+                                <OptimizedImage
+                                  src={
+                                    participant?.imageUrl ||
+                                    "https://res.cloudinary.com/dg0cmj6su/image/upload/v1722934556/coin_6369589_wbb7uk.png"
+                                  }
+                                  width={48}
+                                  height={48}
+                                  className="w-10 sm:w-16 rounded-lg shadow-md"
+                                  alt={participant?.name || "Player"}
+                                />
+                                <div className="absolute bottom-0 right-0 px-1.5 sm:px-2 rounded-full bg-[#444] !text-white text-[10px] sm:text-xs">
+                                  {/* {participant?.level} */}
+                                  {participant?.units?.length}
+                                </div>
+                              </div>
+                              <div>
+                                <div className="font-medium !text-white text-sm sm:text-base truncate max-w-[50px] sm:max-w-[100px]">
+                                  {participant?.name}
+                                </div>
+                                <div className="text-xs sm:text-base text-gray-300">
+                                  {matchHistoryInfo?.duration}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Augments & Traits Column */}
+                          <div className="flex-shrink-0">
+                            <div className="flex gap-1 sm:gap-2">
+                              {/* Augments */}
+                              <div className="flex flex-wrap items-center gap-1 bg-[#00000020] rounded-md p-1 w-fit">
+                                {participant?.augments?.map((augment, i) => {
+                                  const augmentData = augments?.find(
+                                    (a) => a.key === augment
+                                  );
+                                  return augmentData?.imageUrl ? (
+                                    <div key={i} className="relative">
+                                      <OptimizedImage
+                                        src={augmentData.imageUrl}
+                                        width={20}
+                                        height={20}
+                                        className="w-6 h-6 md:w-12 md:h-12 rounded-md"
+                                        data-tooltip-id={`part-aug-${participant?.name}-${i}`}
+                                        alt={augment || "Augment"}
+                                        onError={(e) => {
+                                          e.target.onerror = null;
+                                          e.target.src =
+                                            "https://res.cloudinary.com/dg0cmj6su/image/upload/v1722934556/coin_6369589_wbb7uk.png";
                                         }}
-                                        backgroundRadius="rounded-none"
-                                        isHovered={true}
-                                        tooltipId={`part-item-${participant?.name}-${unit.key}-${j}`}
+                                      />
+                                      <ReactTltp
+                                        variant="augment"
+                                        content={augmentData}
+                                        id={`part-aug-${participant?.name}-${i}`}
                                       />
                                     </div>
                                   ) : null;
                                 })}
                               </div>
+
+                              {/* Traits */}
+                              <div className="flex flex-wrap items-center gap-1 bg-[#00000030] rounded-md p-1 w-fit">
+                                {participant?.traits
+                                  ?.slice(0, 2)
+                                  ?.map((trait, i) => {
+                                    const traitData = traits?.find(
+                                      (t) => t.key === trait.name
+                                    );
+
+                                    // Find the correct tier based on numUnits
+                                    let tierImage = null;
+                                    if (
+                                      traitData?.tiers &&
+                                      traitData.tiers.length > 0
+                                    ) {
+                                      // Find the tier that matches the numUnits
+                                      const tier = traitData.tiers.find(
+                                        (t) =>
+                                          trait.numUnits >= t.min &&
+                                          trait.numUnits <= t.max
+                                      );
+                                      if (tier) {
+                                        tierImage = tier.imageUrl;
+                                      }
+                                    }
+
+                                    return tierImage ? (
+                                      <div key={i} className="relative">
+                                        <OptimizedImage
+                                          src={tierImage}
+                                          width={20}
+                                          height={20}
+                                          className="w-8 h-8 md:w-12 md:h-12 rounded-md"
+                                          data-tooltip-id={`part-trait-${participant?.name}-${i}`}
+                                          alt={trait.name || "Trait"}
+                                          onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src =
+                                              "https://res.cloudinary.com/dg0cmj6su/image/upload/v1722934556/coin_6369589_wbb7uk.png";
+                                          }}
+                                        />
+                                        <ReactTltp
+                                          variant="trait"
+                                          content={traitData}
+                                          id={`part-trait-${participant?.name}-${i}`}
+                                        />
+                                      </div>
+                                    ) : null;
+                                  })}
+                                {participant?.traits?.length > 2 && (
+                                  <div
+                                    className="w-6 h-6 md:w-12 md:h-12 bg-[#00000040] rounded-full border border-white/20 flex items-center justify-center cursor-pointer"
+                                    data-tooltip-id={`more-traits-${participant?.name}`}
+                                  >
+                                    <span className="text-[10px] sm:text-xs text-white">
+                                      +{participant?.traits?.length - 2}
+                                    </span>
+                                  </div>
+                                )}
+                                <ReactTltp
+                                  content={participant?.traits}
+                                  id={`more-traits-${participant?.name}`}
+                                  variant="otherTraits"
+                                />
+                              </div>
                             </div>
-                          ))}
+                          </div>
+                        </div>
+
+                        {/* Units & Items Column */}
+                        <div className="flex-grow">
+                          <div className="flex flex-wrap gap-1 justify-center">
+                            {participant?.units?.map((unit, i) => (
+                              <div key={i} className="flex flex-col">
+                                <CardImage
+                                  src={champions?.find(
+                                    (champion) => champion.key === unit.key
+                                  )}
+                                  forces={forces}
+                                  tier={unit?.tier || 0}
+                                  imgStyle="w-[68px] md:w-[84px]"
+                                  identificationImageStyle="w=[16px] md:w-[32px]"
+                                  textStyle="text-[10px] md:text-[16px] hidden"
+                                  cardSize="!w-[80px] !h-[80px] md:!w-[80px] md:!h-[80px]"
+                                />
+                                <div className="flex justify-center gap-[2px]">
+                                  {unit?.items?.map((item, j) => {
+                                    const itemData = items?.find(
+                                      (i) => i.key === item
+                                    );
+                                    return itemData?.imageUrl ? (
+                                      <div key={j} className="relative">
+                                        {/* <OptimizedImage
+                                      src={itemData.imageUrl}
+                                      width={20}
+                                      height={20}
+                                      className="w-[14px] sm:w-[16px] md:w-[22px] rounded-md !border !border-white/20"
+                                      data-tooltip-id={`part-item-${participant?.name}-${unit.key}-${j}`}
+                                      alt={item}
+                                      onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src =
+                                          "https://res.cloudinary.com/dg0cmj6su/image/upload/v1722934556/coin_6369589_wbb7uk.png";
+                                      }}
+                                    /> */}
+                                        <ItemDisplay
+                                          item={itemData}
+                                          size={{
+                                            container: "w-[24px]",
+                                            frame: "w-full h-full",
+                                            image: "w-full h-full",
+                                          }}
+                                          backgroundRadius="rounded-none"
+                                          isHovered={true}
+                                          tooltipId={`part-item-${participant?.name}-${unit.key}-${j}`}
+                                        />
+                                      </div>
+                                    ) : null;
+                                  })}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </motion.div>
+                    </motion.div>
+                  </>
                 ))}
             </div>
           </div>

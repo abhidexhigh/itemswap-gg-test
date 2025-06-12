@@ -179,11 +179,11 @@ const ProjectItems = () => {
           </div>
         ))}
         {/* Recommended Items */}
-        <div className="col-span-2 flex flex-col">
+        <div className="flex flex-col">
           <span className="text-xs text-gray-400 mb-2">
             {others?.recommended} {others.items}
           </span>
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap justify-start gap-1">
             {champions
               .find((champ) => champ.key === item.key)
               ?.recommendItems.map((itemKey) =>

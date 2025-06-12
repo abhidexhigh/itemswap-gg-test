@@ -225,35 +225,70 @@ const ProjectItems = () => {
             />
           </div>
           {/* Mobile Filter Buttons - Only visible on mobile */}
-          <div className="block md:hidden px-4 mb-2">
-            <div className="flex justify-center items-center">
-              <div className="inline-flex flex-wrap gap-y-2 justify-center">
-                {mobileFilterOptions.map((option, index) => {
+          <div className="block md:hidden mb-2">
+            <div className="flex flex-col items-center gap-2 px-4">
+              {/* First Row - Always 4 buttons */}
+              <div className="flex gap-0">
+                {mobileFilterOptions.slice(0, 4).map((option, index) => {
                   const isFirst = index === 0;
-                  const isLast = index === mobileFilterOptions.length - 1;
+                  const isLast = index === 3;
                   const isActive = mobileFilter === option.key;
-
-                  // Assuming ~4 buttons per line on typical mobile screens
-                  const isFirstLineEnd = index === 3; // "Top 4%" button (4th button, index 3)
-                  const isSecondLineStart = index === 4; // "Win %" button (5th button, index 4)
 
                   return (
                     <button
                       key={option.key}
                       onClick={() => handleMobileFilterClick(option.key)}
                       className={`
-                    px-3 py-2 text-xs font-medium transition-colors flex items-center space-x-1 border
-                    ${isFirst ? "rounded-l-lg" : ""} 
-                    ${isLast ? "rounded-r-lg" : ""} 
-                    ${isFirstLineEnd ? "rounded-r-lg" : ""} 
-                    ${isSecondLineStart ? "rounded-l-lg" : ""} 
-                    ${!isFirst && !isSecondLineStart ? "-ml-px" : ""} 
-                    ${
-                      isActive
-                        ? "bg-[#D9A876] text-black border-[#D9A876] z-10 relative"
-                        : "bg-[#2D2F37] text-white border-[#404040] hover:bg-[#3D3F47] hover:border-[#4A4A4A]"
-                    }
-                  `}
+                      px-3 py-2 text-xs font-medium transition-colors flex items-center justify-center space-x-1 border
+                      ${isFirst ? "rounded-l-lg" : ""} 
+                      ${isLast ? "rounded-r-lg" : ""} 
+                      ${!isFirst ? "-ml-px" : ""} 
+                      ${
+                        isActive
+                          ? "bg-[#D9A876] text-black border-[#D9A876] z-10 relative"
+                          : "bg-[#2D2F37] text-white border-[#404040] hover:bg-[#3D3F47] hover:border-[#4A4A4A]"
+                      }
+                    `}
+                    >
+                      <span>{option.label}</span>
+                      {isActive && sortConfig.key === option.key && (
+                        <span className="ml-1">
+                          {sortConfig.direction === "ascending" ? (
+                            <HiArrowSmUp className="w-3 h-3" />
+                          ) : (
+                            <HiArrowSmDown className="w-3 h-3" />
+                          )}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Second Row - Remaining buttons */}
+              <div className="flex gap-0">
+                {mobileFilterOptions.slice(4).map((option, index) => {
+                  const actualIndex = index + 4;
+                  const isFirst = index === 0;
+                  const isLast =
+                    index === mobileFilterOptions.slice(4).length - 1;
+                  const isActive = mobileFilter === option.key;
+
+                  return (
+                    <button
+                      key={option.key}
+                      onClick={() => handleMobileFilterClick(option.key)}
+                      className={`
+                      px-3 py-2 text-xs font-medium transition-colors flex items-center justify-center space-x-1 border
+                      ${isFirst ? "rounded-l-lg" : ""} 
+                      ${isLast ? "rounded-r-lg" : ""} 
+                      ${!isFirst ? "-ml-px" : ""} 
+                      ${
+                        isActive
+                          ? "bg-[#D9A876] text-black border-[#D9A876] z-10 relative"
+                          : "bg-[#2D2F37] text-white border-[#404040] hover:bg-[#3D3F47] hover:border-[#4A4A4A]"
+                      }
+                    `}
                     >
                       <span>{option.label}</span>
                       {isActive && sortConfig.key === option.key && (
@@ -586,7 +621,7 @@ const ProjectItems = () => {
                             alt="icon"
                             width={32}
                             height={32}
-                            className="w-7 h-7 rounded-md flex-shrink-0"
+                            className="w-12 h-12 rounded-md flex-shrink-0"
                           />
                           <div className="min-w-0 flex-1">
                             <p className="text-white text-sm truncate leading-tight mb-0">
