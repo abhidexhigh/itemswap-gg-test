@@ -59,46 +59,23 @@ const useIntersectionObserver = (options = {}) => {
   return [ref, isIntersecting];
 };
 
-// OPTIMIZATION 4: Virtualized list component for large lists
-const VirtualizedGrid = memo(
-  ({ items, renderItem, itemHeight = 120, containerHeight = 400 }) => {
-    const [scrollTop, setScrollTop] = useState(0);
-    const itemsPerRow = 4; // Adjust based on your grid
-    const rows = Math.ceil(items.length / itemsPerRow);
-    const totalHeight = rows * itemHeight;
+// OPTIMIZATION 4: Infinite scroll hook
+const useInfiniteScroll = (callback, hasMore) => {
+  useEffect(() => {
+    const handleScroll = debounce(() => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop >=
+          document.documentElement.offsetHeight - 1000 &&
+        hasMore
+      ) {
+        callback();
+      }
+    }, 200);
 
-    const startIndex = Math.floor(scrollTop / itemHeight) * itemsPerRow;
-    const endIndex = Math.min(
-      startIndex +
-        Math.ceil(containerHeight / itemHeight) * itemsPerRow +
-        itemsPerRow,
-      items.length
-    );
-
-    const visibleItems = items.slice(startIndex, endIndex);
-
-    return (
-      <div
-        style={{ height: containerHeight, overflow: "auto" }}
-        onScroll={(e) => setScrollTop(e.target.scrollTop)}
-      >
-        <div style={{ height: totalHeight, position: "relative" }}>
-          <div
-            style={{
-              transform: `translateY(${Math.floor(startIndex / itemsPerRow) * itemHeight}px)`,
-            }}
-          >
-            <div className="grid grid-cols-4 gap-4">
-              {visibleItems.map((item, index) =>
-                renderItem(item, startIndex + index)
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [callback, hasMore]);
+};
 
 // OPTIMIZATION 5: Memoized Tab Button with better comparison
 const TabButton = memo(
@@ -242,7 +219,7 @@ const ForceItem = memo(
   }
 );
 
-// OPTIMIZATION 9: Optimized SkillTreeItem
+// OPTIMIZATION 9: Optimized SkillTreeItem with proper mobile rendering
 const SkillTreeItem = memo(
   ({ skill, selectedSkillTree, onSelect, i }) => {
     const handleClick = useCallback(() => {
@@ -282,6 +259,55 @@ const SkillTreeItem = memo(
           </span>
         </div>
       </LazyComponent>
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.skill?.key === nextProps.skill?.key &&
+      prevProps.selectedSkillTree === nextProps.selectedSkillTree &&
+      prevProps.i === nextProps.i
+    );
+  }
+);
+
+// OPTIMIZATION: Mobile optimized SkillTreeItem for filters
+const MobileSkillTreeItem = memo(
+  ({ skill, selectedSkillTree, onSelect, i }) => {
+    const handleClick = useCallback(() => {
+      onSelect("skillTree", skill?.key);
+    }, [onSelect, skill?.key]);
+
+    const isSelected = skill?.key === selectedSkillTree;
+
+    return (
+      <div
+        className="flex flex-col items-center gap-1 cursor-pointer group w-12 sm:w-14 flex-shrink-0"
+        onClick={handleClick}
+      >
+        <ReactTltp
+          variant="skillTree"
+          content={skill}
+          id={`mobile-skill-${skill?.key}-${i}`}
+        />
+        <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-105">
+          <SkillTreeImage
+            skill={skill}
+            size="small"
+            tooltipId={`mobile-skill-${skill?.key}-${i}`}
+            className="w-full h-full rounded-lg"
+            showTooltip={false}
+            loading="lazy"
+          />
+          {isSelected && (
+            <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+              <IoMdCheckmarkCircle className="text-[#86efac] text-2xl z-50" />
+            </div>
+          )}
+        </div>
+        <span className="text-[10px] truncate max-w-full text-center text-[#cccccc] mt-1 leading-tight">
+          {skill?.name}
+        </span>
+      </div>
     );
   },
   (prevProps, nextProps) => {
@@ -798,25 +824,42 @@ const MetaDeck = memo(
       });
     }, [metaDeck?.deck?.champions, champions]);
 
-    // Optimized champions display logic
+    // Optimized champions display logic with proper prioritization
     const championsToDisplay = useMemo(() => {
       if (!sortedChampions.length) return [];
 
       if (isChampionsCollapsed) {
-        // Simplified prioritization logic
+        // Priority-based sorting for collapsed view
         const prioritizedChampions = [...sortedChampions].sort((a, b) => {
-          const isAFourStar = (a?.tier || 0) >= 4;
-          const isBFourStar = (b?.tier || 0) >= 4;
-          if (isAFourStar && !isBFourStar) return -1;
-          if (!isAFourStar && isBFourStar) return 1;
-          return (b?.cost || 0) - (a?.cost || 0);
+          const champA = champions.find((c) => c.key === a.key);
+          const champB = champions.find((c) => c.key === b.key);
+
+          // Priority 1: Tier 4 or higher (highest priority)
+          const isATier4Plus = (a?.tier || 0) >= 4;
+          const isBTier4Plus = (b?.tier || 0) >= 4;
+          if (isATier4Plus && !isBTier4Plus) return -1;
+          if (!isATier4Plus && isBTier4Plus) return 1;
+
+          // Priority 2: Higher cost (if both are same tier level)
+          if (isATier4Plus === isBTier4Plus) {
+            const costDiff = (champB?.cost || 0) - (champA?.cost || 0);
+            if (costDiff !== 0) return costDiff;
+          }
+
+          // Priority 3: Has items (if same tier and cost)
+          const aHasItems = a.items && a.items.length > 0;
+          const bHasItems = b.items && b.items.length > 0;
+          if (aHasItems && !bHasItems) return -1;
+          if (!aHasItems && bHasItems) return 1;
+
+          return 0;
         });
 
         return prioritizedChampions.slice(0, 4);
       }
 
       return sortedChampions;
-    }, [sortedChampions, isChampionsCollapsed]);
+    }, [sortedChampions, isChampionsCollapsed, champions]);
 
     const hasMoreChampions =
       sortedChampions.length > championsToDisplay.length &&
@@ -1081,28 +1124,25 @@ const MetaTrendsItems = () => {
     setCompsData(metaDecks);
   }, [metaDecks]);
 
-  // OPTIMIZATION 18: Debounced shuffle function
-  const shuffle = useCallback(
-    debounce((array) => {
-      if (!array || !array.length) return [];
+  // OPTIMIZATION 18: Proper shuffle function (not debounced)
+  const shuffle = useCallback((array) => {
+    if (!array || !array.length) return [];
 
-      const newArray = [...array];
-      for (let i = newArray.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-      }
-      return newArray;
-    }, 100),
-    []
-  );
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+  }, []);
 
-  // OPTIMIZATION 19: Optimized champion filtering with reduced complexity
+  // OPTIMIZATION 19: Fixed champion filtering logic to match original source code
   const { filteredChampions, groupedArray } = useMemo(() => {
     if (!champions || !champions.length) {
       return { filteredChampions: [], groupedArray: [] };
     }
 
-    // Simplified champion filtering - reduce to essential logic
+    // Original logic: Group champions by type, then shuffle and take 2 from each type
     const championsByType = new Map();
     champions.forEach((champion) => {
       if (!champion.type) return;
@@ -1115,11 +1155,12 @@ const MetaTrendsItems = () => {
 
     const filtered = [];
     for (const [_, group] of championsByType) {
-      // Reduce shuffle operations - take first 2 instead of shuffling
-      const selected = group.slice(0, 2);
+      // Shuffle each group and take 2 champions from each type
+      const selected = shuffle([...group]).slice(0, 2);
       filtered.push(...selected);
     }
 
+    // Group the filtered champions by cost
     const groupedByCost = new Map();
     filtered.forEach((champion) => {
       const { cost } = champion;
@@ -1138,7 +1179,7 @@ const MetaTrendsItems = () => {
         .sort(([costA], [costB]) => costA - costB)
         .map(([cost, champions]) => champions),
     };
-  }, [champions]);
+  }, [champions, shuffle]);
 
   const championsWithSelection = useMemo(() => {
     if (!groupedArray.length) return groupedArray;
@@ -1379,35 +1420,39 @@ const MetaTrendsItems = () => {
           {/* Mobile View */}
           <div className="lg:hidden">
             {activeTraitsSubTab === "Origin" && (
-              <VirtualizedGrid
-                items={traits || []}
-                renderItem={(trait, i) => (
-                  <TraitItem
+              <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 w-full max-h-[300px] overflow-y-auto">
+                {traits?.map((trait, i) => (
+                  <div
                     key={`trait-${trait.key}-${i}`}
-                    trait={trait}
-                    selectedTrait={selectedTrait}
-                    onSelect={handleFilterChange}
-                    i={i}
-                  />
-                )}
-                containerHeight={300}
-              />
+                    className="w-full max-w-[70px] sm:max-w-[80px]"
+                  >
+                    <TraitItem
+                      trait={trait}
+                      selectedTrait={selectedTrait}
+                      onSelect={handleFilterChange}
+                      i={i}
+                    />
+                  </div>
+                ))}
+              </div>
             )}
 
             {activeTraitsSubTab === "Forces" && (
-              <VirtualizedGrid
-                items={forces || []}
-                renderItem={(force, i) => (
-                  <ForceItem
+              <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 w-full max-h-[300px] overflow-y-auto">
+                {forces?.map((force, i) => (
+                  <div
                     key={`force-${force.key}-${i}`}
-                    force={force}
-                    selectedTrait={selectedTrait}
-                    onSelect={handleFilterChange}
-                    i={i}
-                  />
-                )}
-                containerHeight={300}
-              />
+                    className="w-full max-w-[70px] sm:max-w-[80px]"
+                  >
+                    <ForceItem
+                      force={force}
+                      selectedTrait={selectedTrait}
+                      onSelect={handleFilterChange}
+                      i={i}
+                    />
+                  </div>
+                ))}
+              </div>
             )}
           </div>
 
@@ -1418,10 +1463,10 @@ const MetaTrendsItems = () => {
                 {others?.origin}
               </div>
               <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 w-full">
-                {traits?.slice(0, 16).map(
+                {traits?.map(
                   (
                     trait,
-                    i // Limit traits shown on desktop
+                    i // Show all traits on desktop
                   ) => (
                     <TraitItem
                       key={`trait-${trait.key}-${i}`}
@@ -1440,10 +1485,10 @@ const MetaTrendsItems = () => {
                 {others?.forces}
               </div>
               <div className="grid grid-cols-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 w-full">
-                {forces?.slice(0, 16).map(
+                {forces?.map(
                   (
                     force,
-                    i // Limit forces shown on desktop
+                    i // Show all forces on desktop
                   ) => (
                     <ForceItem
                       key={`force-${force.key}-${i}`}
@@ -1460,20 +1505,27 @@ const MetaTrendsItems = () => {
         </div>
       ),
       Items: () => (
-        <div className="p-3 md:p-6 bg-[#111111] rounded-lg mt-2 max-h-[170px] md:max-h-full overflow-y-auto">
-          <VirtualizedGrid
-            items={filteredItems.slice(0, 50)} // Limit items for better performance
-            renderItem={(item, i) => (
-              <ItemIcon
-                key={`item-${item.key}-${i}`}
-                item={item}
-                selectedItem={selectedItem}
-                onSelect={handleFilterChange}
-                i={i}
-              />
+        <div className="p-3 md:p-6 bg-[#111111] rounded-lg mt-2 max-h-[300px] md:max-h-full overflow-y-auto">
+          <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-8 xl:!flex justify-center xl:!flex-wrap gap-1 lg:gap-4">
+            {filteredItems.map(
+              (
+                item,
+                i // Show all items
+              ) => (
+                <div
+                  key={`item-${item.key}-${i}`}
+                  className="w-full max-w-[50px] sm:max-w-[60px] md:max-w-[84px]"
+                >
+                  <ItemIcon
+                    item={item}
+                    selectedItem={selectedItem}
+                    onSelect={handleFilterChange}
+                    i={i}
+                  />
+                </div>
+              )
             )}
-            containerHeight={200}
-          />
+          </div>
         </div>
       ),
       SkillTree: () => (
@@ -1505,20 +1557,18 @@ const MetaTrendsItems = () => {
           {/* Mobile View */}
           <div className="lg:hidden">
             {activeSkillsSubTab && skillsByVariant[activeSkillsSubTab] && (
-              <div className="flex flex-wrap justify-center gap-2 w-full">
-                {skillsByVariant[activeSkillsSubTab].slice(0, 12).map(
+              <div className="flex flex-wrap justify-center gap-2 w-full max-h-[300px] overflow-y-auto px-2">
+                {skillsByVariant[activeSkillsSubTab].map(
                   (
                     skill,
-                    i // Limit skills shown
+                    i // Show all skills in mobile
                   ) => (
-                    <SkillTreeImage
+                    <MobileSkillTreeItem
                       key={`mobile-skill-${skill.key}-${i}`}
                       skill={skill}
-                      size="xlarge"
                       selectedSkillTree={selectedSkillTree}
                       onSelect={handleFilterChange}
                       i={i}
-                      loading="lazy"
                     />
                   )
                 )}
@@ -1531,16 +1581,20 @@ const MetaTrendsItems = () => {
             <div className="flex flex-wrap justify-center gap-3 w-full">
               {skillTree
                 ?.filter((skill) => skill?.imageUrl)
-                ?.slice(0, 20) // Limit skills for better performance
-                ?.map((skill, i) => (
-                  <SkillTreeItem
-                    key={`desktop-skill-${skill.key}-${i}`}
-                    skill={skill}
-                    selectedSkillTree={selectedSkillTree}
-                    onSelect={handleFilterChange}
-                    i={i}
-                  />
-                ))}
+                ?.map(
+                  (
+                    skill,
+                    i // Show all skills on desktop
+                  ) => (
+                    <SkillTreeItem
+                      key={`desktop-skill-${skill.key}-${i}`}
+                      skill={skill}
+                      selectedSkillTree={selectedSkillTree}
+                      onSelect={handleFilterChange}
+                      i={i}
+                    />
+                  )
+                )}
             </div>
           </div>
         </div>
@@ -1598,23 +1652,28 @@ const MetaTrendsItems = () => {
     ));
   }, [activeTab, handleTabChange, others]);
 
-  // OPTIMIZATION 24: Paginated deck rendering
+  // OPTIMIZATION 24: Auto-loading on scroll instead of button
   const [visibleDecks, setVisibleDecks] = useState(5); // Start with 5 decks
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const loadMoreDecks = useCallback(() => {
+    if (isLoadingMore) return;
+
     setIsLoadingMore(true);
     setTimeout(() => {
-      setVisibleDecks((prev) => Math.min(prev + 5, compsData.length));
+      setVisibleDecks((prev) => Math.min(prev + 3, compsData.length)); // Load 3 at a time
       setIsLoadingMore(false);
     }, 100);
-  }, [compsData.length]);
+  }, [compsData.length, isLoadingMore]);
+
+  const hasMoreDecks = visibleDecks < compsData.length;
+
+  // Use infinite scroll hook
+  useInfiniteScroll(loadMoreDecks, hasMoreDecks && !isLoadingMore);
 
   const visibleCompsData = useMemo(() => {
     return compsData.slice(0, visibleDecks);
   }, [compsData, visibleDecks]);
-
-  const hasMoreDecks = visibleDecks < compsData.length;
 
   return (
     <div className="mx-auto md:px-0 lg:px-0 py-6">
@@ -1645,18 +1704,21 @@ const MetaTrendsItems = () => {
                 />
               ))}
 
-              {/* Load More Button */}
-              {hasMoreDecks && (
+              {/* Loading indicator for infinite scroll */}
+              {isLoadingMore && (
                 <div className="flex justify-center py-4">
-                  <button
-                    onClick={loadMoreDecks}
-                    disabled={isLoadingMore}
-                    className="px-6 py-3 bg-[#2D2F37] hover:bg-[#3D3F47] text-[#D9A876] rounded-lg transition-colors duration-200 disabled:opacity-50"
-                  >
-                    {isLoadingMore
-                      ? "Loading..."
-                      : `Load More (${compsData.length - visibleDecks} remaining)`}
-                  </button>
+                  <div className="text-[#D9A876] animate-pulse">
+                    Loading more decks...
+                  </div>
+                </div>
+              )}
+
+              {/* End indicator */}
+              {!hasMoreDecks && compsData.length > 5 && (
+                <div className="flex justify-center py-4">
+                  <div className="text-gray-500 text-sm">
+                    Showing all {compsData.length} decks
+                  </div>
                 </div>
               )}
             </div>
