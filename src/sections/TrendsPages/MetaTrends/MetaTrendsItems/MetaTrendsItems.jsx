@@ -59,22 +59,95 @@ const useIntersectionObserver = (options = {}) => {
   return [ref, isIntersecting];
 };
 
-// OPTIMIZATION 4: Infinite scroll hook
+// OPTIMIZATION 4: Mobile-first infinite scroll with comprehensive detection
 const useInfiniteScroll = (callback, hasMore) => {
-  useEffect(() => {
-    const handleScroll = debounce(() => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop >=
-          document.documentElement.offsetHeight - 1000 &&
-        hasMore
-      ) {
-        callback();
-      }
-    }, 200);
+  const [isMobile, setIsMobile] = useState(false);
+  const scrollTimeoutRef = useRef(null);
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [callback, hasMore]);
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(
+        window.innerWidth <= 768 ||
+          /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+            navigator.userAgent
+          )
+      );
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!hasMore) return;
+
+      // Clear existing timeout
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+
+      scrollTimeoutRef.current = setTimeout(
+        () => {
+          // Multiple methods to get scroll position for mobile compatibility
+          const scrollTop = Math.max(
+            window.pageYOffset,
+            document.documentElement.scrollTop,
+            document.body.scrollTop
+          );
+
+          const windowHeight =
+            window.innerHeight || document.documentElement.clientHeight;
+          const documentHeight = Math.max(
+            document.documentElement.scrollHeight,
+            document.documentElement.offsetHeight,
+            document.body.scrollHeight,
+            document.body.offsetHeight
+          );
+
+          // Very aggressive trigger for mobile - 300px from bottom
+          const triggerDistance = isMobile ? 300 : 800;
+          const distanceFromBottom =
+            documentHeight - (scrollTop + windowHeight);
+
+          console.log("Scroll Debug:", {
+            isMobile,
+            scrollTop,
+            windowHeight,
+            documentHeight,
+            distanceFromBottom,
+            triggerDistance,
+            shouldTrigger: distanceFromBottom <= triggerDistance,
+          });
+
+          if (distanceFromBottom <= triggerDistance) {
+            callback();
+          }
+        },
+        isMobile ? 50 : 100
+      ); // Very fast response on mobile
+    };
+
+    // Add multiple event listeners for maximum mobile compatibility
+    const events = ["scroll", "touchmove", "touchend"];
+    const options = { passive: true };
+
+    events.forEach((event) => {
+      window.addEventListener(event, handleScroll, options);
+      document.addEventListener(event, handleScroll, options);
+    });
+
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      events.forEach((event) => {
+        window.removeEventListener(event, handleScroll, options);
+        document.removeEventListener(event, handleScroll, options);
+      });
+    };
+  }, [callback, hasMore, isMobile]);
 };
 
 // OPTIMIZATION 5: Memoized Tab Button with better comparison
@@ -1652,27 +1725,67 @@ const MetaTrendsItems = () => {
     ));
   }, [activeTab, handleTabChange, others]);
 
-  // OPTIMIZATION 24: Auto-loading on scroll instead of button
-  const [visibleDecks, setVisibleDecks] = useState(5); // Start with 5 decks
+  // OPTIMIZATION 24: Simplified and more reliable auto-loading
+  const [visibleDecks, setVisibleDecks] = useState(3); // Start with fewer decks for testing
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const loadingRef = useRef(false);
+  const lastLoadTime = useRef(0);
 
   const loadMoreDecks = useCallback(() => {
-    if (isLoadingMore) return;
+    const now = Date.now();
 
+    // Prevent rapid multiple calls (debounce at callback level)
+    if (loadingRef.current || now - lastLoadTime.current < 500) {
+      console.log("Blocked duplicate load call");
+      return;
+    }
+
+    if (!hasMoreDecks) {
+      console.log("No more decks to load");
+      return;
+    }
+
+    console.log("Loading more decks...", {
+      current: visibleDecks,
+      total: compsData.length,
+    });
+
+    loadingRef.current = true;
+    lastLoadTime.current = now;
     setIsLoadingMore(true);
+
+    // Immediate update for better mobile experience
     setTimeout(() => {
-      setVisibleDecks((prev) => Math.min(prev + 3, compsData.length)); // Load 3 at a time
+      setVisibleDecks((prev) => {
+        const newCount = Math.min(prev + 2, compsData.length); // Load 2 at a time
+        console.log("Updated visible decks:", newCount);
+        return newCount;
+      });
       setIsLoadingMore(false);
+      loadingRef.current = false;
     }, 100);
-  }, [compsData.length, isLoadingMore]);
+  }, [compsData.length, visibleDecks]);
 
   const hasMoreDecks = visibleDecks < compsData.length;
 
   // Use infinite scroll hook
-  useInfiniteScroll(loadMoreDecks, hasMoreDecks && !isLoadingMore);
+  useInfiniteScroll(loadMoreDecks, hasMoreDecks);
+
+  // Reset when data changes
+  useEffect(() => {
+    console.log("Data changed, resetting visible decks");
+    setVisibleDecks(3);
+    loadingRef.current = false;
+    lastLoadTime.current = 0;
+  }, [compsData]);
 
   const visibleCompsData = useMemo(() => {
-    return compsData.slice(0, visibleDecks);
+    const result = compsData.slice(0, visibleDecks);
+    console.log("Visible decks updated:", {
+      showing: result.length,
+      total: compsData.length,
+    });
+    return result;
   }, [compsData, visibleDecks]);
 
   return (
@@ -1695,7 +1808,7 @@ const MetaTrendsItems = () => {
             <div className="space-y-4">
               {visibleCompsData.map((metaDeck, index) => (
                 <MetaDeck
-                  key={`deck-${metaDeck.name}-${index}`} // Better key for React optimization
+                  key={`deck-${metaDeck.name}-${index}`}
                   metaDeck={metaDeck}
                   i={index}
                   isClosed={isClosed}
@@ -1704,20 +1817,42 @@ const MetaTrendsItems = () => {
                 />
               ))}
 
-              {/* Loading indicator for infinite scroll */}
+              {/* Debug info for mobile testing */}
+              <div className="md:hidden text-xs text-gray-500 text-center py-2">
+                Showing {visibleCompsData.length} of {compsData.length} decks
+                {hasMoreDecks && " - Scroll down for more"}
+              </div>
+
+              {/* Loading indicator */}
               {isLoadingMore && (
-                <div className="flex justify-center py-4">
-                  <div className="text-[#D9A876] animate-pulse">
-                    Loading more decks...
+                <div className="flex justify-center py-6">
+                  <div className="flex items-center space-x-2 text-[#D9A876]">
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#D9A876]"></div>
+                    <span className="text-sm">Loading more decks...</span>
                   </div>
                 </div>
               )}
 
+              {/* Manual load button as fallback for mobile */}
+              {hasMoreDecks && !isLoadingMore && (
+                <div className="md:hidden flex justify-center py-4">
+                  <button
+                    onClick={loadMoreDecks}
+                    className="px-4 py-2 bg-[#2D2F37] hover:bg-[#3D3F47] text-[#D9A876] rounded-lg text-sm transition-colors duration-200"
+                  >
+                    Load More ({compsData.length - visibleDecks} remaining)
+                  </button>
+                </div>
+              )}
+
               {/* End indicator */}
-              {!hasMoreDecks && compsData.length > 5 && (
-                <div className="flex justify-center py-4">
-                  <div className="text-gray-500 text-sm">
-                    Showing all {compsData.length} decks
+              {!hasMoreDecks && compsData.length > 3 && (
+                <div className="flex flex-col items-center py-6 space-y-2">
+                  <div className="text-gray-500 text-sm text-center">
+                    ✓ Showing all {compsData.length} decks
+                  </div>
+                  <div className="text-gray-600 text-xs text-center md:hidden">
+                    Scroll up to see more options
                   </div>
                 </div>
               )}
