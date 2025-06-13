@@ -10,7 +10,6 @@ import React, {
 } from "react";
 import "react-tooltip/dist/react-tooltip.css";
 import MetaTrendsCard from "../MetaTrendsCard/MetaTrendsCard";
-import { PiEye, PiEyeClosed } from "react-icons/pi";
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import Comps from "../../../../data/compsNew.json";
