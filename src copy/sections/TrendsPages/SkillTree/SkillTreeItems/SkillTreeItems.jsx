@@ -3,24 +3,23 @@ import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import "react-tooltip/dist/react-tooltip.css";
 import TrendFilters from "src/components/trendFilters";
-import { HiArrowSmUp, HiArrowSmDown } from "react-icons/hi";
-import { IoMdClose } from "react-icons/io";
+import {
+  HiArrowSmUp,
+  HiArrowSmDown,
+  HiChevronDown,
+  HiChevronUp,
+} from "react-icons/hi";
 import { PiEye } from "react-icons/pi";
-import { IoMdCheckmarkCircle } from "react-icons/io";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
-import { createPortal } from "react-dom";
 import metaDeckSkillTreeStats from "../../../../data/newData/metaDeckSkillTree.json";
 import Comps from "../../../../data/compsNew.json";
-import Forces from "../../../../data/newData/force.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
 import ScrollableTable from "src/utils/ScrollableTable";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
 import ColoredValue from "src/components/ColoredValue";
-import ForceIcon from "src/components/forceIcon";
 import CompsModal from "./CompsModal";
-import GradientText from "src/components/gradientText/GradientText";
+import SkillTreeImage from "src/components/SkillTreeImage";
 
 const ProjectItems = () => {
   const { t } = useTranslation();
@@ -56,6 +55,20 @@ const ProjectItems = () => {
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItemForModal, setSelectedItemForModal] = useState(null);
+  // Mobile state
+  const [mobileFilter, setMobileFilter] = useState("tops");
+  const [expandedRows, setExpandedRows] = useState(new Set());
+
+  // Mobile filter options (excluding serial no, image, name, avg rank, top 3 comps)
+  const mobileFilterOptions = [
+    { key: "tops", label: others?.top4 || "Top 4%" },
+    { key: "wins", label: others?.winPercentage || "Win %" },
+    {
+      key: "threeStarPercentage",
+      label: others?.threeStarsPercentage || "3⭐ %",
+    },
+    { key: "plays", label: others?.played || "Played" },
+  ];
 
   // Get unique variants from the skill tree data and prepare buttons and image URLs
   const uniqueVariants = [
@@ -212,6 +225,138 @@ const ProjectItems = () => {
     setIsModalOpen(true);
   };
 
+  // Mobile filter functions
+  const handleMobileFilterClick = (filterKey) => {
+    setMobileFilter(filterKey);
+
+    // If clicking on the same filter, toggle sort direction
+    if (mobileFilter === filterKey && sortConfig.key === filterKey) {
+      const newDirection =
+        sortConfig.direction === "ascending" ? "descending" : "ascending";
+      setSortConfig({ key: filterKey, direction: newDirection });
+    } else {
+      // Auto-sort by the selected filter (default to descending for new selections)
+      setSortConfig({ key: filterKey, direction: "descending" });
+    }
+  };
+
+  const toggleRowExpansion = (index) => {
+    const newExpandedRows = new Set(expandedRows);
+    if (newExpandedRows.has(index)) {
+      newExpandedRows.delete(index);
+    } else {
+      newExpandedRows.add(index);
+    }
+    setExpandedRows(newExpandedRows);
+  };
+
+  const renderMobileValue = (item, key) => {
+    switch (key) {
+      case "tops":
+      case "wins":
+        return `${((item[key] * 100) / item.plays).toFixed(2)}%`;
+      case "threeStarPercentage":
+        return `${(item[key] * 100).toFixed(2)}%`;
+      case "plays":
+        return item[key].toLocaleString("en-US");
+      default:
+        return item[key];
+    }
+  };
+
+  const renderExpandedContent = (item) => {
+    const hiddenData = [
+      {
+        label: others?.top4 || "Top 4%",
+        value: `${((item.tops * 100) / item.plays).toFixed(2)}%`,
+        key: "tops",
+      },
+      {
+        label: others?.winPercentage || "Win %",
+        value: `${((item.wins * 100) / item.plays).toFixed(2)}%`,
+        key: "wins",
+      },
+      {
+        label: others?.threeStarsPercentage || "3⭐ %",
+        value: `${(item.threeStarPercentage * 100).toFixed(2)}%`,
+        key: "threeStarPercentage",
+      },
+      {
+        label: others?.played || "Played",
+        value: item.plays.toLocaleString("en-US"),
+        key: "plays",
+      },
+    ];
+
+    // Filter out the currently selected mobile filter
+    const filteredData = hiddenData.filter((data) => data.key !== mobileFilter);
+
+    return (
+      <div className="bg-[#1a1a1a] border-t border-[#2D2F37]">
+        <div className="grid grid-cols-3 gap-3 p-4">
+          {filteredData.map((data, index) => (
+            <div key={index} className="flex flex-col">
+              <span className="text-xs text-gray-400 mb-1">{data.label}</span>
+              <span className="text-sm text-white">{data.value}</span>
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-between items-center px-4">
+          {/* Best Pairs */}
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-400 mb-2 text-center">
+              {others?.best} {others?.pairs}
+            </span>
+            <div className="flex flex-wrap gap-1">
+              {item?.bestPairs?.map((skillKey, index) => {
+                const skill = skillTree.find(
+                  (s) => s.key === skillKey || s.name === skillKey
+                );
+                if (!skill) return null;
+                return (
+                  <div key={`skill-${index}`} className="relative">
+                    <SkillTreeImage
+                      skill={skill}
+                      size="medium"
+                      tooltipId={`skill-${skill.key}-${index}`}
+                      className="w-16 h-16"
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          {/* Top 3 Champions */}
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-400 mb-2 text-center">
+              {others?.top3} {others?.champions}
+            </span>
+            <div className="flex gap-1">
+              {item?.top3Champions?.map((champKey, index) => {
+                const champion = champions.find(
+                  (c) => c.key === champKey || c.name === champKey
+                );
+                if (!champion) return null;
+                return (
+                  <div key={`champ-${index}`} className="relative">
+                    <CardImage
+                      src={champion}
+                      imgStyle="w-16 h-16"
+                      identificationImageStyle="w-2 h-2"
+                      textStyle="text-[6px] hidden"
+                      cardSize="!w-16 !h-16"
+                      forces={forces}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <div className="pt-2 bg-[#111111] md:bg-transparent w-full">
@@ -233,28 +378,71 @@ const ProjectItems = () => {
           </div>
         </div>
 
-        {/* Table section */}
-        <div className="projects-row overflow-auto">
+        {/* Mobile Filter Buttons - Only visible on mobile */}
+        <div className="block md:hidden mb-2">
+          <div className="flex flex-col items-center gap-2 px-4">
+            {/* All buttons in a single row since we only have 4 filters */}
+            <div className="flex gap-0">
+              {mobileFilterOptions.map((option, index) => {
+                const isFirst = index === 0;
+                const isLast = index === mobileFilterOptions.length - 1;
+                const isActive = mobileFilter === option.key;
+
+                return (
+                  <button
+                    key={option.key}
+                    onClick={() => handleMobileFilterClick(option.key)}
+                    className={`
+                    px-3 py-2 text-xs font-medium transition-colors flex items-center justify-center space-x-1 border
+                    ${isFirst ? "rounded-l-lg" : ""} 
+                    ${isLast ? "rounded-r-lg" : ""} 
+                    ${!isFirst ? "-ml-px" : ""} 
+                    ${
+                      isActive
+                        ? "bg-[#D9A876] text-black border-[#D9A876] z-10 relative"
+                        : "bg-[#2D2F37] text-white border-[#404040] hover:bg-[#3D3F47] hover:border-[#4A4A4A]"
+                    }
+                  `}
+                  >
+                    <span>{option.label}</span>
+                    {isActive && sortConfig.key === option.key && (
+                      <span className="ml-1">
+                        {sortConfig.direction === "ascending" ? (
+                          <HiArrowSmUp className="w-3 h-3" />
+                        ) : (
+                          <HiArrowSmDown className="w-3 h-3" />
+                        )}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Table - Hidden on mobile */}
+        <div className="hidden md:block projects-row overflow-auto">
           <ScrollableTable>
-            <table className="w-full min-w-[1300px] relative lg:border-separate lg:border-spacing-y-2">
+            <table className="w-full min-w-[1300px] relative border-collapse">
               <thead className="sticky top-0 z-50">
                 <tr className="bg-[#000000]">
-                  <th className="lg:rounded-l-lg p-2 font-semibold w-[50px]">
-                    <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px]">
+                  <th className="p-2 font-semibold w-[50px] text-center border-b border-[#2D2F37]">
+                    <p className="p-0 text-sm sm:text-base md:text-[16px] mb-0 py-2">
                       {others.rank}
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold min-w-[200px] sm:min-w-[220px] md:min-w-[200px] ${sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[160px] md:min-w-[200px] border-b border-[#2D2F37] ${sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("key")}
                   >
-                    <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
+                    <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center ml-[10px]">
                       {others.items}
                       <span className="ml-2">{renderSortIcon("key")}</span>
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] ${sortConfig?.key === "avgPlacement" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] border-b border-[#2D2F37] ${sortConfig?.key === "avgPlacement" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("avgPlacement")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -265,7 +453,7 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] ${sortConfig?.key === "tops" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] border-b border-[#2D2F37] ${sortConfig?.key === "tops" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("tops")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -274,7 +462,7 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] ${sortConfig?.key === "wins" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] border-b border-[#2D2F37] ${sortConfig?.key === "wins" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("wins")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -283,7 +471,7 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] ${sortConfig?.key === "threeStarPercentage" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] border-b border-[#2D2F37] ${sortConfig?.key === "threeStarPercentage" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("threeStarPercentage")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -294,7 +482,7 @@ const ProjectItems = () => {
                     </p>
                   </th>
                   <th
-                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] ${sortConfig?.key === "plays" ? "bg-[#2D2F37]" : ""}`}
+                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] border-b border-[#2D2F37] ${sortConfig?.key === "plays" ? "bg-[#2D2F37]" : ""}`}
                     onClick={() => requestSort("plays")}
                   >
                     <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -302,18 +490,18 @@ const ProjectItems = () => {
                       <span className="ml-2">{renderSortIcon("plays")}</span>
                     </p>
                   </th>
-                  <th className="p-2 font-semibold min-w-[140px]">
-                    <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px] text-center">
+                  <th className="p-2 font-semibold min-w-[140px] border-b border-[#2D2F37]">
+                    <p className="p-0 text-sm sm:text-base md:text-[16px] text-center mb-0">
                       {others.best} {others.pairs}
                     </p>
                   </th>
-                  <th className="p-2 font-semibold min-w-[140px]">
-                    <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px] text-center">
+                  <th className="p-2 font-semibold min-w-[140px] border-b border-[#2D2F37]">
+                    <p className="p-0 text-sm sm:text-base md:text-[16px] text-center mb-0">
                       {others.top3} {others.champions}
                     </p>
                   </th>
-                  <th className="lg:rounded-r-lg p-2 font-semibold min-w-[140px]">
-                    <p className="p-0 text-sm sm:text-base !mx-2 my-2 md:text-[16px] text-center">
+                  <th className="p-2 font-semibold min-w-[140px] border-b border-[#2D2F37]">
+                    <p className="p-0 text-sm sm:text-base md:text-[16px] text-center mb-0">
                       {others.top3} {others.comps}
                     </p>
                   </th>
@@ -326,26 +514,23 @@ const ProjectItems = () => {
                 )}
                 {metaDeckSkillTreeStatsData.map((item, index) => (
                   <tr
-                    className="m-2 hover:bg-[#2D2F37] transition-colors duration-200 md:border-[1px] md:border-[#2D2F37]"
+                    className="hover:bg-[#2D2F37] transition-colors duration-200 border-b border-[#2D2F37]"
                     key={index}
                   >
-                    <td className="p-2 lg:rounded-l-lg">
+                    <td className="p-2 text-center">
                       <div className="text-center text-base">{index + 1}</div>
                     </td>
                     <td className={`p-2 ${getCellClass("key")}`}>
                       <div>
                         <div className="flex justify-start items-center space-x-1 sm:space-x-2">
                           <>
-                            <OptimizedImage
-                              src={
-                                items?.find((i) => i?.key === item?.key)
-                                  ?.imageUrl || item?.imageUrl
-                              }
-                              alt="icon"
-                              width={80}
-                              height={80}
-                              className="w-[40px] h-[40px] sm:w-[50px] sm:h-[50px] md:w-[84px] md:h-[84px] !border !border-[#ffffff60] rounded-md flex-shrink-0"
-                              data-tooltip-id={`${item?.key}`}
+                            <SkillTreeImage
+                              skill={skillTree?.find(
+                                (i) => i?.key === item?.key
+                              )}
+                              size="medium"
+                              tooltipId={`${item?.key}`}
+                              className="w-14 h-14 md:w-20 md:h-20"
                             />
                             <ReactTltp
                               variant="item"
@@ -421,7 +606,7 @@ const ProjectItems = () => {
                         {item?.plays.toLocaleString("en-US")}
                       </p>
                     </td>
-                    <td className="p-2 font-semibold min-w-[140px]">
+                    <td className="p-2 font-semibold min-w-[120px]">
                       <div className="flex items-center justify-center flex-wrap gap-1">
                         {item?.bestPairs?.map((skillKey, index) => {
                           const skill = skillTree.find(
@@ -430,18 +615,11 @@ const ProjectItems = () => {
                           if (!skill) return null;
                           return (
                             <React.Fragment key={`skill-${index}`}>
-                              <OptimizedImage
-                                alt={skill.name}
-                                width={80}
-                                height={80}
-                                src={skill.imageUrl}
-                                className="w-6 h-6 sm:w-8 sm:h-8 md:w-14 md:h-14"
-                                data-tooltip-id={`skill-${skill.key}-${index}`}
-                              />
-                              <ReactTltp
-                                variant="skillTree"
-                                id={`skill-${skill.key}-${index}`}
-                                content={skill}
+                              <SkillTreeImage
+                                skill={skill}
+                                size="medium"
+                                tooltipId={`skill-${skill.key}-${index}`}
+                                className="w-12 h-12 md:w-14 md:h-14"
                               />
                             </React.Fragment>
                           );
@@ -499,6 +677,131 @@ const ProjectItems = () => {
               </tbody>
             </table>
           </ScrollableTable>
+        </div>
+
+        {/* Mobile Table - Only visible on mobile */}
+        <div className="block md:hidden">
+          <div className="bg-[#111111]">
+            {/* Mobile Table Header */}
+            <div
+              className="grid gap-1 p-3 bg-[#1a1a1a] text-white font-semibold text-sm border-b border-[#2D2F37]"
+              style={{ gridTemplateColumns: "8% 35% 15% 17% 22%" }}
+            >
+              <div className="text-center flex justify-center items-center">
+                #
+              </div>
+              <div
+                className={`cursor-pointer flex items-center ${sortConfig?.key === "key" ? "text-[#D9A876]" : ""}`}
+                onClick={() => requestSort("key")}
+              >
+                Skill
+                <span className="ml-1">{renderSortIcon("key")}</span>
+              </div>
+              <div
+                className={`text-center cursor-pointer flex items-center justify-center ${sortConfig?.key === "avgPlacement" ? "text-[#D9A876]" : ""}`}
+                onClick={() => requestSort("avgPlacement")}
+              >
+                Avg Rank
+                <span className="ml-1">{renderSortIcon("avgPlacement")}</span>
+              </div>
+              <div
+                className={`text-center flex items-center justify-center ${mobileFilter === sortConfig.key ? "text-[#D9A876]" : ""}`}
+              >
+                <span>
+                  {
+                    mobileFilterOptions.find(
+                      (option) => option.key === mobileFilter
+                    )?.label
+                  }
+                </span>
+                {mobileFilter === sortConfig.key && (
+                  <span className="ml-1">
+                    {sortConfig.direction === "ascending" ? (
+                      <HiArrowSmUp className="w-3 h-3" />
+                    ) : (
+                      <HiArrowSmDown className="w-3 h-3" />
+                    )}
+                  </span>
+                )}
+              </div>
+              <div className="text-center flex justify-center items-center">
+                Top 3 Comps
+              </div>
+            </div>
+
+            {/* Mobile Table Body */}
+            {metaDeckSkillTreeStatsData.map((item, index) => (
+              <div key={index} className="border-b border-[#2D2F37]">
+                {/* Main Row */}
+                <div
+                  className="grid gap-1 p-3 items-center cursor-pointer hover:bg-[#2D2F37] transition-colors duration-200"
+                  style={{ gridTemplateColumns: "8% 35% 15% 17% 22%" }}
+                  onClick={() => toggleRowExpansion(index)}
+                >
+                  {/* Serial No */}
+                  <div className="text-center text-white font-medium">
+                    {index + 1}
+                  </div>
+
+                  {/* Image & Name */}
+                  <div className="flex items-center space-x-2 min-w-0">
+                    <SkillTreeImage
+                      skill={skillTree?.find((i) => i?.key === item?.key)}
+                      size="large"
+                      tooltipId={`${item?.key}`}
+                      className="w-12 h-12 flex-shrink-0"
+                    />
+                    <ReactTltp
+                      variant="item"
+                      id={`${item?.key}`}
+                      content={items.find((i) => i.key === item.key) || item}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-white text-sm truncate leading-tight mb-0">
+                        {items.find((i) => i.key === item.key)?.name ||
+                          item.name}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Avg Rank */}
+                  <div className="text-center text-white text-sm">
+                    <ColoredValue value={item?.avgPlacement} prefix="#" />
+                  </div>
+
+                  {/* Selected Filter Value */}
+                  <div
+                    className={`text-center text-sm ${mobileFilter === sortConfig.key ? "text-[#D9A876] font-medium" : "text-white"} flex items-center justify-center space-x-1`}
+                  >
+                    <span>{renderMobileValue(item, mobileFilter)}</span>
+                    {expandedRows.has(index) ? (
+                      <HiChevronUp className="w-4 h-4" />
+                    ) : (
+                      <HiChevronDown className="w-4 h-4" />
+                    )}
+                  </div>
+
+                  {/* Top 3 Comps */}
+                  <div className="text-center">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openModal(item);
+                      }}
+                      className="group flex items-center justify-center gap-1 text-xs text-[#D9A876] hover:text-[#F2A03D] transition-all duration-200 cursor-pointer w-full"
+                      title="View top comps"
+                    >
+                      <PiEye className="text-sm group-hover:scale-110 transition-all duration-200" />
+                      <span>View</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Expanded Content */}
+                {expandedRows.has(index) && renderExpandedContent(item)}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
