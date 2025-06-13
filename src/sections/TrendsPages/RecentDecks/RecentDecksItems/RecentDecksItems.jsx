@@ -39,17 +39,27 @@ const SkillTreeIcon = memo(({ skillTree, skills, size = "default" }) => {
 });
 
 // Reusable tab button component
-const TabButton = memo(({ active, label, onClick }) => (
-  <button
-    type="button"
-    className={`px-6 py-3 text-sm md:text-base font-medium transition-colors duration-200 ${
-      active ? "bg-[#ffffff] text-[#111111]" : "text-white hover:bg-[#ffffff20]"
-    }`}
-    onClick={onClick}
-  >
-    {label}
-  </button>
-));
+const TabButton = memo(
+  ({ active, label, onClick }) => (
+    <button
+      type="button"
+      className={`px-6 py-3 text-sm md:text-base font-medium transition-colors duration-200 ${
+        active
+          ? "bg-[#2D2F37] text-[#D9A876]"
+          : "text-[#999] hover:bg-[#2D2F37]"
+      }`}
+      onClick={onClick}
+    >
+      {label}
+    </button>
+  ),
+  (prevProps, nextProps) => {
+    return (
+      prevProps.active === nextProps.active &&
+      prevProps.label === nextProps.label
+    );
+  }
+);
 
 // Trait item component - optimized with stable refs
 const TraitItem = memo(({ trait, selectedTrait, onSelect, i, t }) => {
@@ -816,6 +826,47 @@ const SkillTreeItem = memo(({ skill, selectedSkillTree, onSelect, i }) => {
   );
 });
 
+// Mobile SkillTreeItem component
+const MobileSkillTreeItem = memo(
+  ({ skill, selectedSkillTree, onSelect, i }) => {
+    const handleClick = useCallback(() => {
+      onSelect("skillTree", skill?.key);
+    }, [onSelect, skill?.key]);
+
+    const isSelected = skill?.key === selectedSkillTree;
+
+    return (
+      <div
+        className="flex flex-col items-center gap-1 cursor-pointer group w-12 sm:w-14 flex-shrink-0"
+        onClick={handleClick}
+      >
+        <ReactTltp
+          variant="skillTree"
+          content={skill}
+          id={`mobile-skill-${skill?.key}-${i}`}
+        />
+        <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-105">
+          <SkillTreeImage
+            skill={skill}
+            size="xlarge"
+            tooltipId={`mobile-skill-${skill?.key}-${i}`}
+            className="w-full h-full"
+            showTooltip={false}
+          />
+          {isSelected && (
+            <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+              <IoMdCheckmarkCircle className="text-[#86efac] text-2xl z-50" />
+            </div>
+          )}
+        </div>
+        <span className="text-[10px] truncate max-w-full text-center text-[#cccccc] mt-1 leading-tight">
+          {skill?.name}
+        </span>
+      </div>
+    );
+  }
+);
+
 const RecentDecksItems = () => {
   const { t } = useTranslation();
   const others = t("others");
@@ -1011,7 +1062,7 @@ const RecentDecksItems = () => {
     setActiveSkillsSubTab(subTab);
   }, []);
 
-  // Optimize skills grouping with Map
+  // Simplified skills grouping using existing variant property
   const skillsByVariant = useMemo(() => {
     if (!skillTree?.length) return {};
 
@@ -1019,33 +1070,8 @@ const RecentDecksItems = () => {
     const validSkills = skillTree.filter((skill) => skill?.imageUrl);
 
     validSkills.forEach((skill) => {
-      let variant = "General";
-
-      if (skill.category) {
-        variant = skill.category;
-      } else if (skill.type) {
-        variant = skill.type;
-      } else if (skill.variant) {
-        variant = skill.variant;
-      } else if (skill.name) {
-        const skillName = skill.name.toLowerCase();
-        const patterns = [
-          { keywords: ["fire", "flame", "burn"], variant: "Fire" },
-          { keywords: ["water", "ice", "frost"], variant: "Water" },
-          { keywords: ["earth", "stone", "rock"], variant: "Earth" },
-          { keywords: ["air", "wind", "storm"], variant: "Air" },
-          { keywords: ["light", "holy", "divine"], variant: "Light" },
-          { keywords: ["dark", "shadow", "void"], variant: "Dark" },
-          { keywords: ["nature", "plant", "forest"], variant: "Nature" },
-        ];
-
-        for (const pattern of patterns) {
-          if (pattern.keywords.some((keyword) => skillName.includes(keyword))) {
-            variant = pattern.variant;
-            break;
-          }
-        }
-      }
+      // Use existing variant property, with fallbacks for category/type if needed
+      const variant = skill.variant || "General";
 
       if (!grouped.has(variant)) {
         grouped.set(variant, []);
@@ -1231,10 +1257,9 @@ const RecentDecksItems = () => {
               {activeSkillsSubTab && skillsByVariant[activeSkillsSubTab] && (
                 <div className="flex flex-wrap justify-center gap-2 w-full">
                   {skillsByVariant[activeSkillsSubTab].map((skill, i) => (
-                    <SkillTreeImage
+                    <MobileSkillTreeItem
                       key={`mobile-skill-${skill.key}-${i}`}
                       skill={skill}
-                      size="xlarge"
                       selectedSkillTree={selectedSkillTree}
                       onSelect={handleFilterChange}
                       i={i}
@@ -1291,7 +1316,7 @@ const RecentDecksItems = () => {
       <div className="space-y-2">
         {/* Tabs Section */}
         <div className="flex justify-center md:justify-start">
-          <div className="inline-flex rounded-lg overflow-hidden border border-[#ffffff20] bg-[#111111]">
+          <div className="inline-flex rounded-lg overflow-hidden border border-[#2D2F37] bg-[#1D1D1D]">
             <TabButton
               active={activeTab === "Champions"}
               label={others?.champions}

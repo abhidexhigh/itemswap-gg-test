@@ -1268,7 +1268,7 @@ const MetaTrendsItems = () => {
     return items?.filter((item) => !item?.isFromItem) || [];
   }, [items]);
 
-  // OPTIMIZATION 20: Debounced filter handler
+  // OPTIMIZATION 20: Filter handler with reduced debounce for better mobile responsiveness
   const handleFilterChange = useCallback(
     debounce((type, key) => {
       const metaDecks = metaDecksRef.current;
@@ -1387,7 +1387,7 @@ const MetaTrendsItems = () => {
       }
 
       setCompsData(newCompsData);
-    }, 150),
+    }, 50), // Reduced debounce for better mobile responsiveness
     [selectedChampion, selectedItem, selectedTrait, selectedSkillTree]
   );
 
@@ -1408,37 +1408,31 @@ const MetaTrendsItems = () => {
     setActiveSkillsSubTab(subTab);
   }, []);
 
-  // OPTIMIZATION 21: Simplified skills grouping
+  // OPTIMIZATION 21: Simplified skills grouping using existing variant property
   const skillsByVariant = useMemo(() => {
-    if (!skillTree || skillTree.length === 0) return {};
+    if (!skillTree?.length) return {};
 
-    const grouped = { General: [] };
+    const grouped = new Map();
     const validSkills = skillTree.filter((skill) => skill?.imageUrl);
 
     validSkills.forEach((skill) => {
-      // Simplified categorization
-      let variant = "General";
+      // Use existing variant property, with fallbacks for category/type if needed
+      const variant = skill.variant || "General";
 
-      if (skill.category) {
-        variant = skill.category;
-      } else if (skill.type) {
-        variant = skill.type;
+      if (!grouped.has(variant)) {
+        grouped.set(variant, []);
       }
-
-      if (!grouped[variant]) {
-        grouped[variant] = [];
-      }
-      grouped[variant].push(skill);
+      grouped.get(variant).push(skill);
     });
 
-    return grouped;
+    return Object.fromEntries(grouped);
   }, [skillTree]);
 
-  // Initialize skills sub-tab
+  // Initialize skills sub-tab efficiently
   useEffect(() => {
-    if (Object.keys(skillsByVariant).length > 0 && !activeSkillsSubTab) {
-      const firstVariant = Object.keys(skillsByVariant)[0];
-      setActiveSkillsSubTab(firstVariant);
+    const variants = Object.keys(skillsByVariant);
+    if (variants.length > 0 && !activeSkillsSubTab) {
+      setActiveSkillsSubTab(variants[0]);
     }
   }, [skillsByVariant, activeSkillsSubTab]);
 
@@ -1577,7 +1571,7 @@ const MetaTrendsItems = () => {
         </div>
       ),
       Items: () => (
-        <div className="p-3 md:p-6 bg-[#111111] rounded-lg mt-2 max-h-[300px] md:max-h-full overflow-y-auto">
+        <div className="p-3 md:p-6 bg-[#111111] rounded-lg mt-2 max-h-[155px] md:max-h-full overflow-y-auto">
           <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-8 xl:!flex justify-center xl:!flex-wrap gap-1 lg:gap-4">
             {filteredItems.map(
               (
