@@ -443,7 +443,8 @@ const ProjectItems = () => {
                       size="small"
                       borderRadius="rounded-[4px]"
                       backgroundRadius="rounded-[4px]"
-                      showTooltip={false}
+                      tooltipId={`${synergyItem?.key}_${w}`}
+                      showTooltip={true}
                     />
                   </div>
                 ))}

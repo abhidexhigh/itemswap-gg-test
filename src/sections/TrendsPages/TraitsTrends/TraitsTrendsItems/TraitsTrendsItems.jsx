@@ -15,7 +15,6 @@ import {
 import metaDeckTraitStats from "../../../../data/newData/metaDeckTraits.json";
 import Comps from "../../../../data/compsNew.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
-import ScrollableTable from "src/utils/ScrollableTable";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
 import ColoredValue from "src/components/ColoredValue";
@@ -317,186 +316,213 @@ const ProjectItems = () => {
         </div>
 
         {/* Table section */}
-        <div className="projects-row overflow-auto">
-          {/* Desktop Table - Hidden on mobile */}
+        <div className="projects-row">
+          {/* Desktop Grid - Hidden on mobile */}
           <div className="hidden md:block">
-            <ScrollableTable>
-              <table className="w-full min-w-[900px] relative border-collapse">
-                <thead className="sticky top-0 z-50">
-                  <tr className="bg-[#000000]">
-                    <th className="p-2 font-semibold text-center border-b border-[#2D2F37]">
-                      <p className="p-0 text-sm sm:text-base md:text-[16px] mb-0 py-2">
-                        {others.rank}
-                      </p>
-                    </th>
-                    <th
-                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""}`}
-                      onClick={() => requestSort("key")}
+            <div className="w-full">
+              {/* Grid Header - Sticky */}
+              <div
+                className="grid bg-[#000000] sticky top-[113px] z-50 border-b border-[#2D2F37]"
+                style={{
+                  gridTemplateColumns:
+                    "60px 1fr 150px 130px 130px 130px 150px 300px",
+                }}
+              >
+                <div className="p-2 font-semibold text-center text-white">
+                  <p className="p-0 text-base md:text-[16px] mb-0 py-2">
+                    {others?.rank}
+                  </p>
+                </div>
+                <div
+                  className={`cursor-pointer p-2 font-semibold text-white ${
+                    sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""
+                  }`}
+                  onClick={() => requestSort("key")}
+                >
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center py-2 ml-[18px]">
+                    {others?.traits}
+                    <span className="ml-2">{renderSortIcon("key")}</span>
+                  </p>
+                </div>
+                <div
+                  className={`cursor-pointer p-2 font-semibold text-white ${
+                    sortConfig?.key === "avgPlacement" ? "bg-[#2D2F37]" : ""
+                  }`}
+                  onClick={() => requestSort("avgPlacement")}
+                >
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center py-2">
+                    {others?.avgRank}
+                    <span className="ml-2">
+                      {renderSortIcon("avgPlacement")}
+                    </span>
+                  </p>
+                </div>
+                <div
+                  className={`cursor-pointer p-2 font-semibold text-white ${
+                    sortConfig?.key === "tops" ? "bg-[#2D2F37]" : ""
+                  }`}
+                  onClick={() => requestSort("tops")}
+                >
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center py-2">
+                    {others?.top4}
+                    <span className="ml-2">{renderSortIcon("tops")}</span>
+                  </p>
+                </div>
+                <div
+                  className={`cursor-pointer p-2 font-semibold text-white ${
+                    sortConfig?.key === "wins" ? "bg-[#2D2F37]" : ""
+                  }`}
+                  onClick={() => requestSort("wins")}
+                >
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center py-2">
+                    {others?.winPercentage}
+                    <span className="ml-2">{renderSortIcon("wins")}</span>
+                  </p>
+                </div>
+                <div
+                  className={`cursor-pointer p-2 font-semibold text-white ${
+                    sortConfig?.key === "pickRate" ? "bg-[#2D2F37]" : ""
+                  }`}
+                  onClick={() => requestSort("pickRate")}
+                >
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center py-2">
+                    {others?.pickPercentage}
+                    <span className="ml-2">{renderSortIcon("pickRate")}</span>
+                  </p>
+                </div>
+                <div
+                  className={`cursor-pointer p-2 font-semibold text-white ${
+                    sortConfig?.key === "plays" ? "bg-[#2D2F37]" : ""
+                  }`}
+                  onClick={() => requestSort("plays")}
+                >
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center py-2">
+                    {others?.played}
+                    <span className="ml-2">{renderSortIcon("plays")}</span>
+                  </p>
+                </div>
+                <div className="p-2 font-semibold text-white">
+                  <p className="p-0 text-base my-auto md:text-[16px] text-center py-2">
+                    {others?.top3} {others?.champions}
+                  </p>
+                </div>
+              </div>
+
+              {/* Grid Body */}
+              <div className="bg-[#111111]">
+                {metaDeckTraitStatsData.map((metaTrait, index) => (
+                  <div
+                    key={index}
+                    className="grid bg-[#111111] hover:bg-[#2D2F37] transition-colors duration-200 border-b border-[#2D2F37]"
+                    style={{
+                      gridTemplateColumns:
+                        "60px 1fr 150px 130px 130px 130px 150px 300px",
+                    }}
+                  >
+                    <div
+                      className={`p-2 text-center flex items-center justify-center ${getCellClass("")}`}
                     >
-                      <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center ml-[18px]">
-                        {others.traits}
-                        <span className="ml-2">{renderSortIcon("key")}</span>
-                      </p>
-                    </th>
-                    <th
-                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "avgPlacement" ? "bg-[#2D2F37]" : ""}`}
-                      onClick={() => requestSort("avgPlacement")}
+                      <div className="text-center text-white">{index + 1}</div>
+                    </div>
+                    <div
+                      className={`p-2 flex items-center ${getCellClass("key")}`}
                     >
-                      <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                        {others.avgRank}
-                        <span className="ml-2">
-                          {renderSortIcon("avgPlacement")}
-                        </span>
-                      </p>
-                    </th>
-                    <th
-                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "tops" ? "bg-[#2D2F37]" : ""}`}
-                      onClick={() => requestSort("tops")}
+                      <div className="flex justify-start items-center gap-2">
+                        <TraitImage
+                          trait={getTraitTier(metaTrait?.key, metaTrait?.tier)}
+                          size="large"
+                          borderRadius="rounded-[4px]"
+                          backgroundRadius="rounded-[4px]"
+                          tooltipId={metaTrait?.key}
+                          showTooltip={true}
+                        />
+                        <div className="min-w-0 flex-1">
+                          <p className="p-0 text-sm sm:text-sm md:text-base mb-1 md:mb-2 text-[#fff] truncate">
+                            {
+                              traits?.find(
+                                (trait) => trait?.key === metaTrait?.key
+                              )?.name
+                            }
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className={`p-2 flex items-center ${getCellClass("avgPlacement")}`}
                     >
-                      <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                        {others.top4}
-                        <span className="ml-2">{renderSortIcon("tops")}</span>
+                      <p className="p-0 text-left text-base md:text-lg mb-0">
+                        <ColoredValue
+                          value={metaTrait?.avgPlacement}
+                          prefix="#"
+                        />
                       </p>
-                    </th>
-                    <th
-                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "wins" ? "bg-[#2D2F37]" : ""}`}
-                      onClick={() => requestSort("wins")}
+                    </div>
+                    <div
+                      className={`p-2 flex items-center ${getCellClass("tops")}`}
                     >
-                      <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                        {others.winPercentage}
-                        <span className="ml-2">{renderSortIcon("wins")}</span>
+                      <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
+                        {((metaTrait?.tops * 100) / metaTrait?.plays).toFixed(
+                          2
+                        )}
+                        %
                       </p>
-                    </th>
-                    <th
-                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "pickRate" ? "bg-[#2D2F37]" : ""}`}
-                      onClick={() => requestSort("pickRate")}
+                    </div>
+                    <div
+                      className={`p-2 flex items-center ${getCellClass("wins")}`}
                     >
-                      <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                        {others.pickPercentage}
-                        <span className="ml-2">
-                          {renderSortIcon("pickRate")}
-                        </span>
+                      <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
+                        {((metaTrait?.wins * 100) / metaTrait?.plays).toFixed(
+                          2
+                        )}
+                        %
                       </p>
-                    </th>
-                    <th
-                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "plays" ? "bg-[#2D2F37]" : ""}`}
-                      onClick={() => requestSort("plays")}
+                    </div>
+                    <div
+                      className={`p-2 flex items-center ${getCellClass("pickRate")}`}
                     >
-                      <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                        {others.played}
-                        <span className="ml-2">{renderSortIcon("plays")}</span>
+                      <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
+                        {(metaTrait?.pickRate * 100).toFixed(2)}%
                       </p>
-                    </th>
-                    <th className="p-2 font-semibold border-b border-[#2D2F37] text-center">
-                      {others.top3} {others.champions}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-[#111111]">
-                  {metaDeckTraitStatsData.map((metaTrait, index) => (
-                    <tr
-                      className={`hover:bg-[#2D2F37] transition-colors duration-200 border-b border-[#2D2F37]`}
-                      key={index}
+                    </div>
+                    <div
+                      className={`p-2 flex items-center ${getCellClass("plays")}`}
                     >
-                      <td className="p-2 text-center">
-                        <div className="text-center text-base">{index + 1}</div>
-                      </td>
-                      <td className={`p-2 py-2 ${getCellClass("key")}`}>
-                        <div>
-                          <div className="flex justify-start items-center gap-2">
-                            <TraitImage
-                              trait={getTraitTier(
-                                metaTrait?.key,
-                                metaTrait?.tier
-                              )}
-                              size="large"
-                              borderRadius="rounded-[4px]"
-                              backgroundRadius="rounded-[4px]"
-                              tooltipId={metaTrait?.key}
-                              showTooltip={true}
-                            />
-                            <div>
-                              <p className="p-0 text-base sm:text-lg md:text-xl text-[#fff] mb-0 truncate max-w-[120px] sm:max-w-full">
-                                {
-                                  traits?.find(
-                                    (trait) => trait?.key === metaTrait?.key
-                                  )?.name
-                                }
-                              </p>
-                              <p className="m-0 text-xs font-extralight">
-                                {/* Commented code removed for brevity */}
-                              </p>
+                      <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
+                        {metaTrait?.plays.toLocaleString("en-US")}
+                      </p>
+                    </div>
+                    <div className="p-2 flex items-center justify-center">
+                      <div className="flex flex-wrap justify-center items-center gap-1 md:gap-2">
+                        {metaTrait?.traitChampionStats
+                          ?.slice(0, 3)
+                          ?.map((champion, idx) => (
+                            <div key={idx}>
+                              <CardImage
+                                src={champions?.find(
+                                  (champ) => champ?.key === champion
+                                )}
+                                imgStyle="md:w-[64px]"
+                                identificationImageStyle="w-[12px] sm:w-[16px] md:w-[32px]"
+                                textStyle="text-[8px] sm:text-[10px] md:text-[12px]"
+                                forces={forces}
+                                cardSize="md:!w-[64px] md:!h-[64px]"
+                              />
                             </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className={`p-2 ${getCellClass("avgPlacement")}`}>
-                        <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
-                          <ColoredValue
-                            value={metaTrait?.avgPlacement}
-                            prefix="#"
-                          />
-                        </p>
-                      </td>
-                      <td className={`p-2 ${getCellClass("tops")}`}>
-                        <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
-                          {((metaTrait?.tops * 100) / metaTrait?.plays).toFixed(
-                            2
-                          )}
-                          %
-                        </p>
-                      </td>
-                      <td className={`p-2 ${getCellClass("wins")}`}>
-                        <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
-                          {((metaTrait?.wins * 100) / metaTrait?.plays).toFixed(
-                            2
-                          )}
-                          %
-                        </p>
-                      </td>
-                      <td className={`p-2 ${getCellClass("pickRate")}`}>
-                        <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
-                          {(metaTrait?.pickRate * 100).toFixed(2)}%
-                        </p>
-                      </td>
-                      <td className={`p-2 ${getCellClass("plays")}`}>
-                        <p className="p-0 text-left text-base sm:text-base md:text-lg mb-0 text-[#fff]">
-                          {metaTrait?.plays.toLocaleString("en-US")}
-                        </p>
-                      </td>
-                      <td className="p-2">
-                        <div className="flex flex-wrap justify-center items-center gap-1 md:gap-2">
-                          {metaTrait?.traitChampionStats
-                            ?.slice(0, 3)
-                            ?.map((champion, idx) => (
-                              <div key={idx}>
-                                <CardImage
-                                  src={champions?.find(
-                                    (champ) => champ?.key === champion
-                                  )}
-                                  imgStyle="md:w-[64px]"
-                                  identificationImageStyle="w-[12px] sm:w-[16px] md:w-[32px]"
-                                  textStyle="text-[8px] sm:text-[10px] md:text-[12px]"
-                                  forces={forces}
-                                  cardSize="md:!w-[64px] md:!h-[64px]"
-                                />
-                              </div>
-                            ))}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </ScrollableTable>
+                          ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Mobile Table - Only visible on mobile */}
           <div className="block md:hidden">
             <div className="bg-[#111111]">
-              {/* Mobile Table Header */}
+              {/* Mobile Table Header - Sticky */}
               <div
-                className="grid gap-1 p-3 bg-[#1a1a1a] text-white font-semibold text-sm border-b border-[#2D2F37]"
+                className="grid gap-1 p-3 bg-[#1a1a1a] text-white font-semibold text-sm border-b border-[#2D2F37] sticky top-[100px] z-50"
                 style={{ gridTemplateColumns: "10% 45% 20% 22%" }}
               >
                 <div className="text-center">#</div>

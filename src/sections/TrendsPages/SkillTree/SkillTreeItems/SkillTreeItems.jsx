@@ -14,7 +14,6 @@ import metaDeckSkillTreeStats from "../../../../data/newData/metaDeckSkillTree.j
 import Comps from "../../../../data/compsNew.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
-import ScrollableTable from "src/utils/ScrollableTable";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
 import ColoredValue from "src/components/ColoredValue";
@@ -421,270 +420,299 @@ const ProjectItems = () => {
           </div>
         </div>
 
-        {/* Desktop Table - Hidden on mobile */}
-        <div className="hidden md:block projects-row overflow-auto">
-          <ScrollableTable>
-            <table className="w-full min-w-[1300px] relative border-collapse">
-              <thead className="sticky top-0 z-50">
-                <tr className="bg-[#000000]">
-                  <th className="p-2 font-semibold w-[50px] text-center border-b border-[#2D2F37]">
-                    <p className="p-0 text-sm sm:text-base md:text-[16px] mb-0 py-2">
-                      {others.rank}
-                    </p>
-                  </th>
-                  <th
-                    className={`cursor-pointer p-2 font-semibold min-w-[160px] md:min-w-[200px] border-b border-[#2D2F37] ${sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""}`}
-                    onClick={() => requestSort("key")}
+        {/* Desktop Grid - Hidden on mobile */}
+        <div className="hidden md:block projects-row">
+          <div className="w-full">
+            {/* Grid Header - Sticky */}
+            <div
+              className="grid bg-[#000000] sticky top-[113px] z-50 border-b border-[#2D2F37]"
+              style={{
+                gridTemplateColumns:
+                  "60px 1.5fr 120px 120px 120px 120px 120px 160px 220px 160px",
+              }}
+            >
+              <div className="p-2 font-semibold text-center text-white">
+                <p className="p-0 text-base md:text-[16px] mb-0 py-2">
+                  {others?.rank}
+                </p>
+              </div>
+              <div
+                className={`cursor-pointer p-2 font-semibold text-white ${
+                  sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""
+                }`}
+                onClick={() => requestSort("key")}
+              >
+                <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center py-2 ml-[10px]">
+                  {others?.items}
+                  <span className="ml-2">{renderSortIcon("key")}</span>
+                </p>
+              </div>
+              <div
+                className={`cursor-pointer p-2 font-semibold text-white ${
+                  sortConfig?.key === "avgPlacement" ? "bg-[#2D2F37]" : ""
+                }`}
+                onClick={() => requestSort("avgPlacement")}
+              >
+                <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center py-2">
+                  {others?.avgRank}
+                  <span className="ml-2">{renderSortIcon("avgPlacement")}</span>
+                </p>
+              </div>
+              <div
+                className={`cursor-pointer p-2 font-semibold text-white ${
+                  sortConfig?.key === "tops" ? "bg-[#2D2F37]" : ""
+                }`}
+                onClick={() => requestSort("tops")}
+              >
+                <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center py-2">
+                  {others?.top4}
+                  <span className="ml-2">{renderSortIcon("tops")}</span>
+                </p>
+              </div>
+              <div
+                className={`cursor-pointer p-2 font-semibold text-white ${
+                  sortConfig?.key === "wins" ? "bg-[#2D2F37]" : ""
+                }`}
+                onClick={() => requestSort("wins")}
+              >
+                <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center py-2">
+                  {others?.winPercentage}
+                  <span className="ml-2">{renderSortIcon("wins")}</span>
+                </p>
+              </div>
+              <div
+                className={`cursor-pointer p-2 font-semibold text-white ${
+                  sortConfig?.key === "threeStarPercentage"
+                    ? "bg-[#2D2F37]"
+                    : ""
+                }`}
+                onClick={() => requestSort("threeStarPercentage")}
+              >
+                <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center py-2">
+                  {others?.threeStarsPercentage}
+                  <span className="ml-2">
+                    {renderSortIcon("threeStarPercentage")}
+                  </span>
+                </p>
+              </div>
+              <div
+                className={`cursor-pointer p-2 font-semibold text-white ${
+                  sortConfig?.key === "plays" ? "bg-[#2D2F37]" : ""
+                }`}
+                onClick={() => requestSort("plays")}
+              >
+                <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center py-2">
+                  {others?.played}
+                  <span className="ml-2">{renderSortIcon("plays")}</span>
+                </p>
+              </div>
+              <div className="p-2 font-semibold text-white">
+                <p className="p-0 text-sm sm:text-base md:text-[16px] text-center mb-0 py-2">
+                  {others?.best} {others?.pairs}
+                </p>
+              </div>
+              <div className="p-2 font-semibold text-white">
+                <p className="p-0 text-sm sm:text-base md:text-[16px] text-center mb-0 py-2">
+                  {others?.top3} {others?.champions}
+                </p>
+              </div>
+              <div className="p-2 font-semibold text-white">
+                <p className="p-0 text-sm sm:text-base md:text-[16px] text-center mb-0 py-2">
+                  {others?.top3} {others?.comps}
+                </p>
+              </div>
+            </div>
+
+            {/* Grid Body */}
+            <div className="bg-[#111111]">
+              {console.log(
+                "metaDeckSkillTreeStatsData",
+                metaDeckSkillTreeStatsData
+              )}
+              {metaDeckSkillTreeStatsData.map((item, index) => (
+                <div
+                  key={index}
+                  className="grid bg-[#111111] hover:bg-[#2D2F37] transition-colors duration-200 border-b border-[#2D2F37]"
+                  style={{
+                    gridTemplateColumns:
+                      "60px 1.5fr 120px 120px 120px 120px 120px 160px 220px 160px",
+                  }}
+                >
+                  <div
+                    className={`p-2 text-center flex items-center justify-center ${getCellClass("")}`}
                   >
-                    <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center ml-[10px]">
-                      {others.items}
-                      <span className="ml-2">{renderSortIcon("key")}</span>
-                    </p>
-                  </th>
-                  <th
-                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] border-b border-[#2D2F37] ${sortConfig?.key === "avgPlacement" ? "bg-[#2D2F37]" : ""}`}
-                    onClick={() => requestSort("avgPlacement")}
+                    <div className="text-center text-white">{index + 1}</div>
+                  </div>
+                  <div
+                    className={`p-2 flex items-center ${getCellClass("key")}`}
                   >
-                    <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                      {others.avgRank}
-                      <span className="ml-2">
-                        {renderSortIcon("avgPlacement")}
-                      </span>
-                    </p>
-                  </th>
-                  <th
-                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] border-b border-[#2D2F37] ${sortConfig?.key === "tops" ? "bg-[#2D2F37]" : ""}`}
-                    onClick={() => requestSort("tops")}
-                  >
-                    <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                      {others.top4}
-                      <span className="ml-2">{renderSortIcon("tops")}</span>
-                    </p>
-                  </th>
-                  <th
-                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] border-b border-[#2D2F37] ${sortConfig?.key === "wins" ? "bg-[#2D2F37]" : ""}`}
-                    onClick={() => requestSort("wins")}
-                  >
-                    <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                      {others.winPercentage}
-                      <span className="ml-2">{renderSortIcon("wins")}</span>
-                    </p>
-                  </th>
-                  <th
-                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] border-b border-[#2D2F37] ${sortConfig?.key === "threeStarPercentage" ? "bg-[#2D2F37]" : ""}`}
-                    onClick={() => requestSort("threeStarPercentage")}
-                  >
-                    <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                      {others.threeStarsPercentage}
-                      <span className="ml-2">
-                        {renderSortIcon("threeStarPercentage")}
-                      </span>
-                    </p>
-                  </th>
-                  <th
-                    className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] border-b border-[#2D2F37] ${sortConfig?.key === "plays" ? "bg-[#2D2F37]" : ""}`}
-                    onClick={() => requestSort("plays")}
-                  >
-                    <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                      {others.played}
-                      <span className="ml-2">{renderSortIcon("plays")}</span>
-                    </p>
-                  </th>
-                  <th className="p-2 font-semibold min-w-[140px] border-b border-[#2D2F37]">
-                    <p className="p-0 text-sm sm:text-base md:text-[16px] text-center mb-0">
-                      {others.best} {others.pairs}
-                    </p>
-                  </th>
-                  <th className="p-2 font-semibold min-w-[140px] border-b border-[#2D2F37]">
-                    <p className="p-0 text-sm sm:text-base md:text-[16px] text-center mb-0">
-                      {others.top3} {others.champions}
-                    </p>
-                  </th>
-                  <th className="p-2 font-semibold min-w-[140px] border-b border-[#2D2F37]">
-                    <p className="p-0 text-sm sm:text-base md:text-[16px] text-center mb-0">
-                      {others.top3} {others.comps}
-                    </p>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-[#111111]">
-                {console.log(
-                  "metaDeckSkillTreeStatsData",
-                  metaDeckSkillTreeStatsData
-                )}
-                {metaDeckSkillTreeStatsData.map((item, index) => (
-                  <tr
-                    className="hover:bg-[#2D2F37] transition-colors duration-200 border-b border-[#2D2F37]"
-                    key={index}
-                  >
-                    <td className="p-2 text-center">
-                      <div className="text-center text-base">{index + 1}</div>
-                    </td>
-                    <td className={`p-2 ${getCellClass("key")}`}>
-                      <div>
-                        <div className="flex justify-start items-center space-x-1 sm:space-x-2">
-                          <>
-                            <SkillTreeImage
-                              skill={skillTree?.find(
-                                (i) => i?.key === item?.key
-                              )}
-                              size="medium"
-                              tooltipId={`${item?.key}`}
-                              className="w-14 h-14 md:w-20 md:h-20"
-                            />
-                            <ReactTltp
-                              variant="item"
-                              id={`${item?.key}`}
-                              content={
-                                items.find((i) => i.key === item.key) || item
-                              }
-                            />
-                          </>
-                          <div className="min-w-0 flex-1">
-                            <p className="p-0 text-sm sm:text-sm md:text-base mb-1 md:mb-2 text-[#fff] truncate max-w-[90px] sm:max-w-[150px] md:max-w-full">
-                              {items.find((i) => i.key === item.key)?.name ||
-                                item.name}
-                            </p>
-                            <div className="flex items-center flex-wrap gap-1">
-                              {items
-                                .find((i) => i.key === item.key)
-                                ?.compositions?.map((comp, index) => {
-                                  const compItem = items.find(
-                                    (i) => i.key === comp
-                                  );
-                                  if (!compItem) return null;
-                                  return (
-                                    <React.Fragment key={index}>
-                                      <OptimizedImage
-                                        alt="Item Image"
-                                        width={80}
-                                        height={80}
-                                        src={compItem.imageUrl}
-                                        className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 !border !border-[#ffffff60] rounded-md"
-                                        data-tooltip-id={`${compItem.key}_${index}`}
-                                      />
-                                      {index === 0 && (
-                                        <span className="mx-1">+</span>
-                                      )}
-                                      <ReactTltp
-                                        variant="item"
-                                        id={`${compItem.key}_${index}`}
-                                        content={compItem}
-                                      />
-                                    </React.Fragment>
-                                  );
-                                })}
-                            </div>
-                          </div>
+                    <div className="flex justify-start items-center space-x-1 sm:space-x-2">
+                      <>
+                        <SkillTreeImage
+                          skill={skillTree?.find((i) => i?.key === item?.key)}
+                          size="medium"
+                          tooltipId={`${item?.key}`}
+                          className="w-14 h-14 md:w-20 md:h-20"
+                        />
+                        <ReactTltp
+                          variant="item"
+                          id={`${item?.key}`}
+                          content={
+                            items.find((i) => i.key === item.key) || item
+                          }
+                        />
+                      </>
+                      <div className="min-w-0 flex-1">
+                        <p className="p-0 text-sm sm:text-sm md:text-base mb-1 md:mb-2 text-[#fff] truncate">
+                          {items.find((i) => i.key === item.key)?.name ||
+                            item.name}
+                        </p>
+                        <div className="flex items-center flex-wrap gap-1">
+                          {items
+                            .find((i) => i.key === item.key)
+                            ?.compositions?.map((comp, index) => {
+                              const compItem = items.find(
+                                (i) => i.key === comp
+                              );
+                              if (!compItem) return null;
+                              return (
+                                <React.Fragment key={index}>
+                                  <OptimizedImage
+                                    alt="Item Image"
+                                    width={80}
+                                    height={80}
+                                    src={compItem.imageUrl}
+                                    className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 !border !border-[#ffffff60] rounded-md"
+                                    data-tooltip-id={`${compItem.key}_${index}`}
+                                  />
+                                  {index === 0 && (
+                                    <span className="mx-1">+</span>
+                                  )}
+                                  <ReactTltp
+                                    variant="item"
+                                    id={`${compItem.key}_${index}`}
+                                    content={compItem}
+                                  />
+                                </React.Fragment>
+                              );
+                            })}
                         </div>
                       </div>
-                    </td>
-                    <td className={`p-2 ${getCellClass("avgPlacement")}`}>
-                      <p className="p-0 text-sm sm:text-base md:text-[16px] mb-0 text-[#fff] whitespace-nowrap">
-                        <ColoredValue value={item?.avgPlacement} prefix="#" />
-                      </p>
-                    </td>
-                    <td className={`p-2 ${getCellClass("tops")}`}>
-                      <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
-                        {((item?.tops * 100) / item?.plays).toFixed(2)}%
-                      </p>
-                    </td>
-                    <td className={`p-2 ${getCellClass("wins")}`}>
-                      <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
-                        {((item?.wins * 100) / item?.plays).toFixed(2)}%
-                      </p>
-                    </td>
-                    <td
-                      className={`p-2 ${getCellClass("threeStarPercentage")}`}
+                    </div>
+                  </div>
+                  <div
+                    className={`p-2 flex items-center ${getCellClass("avgPlacement")}`}
+                  >
+                    <p className="p-0 text-left text-base md:text-lg mb-0 whitespace-nowrap">
+                      <ColoredValue value={item?.avgPlacement} prefix="#" />
+                    </p>
+                  </div>
+                  <div
+                    className={`p-2 flex items-center ${getCellClass("tops")}`}
+                  >
+                    <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
+                      {((item?.tops * 100) / item?.plays).toFixed(2)}%
+                    </p>
+                  </div>
+                  <div
+                    className={`p-2 flex items-center ${getCellClass("wins")}`}
+                  >
+                    <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
+                      {((item?.wins * 100) / item?.plays).toFixed(2)}%
+                    </p>
+                  </div>
+                  <div
+                    className={`p-2 flex items-center ${getCellClass("threeStarPercentage")}`}
+                  >
+                    <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
+                      {(item?.threeStarPercentage * 100).toFixed(2)}%
+                    </p>
+                  </div>
+                  <div
+                    className={`p-2 flex items-center ${getCellClass("plays")}`}
+                  >
+                    <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
+                      {item?.plays.toLocaleString("en-US")}
+                    </p>
+                  </div>
+                  <div className="p-2 flex items-center justify-center">
+                    <div className="flex items-center justify-center flex-wrap gap-1">
+                      {item?.bestPairs?.map((skillKey, index) => {
+                        const skill = skillTree.find(
+                          (s) => s.key === skillKey || s.name === skillKey
+                        );
+                        if (!skill) return null;
+                        return (
+                          <React.Fragment key={`skill-${index}`}>
+                            <SkillTreeImage
+                              skill={skill}
+                              size="medium"
+                              tooltipId={`skill-${skill.key}-${index}`}
+                              className="w-12 h-12 md:w-14 md:h-14"
+                            />
+                          </React.Fragment>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <div className="p-2 flex items-center justify-center">
+                    <div className="flex items-center justify-center flex-wrap gap-1">
+                      {item?.top3Champions?.map((champKey, index) => {
+                        const champion = champions.find(
+                          (c) => c.key === champKey || c.name === champKey
+                        );
+                        if (!champion) return null;
+                        console.log("champion", champion);
+                        return (
+                          <React.Fragment key={`champ-${index}`}>
+                            <CardImage
+                              src={champion}
+                              imgStyle="w-[68px] md:w-[84px]"
+                              identificationImageStyle="w=[16px] md:w-[24px]"
+                              textStyle="text-[10px] md:text-[16px] hidden"
+                              cardSize="!w-[48px] !h-[48px] md:!w-[64px] md:!h-[64px]"
+                              forces={forces}
+                            />
+                          </React.Fragment>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <div className="p-2 flex items-center justify-center">
+                    <button
+                      onClick={() => openModal(item)}
+                      className="group flex items-center justify-center hover:scale-110 hover:translate-y-[-2px] gap-1.5 p-1 text-sm sm:text-base md:text-[16px] text-center text-[#D9A876] hover:text-[#F2A03D] transition-all duration-200 cursor-pointer w-full mx-auto relative"
+                      title="View top comps"
                     >
-                      <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
-                        {(item?.threeStarPercentage * 100).toFixed(2)}%
-                      </p>
-                    </td>
-                    <td className={`p-2 ${getCellClass("plays")}`}>
-                      <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
-                        {item?.plays.toLocaleString("en-US")}
-                      </p>
-                    </td>
-                    <td className="p-2 font-semibold min-w-[120px]">
-                      <div className="flex items-center justify-center flex-wrap gap-1">
-                        {item?.bestPairs?.map((skillKey, index) => {
-                          const skill = skillTree.find(
-                            (s) => s.key === skillKey || s.name === skillKey
-                          );
-                          if (!skill) return null;
-                          return (
-                            <React.Fragment key={`skill-${index}`}>
-                              <SkillTreeImage
-                                skill={skill}
-                                size="medium"
-                                tooltipId={`skill-${skill.key}-${index}`}
-                                className="w-12 h-12 md:w-14 md:h-14"
-                              />
-                            </React.Fragment>
-                          );
-                        })}
-                      </div>
-                    </td>
-                    <td className="p-2 font-semibold min-w-[140px]">
-                      <div className="flex items-center justify-center flex-wrap gap-1">
-                        {item?.top3Champions?.map((champKey, index) => {
-                          const champion = champions.find(
-                            (c) => c.key === champKey || c.name === champKey
-                          );
-                          if (!champion) return null;
-                          console.log("champion", champion);
-                          return (
-                            <React.Fragment key={`champ-${index}`}>
-                              <CardImage
-                                src={champion}
-                                imgStyle="w-[68px] md:w-[84px]"
-                                identificationImageStyle="w=[16px] md:w-[24px]"
-                                textStyle="text-[10px] md:text-[16px] hidden"
-                                cardSize="!w-[48px] !h-[48px] md:!w-[64px] md:!h-[64px]"
-                                forces={forces}
-                              />
-                            </React.Fragment>
-                          );
-                        })}
-                      </div>
-                    </td>
-                    <td className="p-2 font-semibold min-w-[120px]">
-                      <button
-                        onClick={() => openModal(item)}
-                        className="group flex items-center justify-center hover:scale-110 hover:translate-y-[-2px] gap-1.5 p-1 text-sm sm:text-base md:text-[16px] text-center text-[#D9A876] hover:text-[#F2A03D] transition-all duration-200 cursor-pointer w-full mx-auto relative"
-                        title="View top comps"
-                      >
-                        <PiEye className="text-lg group-hover:scale-110 transition-all duration-200" />
-                        <span className="truncate">
-                          {/* {item?.top3Comps?.join(", ") || "N/A"} */}
-                          {/* <GradientText
-                            value={item?.top3Comps?.join(", ") || "N/A"}
-                          /> */}
-                        </span>
-                        {/* <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-[#D9A876] group-hover:w-3/4 transition-all duration-300"></span> */}
-                        <img
-                          src="/images/rule_1_1.png"
-                          alt="rule"
-                          width={150}
-                          height={150}
-                          className="w-0 absolute -bottom-3 left-1/2 -translate-x-1/2 group-hover:w-1/3 transition-all duration-300"
-                        />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </ScrollableTable>
+                      <PiEye className="text-lg group-hover:scale-110 transition-all duration-200" />
+                      <span className="truncate">
+                        {/* {item?.top3Comps?.join(", ") || "N/A"} */}
+                        {/* <GradientText
+                          value={item?.top3Comps?.join(", ") || "N/A"}
+                        /> */}
+                      </span>
+                      {/* <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-[#D9A876] group-hover:w-3/4 transition-all duration-300"></span> */}
+                      <img
+                        src="/images/rule_1_1.png"
+                        alt="rule"
+                        width={150}
+                        height={150}
+                        className="w-0 absolute -bottom-3 left-1/2 -translate-x-1/2 group-hover:w-1/3 transition-all duration-300"
+                      />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Mobile Table - Only visible on mobile */}
         <div className="block md:hidden">
           <div className="bg-[#111111]">
-            {/* Mobile Table Header */}
+            {/* Mobile Table Header - Sticky */}
             <div
-              className="grid gap-1 p-3 bg-[#1a1a1a] text-white font-semibold text-sm border-b border-[#2D2F37]"
+              className="grid gap-1 p-3 bg-[#1a1a1a] text-white font-semibold text-sm border-b border-[#2D2F37] sticky top-[100px] z-50"
               style={{ gridTemplateColumns: "8% 35% 15% 17% 22%" }}
             >
               <div className="text-center flex justify-center items-center">

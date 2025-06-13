@@ -429,7 +429,8 @@ const ProjectItems = () => {
                     size="xSmall"
                     borderRadius="rounded-[4px]"
                     backgroundRadius="rounded-[4px]"
-                    showTooltip={false}
+                    tooltipId={itemImg?.name}
+                    showTooltip={true}
                   />
                 </div>
               ))}
@@ -784,7 +785,9 @@ const ProjectItems = () => {
               className="grid gap-1 p-3 bg-[#1a1a1a] text-white font-semibold text-sm border-b border-[#2D2F37] sticky top-[100px] z-50"
               style={{ gridTemplateColumns: "10% 45% 20% 22%" }}
             >
-              <div className="text-center">#</div>
+              <div className="text-center flex items-center justify-center">
+                #
+              </div>
               <div
                 className={`cursor-pointer flex items-center ${
                   sortConfig?.key === "key" ? "text-[#D9A876]" : ""
