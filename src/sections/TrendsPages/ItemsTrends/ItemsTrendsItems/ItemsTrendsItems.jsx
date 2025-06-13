@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useRef,
+} from "react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
@@ -21,9 +27,181 @@ import SearchBar from "src/components/searchBar";
 import ColoredValue from "src/components/ColoredValue";
 import ItemDisplay from "src/components/item/ItemDisplay";
 
+// Virtual scrolling hook for page scroll
+const usePageVirtualScroll = (items, itemHeight, buffer = 5) => {
+  const [scrollTop, setScrollTop] = useState(0);
+  const [containerTop, setContainerTop] = useState(0);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const updateScrollTop = () => {
+      setScrollTop(window.pageYOffset);
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        setContainerTop(window.pageYOffset + rect.top);
+      }
+    };
+
+    const handleScroll = () => {
+      requestAnimationFrame(updateScrollTop);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    updateScrollTop();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const relativeScrollTop = Math.max(0, scrollTop - containerTop);
+  const viewportHeight = window.innerHeight || 800;
+
+  const startIndex = Math.max(
+    0,
+    Math.floor(relativeScrollTop / itemHeight) - buffer
+  );
+  const visibleCount = Math.ceil(viewportHeight / itemHeight) + buffer * 2;
+  const endIndex = Math.min(startIndex + visibleCount, items.length);
+
+  const visibleItems = items.slice(startIndex, endIndex);
+  const totalHeight = items.length * itemHeight;
+  const offsetY = startIndex * itemHeight;
+
+  return {
+    visibleItems,
+    totalHeight,
+    offsetY,
+    startIndex,
+    endIndex,
+    containerRef,
+  };
+};
+
+// Memoized row component
+const GridRow = React.memo(
+  ({ item, index, synergyItems, championData, forces, getCellClass }) => {
+    return (
+      <div
+        className="grid bg-[#111111] hover:bg-[#2D2F37] transition-colors duration-200 border-b border-[#2D2F37]"
+        style={{
+          gridTemplateColumns:
+            "60px 2fr 120px 100px 100px 100px 120px 200px 200px",
+          height: "120px", // Fixed height for virtual scrolling
+        }}
+      >
+        <div
+          className={`p-2 text-center flex items-center justify-center ${getCellClass("")}`}
+        >
+          <div className="text-center text-white">{index + 1}</div>
+        </div>
+        <div className={`p-2 flex items-center ${getCellClass("key")}`}>
+          <div className="flex justify-start items-center space-x-1 sm:space-x-2">
+            <div data-tooltip-id={`${item.itemData.key}}`}>
+              <ItemDisplay
+                item={item.itemData}
+                size="midMedium"
+                borderRadius="rounded-[4px]"
+                backgroundRadius="rounded-[4px]"
+                tooltipId={`${item.itemData.key}}`}
+                showTooltip={true}
+              />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="p-0 text-sm sm:text-sm md:text-base mb-1 md:mb-2 text-[#fff] truncate">
+                {item.itemData.name}
+              </p>
+              <div className="flex items-center flex-wrap gap-1">
+                {item.compositionItems.map((compItem, compIndex) => (
+                  <React.Fragment key={compIndex}>
+                    <OptimizedImage
+                      alt="Item Image"
+                      width={80}
+                      height={80}
+                      src={compItem.imageUrl}
+                      className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 !border !border-[#ffffff60] rounded-md"
+                      data-tooltip-id={`${compItem.key}_${compIndex}`}
+                    />
+                    {compIndex === 0 && <span className="mx-1">+</span>}
+                    <ReactTltp
+                      variant="item"
+                      id={`${compItem.key}_${compIndex}`}
+                      content={compItem}
+                    />
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className={`p-2 flex items-center ${getCellClass("avgPlacement")}`}
+        >
+          <p className="p-0 text-left text-base md:text-lg mb-0">
+            <ColoredValue value={item?.avgPlacement} prefix="#" />
+          </p>
+        </div>
+        <div className={`p-2 flex items-center ${getCellClass("tops")}`}>
+          <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
+            {((item?.tops * 100) / item?.plays).toFixed(2)}%
+          </p>
+        </div>
+        <div className={`p-2 flex items-center ${getCellClass("wins")}`}>
+          <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
+            {((item?.wins * 100) / item?.plays).toFixed(2)}%
+          </p>
+        </div>
+        <div className={`p-2 flex items-center ${getCellClass("pickRate")}`}>
+          <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
+            {(item?.pickRate * 100).toFixed(2)}%
+          </p>
+        </div>
+        <div className={`p-2 flex items-center ${getCellClass("plays")}`}>
+          <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
+            {item?.plays.toLocaleString("en-US")}
+          </p>
+        </div>
+        <div className="p-2 flex items-center justify-center">
+          <div className="flex flex-wrap justify-center items-center gap-1">
+            {synergyItems.map((synergyItem, w) => (
+              <div key={w} className="relative">
+                <ItemDisplay
+                  item={synergyItem}
+                  size="xSmall"
+                  borderRadius="rounded-[4px]"
+                  backgroundRadius="rounded-[4px]"
+                  tooltipId={`${synergyItem?.key}_${w}`}
+                  showTooltip={true}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="p-2 flex items-center justify-center">
+          <div className="flex flex-nowrap justify-center items-center gap-1 md:gap-2 overflow-x-auto">
+            {championData.map((champion, x) => (
+              <div key={x} className="flex-shrink-0">
+                <CardImage
+                  src={champion}
+                  imgStyle="w-[32px] md:w-[50px]"
+                  identificationImageStyle="w-[10px] sm:w-[12px] md:w-[16px]"
+                  textStyle="text-[6px] sm:text-[8px] md:text-[10px]"
+                  forces={forces}
+                  cardSize="!w-[50px] !h-[50px] md:!w-[50px] md:!h-[50px]"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+);
+
+GridRow.displayName = "GridRow";
+
 const ProjectItems = () => {
   const { t } = useTranslation();
   const others = t("others");
+  const scrollContainerRef = useRef(null);
 
   // Pre-process data once
   const {
@@ -150,6 +328,12 @@ const ProjectItems = () => {
 
     return data;
   }, [processedItemData, tagFilter, searchValue, sortConfig]);
+
+  // Virtual scrolling setup with page scroll
+  const itemHeight = 120; // Fixed item height
+
+  const { visibleItems, totalHeight, offsetY, startIndex, containerRef } =
+    usePageVirtualScroll(filteredData, itemHeight);
 
   const requestSort = useCallback((key) => {
     setSortConfig((prev) => {
@@ -327,125 +511,7 @@ const ProjectItems = () => {
     [sortConfig]
   );
 
-  // Memoize desktop table rows
-  const desktopTableRows = useMemo(() => {
-    return filteredData
-      .map((item, index) => {
-        if (!item.itemData?.key) return null;
-
-        return (
-          <tr
-            className="hover:bg-[#2D2F37] transition-colors duration-200 border-b border-[#2D2F37]"
-            key={item.key}
-          >
-            <td className="p-2 text-center">
-              <div className="text-center text-base">{index + 1}</div>
-            </td>
-            <td className={`p-2 ${getCellClass("key")}`}>
-              <div>
-                <div className="flex justify-start items-center space-x-1 sm:space-x-2">
-                  <div data-tooltip-id={`${item.itemData.key}}`}>
-                    <ItemDisplay
-                      item={item.itemData}
-                      size="midMedium"
-                      borderRadius="rounded-[4px]"
-                      backgroundRadius="rounded-[4px]"
-                      tooltipId={`${item.itemData.key}}`}
-                      showTooltip={true}
-                    />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="p-0 text-sm sm:text-sm md:text-base mb-1 md:mb-2 text-[#fff] truncate max-w-[90px] sm:max-w-[150px] md:max-w-full">
-                      {item.itemData.name}
-                    </p>
-                    <div className="flex items-center flex-wrap gap-1">
-                      {item.compositionItems.map((compItem, compIndex) => (
-                        <React.Fragment key={compIndex}>
-                          <OptimizedImage
-                            alt="Item Image"
-                            width={80}
-                            height={80}
-                            src={compItem.imageUrl}
-                            className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 !border !border-[#ffffff60] rounded-md"
-                            data-tooltip-id={`${compItem.key}_${compIndex}`}
-                          />
-                          {compIndex === 0 && <span className="mx-1">+</span>}
-                          <ReactTltp
-                            variant="item"
-                            id={`${compItem.key}_${compIndex}`}
-                            content={compItem}
-                          />
-                        </React.Fragment>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-            <td className={`p-2 ${getCellClass("avgPlacement")}`}>
-              <p className="p-0 text-sm sm:text-base md:text-[16px] mb-0 text-[#fff] whitespace-nowrap">
-                <ColoredValue value={item?.avgPlacement} prefix="#" />
-              </p>
-            </td>
-            <td className={`p-2 ${getCellClass("tops")}`}>
-              <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
-                {((item?.tops * 100) / item?.plays).toFixed(2)}%
-              </p>
-            </td>
-            <td className={`p-2 ${getCellClass("wins")}`}>
-              <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
-                {((item?.wins * 100) / item?.plays).toFixed(2)}%
-              </p>
-            </td>
-            <td className={`p-2 ${getCellClass("pickRate")}`}>
-              <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
-                {(item?.pickRate * 100).toFixed(2)}%
-              </p>
-            </td>
-            <td className={`p-2 ${getCellClass("plays")}`}>
-              <p className="p-0 text-base sm:text-base md:text-[16px] mb-0 text-[#fff]">
-                {item?.plays.toLocaleString("en-US")}
-              </p>
-            </td>
-            <td className="p-2">
-              <div className="flex flex-wrap justify-center items-center gap-1">
-                {item.synergyItems.map((synergyItem, w) => (
-                  <div key={w} className="relative">
-                    <ItemDisplay
-                      item={synergyItem}
-                      size="xSmall"
-                      borderRadius="rounded-[4px]"
-                      backgroundRadius="rounded-[4px]"
-                      tooltipId={`${synergyItem?.key}_${w}`}
-                      showTooltip={true}
-                    />
-                  </div>
-                ))}
-              </div>
-            </td>
-            <td className="p-2">
-              <div className="flex flex-nowrap justify-center items-center gap-1 md:gap-2 overflow-x-auto">
-                {item.championData.map((championData, x) => (
-                  <div key={x} className="flex-shrink-0">
-                    <CardImage
-                      src={championData}
-                      imgStyle="w-[32px] md:w-[64px]"
-                      identificationImageStyle="w-[10px] sm:w-[12px] md:w-[16px] lg:w-[32px]"
-                      textStyle="text-[6px] sm:text-[8px] md:text-[10px] lg:text-[16px]"
-                      forces={forces}
-                      cardSize="!w-[72px] !h-[72px] md:!w-[64px] md:!h-[64px]"
-                    />
-                  </div>
-                ))}
-              </div>
-            </td>
-          </tr>
-        );
-      })
-      .filter(Boolean);
-  }, [filteredData, getCellClass, forces]);
-
-  // Memoize mobile table rows
+  // Memoize mobile table rows (no virtual scrolling for mobile due to complexity)
   const mobileTableRows = useMemo(() => {
     return filteredData
       .map((item, index) => {
@@ -566,110 +632,136 @@ const ProjectItems = () => {
 
         {/* Table section */}
         <div className="projects-row">
-          {/* Desktop Table - Hidden on mobile */}
-          <div className="hidden md:block overflow-auto">
-            <ScrollableTable>
-              <table className="w-full min-w-[1100px] relative border-collapse">
-                <thead className="sticky top-0 z-50">
-                  <tr className="bg-[#000000]">
-                    <th className="p-2 font-semibold w-[50px] text-center border-b border-[#2D2F37]">
-                      <p className="p-0 text-sm sm:text-base md:text-[16px] mb-0 py-2">
-                        {others?.rank}
-                      </p>
-                    </th>
-                    <th
-                      className={`cursor-pointer p-2 font-semibold min-w-[200px] sm:min-w-[220px] md:min-w-[280px] border-b border-[#2D2F37] ${
-                        sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""
-                      }`}
-                      onClick={() => requestSort("key")}
-                    >
-                      <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                        {others?.items}
-                        <span className="ml-2">{renderSortIcon("key")}</span>
-                      </p>
-                    </th>
-                    <th
-                      className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] border-b border-[#2D2F37] ${
-                        sortConfig?.key === "avgPlacement" ? "bg-[#2D2F37]" : ""
-                      }`}
-                      onClick={() => requestSort("avgPlacement")}
-                    >
-                      <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                        {others?.avgRank}
-                        <span className="ml-2">
-                          {renderSortIcon("avgPlacement")}
-                        </span>
-                      </p>
-                    </th>
-                    <th
-                      className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] border-b border-[#2D2F37] ${
-                        sortConfig?.key === "tops" ? "bg-[#2D2F37]" : ""
-                      }`}
-                      onClick={() => requestSort("tops")}
-                    >
-                      <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                        {others?.top4}
-                        <span className="ml-2">{renderSortIcon("tops")}</span>
-                      </p>
-                    </th>
-                    <th
-                      className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] border-b border-[#2D2F37] ${
-                        sortConfig?.key === "wins" ? "bg-[#2D2F37]" : ""
-                      }`}
-                      onClick={() => requestSort("wins")}
-                    >
-                      <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                        {others?.winPercentage}
-                        <span className="ml-2">{renderSortIcon("wins")}</span>
-                      </p>
-                    </th>
-                    <th
-                      className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] border-b border-[#2D2F37] ${
-                        sortConfig?.key === "pickRate" ? "bg-[#2D2F37]" : ""
-                      }`}
-                      onClick={() => requestSort("pickRate")}
-                    >
-                      <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                        {others?.pickPercentage}
-                        <span className="ml-2">
-                          {renderSortIcon("pickRate")}
-                        </span>
-                      </p>
-                    </th>
-                    <th
-                      className={`cursor-pointer p-2 font-semibold min-w-[80px] sm:min-w-[90px] border-b border-[#2D2F37] ${
-                        sortConfig?.key === "plays" ? "bg-[#2D2F37]" : ""
-                      }`}
-                      onClick={() => requestSort("plays")}
-                    >
-                      <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
-                        {others?.played}
-                        <span className="ml-2">{renderSortIcon("plays")}</span>
-                      </p>
-                    </th>
-                    <th className="p-2 font-semibold min-w-[120px] border-b border-[#2D2F37]">
-                      <p className="p-0 text-sm sm:text-base md:text-[16px] mb-0 text-center">
-                        {others?.synergy} {others?.items}
-                      </p>
-                    </th>
-                    <th className="p-2 font-semibold min-w-[140px] border-b border-[#2D2F37]">
-                      <p className="p-0 text-sm sm:text-base md:text-[16px] text-center mb-0">
-                        {others?.top3} {others?.champions}
-                      </p>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-[#111111]">{desktopTableRows}</tbody>
-              </table>
-            </ScrollableTable>
+          {/* Desktop Grid - Hidden on mobile with Virtual Scrolling */}
+          <div className="hidden md:block">
+            <div className="w-full">
+              {/* Grid Header - Sticky */}
+              <div
+                className="grid bg-[#000000] sticky top-[113px] z-50 border-b border-[#2D2F37]"
+                style={{
+                  gridTemplateColumns:
+                    "60px 2fr 120px 100px 100px 100px 120px 200px 200px",
+                }}
+              >
+                <div className="p-2 font-semibold text-center text-white">
+                  <p className="p-0 text-base md:text-[16px] mb-0 py-2">
+                    {others?.rank}
+                  </p>
+                </div>
+                <div
+                  className={`cursor-pointer p-2 font-semibold text-white ${
+                    sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""
+                  }`}
+                  onClick={() => requestSort("key")}
+                >
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center py-2">
+                    {others?.items}
+                    <span className="ml-2">{renderSortIcon("key")}</span>
+                  </p>
+                </div>
+                <div
+                  className={`cursor-pointer p-2 font-semibold text-white ${
+                    sortConfig?.key === "avgPlacement" ? "bg-[#2D2F37]" : ""
+                  }`}
+                  onClick={() => requestSort("avgPlacement")}
+                >
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center py-2">
+                    {others?.avgRank}
+                    <span className="ml-2">
+                      {renderSortIcon("avgPlacement")}
+                    </span>
+                  </p>
+                </div>
+                <div
+                  className={`cursor-pointer p-2 font-semibold text-white ${
+                    sortConfig?.key === "tops" ? "bg-[#2D2F37]" : ""
+                  }`}
+                  onClick={() => requestSort("tops")}
+                >
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center py-2">
+                    {others?.top4}
+                    <span className="ml-2">{renderSortIcon("tops")}</span>
+                  </p>
+                </div>
+                <div
+                  className={`cursor-pointer p-2 font-semibold text-white ${
+                    sortConfig?.key === "wins" ? "bg-[#2D2F37]" : ""
+                  }`}
+                  onClick={() => requestSort("wins")}
+                >
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center py-2">
+                    {others?.winPercentage}
+                    <span className="ml-2">{renderSortIcon("wins")}</span>
+                  </p>
+                </div>
+                <div
+                  className={`cursor-pointer p-2 font-semibold text-white ${
+                    sortConfig?.key === "pickRate" ? "bg-[#2D2F37]" : ""
+                  }`}
+                  onClick={() => requestSort("pickRate")}
+                >
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center py-2">
+                    {others?.pickPercentage}
+                    <span className="ml-2">{renderSortIcon("pickRate")}</span>
+                  </p>
+                </div>
+                <div
+                  className={`cursor-pointer p-2 font-semibold text-white ${
+                    sortConfig?.key === "plays" ? "bg-[#2D2F37]" : ""
+                  }`}
+                  onClick={() => requestSort("plays")}
+                >
+                  <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center py-2">
+                    {others?.played}
+                    <span className="ml-2">{renderSortIcon("plays")}</span>
+                  </p>
+                </div>
+                <div className="p-2 font-semibold text-white">
+                  <p className="p-0 text-base my-auto md:text-[16px] text-center py-2">
+                    {others?.synergy} {others?.items}
+                  </p>
+                </div>
+                <div className="p-2 font-semibold text-white">
+                  <p className="p-0 text-base my-auto md:text-[16px] text-center py-2">
+                    {others?.top3} {others?.champions}
+                  </p>
+                </div>
+              </div>
+
+              {/* Virtual Scrolling Container - Uses page scroll */}
+              <div
+                ref={containerRef}
+                className="bg-[#111111]"
+                style={{ height: `${totalHeight}px`, position: "relative" }}
+              >
+                <div style={{ transform: `translateY(${offsetY}px)` }}>
+                  {visibleItems.map((item, visibleIndex) => {
+                    const actualIndex = startIndex + visibleIndex;
+                    if (!item.itemData?.key) return null;
+
+                    return (
+                      <GridRow
+                        key={item.key}
+                        item={item}
+                        index={actualIndex}
+                        synergyItems={item.synergyItems}
+                        championData={item.championData}
+                        forces={forces}
+                        getCellClass={getCellClass}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Mobile Table - Only visible on mobile */}
           <div className="block md:hidden">
             <div className="bg-[#111111]">
-              {/* Mobile Table Header */}
+              {/* Mobile Table Header - Sticky */}
               <div
-                className="grid gap-1 p-3 bg-[#1a1a1a] text-white font-semibold text-sm border-b border-[#2D2F37]"
+                className="grid gap-1 p-3 bg-[#1a1a1a] text-white font-semibold text-sm border-b border-[#2D2F37] sticky top-[100px] z-50"
                 style={{ gridTemplateColumns: "10% 45% 20% 22%" }}
               >
                 <div className="text-center">#</div>
@@ -715,8 +807,8 @@ const ProjectItems = () => {
                 </div>
               </div>
 
-              {/* Mobile Table Body */}
-              {mobileTableRows}
+              {/* Mobile Table Body - Uses page scroll */}
+              <div>{mobileTableRows}</div>
             </div>
           </div>
         </div>
