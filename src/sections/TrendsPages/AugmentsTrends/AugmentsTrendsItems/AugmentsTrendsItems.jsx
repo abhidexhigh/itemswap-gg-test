@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
@@ -24,7 +24,34 @@ const ProjectItems = () => {
   const others = t("others");
   const { augmentStats } = metaDeckAugments;
 
-  const [augmentsStatsData, setAugmentsStatsData] = useState(augmentStats);
+  // Memoize lookup maps and processed data
+  const { augmentLookup, processedAugmentData } = useMemo(() => {
+    const augmentMap = new Map(
+      augments?.map((augment) => [augment.key, augment]) || []
+    );
+
+    // Pre-process augments with their data
+    const processedAugments = augmentStats
+      .map((augmentStat) => {
+        // Extract the actual augment key from the stats key
+        const augmentKey =
+          augmentStat.key?.split("_")[augmentStat.key?.split("_").length - 1];
+        const augmentData = augmentMap.get(augmentKey);
+
+        return {
+          ...augmentStat,
+          augmentKey,
+          augmentData,
+        };
+      })
+      .filter((item) => item.augmentData?.key); // Only keep items with valid augment data
+
+    return {
+      augmentLookup: augmentMap,
+      processedAugmentData: processedAugments,
+    };
+  }, [augmentStats]);
+
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "ascending",
@@ -32,141 +59,46 @@ const ProjectItems = () => {
   const [searchValue, setSearchValue] = useState("");
   const [mobileFilter, setMobileFilter] = useState("roundOnePickRate");
   const [expandedRows, setExpandedRows] = useState(new Set());
+  const [tierFilter, setTierFilter] = useState("All");
 
   // Mobile filter options (excluding serial no, image, name, avg rank)
-  const mobileFilterOptions = [
-    { key: "roundOnePickRate", label: others?.firstPick || "First Pick" },
-    { key: "roundTwoPickRate", label: others?.secondPick || "Second Pick" },
-    { key: "roundThreePickRate", label: others?.thirdPick || "Third Pick" },
-    { key: "tops", label: others?.top4 || "Top 4%" },
-    { key: "wins", label: others?.winPercentage || "Win %" },
-    { key: "pickRate", label: others?.pickPercentage || "Pick %" },
-    { key: "plays", label: others?.played || "Played" },
-  ];
+  const mobileFilterOptions = useMemo(
+    () => [
+      { key: "roundOnePickRate", label: others?.firstPick || "First Pick" },
+      { key: "roundTwoPickRate", label: others?.secondPick || "Second Pick" },
+      { key: "roundThreePickRate", label: others?.thirdPick || "Third Pick" },
+      { key: "tops", label: others?.top4 || "Top 4%" },
+      { key: "wins", label: others?.winPercentage || "Win %" },
+      { key: "pickRate", label: others?.pickPercentage || "Pick %" },
+      { key: "plays", label: others?.played || "Played" },
+    ],
+    [others]
+  );
 
-  const getCellClass = (key) => {
-    if (sortConfig.key === key) {
-      return "bg-[#2D2F37] text-[#D9A876]";
-    }
-    return "";
-  };
+  // Memoize filtered and sorted data
+  const filteredData = useMemo(() => {
+    let data = [...processedAugmentData];
 
-  const handleButtonClick = (button) => {
-    if (button === "All") {
-      setAugmentsStatsData(augmentStats);
-    } else {
-      setAugmentsStatsData(
-        augmentStats.filter(
-          (augment) => augment.tier.toLowerCase() === button.toLowerCase()
-        )
+    // Apply tier filter
+    if (tierFilter !== "All") {
+      data = data.filter(
+        (augment) => augment.tier.toLowerCase() === tierFilter.toLowerCase()
       );
     }
-  };
 
-  const handleMobileFilterClick = (filterKey) => {
-    setMobileFilter(filterKey);
-
-    // If clicking on the same filter, toggle sort direction
-    if (mobileFilter === filterKey && sortConfig.key === filterKey) {
-      const newDirection =
-        sortConfig.direction === "ascending" ? "descending" : "ascending";
-      setSortConfig({ key: filterKey, direction: newDirection });
-    } else {
-      // Auto-sort by the selected filter (default to descending for new selections)
-      setSortConfig({ key: filterKey, direction: "descending" });
+    // Apply search filter
+    if (searchValue) {
+      data = data.filter((augment) =>
+        augment.key.toLowerCase().includes(searchValue.toLowerCase())
+      );
     }
-  };
 
-  const toggleRowExpansion = (index) => {
-    const newExpandedRows = new Set(expandedRows);
-    if (newExpandedRows.has(index)) {
-      newExpandedRows.delete(index);
-    } else {
-      newExpandedRows.add(index);
-    }
-    setExpandedRows(newExpandedRows);
-  };
-
-  const renderMobileValue = (item, key) => {
-    switch (key) {
-      case "roundOnePickRate":
-      case "roundTwoPickRate":
-      case "roundThreePickRate":
-        return `${item[key].toFixed(2)}%`;
-      case "tops":
-      case "wins":
-        return `${((item[key] * 100) / item.plays).toFixed(2)}%`;
-      case "pickRate":
-        return `${(item[key] * 100).toFixed(2)}%`;
-      case "plays":
-        return item[key].toLocaleString("en-US");
-      default:
-        return item[key];
-    }
-  };
-
-  const renderExpandedContent = (item) => {
-    const hiddenData = [
-      {
-        label: others?.firstPick || "First Pick",
-        value: `${item.roundOnePickRate.toFixed(2)}%`,
-        key: "roundOnePickRate",
-      },
-      {
-        label: others?.secondPick || "Second Pick",
-        value: `${item.roundTwoPickRate.toFixed(2)}%`,
-        key: "roundTwoPickRate",
-      },
-      {
-        label: others?.thirdPick || "Third Pick",
-        value: `${item.roundThreePickRate.toFixed(2)}%`,
-        key: "roundThreePickRate",
-      },
-      {
-        label: others?.top4 || "Top 4%",
-        value: `${((item.tops * 100) / item.plays).toFixed(2)}%`,
-        key: "tops",
-      },
-      {
-        label: others?.winPercentage || "Win %",
-        value: `${((item.wins * 100) / item.plays).toFixed(2)}%`,
-        key: "wins",
-      },
-      {
-        label: others?.pickPercentage || "Pick %",
-        value: `${(item.pickRate * 100).toFixed(2)}%`,
-        key: "pickRate",
-      },
-      {
-        label: others?.played || "Played",
-        value: item.plays.toLocaleString("en-US"),
-        key: "plays",
-      },
-    ];
-
-    // Filter out the currently selected mobile filter
-    const filteredData = hiddenData.filter((data) => data.key !== mobileFilter);
-
-    return (
-      <div className="grid grid-cols-3 gap-3 justify-between text-center px-4 py-3 bg-[#1a1a1a] border-t border-[#2D2F37]">
-        {filteredData.map((data, index) => (
-          <div key={index} className="flex flex-col">
-            <span className="text-xs text-gray-400 mb-1">{data.label}</span>
-            <span className="text-sm text-white">{data.value}</span>
-          </div>
-        ))}
-      </div>
-    );
-  };
-
-  useEffect(() => {
-    let sortedData = [...augmentStats];
-    if (sortConfig !== null) {
-      sortedData.sort((a, b) => {
+    // Apply sorting
+    if (sortConfig.key) {
+      data.sort((a, b) => {
         let aValue, bValue;
 
         if (["tops", "wins"].includes(sortConfig.key)) {
-          // calculate the top percentage and win percentage based on the plays
           aValue = (a[sortConfig.key] * 100) / a.plays;
           bValue = (b[sortConfig.key] * 100) / b.plays;
         } else {
@@ -183,35 +115,291 @@ const ProjectItems = () => {
         return 0;
       });
     }
-    setAugmentsStatsData(sortedData);
-  }, [augmentStats, sortConfig]);
 
-  const requestSort = (key) => {
-    let direction = "ascending";
-    if (sortConfig.key === key && sortConfig.direction === "ascending") {
-      direction = "descending";
+    return data;
+  }, [processedAugmentData, tierFilter, searchValue, sortConfig]);
+
+  const getCellClass = useCallback(
+    (key) => {
+      if (sortConfig.key === key) {
+        return "bg-[#2D2F37] text-[#D9A876]";
+      }
+      return "";
+    },
+    [sortConfig.key]
+  );
+
+  const handleButtonClick = useCallback((button) => {
+    setTierFilter(button);
+  }, []);
+
+  const handleMobileFilterClick = useCallback(
+    (filterKey) => {
+      setMobileFilter((prev) => {
+        // If clicking on the same filter, toggle sort direction
+        if (prev === filterKey && sortConfig.key === filterKey) {
+          const newDirection =
+            sortConfig.direction === "ascending" ? "descending" : "ascending";
+          setSortConfig({ key: filterKey, direction: newDirection });
+          return prev;
+        } else {
+          // Auto-sort by the selected filter (default to descending for new selections)
+          setSortConfig({ key: filterKey, direction: "descending" });
+          return filterKey;
+        }
+      });
+    },
+    [sortConfig]
+  );
+
+  const toggleRowExpansion = useCallback((index) => {
+    setExpandedRows((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index);
+      } else {
+        newSet.add(index);
+      }
+      return newSet;
+    });
+  }, []);
+
+  const renderMobileValue = useCallback((item, key) => {
+    switch (key) {
+      case "roundOnePickRate":
+      case "roundTwoPickRate":
+      case "roundThreePickRate":
+        return `${item[key].toFixed(2)}%`;
+      case "tops":
+      case "wins":
+        return `${((item[key] * 100) / item.plays).toFixed(2)}%`;
+      case "pickRate":
+        return `${(item[key] * 100).toFixed(2)}%`;
+      case "plays":
+        return item[key].toLocaleString("en-US");
+      default:
+        return item[key];
     }
-    setSortConfig({ key, direction });
-  };
+  }, []);
 
-  useEffect(() => {
-    setAugmentsStatsData(
-      augmentStats.filter((augment) =>
-        augment.key.toLowerCase().includes(searchValue.toLowerCase())
-      )
-    );
-  }, [searchValue]);
+  const renderExpandedContent = useCallback(
+    (item) => {
+      const hiddenData = [
+        {
+          label: others?.firstPick || "First Pick",
+          value: `${item.roundOnePickRate.toFixed(2)}%`,
+          key: "roundOnePickRate",
+        },
+        {
+          label: others?.secondPick || "Second Pick",
+          value: `${item.roundTwoPickRate.toFixed(2)}%`,
+          key: "roundTwoPickRate",
+        },
+        {
+          label: others?.thirdPick || "Third Pick",
+          value: `${item.roundThreePickRate.toFixed(2)}%`,
+          key: "roundThreePickRate",
+        },
+        {
+          label: others?.top4 || "Top 4%",
+          value: `${((item.tops * 100) / item.plays).toFixed(2)}%`,
+          key: "tops",
+        },
+        {
+          label: others?.winPercentage || "Win %",
+          value: `${((item.wins * 100) / item.plays).toFixed(2)}%`,
+          key: "wins",
+        },
+        {
+          label: others?.pickPercentage || "Pick %",
+          value: `${(item.pickRate * 100).toFixed(2)}%`,
+          key: "pickRate",
+        },
+        {
+          label: others?.played || "Played",
+          value: item.plays.toLocaleString("en-US"),
+          key: "plays",
+        },
+      ];
 
-  const renderSortIcon = (key) => {
-    if (sortConfig.key === key) {
-      return sortConfig.direction === "ascending" ? (
-        <HiArrowSmUp className="text-lg" />
-      ) : (
-        <HiArrowSmDown className="text-lg" />
+      const filteredDataItems = hiddenData.filter(
+        (data) => data.key !== mobileFilter
       );
-    }
-    return null;
-  };
+
+      return (
+        <div className="grid grid-cols-3 gap-3 justify-between text-center px-4 py-3 bg-[#1a1a1a] border-t border-[#2D2F37]">
+          {filteredDataItems.map((data, index) => (
+            <div key={index} className="flex flex-col">
+              <span className="text-xs text-gray-400 mb-1">{data.label}</span>
+              <span className="text-sm text-white">{data.value}</span>
+            </div>
+          ))}
+        </div>
+      );
+    },
+    [mobileFilter, others]
+  );
+
+  const requestSort = useCallback((key) => {
+    setSortConfig((prev) => {
+      let direction = "ascending";
+      if (prev.key === key && prev.direction === "ascending") {
+        direction = "descending";
+      }
+      return { key, direction };
+    });
+  }, []);
+
+  const handleSearchChange = useCallback((value) => {
+    setSearchValue(value);
+  }, []);
+
+  const renderSortIcon = useCallback(
+    (key) => {
+      if (sortConfig.key === key) {
+        return sortConfig.direction === "ascending" ? (
+          <HiArrowSmUp className="text-lg" />
+        ) : (
+          <HiArrowSmDown className="text-lg" />
+        );
+      }
+      return null;
+    },
+    [sortConfig]
+  );
+
+  // Memoize desktop table rows
+  const desktopTableRows = useMemo(() => {
+    return filteredData.map((item, index) => (
+      <tr
+        className="hover:bg-[#2D2F37] transition-colors duration-200 border-b border-[#2D2F37]"
+        key={item.key}
+      >
+        <td className="p-2 text-center">
+          <div className="text-center text-base">{index + 1}</div>
+        </td>
+        <td className={`p-2 ${getCellClass("key")}`}>
+          <div>
+            <div className="flex justify-start items-center">
+              <OptimizedImage
+                src={item.augmentData?.imageUrl}
+                alt="icon"
+                width={80}
+                height={80}
+                className="w-12 h-12 sm:w-14 sm:h-14 md:w-[80px] md:h-[80px] mr-1 rounded-md"
+                data-tooltip-id={item?.key}
+              />
+              <ReactTltp
+                variant="augment"
+                id={item?.key}
+                content={item.augmentData}
+              />
+              <div>
+                <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-1 ml-2 truncate max-w-[120px] sm:max-w-full">
+                  {item.augmentData?.name}
+                </p>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td className={`p-2 ${getCellClass("avgPlacement")}`}>
+          <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
+            <ColoredValue value={item?.avgPlacement} prefix="#" />
+          </p>
+        </td>
+        <td className={`p-2 ${getCellClass("roundOnePickRate")}`}>
+          <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
+            {item?.roundOnePickRate.toFixed(2)}%
+          </p>
+        </td>
+        <td className={`p-2 ${getCellClass("roundTwoPickRate")}`}>
+          <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
+            {item?.roundTwoPickRate.toFixed(2)}%
+          </p>
+        </td>
+        <td className={`p-2 ${getCellClass("roundThreePickRate")}`}>
+          <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
+            {item?.roundThreePickRate.toFixed(2)}%
+          </p>
+        </td>
+        <td className={`p-2 ${getCellClass("tops")}`}>
+          <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
+            {((item?.tops * 100) / item?.plays).toFixed(2)}%
+          </p>
+        </td>
+        <td className={`p-2 ${getCellClass("wins")}`}>
+          <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
+            {((item?.wins * 100) / item?.plays).toFixed(2)}%
+          </p>
+        </td>
+        <td className={`p-2 ${getCellClass("pickRate")}`}>
+          <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
+            {(item?.pickRate * 100).toFixed(2)}%
+          </p>
+        </td>
+        <td className={`p-2 ${getCellClass("plays")}`}>
+          <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
+            {item?.plays.toLocaleString("en-US")}
+          </p>
+        </td>
+      </tr>
+    ));
+  }, [filteredData, getCellClass]);
+
+  // Memoize mobile table rows
+  const mobileTableRows = useMemo(() => {
+    return filteredData.map((item, index) => (
+      <div key={item.key} className="border-b border-[#2D2F37]">
+        <div
+          className="grid gap-1 p-3 items-center cursor-pointer hover:bg-[#2D2F37] transition-colors duration-200"
+          style={{ gridTemplateColumns: "10% 45% 20% 22%" }}
+          onClick={() => toggleRowExpansion(index)}
+        >
+          <div className="text-center text-white font-medium">{index + 1}</div>
+          <div className="flex items-center space-x-2 min-w-0">
+            <OptimizedImage
+              src={item.augmentData?.imageUrl}
+              alt="icon"
+              width={32}
+              height={32}
+              className="w-12 h-12 rounded-md flex-shrink-0"
+            />
+            <div className="min-w-0 flex-1">
+              <p className="text-white text-sm truncate leading-tight mb-0">
+                {item.augmentData?.name}
+              </p>
+            </div>
+          </div>
+          <div className="text-center text-white text-sm">
+            <ColoredValue value={item?.avgPlacement} prefix="#" />
+          </div>
+          <div
+            className={`text-center text-sm ${
+              mobileFilter === sortConfig.key
+                ? "text-[#D9A876] font-medium"
+                : "text-white"
+            } flex items-center justify-center space-x-1`}
+          >
+            <span>{renderMobileValue(item, mobileFilter)}</span>
+            {expandedRows.has(index) ? (
+              <HiChevronUp className="w-4 h-4" />
+            ) : (
+              <HiChevronDown className="w-4 h-4" />
+            )}
+          </div>
+        </div>
+        {expandedRows.has(index) && renderExpandedContent(item)}
+      </div>
+    ));
+  }, [
+    filteredData,
+    mobileFilter,
+    sortConfig.key,
+    expandedRows,
+    toggleRowExpansion,
+    renderMobileValue,
+    renderExpandedContent,
+  ]);
 
   return (
     <>
@@ -268,7 +456,6 @@ const ProjectItems = () => {
               {/* Second Row - Remaining buttons */}
               <div className="flex gap-0">
                 {mobileFilterOptions.slice(4).map((option, index) => {
-                  const actualIndex = index + 4;
                   const isFirst = index === 0;
                   const isLast =
                     index === mobileFilterOptions.slice(4).length - 1;
@@ -309,7 +496,7 @@ const ProjectItems = () => {
           <div className="w-full sm:w-auto px-4 sm:px-0">
             <SearchBar
               searchValue={searchValue}
-              setSearchValue={setSearchValue}
+              setSearchValue={handleSearchChange}
               placeholder="Search augment..."
             />
           </div>
@@ -325,11 +512,13 @@ const ProjectItems = () => {
                   <tr className="bg-[#000000]">
                     <th className="p-2 font-semibold text-center border-b border-[#2D2F37]">
                       <p className="p-0 text-sm sm:text-base md:text-[16px] mb-0 py-2">
-                        {others.rank}
+                        {others?.rank}
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${
+                        sortConfig?.key === "key" ? "bg-[#2D2F37]" : ""
+                      }`}
                       onClick={() => requestSort("key")}
                     >
                       <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -338,7 +527,9 @@ const ProjectItems = () => {
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "avgPlacement" ? "bg-[#2D2F37]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${
+                        sortConfig?.key === "avgPlacement" ? "bg-[#2D2F37]" : ""
+                      }`}
                       onClick={() => requestSort("avgPlacement")}
                     >
                       <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -349,7 +540,11 @@ const ProjectItems = () => {
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "roundOnePickRate" ? "bg-[#2D2F37]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${
+                        sortConfig?.key === "roundOnePickRate"
+                          ? "bg-[#2D2F37]"
+                          : ""
+                      }`}
                       onClick={() => requestSort("roundOnePickRate")}
                     >
                       <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -360,7 +555,11 @@ const ProjectItems = () => {
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "roundTwoPickRate" ? "bg-[#2D2F37]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${
+                        sortConfig?.key === "roundTwoPickRate"
+                          ? "bg-[#2D2F37]"
+                          : ""
+                      }`}
                       onClick={() => requestSort("roundTwoPickRate")}
                     >
                       <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -371,7 +570,11 @@ const ProjectItems = () => {
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "roundThreePickRate" ? "bg-[#2D2F37]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${
+                        sortConfig?.key === "roundThreePickRate"
+                          ? "bg-[#2D2F37]"
+                          : ""
+                      }`}
                       onClick={() => requestSort("roundThreePickRate")}
                     >
                       <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -382,7 +585,9 @@ const ProjectItems = () => {
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "tops" ? "bg-[#2D2F37]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${
+                        sortConfig?.key === "tops" ? "bg-[#2D2F37]" : ""
+                      }`}
                       onClick={() => requestSort("tops")}
                     >
                       <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -391,7 +596,9 @@ const ProjectItems = () => {
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "wins" ? "bg-[#2D2F37]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${
+                        sortConfig?.key === "wins" ? "bg-[#2D2F37]" : ""
+                      }`}
                       onClick={() => requestSort("wins")}
                     >
                       <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -400,7 +607,9 @@ const ProjectItems = () => {
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "pickRate" ? "bg-[#2D2F37]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${
+                        sortConfig?.key === "pickRate" ? "bg-[#2D2F37]" : ""
+                      }`}
                       onClick={() => requestSort("pickRate")}
                     >
                       <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -411,7 +620,9 @@ const ProjectItems = () => {
                       </p>
                     </th>
                     <th
-                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${sortConfig?.key === "plays" ? "bg-[#2D2F37]" : ""}`}
+                      className={`cursor-pointer p-2 font-semibold border-b border-[#2D2F37] ${
+                        sortConfig?.key === "plays" ? "bg-[#2D2F37]" : ""
+                      }`}
                       onClick={() => requestSort("plays")}
                     >
                       <p className="p-0 text-sm sm:text-base my-auto md:text-[16px] text-left flex items-center">
@@ -421,122 +632,7 @@ const ProjectItems = () => {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-[#111111]">
-                  {augmentsStatsData.map(
-                    (item, index) =>
-                      augments.find(
-                        (augment) =>
-                          augment.key ===
-                          item.key?.split("_")[item?.key?.split("_").length - 1]
-                      )?.key && (
-                        <tr
-                          className="hover:bg-[#2D2F37] transition-colors duration-200 border-b border-[#2D2F37]"
-                          key={index}
-                        >
-                          <td className="p-2 text-center">
-                            <div className="text-center text-base">
-                              {index + 1}
-                            </div>
-                          </td>
-                          <td className={`p-2 ${getCellClass("key")}`}>
-                            <div>
-                              <div className="flex justify-start items-center">
-                                <OptimizedImage
-                                  src={
-                                    augments.find(
-                                      (augment) =>
-                                        augment.key ===
-                                        item.key?.split("_")[
-                                          item?.key?.split("_").length - 1
-                                        ]
-                                    )?.imageUrl
-                                  }
-                                  alt="icon"
-                                  width={80}
-                                  height={80}
-                                  className="w-12 h-12 sm:w-14 sm:h-14 md:w-[80px] md:h-[80px] mr-1 rounded-md"
-                                  data-tooltip-id={item?.key}
-                                />
-                                <ReactTltp
-                                  variant="augment"
-                                  id={item?.key}
-                                  content={augments.find(
-                                    (augment) =>
-                                      augment.key ===
-                                      item.key?.split("_")[
-                                        item?.key?.split("_").length - 1
-                                      ]
-                                  )}
-                                />
-                                <div>
-                                  <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-1 ml-2 truncate max-w-[120px] sm:max-w-full">
-                                    {
-                                      augments.find(
-                                        (augment) =>
-                                          augment.key ===
-                                          item.key?.split("_")[
-                                            item?.key?.split("_").length - 1
-                                          ]
-                                      )?.name
-                                    }
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-                          <td className={`p-2 ${getCellClass("avgPlacement")}`}>
-                            <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
-                              <ColoredValue
-                                value={item?.avgPlacement}
-                                prefix="#"
-                              />
-                            </p>
-                          </td>
-                          <td
-                            className={`p-2 ${getCellClass("roundOnePickRate")}`}
-                          >
-                            <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
-                              {item?.roundOnePickRate.toFixed(2)}%
-                            </p>
-                          </td>
-                          <td
-                            className={`p-2 ${getCellClass("roundTwoPickRate")}`}
-                          >
-                            <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
-                              {item?.roundTwoPickRate.toFixed(2)}%
-                            </p>
-                          </td>
-                          <td
-                            className={`p-2 ${getCellClass("roundThreePickRate")}`}
-                          >
-                            <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
-                              {item?.roundThreePickRate.toFixed(2)}%
-                            </p>
-                          </td>
-                          <td className={`p-2 ${getCellClass("tops")}`}>
-                            <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
-                              {((item?.tops * 100) / item?.plays).toFixed(2)}%
-                            </p>
-                          </td>
-                          <td className={`p-2 ${getCellClass("wins")}`}>
-                            <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
-                              {((item?.wins * 100) / item?.plays).toFixed(2)}%
-                            </p>
-                          </td>
-                          <td className={`p-2 ${getCellClass("pickRate")}`}>
-                            <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
-                              {(item?.pickRate * 100).toFixed(2)}%
-                            </p>
-                          </td>
-                          <td className={`p-2 ${getCellClass("plays")}`}>
-                            <p className="p-0 text-base sm:text-base md:text-lg text-[#fff] mb-0">
-                              {item?.plays.toLocaleString("en-US")}
-                            </p>
-                          </td>
-                        </tr>
-                      )
-                  )}
-                </tbody>
+                <tbody className="bg-[#111111]">{desktopTableRows}</tbody>
               </table>
             </ScrollableTable>
           </div>
@@ -551,21 +647,27 @@ const ProjectItems = () => {
               >
                 <div className="text-center">#</div>
                 <div
-                  className={`cursor-pointer flex items-center ${sortConfig?.key === "key" ? "text-[#D9A876]" : ""}`}
+                  className={`cursor-pointer flex items-center ${
+                    sortConfig?.key === "key" ? "text-[#D9A876]" : ""
+                  }`}
                   onClick={() => requestSort("key")}
                 >
                   Augment
                   <span className="ml-1">{renderSortIcon("key")}</span>
                 </div>
                 <div
-                  className={`text-center cursor-pointer flex items-center justify-center ${sortConfig?.key === "avgPlacement" ? "text-[#D9A876]" : ""}`}
+                  className={`text-center cursor-pointer flex items-center justify-center ${
+                    sortConfig?.key === "avgPlacement" ? "text-[#D9A876]" : ""
+                  }`}
                   onClick={() => requestSort("avgPlacement")}
                 >
                   Avg Rank
                   <span className="ml-1">{renderSortIcon("avgPlacement")}</span>
                 </div>
                 <div
-                  className={`text-center flex items-center justify-center ${mobileFilter === sortConfig.key ? "text-[#D9A876]" : ""}`}
+                  className={`text-center flex items-center justify-center ${
+                    mobileFilter === sortConfig.key ? "text-[#D9A876]" : ""
+                  }`}
                 >
                   <span>
                     {
@@ -587,80 +689,7 @@ const ProjectItems = () => {
               </div>
 
               {/* Mobile Table Body */}
-              {augmentsStatsData.map(
-                (item, index) =>
-                  augments.find(
-                    (augment) =>
-                      augment.key ===
-                      item.key?.split("_")[item?.key?.split("_").length - 1]
-                  )?.key && (
-                    <div key={index} className="border-b border-[#2D2F37]">
-                      {/* Main Row */}
-                      <div
-                        className="grid gap-1 p-3 items-center cursor-pointer hover:bg-[#2D2F37] transition-colors duration-200"
-                        style={{ gridTemplateColumns: "10% 45% 20% 22%" }}
-                        onClick={() => toggleRowExpansion(index)}
-                      >
-                        {/* Serial No */}
-                        <div className="text-center text-white font-medium">
-                          {index + 1}
-                        </div>
-
-                        {/* Image & Name */}
-                        <div className="flex items-center space-x-2 min-w-0">
-                          <OptimizedImage
-                            src={
-                              augments.find(
-                                (augment) =>
-                                  augment.key ===
-                                  item.key?.split("_")[
-                                    item?.key?.split("_").length - 1
-                                  ]
-                              )?.imageUrl
-                            }
-                            alt="icon"
-                            width={32}
-                            height={32}
-                            className="w-12 h-12 rounded-md flex-shrink-0"
-                          />
-                          <div className="min-w-0 flex-1">
-                            <p className="text-white text-sm truncate leading-tight mb-0">
-                              {
-                                augments.find(
-                                  (augment) =>
-                                    augment.key ===
-                                    item.key?.split("_")[
-                                      item?.key?.split("_").length - 1
-                                    ]
-                                )?.name
-                              }
-                            </p>
-                          </div>
-                        </div>
-
-                        {/* Avg Rank */}
-                        <div className="text-center text-white text-sm">
-                          <ColoredValue value={item?.avgPlacement} prefix="#" />
-                        </div>
-
-                        {/* Selected Filter Value */}
-                        <div
-                          className={`text-center text-sm ${mobileFilter === sortConfig.key ? "text-[#D9A876] font-medium" : "text-white"} flex items-center justify-center space-x-1`}
-                        >
-                          <span>{renderMobileValue(item, mobileFilter)}</span>
-                          {expandedRows.has(index) ? (
-                            <HiChevronUp className="w-4 h-4" />
-                          ) : (
-                            <HiChevronDown className="w-4 h-4" />
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Expanded Content */}
-                      {expandedRows.has(index) && renderExpandedContent(item)}
-                    </div>
-                  )
-              )}
+              {mobileTableRows}
             </div>
           </div>
         </div>
