@@ -1028,7 +1028,7 @@ const MetaDeck = memo(
                       </div>
 
                       {/* Desktop view: All champions visible */}
-                      <div className="hidden lg:flex flex-wrap justify-center gap-2 w-full">
+                      <div className="hidden lg:flex flex-wrap justify-between gap-2 w-full">
                         {sortedChampions.map((champion, index) => (
                           <ChampionWithItems
                             key={`desktop-${champion.key}-${index}`}
@@ -1757,7 +1757,7 @@ const MetaTrendsItems = () => {
     // Immediate update for better mobile experience
     setTimeout(() => {
       setVisibleDecks((prev) => {
-        const newCount = Math.min(prev + 2, compsData.length); // Load 2 at a time
+        const newCount = Math.min(prev + 5, compsData.length); // Load 5 at a time
         console.log("Updated visible decks:", newCount);
         return newCount;
       });
@@ -1817,12 +1817,6 @@ const MetaTrendsItems = () => {
                 />
               ))}
 
-              {/* Debug info for mobile testing */}
-              <div className="md:hidden text-xs text-gray-500 text-center py-2">
-                Showing {visibleCompsData.length} of {compsData.length} decks
-                {hasMoreDecks && " - Scroll down for more"}
-              </div>
-
               {/* Loading indicator */}
               {isLoadingMore && (
                 <div className="flex justify-center py-6">
@@ -1840,7 +1834,7 @@ const MetaTrendsItems = () => {
                     onClick={loadMoreDecks}
                     className="px-4 py-2 bg-[#2D2F37] hover:bg-[#3D3F47] text-[#D9A876] rounded-lg text-sm transition-colors duration-200"
                   >
-                    Load More ({compsData.length - visibleDecks} remaining)
+                    Load More
                   </button>
                 </div>
               )}
