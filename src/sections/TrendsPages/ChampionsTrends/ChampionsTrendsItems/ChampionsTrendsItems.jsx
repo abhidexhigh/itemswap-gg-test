@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import "react-tooltip/dist/react-tooltip.css";
+import ReactTltp from "src/components/tooltip/ReactTltp";
 import {
   HiArrowSmUp,
   HiArrowSmDown,
@@ -13,6 +15,7 @@ import Comps from "../../../../data/compsNew.json";
 import CardImage from "src/components/cardImage";
 import TrendFilters from "src/components/trendFilters";
 import ScrollableTable from "src/utils/ScrollableTable";
+import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
 import ColoredValue from "src/components/ColoredValue";
 import ItemDisplay from "src/components/item/ItemDisplay";
@@ -21,6 +24,32 @@ const ProjectItems = () => {
   const { t } = useTranslation();
   const others = t("others");
 
+  // Pre-process data once
+  const {
+    props: {
+      pageProps: {
+        dehydratedState: {
+          queries: { data },
+        },
+      },
+    },
+  } = Comps;
+
+  const { champions, items, forces } = data?.refs || {};
+
+  // Memoize lookup map and merged data
+  const { championLookup, mergedData } = useMemo(() => {
+    const lookup = new Map(
+      champions?.map((champion) => [champion.key, champion]) || []
+    );
+    const merged = metaDeckChampionsStats.map((champion) => ({
+      ...champion,
+      ...(lookup.get(champion.key) || {}),
+    }));
+    return { championLookup: lookup, mergedData: merged };
+  }, [champions]);
+
+  const [filteredData, setFilteredData] = useState(mergedData);
   const [searchValue, setSearchValue] = useState("");
   const [sortConfig, setSortConfig] = useState({
     key: null,
@@ -30,37 +59,7 @@ const ProjectItems = () => {
   const [expandedRows, setExpandedRows] = useState(new Set());
   const [costFilter, setCostFilter] = useState("All");
 
-  // Memoize static data extraction
-  const { champions, items, forces, lookup, merged } = useMemo(() => {
-    const {
-      props: {
-        pageProps: {
-          dehydratedState: {
-            queries: { data },
-          },
-        },
-      },
-    } = Comps;
-
-    const { champions, items, forces } = data?.refs || {};
-    const lookup = new Map(
-      champions?.map((champion) => [champion.key, champion]) || []
-    );
-    const merged = metaDeckChampionsStats.map((champion) => ({
-      ...champion,
-      ...(lookup.get(champion.key) || {}),
-    }));
-
-    return {
-      champions: champions || [],
-      items: items || [],
-      forces: forces || [],
-      lookup,
-      merged,
-    };
-  }, []);
-
-  // Memoize mobile filter options
+  // Mobile filter options (excluding serial no, image, name, avg rank, recommended items)
   const mobileFilterOptions = useMemo(
     () => [
       { key: "tops", label: others?.top4 || "Top 4%" },
@@ -69,34 +68,32 @@ const ProjectItems = () => {
       { key: "plays", label: others?.played || "Played" },
       {
         key: "threeStarPercentage",
-        label: others?.threeStarsPercentage || "3⭐ %",
+        label: others?.threeStarsPercentage || "3-Stars%",
       },
-      { key: "threeStarRank", label: others?.threeStarsRank || "3⭐ Rank" },
+      { key: "threeStarRank", label: others?.threeStarsRank || "3-Stars Rank" },
     ],
     [others]
   );
 
-  // Memoize filtered and sorted data
+  // Memoize sorted and filtered data
   const processedData = useMemo(() => {
-    let filteredData = merged;
+    let data = [...mergedData];
 
     // Apply cost filter
     if (costFilter !== "All") {
-      filteredData = filteredData.filter(
-        (champion) => champion.cost == costFilter
-      );
+      data = data.filter((champion) => champion.cost == costFilter);
     }
 
     // Apply search filter
     if (searchValue) {
-      filteredData = filteredData.filter((champion) =>
+      data = data.filter((champion) =>
         champion.key.toLowerCase().includes(searchValue.toLowerCase())
       );
     }
 
     // Apply sorting
     if (sortConfig.key) {
-      filteredData = [...filteredData].sort((a, b) => {
+      data.sort((a, b) => {
         let aValue, bValue;
 
         if (["firstPick", "secondPick", "thirdPick"].includes(sortConfig.key)) {
@@ -116,43 +113,51 @@ const ProjectItems = () => {
           bValue = b[sortConfig.key];
         }
 
-        if (aValue < bValue)
+        if (aValue < bValue) {
           return sortConfig.direction === "ascending" ? -1 : 1;
-        if (aValue > bValue)
+        }
+        if (aValue > bValue) {
           return sortConfig.direction === "ascending" ? 1 : -1;
+        }
         return 0;
       });
     }
 
-    return filteredData;
-  }, [merged, costFilter, searchValue, sortConfig]);
+    return data;
+  }, [mergedData, costFilter, searchValue, sortConfig]);
 
-  // Memoize callbacks
+  // Update filtered data when processed data changes
+  useEffect(() => {
+    setFilteredData(processedData);
+  }, [processedData]);
+
   const requestSort = useCallback((key) => {
-    setSortConfig((prev) => ({
-      key,
-      direction:
-        prev.key === key && prev.direction === "ascending"
-          ? "descending"
-          : "ascending",
-    }));
+    setSortConfig((prev) => {
+      let direction = "ascending";
+      if (prev.key === key && prev.direction === "ascending") {
+        direction = "descending";
+      }
+      return { key, direction };
+    });
   }, []);
 
   const handleMobileFilterClick = useCallback(
     (filterKey) => {
-      setMobileFilter(filterKey);
-
-      if (mobileFilter === filterKey && sortConfig.key === filterKey) {
-        setSortConfig((prev) => ({
-          key: filterKey,
-          direction:
-            prev.direction === "ascending" ? "descending" : "ascending",
-        }));
-      } else {
-        setSortConfig({ key: filterKey, direction: "descending" });
-      }
+      setMobileFilter((prev) => {
+        // If clicking on the same filter, toggle sort direction
+        if (prev === filterKey && sortConfig.key === filterKey) {
+          const newDirection =
+            sortConfig.direction === "ascending" ? "descending" : "ascending";
+          setSortConfig({ key: filterKey, direction: newDirection });
+          return prev;
+        } else {
+          // Auto-sort by the selected filter (default to descending for new selections)
+          setSortConfig({ key: filterKey, direction: "descending" });
+          return filterKey;
+        }
+      });
     },
-    [mobileFilter, sortConfig.key]
+    [sortConfig]
   );
 
   const toggleRowExpansion = useCallback((index) => {
@@ -167,11 +172,6 @@ const ProjectItems = () => {
     });
   }, []);
 
-  const handleButtonClick = useCallback((button) => {
-    setCostFilter(button);
-  }, []);
-
-  // Memoize render functions
   const renderMobileValue = useCallback((item, key) => {
     switch (key) {
       case "tops":
@@ -189,28 +189,23 @@ const ProjectItems = () => {
     }
   }, []);
 
-  const getCellClass = useCallback(
-    (key) => {
-      return sortConfig.key === key ? "bg-[#2D2F37] text-[#D9A876]" : "";
-    },
-    [sortConfig.key]
-  );
-
-  const renderSortIcon = useCallback(
-    (key) => {
-      if (sortConfig.key === key) {
-        return sortConfig.direction === "ascending" ? (
-          <HiArrowSmUp className="text-lg" />
-        ) : (
-          <HiArrowSmDown className="text-lg" />
-        );
+  // Memoize recommended items for each champion
+  const championRecommendedItems = useMemo(() => {
+    const itemsMap = new Map();
+    champions?.forEach((champion) => {
+      if (champion.recommendItems) {
+        const recommendedItems = champion.recommendItems
+          .map((itemKey) => {
+            const key = itemKey?.split("_")[itemKey?.split("_").length - 1];
+            return items?.find((item) => item.key === key);
+          })
+          .filter(Boolean);
+        itemsMap.set(champion.key, recommendedItems);
       }
-      return null;
-    },
-    [sortConfig]
-  );
+    });
+    return itemsMap;
+  }, [champions, items]);
 
-  // Memoize expanded content
   const renderExpandedContent = useCallback(
     (item) => {
       const hiddenData = [
@@ -249,7 +244,7 @@ const ProjectItems = () => {
       const filteredData = hiddenData.filter(
         (data) => data.key !== mobileFilter
       );
-      const champion = champions.find((champ) => champ.key === item.key);
+      const recommendedItems = championRecommendedItems.get(item.key) || [];
 
       return (
         <div className="grid grid-cols-3 gap-3 p-4 bg-[#1a1a1a] border-t border-[#2D2F37]">
@@ -259,182 +254,231 @@ const ProjectItems = () => {
               <span className="text-sm text-white">{data.value}</span>
             </div>
           ))}
-          {/* Recommended Items */}
           <div className="flex flex-col">
             <span className="text-xs text-gray-400 mb-2">
-              {others?.recommended} {others.items}
+              {others?.recommended} {others?.items}
             </span>
             <div className="flex flex-wrap justify-start gap-1">
-              {champion?.recommendItems?.map((itemKey, idx) => {
-                const itemImg = items.find(
-                  (i) =>
-                    i.key ===
-                    itemKey?.split("_")[itemKey?.split("_").length - 1]
-                );
-                return itemImg ? (
-                  <div key={idx} className="relative">
-                    <ItemDisplay
-                      item={itemImg}
-                      size="xSmall"
-                      borderRadius="rounded-[4px]"
-                      backgroundRadius="rounded-[4px]"
-                      showTooltip={false}
-                    />
-                  </div>
-                ) : null;
-              })}
+              {recommendedItems.map((itemImg, idx) => (
+                <div key={idx} className="relative">
+                  <ItemDisplay
+                    item={itemImg}
+                    size="xSmall"
+                    borderRadius="rounded-[4px]"
+                    backgroundRadius="rounded-[4px]"
+                    showTooltip={false}
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>
       );
     },
-    [champions, items, others, mobileFilter]
+    [mobileFilter, championRecommendedItems, others]
   );
 
-  // Memoize table rows
-  const MemoizedDesktopRow = React.memo(({ champion, index }) => {
-    const championData = champions.find((champ) => champ.key === champion.key);
-    if (!championData?.key) return null;
+  const handleButtonClick = useCallback((button) => {
+    setCostFilter(button);
+  }, []);
 
-    return (
-      <tr
-        className="bg-[#111111] hover:bg-[#2D2F37] transition-colors duration-200 border-b border-[#2D2F37]"
-        key={`${champion.key}-${index}`}
-      >
-        <td className="p-2 text-center">
-          <div className="text-center">{index + 1}</div>
-        </td>
-        <td className={`p-2 ${getCellClass("key")}`}>
-          <div className="flex justify-start items-center">
-            <CardImage
-              src={championData}
-              imgStyle="md:w-[80px]"
-              identificationImageStyle="w=[16px] md:w-[32px]"
-              textStyle="text-[10px] md:text-[16px] hidden"
-              forces={forces}
-              cardSize="md:!w-[80px] md:!h-[80px]"
-            />
-            <p className="p-0 text-left text-base md:text-xl mb-0 ml-2 text-[#fff]">
-              {championData.key}
-            </p>
-          </div>
-        </td>
-        <td className={`p-2 ${getCellClass("avgPlacement")}`}>
-          <p className="p-0 text-left text-base md:text-lg mb-0">
-            <ColoredValue value={champion?.avgPlacement} prefix="#" />
-          </p>
-        </td>
-        <td className={`p-2 ${getCellClass("tops")}`}>
-          <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-            {((champion?.tops * 100) / champion?.plays).toFixed(2)}%
-          </p>
-        </td>
-        <td className={`p-2 ${getCellClass("wins")}`}>
-          <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-            {((champion?.wins * 100) / champion?.plays).toFixed(2)}%
-          </p>
-        </td>
-        <td className={`p-2 ${getCellClass("pickRate")}`}>
-          <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-            {(champion?.pickRate * 100).toFixed(2)}%
-          </p>
-        </td>
-        <td className={`p-2 ${getCellClass("plays")}`}>
-          <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-            {champion?.plays.toLocaleString("en-US")}
-          </p>
-        </td>
-        <td className="p-2">
-          <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-            {(champion?.threeStarPercentage * 100).toFixed(2)}%
-          </p>
-        </td>
-        <td className="p-2">
-          <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-            #{champion?.threeStarRank.toFixed(2)}
-          </p>
-        </td>
-        <td className="p-2">
-          <div className="flex justify-center items-center gap-1">
-            {championData?.recommendItems?.map((item, idx) => {
-              const itemData = items.find(
-                (i) => i.key === item?.split("_")[item?.split("_").length - 1]
-              );
-              return itemData ? (
-                <div
-                  key={idx}
-                  className="relative z-10 hover:z-20 aspect-square rounded-lg"
-                >
-                  <ItemDisplay
-                    item={itemData}
-                    size="small"
-                    borderRadius="rounded-[4px]"
-                    backgroundRadius="rounded-[4px]"
-                    tooltipId={itemData?.name}
-                    showTooltip={true}
-                  />
-                </div>
-              ) : null;
-            })}
-          </div>
-        </td>
-      </tr>
-    );
-  });
+  const handleSearchChange = useCallback((value) => {
+    setSearchValue(value);
+  }, []);
 
-  const MemoizedMobileRow = React.memo(({ champion, index }) => {
-    const championData = champions.find((champ) => champ.key === champion.key);
-    if (!championData?.key) return null;
+  // Add getCellClass function to highlight sorted column cells
+  const getCellClass = useCallback(
+    (key) => {
+      if (sortConfig.key === key) {
+        return "bg-[#2D2F37] text-[#D9A876]";
+      }
+      return "";
+    },
+    [sortConfig.key]
+  );
 
-    return (
-      <div
-        key={`mobile-${champion.key}-${index}`}
-        className="border-b border-[#2D2F37]"
-      >
-        {/* Main Row */}
-        <div
-          className="grid gap-1 p-3 items-center cursor-pointer hover:bg-[#2D2F37] transition-colors duration-200"
-          style={{ gridTemplateColumns: "10% 45% 20% 22%" }}
-          onClick={() => toggleRowExpansion(index)}
-        >
-          <div className="text-center text-white font-medium">{index + 1}</div>
-          <div className="flex items-center space-x-2 min-w-0">
-            <CardImage
-              src={championData}
-              imgStyle="w-16 h-16"
-              identificationImageStyle="w-3 h-3"
-              textStyle="text-[8px] hidden"
-              forces={forces}
-              cardSize="!w-16 !h-16"
-            />
-            <div className="min-w-0 flex-1">
-              <p className="text-white text-base truncate leading-tight mb-0">
-                {championData.key}
-              </p>
-            </div>
-          </div>
-          <div className="text-center text-white text-base">
-            <ColoredValue value={champion?.avgPlacement} prefix="#" />
-          </div>
-          <div
-            className={`text-center text-base ${
-              mobileFilter === sortConfig.key
-                ? "text-[#D9A876] font-medium"
-                : "text-white"
-            } flex items-center justify-center space-x-1`}
+  // Add renderSortIcon function for consistent icon rendering
+  const renderSortIcon = useCallback(
+    (key) => {
+      if (sortConfig.key === key) {
+        return sortConfig.direction === "ascending" ? (
+          <HiArrowSmUp className="text-lg" />
+        ) : (
+          <HiArrowSmDown className="text-lg" />
+        );
+      }
+      return null;
+    },
+    [sortConfig]
+  );
+
+  // Memoize desktop table rows
+  const desktopTableRows = useMemo(() => {
+    return filteredData
+      .map((champion, index) => {
+        const championData = championLookup.get(champion.key);
+        if (!championData?.key) return null;
+
+        const recommendedItems =
+          championRecommendedItems.get(champion.key) || [];
+
+        return (
+          <tr
+            className="bg-[#111111] hover:bg-[#2D2F37] transition-colors duration-200 border-b border-[#2D2F37]"
+            key={champion.key}
           >
-            <span>{renderMobileValue(champion, mobileFilter)}</span>
-            {expandedRows.has(index) ? (
-              <HiChevronUp className="w-4 h-4" />
-            ) : (
-              <HiChevronDown className="w-4 h-4" />
-            )}
+            <td className="p-2 text-center">
+              <div className="text-center">{index + 1}</div>
+            </td>
+            <td className={`p-2 ${getCellClass("key")}`}>
+              <div>
+                <div className="flex justify-start items-center">
+                  <CardImage
+                    src={championData}
+                    imgStyle="md:w-[80px]"
+                    identificationImageStyle="w=[16px] md:w-[32px]"
+                    textStyle="text-[10px] md:text-[16px] hidden"
+                    forces={forces}
+                    cardSize="md:!w-[80px] md:!h-[80px]"
+                  />
+                  <p className="p-0 text-left text-base md:text-xl mb-0 ml-2 text-[#fff]">
+                    {championData.key}
+                  </p>
+                </div>
+              </div>
+            </td>
+            <td className={`p-2 ${getCellClass("avgPlacement")}`}>
+              <p className="p-0 text-left text-base md:text-lg mb-0">
+                <ColoredValue value={champion?.avgPlacement} prefix="#" />
+              </p>
+            </td>
+            <td className={`p-2 ${getCellClass("tops")}`}>
+              <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
+                {((champion?.tops * 100) / champion?.plays).toFixed(2)}%
+              </p>
+            </td>
+            <td className={`p-2 ${getCellClass("wins")}`}>
+              <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
+                {((champion?.wins * 100) / champion?.plays).toFixed(2)}%
+              </p>
+            </td>
+            <td className={`p-2 ${getCellClass("pickRate")}`}>
+              <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
+                {(champion?.pickRate * 100).toFixed(2)}%
+              </p>
+            </td>
+            <td className={`p-2 ${getCellClass("plays")}`}>
+              <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
+                {champion?.plays.toLocaleString("en-US")}
+              </p>
+            </td>
+            <td className="p-2">
+              <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
+                {(champion?.threeStarPercentage * 100).toFixed(2)}%
+              </p>
+            </td>
+            <td className="p-2">
+              <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
+                #{champion?.threeStarRank.toFixed(2)}
+              </p>
+            </td>
+            <td className="p-2">
+              <div className="flex justify-center items-center gap-1">
+                {recommendedItems.map((item, itemIndex) => (
+                  <div
+                    key={itemIndex}
+                    className="relative z-10 hover:z-20 aspect-square rounded-lg"
+                  >
+                    <ItemDisplay
+                      item={item}
+                      size="small"
+                      borderRadius="rounded-[4px]"
+                      backgroundRadius="rounded-[4px]"
+                      tooltipId={item?.name}
+                      showTooltip={true}
+                    />
+                  </div>
+                ))}
+              </div>
+            </td>
+          </tr>
+        );
+      })
+      .filter(Boolean);
+  }, [
+    filteredData,
+    championLookup,
+    championRecommendedItems,
+    forces,
+    getCellClass,
+  ]);
+
+  // Memoize mobile table rows
+  const mobileTableRows = useMemo(() => {
+    return filteredData
+      .map((champion, index) => {
+        const championData = championLookup.get(champion.key);
+        if (!championData?.key) return null;
+
+        return (
+          <div key={champion.key} className="border-b border-[#2D2F37]">
+            <div
+              className="grid gap-1 p-3 items-center cursor-pointer hover:bg-[#2D2F37] transition-colors duration-200"
+              style={{ gridTemplateColumns: "10% 45% 20% 22%" }}
+              onClick={() => toggleRowExpansion(index)}
+            >
+              <div className="text-center text-white font-medium">
+                {index + 1}
+              </div>
+              <div className="flex items-center space-x-2 min-w-0">
+                <CardImage
+                  src={championData}
+                  imgStyle="w-16 h-16"
+                  identificationImageStyle="w-3 h-3"
+                  textStyle="text-[8px] hidden"
+                  forces={forces}
+                  cardSize="!w-16 !h-16"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="text-white text-base truncate leading-tight mb-0">
+                    {championData.key}
+                  </p>
+                </div>
+              </div>
+              <div className="text-center text-white text-base">
+                <ColoredValue value={champion?.avgPlacement} prefix="#" />
+              </div>
+              <div
+                className={`text-center text-base ${
+                  mobileFilter === sortConfig.key
+                    ? "text-[#D9A876] font-medium"
+                    : "text-white"
+                } flex items-center justify-center space-x-1`}
+              >
+                <span>{renderMobileValue(champion, mobileFilter)}</span>
+                {expandedRows.has(index) ? (
+                  <HiChevronUp className="w-4 h-4" />
+                ) : (
+                  <HiChevronDown className="w-4 h-4" />
+                )}
+              </div>
+            </div>
+            {expandedRows.has(index) && renderExpandedContent(champion)}
           </div>
-        </div>
-        {expandedRows.has(index) && renderExpandedContent(champion)}
-      </div>
-    );
-  });
+        );
+      })
+      .filter(Boolean);
+  }, [
+    filteredData,
+    championLookup,
+    forces,
+    mobileFilter,
+    sortConfig.key,
+    expandedRows,
+    toggleRowExpansion,
+    renderMobileValue,
+    renderExpandedContent,
+  ]);
 
   return (
     <div className="pt-2 bg-[#111111] md:bg-transparent">
@@ -449,9 +493,10 @@ const ProjectItems = () => {
           />
         </div>
 
-        {/* Mobile Filter Buttons */}
+        {/* Mobile Filter Buttons - Only visible on mobile */}
         <div className="block md:hidden mb-2">
           <div className="flex flex-col items-center gap-2 px-4">
+            {/* First Row - Always 4 buttons */}
             <div className="flex gap-0">
               {mobileFilterOptions.slice(0, 4).map((option, index) => {
                 const isFirst = index === 0;
@@ -489,6 +534,7 @@ const ProjectItems = () => {
               })}
             </div>
 
+            {/* Second Row - Remaining buttons */}
             <div className="flex gap-0">
               {mobileFilterOptions.slice(4).map((option, index) => {
                 const isFirst = index === 0;
@@ -532,14 +578,14 @@ const ProjectItems = () => {
         <div className="mb-2 md:mb-0 px-4">
           <SearchBar
             searchValue={searchValue}
-            setSearchValue={setSearchValue}
+            setSearchValue={handleSearchChange}
             placeholder="Search champion..."
           />
         </div>
       </div>
 
       <div className="projects-row">
-        {/* Desktop Table */}
+        {/* Desktop Table - Hidden on mobile */}
         <div className="hidden md:block overflow-auto">
           <ScrollableTable>
             <table className="w-[900px] md:w-full relative border-collapse">
@@ -635,22 +681,15 @@ const ProjectItems = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody>
-                {processedData.map((champion, index) => (
-                  <MemoizedDesktopRow
-                    key={`${champion.key}-${index}`}
-                    champion={champion}
-                    index={index}
-                  />
-                ))}
-              </tbody>
+              <tbody>{desktopTableRows}</tbody>
             </table>
           </ScrollableTable>
         </div>
 
-        {/* Mobile Table */}
+        {/* Mobile Table - Only visible on mobile */}
         <div className="block md:hidden">
           <div className="bg-[#111111]">
+            {/* Mobile Table Header */}
             <div
               className="grid gap-1 p-3 bg-[#1a1a1a] text-white font-semibold text-sm border-b border-[#2D2F37]"
               style={{ gridTemplateColumns: "10% 45% 20% 22%" }}
@@ -698,13 +737,8 @@ const ProjectItems = () => {
               </div>
             </div>
 
-            {processedData.map((champion, index) => (
-              <MemoizedMobileRow
-                key={`mobile-${champion.key}-${index}`}
-                champion={champion}
-                index={index}
-              />
-            ))}
+            {/* Mobile Table Body */}
+            {mobileTableRows}
           </div>
         </div>
       </div>
