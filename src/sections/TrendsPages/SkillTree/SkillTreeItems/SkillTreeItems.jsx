@@ -547,56 +547,17 @@ const ProjectItems = () => {
                     className={`p-2 flex items-center ${getCellClass("key")}`}
                   >
                     <div className="flex justify-start items-center space-x-1 sm:space-x-2">
-                      <>
-                        <SkillTreeImage
-                          skill={skillTree?.find((i) => i?.key === item?.key)}
-                          size="medium"
-                          tooltipId={`${item?.key}`}
-                          className="w-14 h-14 md:w-20 md:h-20"
-                        />
-                        <ReactTltp
-                          variant="item"
-                          id={`${item?.key}`}
-                          content={
-                            items.find((i) => i.key === item.key) || item
-                          }
-                        />
-                      </>
+                      <SkillTreeImage
+                        skill={skillTree?.find((i) => i?.key === item?.key)}
+                        size="medium"
+                        tooltipId={`${item?.key}-${index}`}
+                        className="w-14 h-14 md:w-20 md:h-20"
+                      />
                       <div className="min-w-0 flex-1">
                         <p className="p-0 text-sm sm:text-sm md:text-base mb-1 md:mb-2 text-[#fff] truncate">
                           {items.find((i) => i.key === item.key)?.name ||
                             item.name}
                         </p>
-                        <div className="flex items-center flex-wrap gap-1">
-                          {items
-                            .find((i) => i.key === item.key)
-                            ?.compositions?.map((comp, index) => {
-                              const compItem = items.find(
-                                (i) => i.key === comp
-                              );
-                              if (!compItem) return null;
-                              return (
-                                <React.Fragment key={index}>
-                                  <OptimizedImage
-                                    alt="Item Image"
-                                    width={80}
-                                    height={80}
-                                    src={compItem.imageUrl}
-                                    className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 !border !border-[#ffffff60] rounded-md"
-                                    data-tooltip-id={`${compItem.key}_${index}`}
-                                  />
-                                  {index === 0 && (
-                                    <span className="mx-1">+</span>
-                                  )}
-                                  <ReactTltp
-                                    variant="item"
-                                    id={`${compItem.key}_${index}`}
-                                    content={compItem}
-                                  />
-                                </React.Fragment>
-                              );
-                            })}
-                        </div>
                       </div>
                     </div>
                   </div>

@@ -1,11 +1,14 @@
 import React from "react";
 import { OptimizedImage } from "src/utils/imageOptimizer";
+import ReactTltp from "../tooltip/ReactTltp";
 
 const TraitImage = ({
   trait,
   size = "default",
   className = "",
   showFrame = true,
+  tooltipId,
+  showTooltip = true,
   ...props
 }) => {
   // Define size variants
@@ -48,6 +51,7 @@ const TraitImage = ({
         src={trait?.tier?.imageUrl || trait?.imageUrl}
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center w-full h-full"
         loading="eager"
+        data-tooltip-id={tooltipId}
       />
 
       {/* Gold frame overlay */}
@@ -76,6 +80,11 @@ const TraitImage = ({
           className="absolute inset-0 w-full h-full object-cover pointer-events-none z-10"
           loading="eager"
         />
+      )}
+
+      {/* Tooltip always rendered to prevent flickering */}
+      {showTooltip && (
+        <ReactTltp variant="trait" id={tooltipId} content={trait} />
       )}
     </div>
   );
