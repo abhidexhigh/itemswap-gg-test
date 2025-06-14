@@ -84,8 +84,8 @@ const GridRow = React.memo(
         className="grid bg-[#111111] hover:bg-[#2D2F37] transition-colors duration-200 border-b border-[#2D2F37]"
         style={{
           gridTemplateColumns:
-            "60px 2fr 120px 100px 100px 100px 120px 200px 200px",
-          height: "120px", // Fixed height for virtual scrolling
+            "60px 1.5fr 120px 120px 120px 120px 120px 200px 240px",
+          height: "100px", // Fixed height for virtual scrolling
         }}
       >
         <div
@@ -176,16 +176,16 @@ const GridRow = React.memo(
           </div>
         </div>
         <div className="p-2 flex items-center justify-center">
-          <div className="flex flex-nowrap justify-center items-center gap-1 md:gap-2 overflow-x-auto">
+          <div className="flex flex-nowrap justify-center items-center gap-1 md:gap-2">
             {championData.map((champion, x) => (
               <div key={x} className="flex-shrink-0">
                 <CardImage
                   src={champion}
-                  imgStyle="w-[32px] md:w-[50px]"
+                  imgStyle="w-[32px] md:w-[64px]"
                   identificationImageStyle="w-[10px] sm:w-[12px] md:w-[16px]"
                   textStyle="text-[6px] sm:text-[8px] md:text-[10px]"
                   forces={forces}
-                  cardSize="!w-[50px] !h-[50px] md:!w-[50px] md:!h-[50px]"
+                  cardSize="!w-[64px] !h-[64px] md:!w-[64px] md:!h-[64px]"
                 />
               </div>
             ))}
@@ -641,7 +641,7 @@ const ProjectItems = () => {
                 className="grid bg-[#000000] sticky top-[113px] z-50 border-b border-[#2D2F37]"
                 style={{
                   gridTemplateColumns:
-                    "60px 2fr 120px 100px 100px 100px 120px 200px 200px",
+                    "60px 1.5fr 120px 120px 120px 120px 120px 200px 240px",
                 }}
               >
                 <div className="p-2 font-semibold text-center text-white">

@@ -90,7 +90,7 @@ const GridRow = React.memo(
         className="grid bg-[#111111] hover:bg-[#2D2F37] transition-colors duration-200 border-b border-[#2D2F37]"
         style={{
           gridTemplateColumns:
-            "60px 2fr 120px 100px 100px 100px 120px 120px 120px 200px",
+            "60px 1fr 120px 120px 120px 120px 120px 120px 120px 260px",
           height: "100px", // Fixed height for virtual scrolling
         }}
       >
@@ -103,11 +103,11 @@ const GridRow = React.memo(
           <div className="flex justify-start items-center">
             <CardImage
               src={championData}
-              imgStyle="w-[60px] h-[60px]"
+              imgStyle="w-[80px] h-[80px]"
               identificationImageStyle="w-[16px] h-[16px]"
               textStyle="text-[10px] hidden"
               forces={forces}
-              cardSize="!w-[60px] !h-[60px]"
+              cardSize="!w-[80px] !h-[80px]"
             />
             <p className="p-0 text-left text-base md:text-lg mb-0 ml-2 text-[#fff] truncate">
               {championData.key}
@@ -160,7 +160,7 @@ const GridRow = React.memo(
               >
                 <ItemDisplay
                   item={item}
-                  size="xSmall"
+                  size="small"
                   borderRadius="rounded-[4px]"
                   backgroundRadius="rounded-[4px]"
                   tooltipId={item?.name}
@@ -654,7 +654,7 @@ const ProjectItems = () => {
               className="grid bg-[#000000] sticky top-[113px] z-50 border-b border-[#2D2F37]"
               style={{
                 gridTemplateColumns:
-                  "60px 2fr 120px 100px 100px 100px 120px 120px 120px 200px",
+                  "60px 1fr 120px 120px 120px 120px 120px 120px 120px 260px",
               }}
             >
               <div className="p-2 font-semibold text-center text-white">
