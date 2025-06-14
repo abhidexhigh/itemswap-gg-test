@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import projectsData from "@assets/data/projects/dataV6";
@@ -7,11 +7,24 @@ import TierContent from "./TierContent";
 import BestItemsBuilds from "../../../../data/newData/bestItemsBuilds.json";
 import ProjectCardStyleWrapper from "./BestItemsBuildsItems.style";
 
-const ProjectItems = () => {
+const ProjectItems = React.memo(() => {
   const { t } = useTranslation();
   const others = t("others");
   const { metaDeckChampionStats } = BestItemsBuilds;
-  const [activeTab, setActiveTab] = useState("Tier 1"); // [Tier 1, Tier 2, Tier 3, Tier 4, Tier 5
+  const [activeTab, setActiveTab] = useState("Tier 1");
+
+  // Memoize filtered data to prevent re-filtering on every render
+  const filteredDataByTier = useMemo(() => {
+    if (!metaDeckChampionStats) return {};
+
+    return {
+      1: metaDeckChampionStats.filter((stats) => stats?.cost === 1),
+      2: metaDeckChampionStats.filter((stats) => stats?.cost === 2),
+      3: metaDeckChampionStats.filter((stats) => stats?.cost === 3),
+      4: metaDeckChampionStats.filter((stats) => stats?.cost === 4),
+      5: metaDeckChampionStats.filter((stats) => stats?.cost === 5),
+    };
+  }, [metaDeckChampionStats]);
 
   return (
     <ProjectCardStyleWrapper>
@@ -87,60 +100,35 @@ const ProjectItems = () => {
                   activeTab === "Tier 1" ? "block" : "hidden"
                 }`}
               >
-                <TierContent
-                  cost="1"
-                  itemsData={metaDeckChampionStats?.filter(
-                    (stats) => stats?.cost === 1
-                  )}
-                />
+                <TierContent cost="1" itemsData={filteredDataByTier[1] || []} />
               </div>
               <div
                 className={`bg-slate-800 md:block !rounded-lg !border !border-[#ffffff50] shadow-lg transition-all duration-300 hover:border-[#ffffff70] ${
                   activeTab === "Tier 2" ? "block" : "hidden"
                 }`}
               >
-                <TierContent
-                  cost="2"
-                  itemsData={metaDeckChampionStats?.filter(
-                    (stats) => stats?.cost === 2
-                  )}
-                />
+                <TierContent cost="2" itemsData={filteredDataByTier[2] || []} />
               </div>
               <div
                 className={`bg-slate-800 md:block !rounded-lg !border !border-[#ffffff50] shadow-lg transition-all duration-300 hover:border-[#ffffff70] ${
                   activeTab === "Tier 3" ? "block" : "hidden"
                 }`}
               >
-                <TierContent
-                  cost="3"
-                  itemsData={metaDeckChampionStats?.filter(
-                    (stats) => stats?.cost === 3
-                  )}
-                />
+                <TierContent cost="3" itemsData={filteredDataByTier[3] || []} />
               </div>
               <div
                 className={`bg-slate-800 md:block !rounded-lg !border !border-[#ffffff50] shadow-lg transition-all duration-300 hover:border-[#ffffff70] ${
                   activeTab === "Tier 4" ? "block" : "hidden"
                 }`}
               >
-                <TierContent
-                  cost="4"
-                  itemsData={metaDeckChampionStats?.filter(
-                    (stats) => stats?.cost === 4
-                  )}
-                />
+                <TierContent cost="4" itemsData={filteredDataByTier[4] || []} />
               </div>
               <div
                 className={`bg-slate-800 md:block !rounded-lg !border !border-[#ffffff50] shadow-lg transition-all duration-300 hover:border-[#ffffff70] ${
                   activeTab === "Tier 5" ? "block" : "hidden"
                 }`}
               >
-                <TierContent
-                  cost="5"
-                  itemsData={metaDeckChampionStats?.filter(
-                    (stats) => stats?.cost === 5
-                  )}
-                />
+                <TierContent cost="5" itemsData={filteredDataByTier[5] || []} />
               </div>
             </div>
           </div>
@@ -148,6 +136,8 @@ const ProjectItems = () => {
       </div>
     </ProjectCardStyleWrapper>
   );
-};
+});
+
+ProjectItems.displayName = "ProjectItems";
 
 export default ProjectItems;
