@@ -25,7 +25,7 @@ const ItemComponent = ({ item, items, isLarge = false }) => {
       }
     >
       <div
-        className={`relative overflow-hidden ${isLarge ? "w-[60px] md:w-[36px] group" : ""}`}
+        className={`relative overflow-hidden ${isLarge ? "w-[60px] h-[60px] md:w-[36px] md:h-[36px] group" : "w-[56px] h-[56px] md:w-[44px] md:h-[44px]"}`}
         data-tooltip-id={item}
       >
         <OptimizedImage
@@ -38,8 +38,8 @@ const ItemComponent = ({ item, items, isLarge = false }) => {
           blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"
           className={
             isLarge
-              ? "w-full border-[1px] rounded-lg border-[#ffffff60] hover:border-[#ffffff90] transition-all duration-300 shadow-md group-hover:scale-105"
-              : "w-[56px] md:w-[44px] group-hover:scale-105 transition-transform duration-300 shadow-md"
+              ? "w-full h-full object-cover border-[1px] rounded-lg border-[#ffffff60] hover:border-[#ffffff90] transition-all duration-300 shadow-md group-hover:scale-105"
+              : "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 shadow-md"
           }
         />
       </div>
