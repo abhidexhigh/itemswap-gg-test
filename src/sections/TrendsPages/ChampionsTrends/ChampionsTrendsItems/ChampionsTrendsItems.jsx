@@ -4,6 +4,7 @@ import React, {
   useMemo,
   useCallback,
   useRef,
+  memo,
 } from "react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
@@ -26,29 +27,92 @@ import SearchBar from "src/components/searchBar";
 import ColoredValue from "src/components/ColoredValue";
 import ItemDisplay from "src/components/item/ItemDisplay";
 
-// Virtual scrolling hook for page scroll
-const usePageVirtualScroll = (items, itemHeight, buffer = 5) => {
+// Debounce hook for search
+const useDebounce = (value, delay) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+};
+
+// Optimized virtual scrolling for mobile
+const useMobileVirtualScroll = (items, itemHeight, containerHeight) => {
+  const [scrollTop, setScrollTop] = useState(0);
+  const containerRef = useRef(null);
+
+  const handleScroll = useCallback(() => {
+    if (containerRef.current) {
+      setScrollTop(containerRef.current.scrollTop);
+    }
+  }, []);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const throttledScroll = throttle(handleScroll, 16); // ~60fps
+    container.addEventListener("scroll", throttledScroll, { passive: true });
+
+    return () => {
+      container.removeEventListener("scroll", throttledScroll);
+    };
+  }, [handleScroll]);
+
+  const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - 2);
+  const visibleCount = Math.ceil(containerHeight / itemHeight) + 4;
+  const endIndex = Math.min(startIndex + visibleCount, items.length);
+
+  return {
+    visibleItems: items.slice(startIndex, endIndex),
+    totalHeight: items.length * itemHeight,
+    offsetY: startIndex * itemHeight,
+    startIndex,
+    containerRef,
+  };
+};
+
+// Throttle utility
+const throttle = (func, limit) => {
+  let inThrottle;
+  return function () {
+    const args = arguments;
+    const context = this;
+    if (!inThrottle) {
+      func.apply(context, args);
+      inThrottle = true;
+      setTimeout(() => (inThrottle = false), limit);
+    }
+  };
+};
+
+// Virtual scrolling hook for desktop - simplified
+const useDesktopVirtualScroll = (items, itemHeight, buffer = 3) => {
   const [scrollTop, setScrollTop] = useState(0);
   const [containerTop, setContainerTop] = useState(0);
   const containerRef = useRef(null);
 
   useEffect(() => {
-    const updateScrollTop = () => {
+    const updateScroll = throttle(() => {
       setScrollTop(window.pageYOffset);
       if (containerRef.current) {
         const rect = containerRef.current.getBoundingClientRect();
         setContainerTop(window.pageYOffset + rect.top);
       }
-    };
+    }, 16);
 
-    const handleScroll = () => {
-      requestAnimationFrame(updateScrollTop);
-    };
+    window.addEventListener("scroll", updateScroll, { passive: true });
+    updateScroll();
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    updateScrollTop();
-
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", updateScroll);
   }, []);
 
   const relativeScrollTop = Math.max(0, scrollTop - containerTop);
@@ -61,22 +125,17 @@ const usePageVirtualScroll = (items, itemHeight, buffer = 5) => {
   const visibleCount = Math.ceil(viewportHeight / itemHeight) + buffer * 2;
   const endIndex = Math.min(startIndex + visibleCount, items.length);
 
-  const visibleItems = items.slice(startIndex, endIndex);
-  const totalHeight = items.length * itemHeight;
-  const offsetY = startIndex * itemHeight;
-
   return {
-    visibleItems,
-    totalHeight,
-    offsetY,
+    visibleItems: items.slice(startIndex, endIndex),
+    totalHeight: items.length * itemHeight,
+    offsetY: startIndex * itemHeight,
     startIndex,
-    endIndex,
     containerRef,
   };
 };
 
-// Memoized row component
-const GridRow = React.memo(
+// Memoized desktop row component with better optimization
+const DesktopGridRow = memo(
   ({
     champion,
     index,
@@ -85,13 +144,39 @@ const GridRow = React.memo(
     forces,
     getCellClass,
   }) => {
+    const topsPercentage = useMemo(
+      () => ((champion?.tops * 100) / champion?.plays).toFixed(2),
+      [champion?.tops, champion?.plays]
+    );
+
+    const winsPercentage = useMemo(
+      () => ((champion?.wins * 100) / champion?.plays).toFixed(2),
+      [champion?.wins, champion?.plays]
+    );
+
+    const pickRatePercentage = useMemo(
+      () => (champion?.pickRate * 100).toFixed(2),
+      [champion?.pickRate]
+    );
+
+    const threeStarPercentage = useMemo(
+      () => (champion?.threeStarPercentage * 100).toFixed(2),
+      [champion?.threeStarPercentage]
+    );
+
+    const playsFormatted = useMemo(
+      () => champion?.plays.toLocaleString("en-US"),
+      [champion?.plays]
+    );
+
     return (
       <div
         className="grid bg-[#111111] hover:bg-[#2D2F37] transition-colors duration-200 border-b border-[#2D2F37]"
         style={{
           gridTemplateColumns:
             "60px 1fr 120px 120px 120px 120px 120px 120px 120px 260px",
-          height: "100px", // Fixed height for virtual scrolling
+          height: "100px",
+          willChange: "transform", // Optimize for animations
         }}
       >
         <div
@@ -99,6 +184,7 @@ const GridRow = React.memo(
         >
           <div className="text-center text-white">{index + 1}</div>
         </div>
+
         <div className={`p-2 flex items-center ${getCellClass("key")}`}>
           <div className="flex justify-start items-center">
             <CardImage
@@ -114,43 +200,49 @@ const GridRow = React.memo(
             </p>
           </div>
         </div>
+
         <div
           className={`p-2 flex items-center ${getCellClass("avgPlacement")}`}
         >
-          <p className="p-0 text-left text-base md:text-lg mb-0">
-            <ColoredValue value={champion?.avgPlacement} prefix="#" />
-          </p>
+          <ColoredValue value={champion?.avgPlacement} prefix="#" />
         </div>
+
         <div className={`p-2 flex items-center ${getCellClass("tops")}`}>
           <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-            {((champion?.tops * 100) / champion?.plays).toFixed(2)}%
+            {topsPercentage}%
           </p>
         </div>
+
         <div className={`p-2 flex items-center ${getCellClass("wins")}`}>
           <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-            {((champion?.wins * 100) / champion?.plays).toFixed(2)}%
+            {winsPercentage}%
           </p>
         </div>
+
         <div className={`p-2 flex items-center ${getCellClass("pickRate")}`}>
           <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-            {(champion?.pickRate * 100).toFixed(2)}%
+            {pickRatePercentage}%
           </p>
         </div>
+
         <div className={`p-2 flex items-center ${getCellClass("plays")}`}>
           <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-            {champion?.plays.toLocaleString("en-US")}
+            {playsFormatted}
           </p>
         </div>
+
         <div className="p-2 flex items-center">
           <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-            {(champion?.threeStarPercentage * 100).toFixed(2)}%
+            {threeStarPercentage}%
           </p>
         </div>
+
         <div className="p-2 flex items-center">
           <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
             #{champion?.threeStarRank.toFixed(2)}
           </p>
         </div>
+
         <div className="p-2 flex items-center justify-center">
           <div className="flex justify-center items-center gap-1">
             {recommendedItems.slice(0, 4).map((item, itemIndex) => (
@@ -175,12 +267,87 @@ const GridRow = React.memo(
   }
 );
 
-GridRow.displayName = "GridRow";
+DesktopGridRow.displayName = "DesktopGridRow";
+
+// Optimized mobile row component
+const MobileRow = memo(
+  ({
+    champion,
+    index,
+    championData,
+    forces,
+    mobileFilter,
+    sortConfig,
+    expandedRows,
+    onToggle,
+    renderMobileValue,
+    renderExpandedContent,
+  }) => {
+    const isExpanded = expandedRows.has(index);
+
+    const handleClick = useCallback(() => {
+      onToggle(index);
+    }, [index, onToggle]);
+
+    return (
+      <div className="border-b border-[#2D2F37]">
+        <div
+          className="grid gap-1 p-3 items-center cursor-pointer hover:bg-[#2D2F37] transition-colors duration-200"
+          style={{
+            gridTemplateColumns: "10% 45% 20% 22%",
+            willChange: "background-color",
+          }}
+          onClick={handleClick}
+        >
+          <div className="text-center text-white font-medium">{index + 1}</div>
+
+          <div className="flex items-center space-x-2 min-w-0">
+            <CardImage
+              src={championData}
+              imgStyle="w-12 h-12"
+              identificationImageStyle="w-3 h-3"
+              textStyle="text-[8px] hidden"
+              forces={forces}
+              cardSize="!w-12 !h-12"
+            />
+            <div className="min-w-0 flex-1">
+              <p className="text-white text-sm truncate leading-tight mb-0">
+                {championData.key}
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center text-white text-sm">
+            <ColoredValue value={champion?.avgPlacement} prefix="#" />
+          </div>
+
+          <div
+            className={`text-center text-sm ${
+              mobileFilter === sortConfig.key
+                ? "text-[#D9A876] font-medium"
+                : "text-white"
+            } flex items-center justify-center space-x-1`}
+          >
+            <span>{renderMobileValue(champion, mobileFilter)}</span>
+            {isExpanded ? (
+              <HiChevronUp className="w-3 h-3" />
+            ) : (
+              <HiChevronDown className="w-3 h-3" />
+            )}
+          </div>
+        </div>
+
+        {isExpanded && renderExpandedContent(champion)}
+      </div>
+    );
+  }
+);
+
+MobileRow.displayName = "MobileRow";
 
 const ProjectItems = () => {
   const { t } = useTranslation();
   const others = t("others");
-  const scrollContainerRef = useRef(null);
 
   // Pre-process data once
   const {
@@ -195,20 +362,43 @@ const ProjectItems = () => {
 
   const { champions, items, forces } = data?.refs || {};
 
-  // Memoize lookup map and merged data
-  const { championLookup, mergedData } = useMemo(() => {
-    const lookup = new Map(
-      champions?.map((champion) => [champion.key, champion]) || []
-    );
-    const merged = metaDeckChampionsStats.map((champion) => ({
-      ...champion,
-      ...(lookup.get(champion.key) || {}),
-    }));
-    return { championLookup: lookup, mergedData: merged };
-  }, [champions]);
+  // Memoize lookup maps - these are expensive operations
+  const { championLookup, mergedData, championRecommendedItems } =
+    useMemo(() => {
+      const lookup = new Map(
+        champions?.map((champion) => [champion.key, champion]) || []
+      );
 
-  const [filteredData, setFilteredData] = useState(mergedData);
+      const merged = metaDeckChampionsStats.map((champion) => ({
+        ...champion,
+        ...(lookup.get(champion.key) || {}),
+      }));
+
+      // Pre-calculate recommended items
+      const itemsMap = new Map();
+      champions?.forEach((champion) => {
+        if (champion.recommendItems) {
+          const recommendedItems = champion.recommendItems
+            .map((itemKey) => {
+              const key = itemKey?.split("_")[itemKey?.split("_").length - 1];
+              return items?.find((item) => item.key === key);
+            })
+            .filter(Boolean);
+          itemsMap.set(champion.key, recommendedItems);
+        }
+      });
+
+      return {
+        championLookup: lookup,
+        mergedData: merged,
+        championRecommendedItems: itemsMap,
+      };
+    }, [champions, items]);
+
+  // State management
   const [searchValue, setSearchValue] = useState("");
+  const debouncedSearchValue = useDebounce(searchValue, 300); // Debounce search
+
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "ascending",
@@ -217,7 +407,7 @@ const ProjectItems = () => {
   const [expandedRows, setExpandedRows] = useState(new Set());
   const [costFilter, setCostFilter] = useState("All");
 
-  // Mobile filter options
+  // Mobile filter options - memoized
   const mobileFilterOptions = useMemo(
     () => [
       { key: "tops", label: others?.top4 || "Top 4%" },
@@ -233,18 +423,18 @@ const ProjectItems = () => {
     [others]
   );
 
-  // Memoize sorted and filtered data with debouncing
+  // Optimized data processing with better memoization
   const processedData = useMemo(() => {
-    let data = [...mergedData];
+    let data = mergedData;
 
-    // Apply cost filter
+    // Apply cost filter first (most selective)
     if (costFilter !== "All") {
       data = data.filter((champion) => champion.cost == costFilter);
     }
 
     // Apply search filter
-    if (searchValue) {
-      const searchLower = searchValue.toLowerCase();
+    if (debouncedSearchValue) {
+      const searchLower = debouncedSearchValue.toLowerCase();
       data = data.filter((champion) =>
         champion.key.toLowerCase().includes(searchLower)
       );
@@ -252,19 +442,10 @@ const ProjectItems = () => {
 
     // Apply sorting
     if (sortConfig.key) {
-      data.sort((a, b) => {
+      data = [...data].sort((a, b) => {
         let aValue, bValue;
 
-        if (["firstPick", "secondPick", "thirdPick"].includes(sortConfig.key)) {
-          const index =
-            sortConfig.key === "firstPick"
-              ? 0
-              : sortConfig.key === "secondPick"
-                ? 1
-                : 2;
-          aValue = a.augmentRoundStats?.[index]?.avgPlacement || 0;
-          bValue = b.augmentRoundStats?.[index]?.avgPlacement || 0;
-        } else if (["tops", "wins"].includes(sortConfig.key)) {
+        if (["tops", "wins"].includes(sortConfig.key)) {
           aValue = (a[sortConfig.key] * 100) / a.plays;
           bValue = (b[sortConfig.key] * 100) / b.plays;
         } else {
@@ -283,36 +464,31 @@ const ProjectItems = () => {
     }
 
     return data;
-  }, [mergedData, costFilter, searchValue, sortConfig]);
+  }, [mergedData, costFilter, debouncedSearchValue, sortConfig]);
 
-  // Update filtered data when processed data changes
-  useEffect(() => {
-    setFilteredData(processedData);
-  }, [processedData]);
+  // Virtual scrolling setup
+  const itemHeight = 100;
+  const mobileItemHeight = 80;
 
-  // Memoize recommended items for each champion
-  const championRecommendedItems = useMemo(() => {
-    const itemsMap = new Map();
-    champions?.forEach((champion) => {
-      if (champion.recommendItems) {
-        const recommendedItems = champion.recommendItems
-          .map((itemKey) => {
-            const key = itemKey?.split("_")[itemKey?.split("_").length - 1];
-            return items?.find((item) => item.key === key);
-          })
-          .filter(Boolean);
-        itemsMap.set(champion.key, recommendedItems);
-      }
-    });
-    return itemsMap;
-  }, [champions, items]);
+  // Desktop virtual scrolling
+  const {
+    visibleItems: desktopVisibleItems,
+    totalHeight: desktopTotalHeight,
+    offsetY: desktopOffsetY,
+    startIndex: desktopStartIndex,
+    containerRef: desktopContainerRef,
+  } = useDesktopVirtualScroll(processedData, itemHeight);
 
-  // Virtual scrolling setup with page scroll
-  const itemHeight = 100; // Fixed item height
+  // Mobile virtual scrolling
+  const {
+    visibleItems: mobileVisibleItems,
+    totalHeight: mobileTotalHeight,
+    offsetY: mobileOffsetY,
+    startIndex: mobileStartIndex,
+    containerRef: mobileContainerRef,
+  } = useMobileVirtualScroll(processedData, mobileItemHeight, 600);
 
-  const { visibleItems, totalHeight, offsetY, startIndex, containerRef } =
-    usePageVirtualScroll(filteredData, itemHeight);
-
+  // Event handlers - memoized
   const requestSort = useCallback((key) => {
     setSortConfig((prev) => {
       let direction = "ascending";
@@ -474,75 +650,6 @@ const ProjectItems = () => {
     [sortConfig]
   );
 
-  // Handle scroll events for virtual scrolling - removed since we use page scroll
-
-  // Memoize mobile table rows (no virtual scrolling for mobile due to complexity)
-  const mobileTableRows = useMemo(() => {
-    return filteredData
-      .map((champion, index) => {
-        const championData = championLookup.get(champion.key);
-        if (!championData?.key) return null;
-
-        return (
-          <div key={champion.key} className="border-b border-[#2D2F37]">
-            <div
-              className="grid gap-1 p-3 items-center cursor-pointer hover:bg-[#2D2F37] transition-colors duration-200"
-              style={{ gridTemplateColumns: "10% 45% 20% 22%" }}
-              onClick={() => toggleRowExpansion(index)}
-            >
-              <div className="text-center text-white font-medium">
-                {index + 1}
-              </div>
-              <div className="flex items-center space-x-2 min-w-0">
-                <CardImage
-                  src={championData}
-                  imgStyle="w-12 h-12"
-                  identificationImageStyle="w-3 h-3"
-                  textStyle="text-[8px] hidden"
-                  forces={forces}
-                  cardSize="!w-12 !h-12"
-                />
-                <div className="min-w-0 flex-1">
-                  <p className="text-white text-sm truncate leading-tight mb-0">
-                    {championData.key}
-                  </p>
-                </div>
-              </div>
-              <div className="text-center text-white text-sm">
-                <ColoredValue value={champion?.avgPlacement} prefix="#" />
-              </div>
-              <div
-                className={`text-center text-sm ${
-                  mobileFilter === sortConfig.key
-                    ? "text-[#D9A876] font-medium"
-                    : "text-white"
-                } flex items-center justify-center space-x-1`}
-              >
-                <span>{renderMobileValue(champion, mobileFilter)}</span>
-                {expandedRows.has(index) ? (
-                  <HiChevronUp className="w-3 h-3" />
-                ) : (
-                  <HiChevronDown className="w-3 h-3" />
-                )}
-              </div>
-            </div>
-            {expandedRows.has(index) && renderExpandedContent(champion)}
-          </div>
-        );
-      })
-      .filter(Boolean);
-  }, [
-    filteredData,
-    championLookup,
-    forces,
-    mobileFilter,
-    sortConfig.key,
-    expandedRows,
-    toggleRowExpansion,
-    renderMobileValue,
-    renderExpandedContent,
-  ]);
-
   return (
     <div className="pt-2 bg-[#111111] md:bg-transparent">
       <div className="md:flex md:justify-between md:items-center bg-[#111111] md:bg-transparent mb-2.5 md:mb-0">
@@ -646,7 +753,7 @@ const ProjectItems = () => {
       </div>
 
       <div className="projects-row">
-        {/* Desktop Grid - Hidden on mobile with Virtual Scrolling */}
+        {/* Desktop Grid with Virtual Scrolling */}
         <div className="hidden md:block">
           <div className="w-full">
             {/* Grid Header - Sticky */}
@@ -745,15 +852,18 @@ const ProjectItems = () => {
               </div>
             </div>
 
-            {/* Virtual Scrolling Container - Uses page scroll */}
+            {/* Virtual Scrolling Container */}
             <div
-              ref={containerRef}
+              ref={desktopContainerRef}
               className="bg-[#111111]"
-              style={{ height: `${totalHeight}px`, position: "relative" }}
+              style={{
+                height: `${desktopTotalHeight}px`,
+                position: "relative",
+              }}
             >
-              <div style={{ transform: `translateY(${offsetY}px)` }}>
-                {visibleItems.map((champion, visibleIndex) => {
-                  const actualIndex = startIndex + visibleIndex;
+              <div style={{ transform: `translateY(${desktopOffsetY}px)` }}>
+                {desktopVisibleItems.map((champion, visibleIndex) => {
+                  const actualIndex = desktopStartIndex + visibleIndex;
                   const championData = championLookup.get(champion.key);
                   if (!championData?.key) return null;
 
@@ -761,7 +871,7 @@ const ProjectItems = () => {
                     championRecommendedItems.get(champion.key) || [];
 
                   return (
-                    <GridRow
+                    <DesktopGridRow
                       key={champion.key}
                       champion={champion}
                       index={actualIndex}
@@ -777,7 +887,7 @@ const ProjectItems = () => {
           </div>
         </div>
 
-        {/* Mobile Table - Only visible on mobile */}
+        {/* Mobile Table with Virtual Scrolling */}
         <div className="block md:hidden">
           <div className="bg-[#111111]">
             {/* Mobile Table Header - Sticky */}
@@ -830,8 +940,43 @@ const ProjectItems = () => {
               </div>
             </div>
 
-            {/* Mobile Table Body - Uses page scroll */}
-            <div>{mobileTableRows}</div>
+            {/* Mobile Virtual Scrolling Container */}
+            <div
+              ref={mobileContainerRef}
+              className="overflow-auto"
+              style={{ height: "600px" }} // Fixed height for mobile virtual scrolling
+            >
+              <div
+                style={{
+                  height: `${mobileTotalHeight}px`,
+                  position: "relative",
+                }}
+              >
+                <div style={{ transform: `translateY(${mobileOffsetY}px)` }}>
+                  {mobileVisibleItems.map((champion, visibleIndex) => {
+                    const actualIndex = mobileStartIndex + visibleIndex;
+                    const championData = championLookup.get(champion.key);
+                    if (!championData?.key) return null;
+
+                    return (
+                      <MobileRow
+                        key={champion.key}
+                        champion={champion}
+                        index={actualIndex}
+                        championData={championData}
+                        forces={forces}
+                        mobileFilter={mobileFilter}
+                        sortConfig={sortConfig}
+                        expandedRows={expandedRows}
+                        onToggle={toggleRowExpansion}
+                        renderMobileValue={renderMobileValue}
+                        renderExpandedContent={renderExpandedContent}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
