@@ -42,7 +42,7 @@ const Header = () => {
               {/* <Badge3 value="RPG" /> */}
               <OptimizedImage
                 src={
-                  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1749039461/enhanced_ChatGPT_Image_Jun_4_2025_05_38_32_PM_fkwrcl.png"
+                  "https://res.cloudinary.com/dg0cmj6su/image/upload/v1750164932/enhanced_ChatGPT_Image_Jun_4_2025_05_38_32_PM_fkwrcl_1_aehgri.webp"
                 }
                 alt="RPG"
                 width={100}
@@ -54,11 +54,13 @@ const Header = () => {
           <div className="gamfi_menu_left_sect mx-auto !justify-center md:!justify-start">
             <div className="logo">
               <a href="http://itemswap-guild-test.vercel.app/">
-                <img
+                <OptimizedImage
                   src={
                     "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747135734/ArmyDragone_text_copy_kelovj_wb1nrz.webp"
                   }
                   alt="ItemSwap logo"
+                  width={100}
+                  height={100}
                   className="w-28 md:w-36 mt-2"
                 />
               </a>
