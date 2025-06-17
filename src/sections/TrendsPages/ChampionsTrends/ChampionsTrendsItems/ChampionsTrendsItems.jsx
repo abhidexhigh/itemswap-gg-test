@@ -308,7 +308,7 @@ const MobileRow = memo(
               identificationImageStyle="w-3 h-3"
               textStyle="text-[8px] hidden"
               forces={forces}
-              cardSize="!w-12 !h-12"
+              cardSize="!w-[60px] !h-[60px]"
             />
             <div className="min-w-0 flex-1">
               <p className="text-white text-sm truncate leading-tight mb-0">
