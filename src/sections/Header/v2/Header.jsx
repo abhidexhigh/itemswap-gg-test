@@ -56,7 +56,7 @@ const Header = () => {
               <a href="http://itemswap-guild-test.vercel.app/">
                 <img
                   src={
-                    "https://res.cloudinary.com/dg0cmj6su/image/upload/v1740650877/ArmyDragone_text_copy_kelovj.png"
+                    "https://res.cloudinary.com/dg0cmj6su/image/upload/v1747135734/ArmyDragone_text_copy_kelovj_wb1nrz.webp"
                   }
                   alt="ItemSwap logo"
                   className="w-28 md:w-36 mt-2"

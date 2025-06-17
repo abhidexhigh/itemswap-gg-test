@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import headerBg1 from "@assets/images/bg/header-shape1.png";
-import headerBg2 from "@assets/images/bg/header-shape2.png";
+import headerBg1 from "@assets/images/bg/header-shape1.webp";
+import headerBg2 from "@assets/images/bg/header-shape2.webp";
 
 const NavWrapper = styled.nav`
   z-index: 999;
