@@ -9,8 +9,6 @@ import React, {
   useEffect,
   useRef,
   startTransition,
-  lazy,
-  Suspense,
 } from "react";
 import { Tooltip } from "react-tooltip";
 import moment from "moment";
@@ -31,32 +29,29 @@ import ForceIcon from "src/components/forceIcon";
 import SkillTreeImage from "src/components/SkillTreeImage";
 import TraitImage from "src/components/TraitImage/TraitImage";
 
-// Constants
+// OPTIMIZATION 1: Constants and utilities
 const MOBILE_DISPLAY_LIMIT = 4;
-const DESKTOP_DISPLAY_LIMIT = 20; // Reduced from 50
-const INITIAL_RENDER_LIMIT = 8; // Only render first 8 items initially
-const SCROLL_THRESHOLD = 100;
-const INTERSECTION_THRESHOLD = 0.1;
-
-// Stable empty arrays to prevent re-renders
+const DESKTOP_DISPLAY_LIMIT = 20;
+const SCROLL_THRESHOLD = 300; // Increased for mobile
 const EMPTY_ARRAY = [];
 const EMPTY_OBJECT = {};
 
-// Lazy load heavy components
-const LazyMetaTrendsCard = lazy(
-  () => import("../../MetaTrends/MetaTrendsCard/MetaTrendsCard")
-);
+// OPTIMIZATION 2: Debounce utility for mobile performance
+const debounce = (func, wait) => {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
 
-// Optimized loading component
-const LoadingSpinner = memo(() => (
-  <div className="flex justify-center items-center p-4">
-    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#D9A876]"></div>
-  </div>
-));
-
-// Custom hook for intersection observer with better performance
-const useIntersectionObserver = (threshold = INTERSECTION_THRESHOLD) => {
-  const [isVisible, setIsVisible] = useState(false);
+// OPTIMIZATION 3: Simple intersection observer for lazy loading
+const useIntersectionObserver = (options = {}) => {
+  const [isIntersecting, setIntersecting] = useState(false);
   const ref = useRef();
 
   useEffect(() => {
@@ -66,90 +61,127 @@ const useIntersectionObserver = (threshold = INTERSECTION_THRESHOLD) => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(element);
+          setIntersecting(true);
+          observer.unobserve(element); // Stop observing once visible
         }
       },
-      { threshold, rootMargin: "50px" }
+      { threshold: 0.1, rootMargin: "100px", ...options }
     );
 
     observer.observe(element);
     return () => observer.disconnect();
-  }, [threshold]);
+  }, []);
 
-  return [ref, isVisible];
+  return [ref, isIntersecting];
 };
 
-// Optimized virtualization with reduced DOM nodes
-const useVirtualList = (items, containerHeight = 600, itemHeight = 200) => {
-  const [visibleRange, setVisibleRange] = useState({
-    start: 0,
-    end: INITIAL_RENDER_LIMIT,
-  });
-  const [scrollTop, setScrollTop] = useState(0);
-  const containerRef = useRef();
+// OPTIMIZATION 4: Mobile-optimized infinite scroll
+const useInfiniteScroll = (callback, hasMore) => {
+  const scrollTimeoutRef = useRef(null);
 
-  const handleScroll = useCallback(
-    (e) => {
-      const newScrollTop = e.target.scrollTop;
-      setScrollTop(newScrollTop);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!hasMore) return;
 
-      const start = Math.floor(newScrollTop / itemHeight);
-      const visibleCount = Math.ceil(containerHeight / itemHeight);
-      const end = Math.min(start + visibleCount + 2, items.length); // Buffer of 2
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
 
-      setVisibleRange({ start, end });
-    },
-    [itemHeight, containerHeight, items.length]
-  );
+      scrollTimeoutRef.current = setTimeout(() => {
+        const scrollTop = Math.max(
+          window.pageYOffset,
+          document.documentElement.scrollTop,
+          document.body.scrollTop
+        );
+        const windowHeight =
+          window.innerHeight || document.documentElement.clientHeight;
+        const documentHeight = Math.max(
+          document.documentElement.scrollHeight,
+          document.body.scrollHeight
+        );
 
-  const visibleItems = useMemo(() => {
-    return items.slice(visibleRange.start, visibleRange.end);
-  }, [items, visibleRange]);
+        const distanceFromBottom = documentHeight - (scrollTop + windowHeight);
 
-  return { visibleItems, handleScroll, containerRef, visibleRange };
+        if (distanceFromBottom <= SCROLL_THRESHOLD) {
+          callback();
+        }
+      }, 100);
+    };
+
+    const events = ["scroll", "touchmove", "touchend"];
+    const options = { passive: true };
+
+    events.forEach((event) => {
+      window.addEventListener(event, handleScroll, options);
+    });
+
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      events.forEach((event) => {
+        window.removeEventListener(event, handleScroll, options);
+      });
+    };
+  }, [callback, hasMore]);
 };
 
-// Heavily optimized TabButton with reduced re-renders
-const TabButton = memo(({ active, label, onClick, tabKey }) => {
-  const handleClick = useCallback(() => onClick(tabKey), [onClick, tabKey]);
+// OPTIMIZATION 5: Lightweight lazy loading wrapper
+const LazyComponent = memo(({ children, height = "120px" }) => {
+  const [ref, isVisible] = useIntersectionObserver();
 
   return (
-    <button
-      type="button"
-      className={`px-6 py-3 text-sm md:text-base font-medium transition-colors duration-200 ${
-        active
-          ? "bg-[#2D2F37] text-[#D9A876]"
-          : "text-[#999] hover:bg-[#2D2F37]"
-      }`}
-      onClick={handleClick}
-    >
-      {label}
-    </button>
+    <div ref={ref}>{isVisible ? children : <div style={{ height }} />}</div>
   );
 });
 
-// Optimized with lazy loading and reduced DOM complexity
-const ItemIcon = memo(({ item, selectedItem, onSelect, index }) => {
-  const [ref, isVisible] = useIntersectionObserver();
-  const isSelected = item?.key === selectedItem;
-  const tooltipId = `${item?.key}-${index}`;
+// OPTIMIZATION 6: Heavily optimized TabButton
+const TabButton = memo(
+  ({ active, label, onClick, tabKey }) => {
+    const handleClick = useCallback(() => onClick(tabKey), [onClick, tabKey]);
 
-  const handleClick = useCallback(() => {
-    onSelect("item", item?.key);
-  }, [onSelect, item?.key]);
+    return (
+      <button
+        type="button"
+        className={`px-6 py-3 text-sm md:text-base font-medium transition-colors duration-200 ${
+          active
+            ? "bg-[#2D2F37] text-[#D9A876]"
+            : "text-[#999] hover:bg-[#2D2F37]"
+        }`}
+        onClick={handleClick}
+      >
+        {label}
+      </button>
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.active === nextProps.active &&
+      prevProps.label === nextProps.label &&
+      prevProps.tabKey === nextProps.tabKey
+    );
+  }
+);
 
-  return (
-    <div
-      ref={ref}
-      className="flex flex-col items-center gap-2 cursor-pointer group max-w-[84px]"
-      onClick={handleClick}
-      role="button"
-      tabIndex={0}
-      aria-pressed={isSelected}
-    >
-      {isVisible && (
-        <>
+// OPTIMIZATION 7: Optimized ItemIcon with lazy loading
+const ItemIcon = memo(
+  ({ item, selectedItem, onSelect, index }) => {
+    const isSelected = item?.key === selectedItem;
+    const tooltipId = `${item?.key}-${index}`;
+
+    const handleClick = useCallback(() => {
+      onSelect("item", item?.key);
+    }, [onSelect, item?.key]);
+
+    return (
+      <LazyComponent>
+        <div
+          className="flex flex-col items-center gap-2 cursor-pointer group max-w-[84px]"
+          onClick={handleClick}
+          role="button"
+          tabIndex={0}
+          aria-pressed={isSelected}
+        >
           <ReactTltp variant="item" content={item} id={tooltipId} />
           <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-110">
             <OptimizedImage
@@ -167,159 +199,299 @@ const ItemIcon = memo(({ item, selectedItem, onSelect, index }) => {
               </div>
             )}
           </div>
-        </>
-      )}
-    </div>
-  );
-});
+        </div>
+      </LazyComponent>
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.item?.key === nextProps.item?.key &&
+      prevProps.selectedItem === nextProps.selectedItem
+    );
+  }
+);
 
-// Optimized TraitItem with reduced re-renders
-const TraitItem = memo(({ trait, selectedTrait, onSelect, index }) => {
-  const isSelected = trait?.key === selectedTrait;
-  const tooltipId = `${trait?.key}-${index}`;
+// OPTIMIZATION 8: Optimized TraitItem
+const TraitItem = memo(
+  ({ trait, selectedTrait, onSelect, index }) => {
+    const isSelected = trait?.key === selectedTrait;
+    const tooltipId = `${trait?.key}-${index}`;
 
-  const handleClick = useCallback(() => {
-    onSelect("trait", trait?.key);
-  }, [onSelect, trait?.key]);
+    const handleClick = useCallback(() => {
+      onSelect("trait", trait?.key);
+    }, [onSelect, trait?.key]);
 
-  return (
-    <div
-      className="flex flex-col items-center gap-2 cursor-pointer group"
-      onClick={handleClick}
-      role="button"
-      tabIndex={0}
-      aria-pressed={isSelected}
-    >
-      <ReactTltp variant="trait" content={trait} id={tooltipId} />
-      <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
-        <TraitImage
-          trait={trait}
-          size="xlarge"
-          className="w-full h-full rounded-lg"
-          data-tooltip-id={tooltipId}
-          loading="lazy"
-        />
-        {isSelected && (
-          <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center z-20">
-            <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
+    return (
+      <LazyComponent>
+        <div
+          className="flex flex-col items-center gap-2 cursor-pointer group"
+          onClick={handleClick}
+          role="button"
+          tabIndex={0}
+          aria-pressed={isSelected}
+        >
+          <ReactTltp variant="trait" content={trait} id={tooltipId} />
+          <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
+            <TraitImage
+              trait={trait}
+              size="xlarge"
+              className="w-full h-full rounded-lg"
+              data-tooltip-id={tooltipId}
+              loading="lazy"
+            />
+            {isSelected && (
+              <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center z-20">
+                <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      <span className="hidden lg:block text-sm md:text-base text-[#D9A876] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
-        {trait?.name}
-      </span>
-    </div>
-  );
-});
+          <span className="hidden lg:block text-sm md:text-base text-[#D9A876] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
+            {trait?.name}
+          </span>
+        </div>
+      </LazyComponent>
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.trait?.key === nextProps.trait?.key &&
+      prevProps.selectedTrait === nextProps.selectedTrait
+    );
+  }
+);
 
-// Optimized ForceItem
-const ForceItem = memo(({ force, selectedTrait, onSelect, index }) => {
-  const isSelected = force?.key === selectedTrait;
-  const tooltipId = `${force?.key}-${index}`;
+// OPTIMIZATION 9: Optimized ForceItem
+const ForceItem = memo(
+  ({ force, selectedTrait, onSelect, index }) => {
+    const [isHovered, setIsHovered] = useState(false);
+    const isSelected = force?.key === selectedTrait;
+    const tooltipId = `${force?.key}-${index}`;
 
-  const handleClick = useCallback(() => {
-    onSelect("force", force?.key);
-  }, [onSelect, force?.key]);
+    const handleClick = useCallback(() => {
+      onSelect("force", force?.key);
+    }, [onSelect, force?.key]);
 
-  return (
-    <div
-      className="flex flex-col items-center gap-2 cursor-pointer group"
-      onClick={handleClick}
-      role="button"
-      tabIndex={0}
-      aria-pressed={isSelected}
-    >
-      <ReactTltp variant="force" content={force} id={tooltipId} />
-      <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
-        <ForceIcon
-          force={force}
-          size="xxlarge"
-          className="w-full h-full object-cover rounded-lg"
-          data-tooltip-id={tooltipId}
-          loading="lazy"
-        />
-        {isSelected && (
-          <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
-            <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
+    const handleMouseEnter = useCallback(() => setIsHovered(true), []);
+    const handleMouseLeave = useCallback(() => setIsHovered(false), []);
+
+    return (
+      <LazyComponent>
+        <div
+          className="flex flex-col items-center gap-2 cursor-pointer group"
+          onClick={handleClick}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          role="button"
+          tabIndex={0}
+          aria-pressed={isSelected}
+        >
+          <ReactTltp variant="force" content={force} id={tooltipId} />
+          <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
+            <ForceIcon
+              force={force}
+              size="xxlarge"
+              isHovered={isHovered}
+              className="w-full h-full object-cover rounded-lg"
+              data-tooltip-id={tooltipId}
+              loading="lazy"
+            />
+            {isSelected && (
+              <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+                <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
+              </div>
+            )}
           </div>
-        )}
-      </div>
-      <span className="hidden lg:block text-sm md:text-base text-[#cccccc] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
-        {force?.name}
-      </span>
-    </div>
-  );
-});
+          <span className="hidden lg:block text-sm md:text-base text-[#cccccc] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
+            {force?.name}
+          </span>
+        </div>
+      </LazyComponent>
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.force?.key === nextProps.force?.key &&
+      prevProps.selectedTrait === nextProps.selectedTrait
+    );
+  }
+);
 
-// Heavily optimized ChampionWithItems with Map caching
+// OPTIMIZATION 10: Optimized SkillTreeItem components
+const SkillTreeItem = memo(
+  ({ skill, selectedSkillTree, onSelect, index }) => {
+    const isSelected = skill?.key === selectedSkillTree;
+    const tooltipId = `skill-${skill?.key}-${index}`;
+
+    const handleClick = useCallback(() => {
+      onSelect("skillTree", skill?.key);
+    }, [onSelect, skill?.key]);
+
+    return (
+      <LazyComponent>
+        <div
+          className="flex flex-col items-center gap-1 cursor-pointer group w-16 md:w-20 lg:w-24 flex-shrink-0"
+          onClick={handleClick}
+          role="button"
+          tabIndex={0}
+          aria-pressed={isSelected}
+        >
+          <ReactTltp variant="skillTree" content={skill} id={tooltipId} />
+          <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-105">
+            <SkillTreeImage
+              skill={skill}
+              size="large"
+              tooltipId={tooltipId}
+              className="w-full h-full"
+              showTooltip={false}
+              loading="lazy"
+            />
+            {isSelected && (
+              <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+                <IoMdCheckmarkCircle className="text-[#86efac] text-3xl z-50" />
+              </div>
+            )}
+          </div>
+          <span className="text-xs truncate max-w-full text-center text-[#cccccc] mt-1">
+            {skill?.name}
+          </span>
+        </div>
+      </LazyComponent>
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.skill?.key === nextProps.skill?.key &&
+      prevProps.selectedSkillTree === nextProps.selectedSkillTree
+    );
+  }
+);
+
+const MobileSkillTreeItem = memo(
+  ({ skill, selectedSkillTree, onSelect, index }) => {
+    const isSelected = skill?.key === selectedSkillTree;
+    const tooltipId = `mobile-skill-${skill?.key}-${index}`;
+
+    const handleClick = useCallback(() => {
+      onSelect("skillTree", skill?.key);
+    }, [onSelect, skill?.key]);
+
+    return (
+      <div
+        className="flex flex-col items-center gap-1 cursor-pointer group w-12 sm:w-14 flex-shrink-0"
+        onClick={handleClick}
+        role="button"
+        tabIndex={0}
+        aria-pressed={isSelected}
+      >
+        <ReactTltp variant="skillTree" content={skill} id={tooltipId} />
+        <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-105">
+          <SkillTreeImage
+            skill={skill}
+            size="xlarge"
+            tooltipId={tooltipId}
+            className="w-full h-full"
+            showTooltip={false}
+            loading="lazy"
+          />
+          {isSelected && (
+            <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+              <IoMdCheckmarkCircle className="text-[#86efac] text-2xl z-50" />
+            </div>
+          )}
+        </div>
+        <span className="text-[10px] truncate max-w-full text-center text-[#cccccc] mt-1 leading-tight">
+          {skill?.name}
+        </span>
+      </div>
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.skill?.key === nextProps.skill?.key &&
+      prevProps.selectedSkillTree === nextProps.selectedSkillTree
+    );
+  }
+);
+
+// OPTIMIZATION 11: Heavily optimized ChampionWithItems
 const ChampionWithItems = memo(
   ({ champion, championDetails, itemsMap, forces, tier }) => {
     const championItems = useMemo(() => {
       if (!champion?.items?.length || !itemsMap) return EMPTY_ARRAY;
-
       return champion.items
         .map((itemKey) => itemsMap.get(itemKey))
-        .filter(Boolean);
+        .filter(Boolean)
+        .slice(0, 3); // Limit items for performance
     }, [champion?.items, itemsMap]);
 
     if (!champion || !championDetails) return null;
 
     return (
-      <div className="flex flex-col items-center gap-x-4 flex-grow basis-0 min-w-[65px] md:min-w-[80px] max-w-[78px] md:max-w-[110px]">
-        <div className="inline-flex items-center justify-center flex-col">
-          <div className="flex flex-col w-full aspect-square rounded-[20px]">
-            <div
-              className="relative inline-flex rounded-lg"
-              data-tooltip-id={championDetails.key}
-            >
-              <CardImage
-                src={championDetails}
-                forces={forces}
-                tier={tier}
-                imgStyle="w-[68px] md:w-[84px]"
-                identificationImageStyle="w=[16px] md:w-[32px]"
-                textStyle="text-[10px] md:text-[16px] hidden"
-                cardSize="!w-[80px] !h-[80px] md:!w-[96px] md:!h-[96px]"
-                loading="lazy"
+      <LazyComponent height="120px">
+        <div className="flex flex-col items-center gap-x-4 flex-grow basis-0 min-w-[65px] md:min-w-[80px] max-w-[78px] md:max-w-[110px]">
+          <div className="inline-flex items-center justify-center flex-col">
+            <div className="flex flex-col w-full aspect-square rounded-[20px]">
+              <div
+                className="relative inline-flex rounded-lg"
+                data-tooltip-id={championDetails.key}
+              >
+                <CardImage
+                  src={championDetails}
+                  forces={forces}
+                  tier={tier}
+                  imgStyle="w-[68px] md:w-[84px]"
+                  identificationImageStyle="w=[16px] md:w-[32px]"
+                  textStyle="text-[10px] md:text-[16px] hidden"
+                  cardSize="!w-[80px] !h-[80px] md:!w-[96px] md:!h-[96px]"
+                  loading="lazy"
+                />
+              </div>
+              <ReactTltp
+                variant="champion"
+                id={championDetails.key}
+                content={championDetails}
               />
             </div>
-            <ReactTltp
-              variant="champion"
-              id={championDetails.key}
-              content={championDetails}
-            />
+          </div>
+
+          <div className="inline-flex items-center justify-center w-full gap-0.5 flex-wrap">
+            {championItems.map((itemDetails, idx) => (
+              <div
+                key={`item-${itemDetails.key}-${idx}`}
+                className="relative z-10 hover:z-20 !border !border-[#ffffff20] aspect-square rounded-lg"
+              >
+                <ReactTltp
+                  variant="item"
+                  content={itemDetails}
+                  id={`item-${itemDetails.key}-${idx}`}
+                />
+                <OptimizedImage
+                  alt={itemDetails.name || "Item"}
+                  width={30}
+                  height={30}
+                  src={itemDetails.imageUrl}
+                  className="w-[20px] md:w-[30px] rounded-lg hover:scale-150 transition-all duration-300"
+                  data-tooltip-id={`item-${itemDetails.key}-${idx}`}
+                  loading="lazy"
+                />
+              </div>
+            ))}
           </div>
         </div>
-
-        <div className="inline-flex items-center justify-center w-full gap-0.5 flex-wrap">
-          {championItems.map((itemDetails, idx) => (
-            <div
-              key={`item-${itemDetails.key}-${idx}`}
-              className="relative z-10 hover:z-20 !border !border-[#ffffff20] aspect-square rounded-lg"
-            >
-              <ReactTltp
-                variant="item"
-                content={itemDetails}
-                id={`item-${itemDetails.key}-${idx}`}
-              />
-              <OptimizedImage
-                alt={itemDetails.name || "Item"}
-                width={50}
-                height={50}
-                src={itemDetails.imageUrl}
-                className="w-[20px] md:w-[30px] rounded-lg hover:scale-150 transition-all duration-300"
-                data-tooltip-id={`item-${itemDetails.key}-${idx}`}
-                loading="lazy"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
+      </LazyComponent>
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.champion?.key === nextProps.champion?.key &&
+      prevProps.tier === nextProps.tier &&
+      JSON.stringify(prevProps.champion?.items) ===
+        JSON.stringify(nextProps.champion?.items)
     );
   }
 );
 
-// Stable PlacementBadge with memoized styles
+// OPTIMIZATION 12: Simplified PlacementBadge
 const PlacementBadge = memo(({ placement }) => {
   const badgeClass = useMemo(() => {
     const baseClass =
@@ -343,56 +515,10 @@ const PlacementBadge = memo(({ placement }) => {
   );
 });
 
-// Heavily optimized DeckHeader with better data processing
+// OPTIMIZATION 13: Simplified DeckHeader with pre-computed data
 const DeckHeader = memo(
-  ({
-    metaDeck,
-    forces,
-    traits,
-    isClosed,
-    index,
-    skills,
-    augmentDetails,
-    forceDetailsMap,
-    skillDetailsMap,
-    traitDetailsMap,
-  }) => {
-    // Use pre-computed maps for O(1) lookups
-    const computedData = useMemo(() => {
-      const forceDetails = metaDeck?.deck?.forces
-        ? metaDeck.deck.forces
-            .map((force) => ({
-              ...force,
-              details: forceDetailsMap.get(force?.key?.toLowerCase()),
-            }))
-            .filter((item) => item.details)
-        : EMPTY_ARRAY;
-
-      const skillDetails = metaDeck?.deck?.skillTree
-        ? metaDeck.deck.skillTree
-            .map((skill) => skillDetailsMap.get(skill))
-            .filter(Boolean)
-        : EMPTY_ARRAY;
-
-      const traitDetails = metaDeck?.deck?.traits
-        ? metaDeck.deck.traits
-            .map((trait) => {
-              const traitDetails = traitDetailsMap.get(trait?.key);
-              if (!traitDetails) return null;
-
-              const tier = traitDetails.tiers?.find(
-                (t) => trait?.numUnits >= t?.min && trait?.numUnits <= t?.max
-              );
-
-              return tier?.imageUrl
-                ? { ...traitDetails, tier, numUnits: trait?.numUnits }
-                : null;
-            })
-            .filter(Boolean)
-        : EMPTY_ARRAY;
-
-      return { forceDetails, skillDetails, traitDetails };
-    }, [metaDeck?.deck, forceDetailsMap, skillDetailsMap, traitDetailsMap]);
+  ({ metaDeck, computedData, augmentDetails }) => {
+    if (!metaDeck) return null;
 
     return (
       <header className="relative flex flex-col md:flex-col justify-between items-start md:items-end bg-[#111111] py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px] rounded-t-lg">
@@ -424,7 +550,7 @@ const DeckHeader = memo(
 
           {/* Desktop: Traits on left side */}
           <div className="hidden md:flex items-center gap-1 ml-4">
-            {computedData.traitDetails.map((trait, idx) => (
+            {computedData.traitDetails.slice(0, 5).map((trait, idx) => (
               <div key={`trait-${trait.key}-${idx}`} className="relative">
                 <TraitImage
                   trait={trait}
@@ -443,10 +569,10 @@ const DeckHeader = memo(
           </div>
         </div>
 
-        {/* Mobile layout optimizations */}
+        {/* Mobile layout - simplified */}
         <div className="flex md:hidden flex-col gap-y-3 mt-2 w-full items-center">
           <div className="flex items-center gap-x-2 w-fit overflow-hidden !border !border-[#ffffff40] rounded-lg p-1">
-            {computedData.forceDetails.map((force, idx) => (
+            {computedData.forceDetails.slice(0, 4).map((force, idx) => (
               <div
                 key={`mobile-force-${force.key}-${idx}`}
                 className="flex-shrink-0 w-[30px] h-[30px]"
@@ -471,7 +597,7 @@ const DeckHeader = memo(
                 <div className="flex-shrink-0 h-8 w-px bg-[#ffffff30] mx-1"></div>
               )}
 
-            {computedData.skillDetails.map((skill, idx) => (
+            {computedData.skillDetails.slice(0, 3).map((skill, idx) => (
               <div
                 key={`mobile-skill-${skill.key}-${idx}`}
                 className="flex-shrink-0 w-[30px] h-[30px] shadow-md rounded-full shadow-[#ffffff20]"
@@ -487,7 +613,7 @@ const DeckHeader = memo(
           </div>
 
           <div className="flex items-center gap-x-1 w-fit overflow-x-auto scrollbar-hide">
-            {computedData.traitDetails.map((trait, idx) => (
+            {computedData.traitDetails.slice(0, 6).map((trait, idx) => (
               <div
                 key={`mobile-trait-${trait.key}-${idx}`}
                 className="flex-shrink-0"
@@ -512,7 +638,7 @@ const DeckHeader = memo(
                 <div className="flex-shrink-0 h-8 w-px bg-[#ffffff30] mx-2"></div>
               )}
 
-            {augmentDetails.map((augment, idx) => (
+            {augmentDetails.slice(0, 4).map((augment, idx) => (
               <div
                 key={`mobile-augment-${augment.key}-${idx}`}
                 className="flex-shrink-0"
@@ -536,7 +662,7 @@ const DeckHeader = memo(
           </div>
         </div>
 
-        {/* Desktop layout with better performance */}
+        {/* Desktop layout - simplified */}
         <div className="hidden md:inline-flex flex-shrink-0 justify-between gap-1 !gap-x-6 md:mt-1">
           <div className="flex flex-wrap gap-1 md:gap-0 md:inline-flex md:flex-wrap justify-start md:justify-end items-center md:mr-0">
             {computedData.forceDetails.map((force, idx) => (
@@ -609,28 +735,22 @@ const DeckHeader = memo(
         </div>
       </header>
     );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.metaDeck?.key === nextProps.metaDeck?.key &&
+      JSON.stringify(prevProps.computedData) ===
+        JSON.stringify(nextProps.computedData) &&
+      JSON.stringify(prevProps.augmentDetails) ===
+        JSON.stringify(nextProps.augmentDetails)
+    );
   }
 );
 
-// Optimized MetaDeck with lazy loading and reduced DOM
+// OPTIMIZATION 14: Highly optimized MetaDeck with proper lazy loading
 const MetaDeck = memo(
-  ({
-    metaDeck,
-    index,
-    isClosed,
-    handleIsClosed,
-    championsMap,
-    itemsMap,
-    traits,
-    forces,
-    augments,
-    skills,
-    forceDetailsMap,
-    skillDetailsMap,
-    traitDetailsMap,
-  }) => {
+  ({ metaDeck, index, isClosed, handleIsClosed, gameData }) => {
     const [isChampionsCollapsed, setIsChampionsCollapsed] = useState(true);
-    const [ref, isVisible] = useIntersectionObserver();
 
     const toggleClosed = useCallback(
       (e) => {
@@ -645,27 +765,35 @@ const MetaDeck = memo(
       });
     }, []);
 
-    // Pre-compute all champion data with better performance
-    const computedChampionData = useMemo(() => {
-      if (!metaDeck?.deck?.champions?.length || !championsMap?.size) {
+    // Pre-compute all data once with Maps for O(1) lookups
+    const computedData = useMemo(() => {
+      if (!metaDeck?.deck) {
         return {
           sortedChampions: EMPTY_ARRAY,
           championsToDisplay: EMPTY_ARRAY,
           augmentDetails: EMPTY_ARRAY,
+          forceDetails: EMPTY_ARRAY,
+          skillDetails: EMPTY_ARRAY,
+          traitDetails: EMPTY_ARRAY,
         };
       }
 
-      const sortedChampions = metaDeck.deck.champions.slice().sort((a, b) => {
-        const champA = championsMap.get(a.key);
-        const champB = championsMap.get(b.key);
-        return (champA?.cost || 0) - (champB?.cost || 0);
-      });
+      const sortedChampions = metaDeck.deck.champions?.length
+        ? metaDeck.deck.champions.slice().sort((a, b) => {
+            const champA = gameData.championsMap.get(a.key);
+            const champB = gameData.championsMap.get(b.key);
+            return (champA?.cost || 0) - (champB?.cost || 0);
+          })
+        : EMPTY_ARRAY;
 
       let championsToDisplay;
-      if (isChampionsCollapsed) {
-        const prioritizedChampions = [...sortedChampions].sort((a, b) => {
-          const champA = championsMap.get(a.key);
-          const champB = championsMap.get(b.key);
+      if (
+        isChampionsCollapsed &&
+        sortedChampions.length > MOBILE_DISPLAY_LIMIT
+      ) {
+        const prioritized = [...sortedChampions].sort((a, b) => {
+          const champA = gameData.championsMap.get(a.key);
+          const champB = gameData.championsMap.get(b.key);
 
           const isAFourStar = (a?.tier || 0) >= 4;
           const isBFourStar = (b?.tier || 0) >= 4;
@@ -682,44 +810,69 @@ const MetaDeck = memo(
 
           return 0;
         });
-        championsToDisplay = prioritizedChampions.slice(
-          0,
-          MOBILE_DISPLAY_LIMIT
-        );
+        championsToDisplay = prioritized.slice(0, MOBILE_DISPLAY_LIMIT);
       } else {
         championsToDisplay = sortedChampions;
       }
 
-      const augmentDetailsMap = new Map(augments.map((a) => [a.key, a]));
-      const augmentDetails = metaDeck?.deck?.augments
-        ? metaDeck.deck.augments
-            .map((augment) => augmentDetailsMap.get(augment))
+      const forceDetails = metaDeck.deck.forces
+        ? metaDeck.deck.forces
+            .map((force) => ({
+              ...force,
+              details: gameData.forceDetailsMap.get(force?.key?.toLowerCase()),
+            }))
+            .filter((item) => item.details)
+        : EMPTY_ARRAY;
+
+      const skillDetails = metaDeck.deck.skillTree
+        ? metaDeck.deck.skillTree
+            .map((skill) => gameData.skillDetailsMap.get(skill))
             .filter(Boolean)
         : EMPTY_ARRAY;
 
-      return { sortedChampions, championsToDisplay, augmentDetails };
-    }, [metaDeck?.deck, championsMap, augments, isChampionsCollapsed]);
+      const traitDetails = metaDeck.deck.traits
+        ? metaDeck.deck.traits
+            .map((trait) => {
+              const traitDetails = gameData.traitDetailsMap.get(trait?.key);
+              if (!traitDetails) return null;
+
+              const tier = traitDetails.tiers?.find(
+                (t) => trait?.numUnits >= t?.min && trait?.numUnits <= t?.max
+              );
+
+              return tier?.imageUrl
+                ? { ...traitDetails, tier, numUnits: trait?.numUnits }
+                : null;
+            })
+            .filter(Boolean)
+        : EMPTY_ARRAY;
+
+      const augmentDetails = metaDeck.deck.augments
+        ? metaDeck.deck.augments
+            .map((augment) => gameData.augmentsMap.get(augment))
+            .filter(Boolean)
+        : EMPTY_ARRAY;
+
+      return {
+        sortedChampions,
+        championsToDisplay,
+        augmentDetails,
+        forceDetails,
+        skillDetails,
+        traitDetails,
+      };
+    }, [metaDeck?.deck, gameData, isChampionsCollapsed]);
 
     if (!metaDeck) return null;
 
     return (
-      <div
-        ref={ref}
-        className="flex flex-col gap-[1px] bg-gradient-to-r from-[#5f5525] to-[#6D4600] p-[1px] rounded-lg overflow-hidden shadow-lg mb-4 md:!mb-6"
-      >
-        {isVisible && (
+      <LazyComponent height="200px">
+        <div className="flex flex-col gap-[1px] bg-gradient-to-r from-[#5f5525] to-[#6D4600] p-[1px] rounded-lg overflow-hidden shadow-lg mb-4 md:!mb-6">
           <div className="bg-[#000000] rounded-lg">
             <DeckHeader
               metaDeck={metaDeck}
-              forces={forces}
-              traits={traits}
-              isClosed={isClosed}
-              index={index}
-              skills={skills}
-              augmentDetails={computedChampionData.augmentDetails}
-              forceDetailsMap={forceDetailsMap}
-              skillDetailsMap={skillDetailsMap}
-              traitDetailsMap={traitDetailsMap}
+              computedData={computedData}
+              augmentDetails={computedData.augmentDetails}
             />
 
             {!isClosed[index] && (
@@ -730,9 +883,9 @@ const MetaDeck = memo(
                       {/* Mobile view */}
                       <div className="lg:hidden">
                         <div className="flex flex-wrap justify-center gap-2 w-full">
-                          {computedChampionData.championsToDisplay.map(
+                          {computedData.championsToDisplay.map(
                             (champion, idx) => {
-                              const championDetails = championsMap.get(
+                              const championDetails = gameData.championsMap.get(
                                 champion.key
                               );
                               return championDetails ? (
@@ -740,8 +893,8 @@ const MetaDeck = memo(
                                   key={`${isChampionsCollapsed ? "collapsed" : "expanded"}-${champion.key}-${idx}`}
                                   champion={champion}
                                   championDetails={championDetails}
-                                  itemsMap={itemsMap}
-                                  forces={forces}
+                                  itemsMap={gameData.itemsMap}
+                                  forces={gameData.forces}
                                   tier={champion.tier}
                                 />
                               ) : null;
@@ -749,7 +902,7 @@ const MetaDeck = memo(
                           )}
                         </div>
 
-                        {computedChampionData.sortedChampions.length >
+                        {computedData.sortedChampions.length >
                           MOBILE_DISPLAY_LIMIT && (
                           <div className="flex items-center justify-center mt-1 w-full transition-all duration-300 ease-in-out">
                             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#ffffff30] to-[#ffffff30] transition-all duration-300"></div>
@@ -758,7 +911,7 @@ const MetaDeck = memo(
                               className="mx-3 w-7 h-7 bg-[#2D2F37] hover:bg-[#3D3F47] text-[#D9A876] rounded-full transition-all duration-300 ease-in-out flex items-center justify-center shadow-md border border-[#ffffff20] flex-shrink-0 hover:scale-110 active:scale-95"
                               title={
                                 isChampionsCollapsed
-                                  ? `Show all ${computedChampionData.sortedChampions.length} champions`
+                                  ? `Show all ${computedData.sortedChampions.length} champions`
                                   : "Show fewer champions"
                               }
                             >
@@ -777,23 +930,21 @@ const MetaDeck = memo(
 
                       {/* Desktop view */}
                       <div className="hidden lg:flex flex-wrap justify-center gap-2 w-full">
-                        {computedChampionData.sortedChampions.map(
-                          (champion, idx) => {
-                            const championDetails = championsMap.get(
-                              champion.key
-                            );
-                            return championDetails ? (
-                              <ChampionWithItems
-                                key={`desktop-${champion.key}-${idx}`}
-                                champion={champion}
-                                championDetails={championDetails}
-                                itemsMap={itemsMap}
-                                forces={forces}
-                                tier={champion.tier}
-                              />
-                            ) : null;
-                          }
-                        )}
+                        {computedData.sortedChampions.map((champion, idx) => {
+                          const championDetails = gameData.championsMap.get(
+                            champion.key
+                          );
+                          return championDetails ? (
+                            <ChampionWithItems
+                              key={`desktop-${champion.key}-${idx}`}
+                              champion={champion}
+                              championDetails={championDetails}
+                              itemsMap={gameData.itemsMap}
+                              forces={gameData.forces}
+                              tier={champion.tier}
+                            />
+                          ) : null;
+                        })}
                       </div>
                     </div>
                   </div>
@@ -801,99 +952,25 @@ const MetaDeck = memo(
               </div>
             )}
           </div>
-        )}
-      </div>
-    );
-  }
-);
-
-// Optimized SkillTreeItem components
-const SkillTreeItem = memo(({ skill, selectedSkillTree, onSelect, index }) => {
-  const isSelected = skill?.key === selectedSkillTree;
-  const tooltipId = `skill-${skill?.key}-${index}`;
-
-  const handleClick = useCallback(() => {
-    onSelect("skillTree", skill?.key);
-  }, [onSelect, skill?.key]);
-
-  return (
-    <div
-      className="flex flex-col items-center gap-1 cursor-pointer group w-16 md:w-20 lg:w-24 flex-shrink-0"
-      onClick={handleClick}
-      role="button"
-      tabIndex={0}
-      aria-pressed={isSelected}
-    >
-      <ReactTltp variant="skillTree" content={skill} id={tooltipId} />
-      <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-105">
-        <SkillTreeImage
-          skill={skill}
-          size="large"
-          tooltipId={tooltipId}
-          className="w-full h-full"
-          showTooltip={false}
-          loading="lazy"
-        />
-        {isSelected && (
-          <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
-            <IoMdCheckmarkCircle className="text-[#86efac] text-3xl z-50" />
-          </div>
-        )}
-      </div>
-      <span className="text-xs truncate max-w-full text-center text-[#cccccc] mt-1">
-        {skill?.name}
-      </span>
-    </div>
-  );
-});
-
-const MobileSkillTreeItem = memo(
-  ({ skill, selectedSkillTree, onSelect, index }) => {
-    const isSelected = skill?.key === selectedSkillTree;
-    const tooltipId = `mobile-skill-${skill?.key}-${index}`;
-
-    const handleClick = useCallback(() => {
-      onSelect("skillTree", skill?.key);
-    }, [onSelect, skill?.key]);
-
-    return (
-      <div
-        className="flex flex-col items-center gap-1 cursor-pointer group w-12 sm:w-14 flex-shrink-0"
-        onClick={handleClick}
-        role="button"
-        tabIndex={0}
-        aria-pressed={isSelected}
-      >
-        <ReactTltp variant="skillTree" content={skill} id={tooltipId} />
-        <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-105">
-          <SkillTreeImage
-            skill={skill}
-            size="xlarge"
-            tooltipId={tooltipId}
-            className="w-full h-full"
-            showTooltip={false}
-            loading="lazy"
-          />
-          {isSelected && (
-            <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
-              <IoMdCheckmarkCircle className="text-[#86efac] text-2xl z-50" />
-            </div>
-          )}
         </div>
-        <span className="text-[10px] truncate max-w-full text-center text-[#cccccc] mt-1 leading-tight">
-          {skill?.name}
-        </span>
-      </div>
+      </LazyComponent>
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.metaDeck?.key === nextProps.metaDeck?.key &&
+      prevProps.isClosed === nextProps.isClosed &&
+      prevProps.index === nextProps.index
     );
   }
 );
 
-// Main optimized component
+// OPTIMIZATION 15: Main component with simplified state management
 const RecentDecksItems = () => {
   const { t } = useTranslation();
   const others = t("others");
 
-  // State management with better organization
+  // Simplified state management
   const [filters, setFilters] = useState({
     selectedChampion: null,
     selectedTrait: null,
@@ -908,7 +985,11 @@ const RecentDecksItems = () => {
     activeSkillsSubTab: null,
   });
 
-  // Extract and memoize data once with better performance
+  const [visibleDecks, setVisibleDecks] = useState(6); // Start with fewer decks
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const loadingRef = useRef(false);
+
+  // OPTIMIZATION 16: Extract and memoize data once with Maps
   const gameData = useMemo(() => {
     try {
       const {
@@ -953,13 +1034,13 @@ const RecentDecksItems = () => {
         augments,
         forces,
         skillTree,
-        // Maps for O(1) lookups
         championsMap,
         itemsMap,
-        traitsMap,
+        traitsMap: traitsMap,
         augmentsMap,
-        forcesMap,
-        skillTreeMap,
+        forceDetailsMap: forcesMap,
+        skillDetailsMap: skillTreeMap,
+        traitDetailsMap: traitsMap,
       };
     } catch (error) {
       console.error("Error loading game data:", error);
@@ -975,15 +1056,23 @@ const RecentDecksItems = () => {
         itemsMap: new Map(),
         traitsMap: new Map(),
         augmentsMap: new Map(),
-        forcesMap: new Map(),
-        skillTreeMap: new Map(),
+        forceDetailsMap: new Map(),
+        skillDetailsMap: new Map(),
+        traitDetailsMap: new Map(),
       };
     }
   }, []);
 
   const [compsData, setCompsData] = useState(() => gameData.metaDecks);
+  const metaDecksRef = useRef(gameData.metaDecks);
 
-  // Optimized shuffle function with better performance
+  useEffect(() => {
+    metaDecksRef.current = gameData.metaDecks;
+    setCompsData(gameData.metaDecks);
+    setVisibleDecks(6); // Reset visible decks when data changes
+  }, [gameData.metaDecks]);
+
+  // OPTIMIZATION 17: Optimized shuffle function
   const shuffle = useCallback((array) => {
     if (!array?.length) return EMPTY_ARRAY;
     const newArray = [...array];
@@ -994,13 +1083,12 @@ const RecentDecksItems = () => {
     return newArray;
   }, []);
 
-  // Heavily optimized champion processing with reduced computation
+  // OPTIMIZATION 18: Simplified champion processing
   const processedChampions = useMemo(() => {
     if (!gameData.champions?.length) {
       return { filteredChampions: EMPTY_ARRAY, groupedArray: EMPTY_ARRAY };
     }
 
-    // Use Map for grouping by type
     const championsByType = new Map();
     gameData.champions.forEach((champion) => {
       if (!championsByType.has(champion.type)) {
@@ -1015,7 +1103,6 @@ const RecentDecksItems = () => {
       filtered.push(...selected);
     }
 
-    // Group by cost using Map
     const groupedByCost = new Map();
     filtered.forEach((champion) => {
       const { cost } = champion;
@@ -1034,15 +1121,15 @@ const RecentDecksItems = () => {
     };
   }, [gameData.champions, shuffle, filters.selectedChampion]);
 
-  // Optimize filtered items with better caching
   const filteredItems = useMemo(() => {
     return gameData.items?.filter((item) => !item?.isFromItem) || EMPTY_ARRAY;
   }, [gameData.items]);
 
-  // Optimized filter change handler with better performance
+  // OPTIMIZATION 19: Debounced sort change handler
   const handleFilterChange = useCallback(
-    (type, key) => {
-      if (!gameData.metaDecks?.length) return;
+    debounce((type, key) => {
+      const metaDecks = metaDecksRef.current;
+      if (!metaDecks?.length) return;
 
       startTransition(() => {
         const currentFilterKey =
@@ -1053,14 +1140,14 @@ const RecentDecksItems = () => {
               ];
 
         if (currentFilterKey === key) {
-          // Reset filter
           setFilters({
             selectedChampion: null,
             selectedTrait: null,
             selectedItem: null,
             selectedSkillTree: null,
           });
-          setCompsData(gameData.metaDecks);
+          setCompsData(metaDecks);
+          setVisibleDecks(6);
           return;
         }
 
@@ -1070,37 +1157,84 @@ const RecentDecksItems = () => {
         switch (type) {
           case "trait":
             newFilters.selectedTrait = key;
-            newCompsData = gameData.metaDecks.filter((deck) =>
-              deck.deck?.traits?.some((trait) => trait.key === key)
-            );
+            // Sort by trait count (numUnits) - highest first
+            newCompsData = [...metaDecks].sort((a, b) => {
+              const aTraitCount =
+                a.deck?.traits?.find((trait) => trait.key === key)?.numUnits ||
+                0;
+              const bTraitCount =
+                b.deck?.traits?.find((trait) => trait.key === key)?.numUnits ||
+                0;
+              return bTraitCount - aTraitCount;
+            });
             break;
           case "force":
             newFilters.selectedTrait = key;
-            newCompsData = gameData.metaDecks.filter((deck) =>
-              deck.deck?.forces?.some(
-                (force) => force.key.toLowerCase() === key.toLowerCase()
-              )
-            );
+            // Sort by force count (numUnits) - highest first
+            newCompsData = [...metaDecks].sort((a, b) => {
+              const aForceCount =
+                a.deck?.forces?.find(
+                  (force) => force.key.toLowerCase() === key.toLowerCase()
+                )?.numUnits || 0;
+              const bForceCount =
+                b.deck?.forces?.find(
+                  (force) => force.key.toLowerCase() === key.toLowerCase()
+                )?.numUnits || 0;
+              return bForceCount - aForceCount;
+            });
             break;
           case "champion":
             newFilters.selectedChampion = key;
-            newCompsData = gameData.metaDecks.filter((deck) =>
-              deck.deck?.champions?.some((champion) => champion.key === key)
-            );
+            // Sort by champion presence - decks with champion first
+            newCompsData = [...metaDecks].sort((a, b) => {
+              const aHasChampion =
+                a.deck?.champions?.some((champion) => champion.key === key) ||
+                false;
+              const bHasChampion =
+                b.deck?.champions?.some((champion) => champion.key === key) ||
+                false;
+
+              if (aHasChampion && !bHasChampion) return -1;
+              if (!aHasChampion && bHasChampion) return 1;
+
+              // If both have or both don't have, maintain original order
+              return 0;
+            });
             break;
           case "item":
             newFilters.selectedItem = key;
-            newCompsData = gameData.metaDecks.filter((deck) =>
-              deck.deck?.champions?.some((champion) =>
-                champion.items?.some((item) => item === key)
-              )
-            );
+            // Sort by item count across all champions - highest first
+            newCompsData = [...metaDecks].sort((a, b) => {
+              const aItemCount =
+                a.deck?.champions?.reduce((count, champion) => {
+                  if (!champion.items) return count;
+                  return (
+                    count + champion.items.filter((item) => item === key).length
+                  );
+                }, 0) || 0;
+              const bItemCount =
+                b.deck?.champions?.reduce((count, champion) => {
+                  if (!champion.items) return count;
+                  return (
+                    count + champion.items.filter((item) => item === key).length
+                  );
+                }, 0) || 0;
+              return bItemCount - aItemCount;
+            });
             break;
           case "skillTree":
             newFilters.selectedSkillTree = key;
-            newCompsData = gameData.metaDecks.filter((deck) =>
-              deck.deck?.skillTree?.includes(key)
-            );
+            // Sort by skill presence - decks with skill first
+            newCompsData = [...metaDecks].sort((a, b) => {
+              const aHasSkill = a.deck?.skillTree?.includes(key) || false;
+              const bHasSkill = b.deck?.skillTree?.includes(key) || false;
+
+              if (aHasSkill && !bHasSkill) return -1;
+              if (!aHasSkill && bHasSkill) return 1;
+
+              // If both have or both don't have, maintain original order
+              return 0;
+            });
             break;
           default:
             return;
@@ -1108,9 +1242,10 @@ const RecentDecksItems = () => {
 
         setFilters(newFilters);
         setCompsData(newCompsData);
+        setVisibleDecks(6); // Reset visible decks on filter change
       });
-    },
-    [gameData.metaDecks, filters]
+    }, 150),
+    [filters]
   );
 
   const handleIsClosed = useCallback((event) => {
@@ -1135,7 +1270,7 @@ const RecentDecksItems = () => {
     setUi((prev) => ({ ...prev, activeSkillsSubTab: subTab }));
   }, []);
 
-  // Optimized skills grouping with better performance
+  // OPTIMIZATION 20: Simplified skills grouping
   const skillsByVariant = useMemo(() => {
     if (!gameData.skillTree?.length) return EMPTY_OBJECT;
 
@@ -1153,7 +1288,6 @@ const RecentDecksItems = () => {
     return Object.fromEntries(grouped);
   }, [gameData.skillTree]);
 
-  // Initialize skills sub-tab with reduced effects
   useEffect(() => {
     const variants = Object.keys(skillsByVariant);
     if (variants.length > 0 && !ui.activeSkillsSubTab) {
@@ -1161,23 +1295,36 @@ const RecentDecksItems = () => {
     }
   }, [skillsByVariant, ui.activeSkillsSubTab]);
 
-  // Use virtualization for better performance
-  const { visibleItems: visibleDecks } = useVirtualList(compsData, 600, 200);
+  // OPTIMIZATION 21: Infinite scroll for mobile performance
+  const loadMoreDecks = useCallback(() => {
+    if (loadingRef.current || isLoadingMore) return;
+    if (visibleDecks >= compsData.length) return;
 
-  // Optimized tab content with lazy rendering and reduced DOM
+    loadingRef.current = true;
+    setIsLoadingMore(true);
+
+    setTimeout(() => {
+      setVisibleDecks((prev) => Math.min(prev + 6, compsData.length));
+      setIsLoadingMore(false);
+      loadingRef.current = false;
+    }, 100);
+  }, [compsData.length, visibleDecks, isLoadingMore]);
+
+  const hasMoreDecks = visibleDecks < compsData.length;
+  useInfiniteScroll(loadMoreDecks, hasMoreDecks);
+
+  // OPTIMIZATION 22: Memoized tab content
   const tabContent = useMemo(() => {
     switch (ui.activeTab) {
       case "Champions":
         return (
-          <Suspense fallback={<LoadingSpinner />}>
-            <LazyMetaTrendsCard
-              itemCount={13}
-              championsByCost={processedChampions.groupedArray}
-              setSelectedChampion={(key) => handleFilterChange("champion", key)}
-              selectedChampion={filters.selectedChampion}
-              forces={gameData.forces}
-            />
-          </Suspense>
+          <MetaTrendsCard
+            itemCount={13}
+            championsByCost={processedChampions.groupedArray}
+            setSelectedChampion={(key) => handleFilterChange("champion", key)}
+            selectedChampion={filters.selectedChampion}
+            forces={gameData.forces}
+          />
         );
       case "Traits":
         return (
@@ -1206,7 +1353,7 @@ const RecentDecksItems = () => {
             <div className="lg:hidden">
               {ui.activeTraitsSubTab === "Origin" && (
                 <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 gap-4 w-full">
-                  {gameData.traits?.slice(0, 12).map((trait, i) => (
+                  {gameData.traits?.map((trait, i) => (
                     <TraitItem
                       key={`trait-${trait.key}`}
                       trait={trait}
@@ -1220,7 +1367,7 @@ const RecentDecksItems = () => {
 
               {ui.activeTraitsSubTab === "Forces" && (
                 <div className="grid grid-cols-5 sm:grid-cols-3 md:grid-cols-4 gap-4 w-full">
-                  {gameData.forces?.slice(0, 10).map((force, i) => (
+                  {gameData.forces?.map((force, i) => (
                     <ForceItem
                       key={`force-${force.key}`}
                       force={force}
@@ -1275,7 +1422,7 @@ const RecentDecksItems = () => {
         return (
           <div className="p-3 md:p-6 bg-[#111111] rounded-lg max-h-[155px] md:max-h-full mb-8 overflow-y-auto">
             <div className="grid grid-cols-6 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:!flex justify-center xl:!flex-wrap gap-2 lg:gap-4">
-              {filteredItems.slice(0, 24).map((item, i) => (
+              {filteredItems.map((item, i) => (
                 <ItemIcon
                   key={`item-${item.key}`}
                   item={item}
@@ -1365,6 +1512,11 @@ const RecentDecksItems = () => {
     others,
   ]);
 
+  // OPTIMIZATION 23: Visible decks with proper slicing
+  const visibleCompsData = useMemo(() => {
+    return compsData.slice(0, visibleDecks);
+  }, [compsData, visibleDecks]);
+
   return (
     <div className="mx-auto md:px-6 lg:px-8 py-6">
       <div className="space-y-2">
@@ -1403,32 +1555,61 @@ const RecentDecksItems = () => {
           {tabContent}
         </div>
 
-        {/* Results Section - Use visible decks for virtualization */}
+        {/* Results Section with infinite scroll */}
         <div className="flex flex-col gap-[16px]">
           <div>
-            {(compsData.length > DESKTOP_DISPLAY_LIMIT
-              ? visibleDecks
-              : compsData
-            )
-              ?.slice(0, DESKTOP_DISPLAY_LIMIT)
-              ?.map((metaDeck, i) => (
-                <MetaDeck
-                  key={`${metaDeck.key || metaDeck.puuid}-${i}`}
-                  metaDeck={metaDeck}
-                  index={metaDeck.virtualIndex || i}
-                  isClosed={ui.isClosed}
-                  handleIsClosed={handleIsClosed}
-                  championsMap={gameData.championsMap}
-                  itemsMap={gameData.itemsMap}
-                  traits={gameData.traits}
-                  forces={gameData.forces}
-                  augments={gameData.augments}
-                  skills={gameData.skillTree}
-                  forceDetailsMap={gameData.forcesMap}
-                  skillDetailsMap={gameData.skillTreeMap}
-                  traitDetailsMap={gameData.traitsMap}
-                />
-              ))}
+            {visibleCompsData.length > 0 ? (
+              <>
+                {visibleCompsData.map((metaDeck, i) => (
+                  <MetaDeck
+                    key={`${metaDeck.key || metaDeck.puuid}-${i}`}
+                    metaDeck={metaDeck}
+                    index={i}
+                    isClosed={ui.isClosed}
+                    handleIsClosed={handleIsClosed}
+                    gameData={gameData}
+                  />
+                ))}
+
+                {/* Loading indicator */}
+                {isLoadingMore && (
+                  <div className="flex justify-center py-6">
+                    <div className="flex items-center space-x-2 text-[#D9A876]">
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#D9A876]"></div>
+                      <span className="text-sm">Loading more decks...</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Manual load button as fallback */}
+                {hasMoreDecks && !isLoadingMore && (
+                  <div className="md:hidden flex justify-center py-4">
+                    <button
+                      onClick={loadMoreDecks}
+                      className="px-4 py-2 bg-[#2D2F37] hover:bg-[#3D3F47] text-[#D9A876] rounded-lg text-sm transition-colors duration-200"
+                    >
+                      Load More
+                    </button>
+                  </div>
+                )}
+
+                {/* End indicator */}
+                {!hasMoreDecks && compsData.length > 6 && (
+                  <div className="flex flex-col items-center py-6 space-y-2">
+                    <div className="text-gray-500 text-sm text-center">
+                      ✓ Showing all {compsData.length} decks
+                    </div>
+                    <div className="text-gray-600 text-xs text-center md:hidden">
+                      Scroll up to see more options
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="text-center py-8 text-gray-400">
+                No decks found matching the current filters.
+              </div>
+            )}
           </div>
         </div>
       </div>
