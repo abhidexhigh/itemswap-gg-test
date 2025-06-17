@@ -68,14 +68,14 @@ const AccordionContentRow = ({ item, itemIndex, items, others }) => {
         </div>
       </td>
       <td
-        className={`w-[52px] text-center py-[8px] text-lg font-medium ${
+        className={`w-[52px] text-center py-[8px] text-base md:text-sm font-medium ${
           item?.avgPlacement < 4 ? "text-yellow-300" : "text-[#fff]"
         }`}
       >
         #{item?.avgPlacement.toFixed(2)}
       </td>
-      <td className="w-[52px] text-center py-[8px] text-lg text-[#fff] font-medium">
-        {(item?.pickRate * 100).toFixed(2)}%
+      <td className="w-[52px] text-center py-[8px] text-base md:text-sm text-[#fff] font-medium">
+        {(item?.pickRate).toFixed(2)}%
       </td>
     </tr>
   );
