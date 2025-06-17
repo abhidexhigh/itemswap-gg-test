@@ -1268,7 +1268,7 @@ const MetaTrendsItems = () => {
     return items?.filter((item) => !item?.isFromItem) || [];
   }, [items]);
 
-  // OPTIMIZATION 20: Filter handler with reduced debounce for better mobile responsiveness
+  // OPTIMIZATION 20: Sort handler with reduced debounce for better mobile responsiveness
   const handleFilterChange = useCallback(
     debounce((type, key) => {
       const metaDecks = metaDecksRef.current;
@@ -1277,7 +1277,7 @@ const MetaTrendsItems = () => {
       let newCompsData;
       const cacheKey = `${type}:${key}`;
 
-      const filterLogic = {
+      const sortLogic = {
         trait: () => {
           if (selectedTrait === key) {
             setSelectedTrait(null);
@@ -1287,11 +1287,16 @@ const MetaTrendsItems = () => {
             if (filterCache.has(cacheKey)) {
               return filterCache.get(cacheKey);
             }
-            const filtered = metaDecks.filter((deck) =>
-              deck.deck.traits.some((trait) => trait.key === key)
-            );
-            filterCache.set(cacheKey, filtered);
-            return filtered;
+            // Sort by trait count (numUnits) - highest first
+            const sorted = [...metaDecks].sort((a, b) => {
+              const aTraitCount =
+                a.deck.traits.find((trait) => trait.key === key)?.numUnits || 0;
+              const bTraitCount =
+                b.deck.traits.find((trait) => trait.key === key)?.numUnits || 0;
+              return bTraitCount - aTraitCount;
+            });
+            filterCache.set(cacheKey, sorted);
+            return sorted;
           }
         },
         force: () => {
@@ -1303,13 +1308,20 @@ const MetaTrendsItems = () => {
             if (filterCache.has(cacheKey)) {
               return filterCache.get(cacheKey);
             }
-            const filtered = metaDecks.filter((deck) =>
-              deck.deck.forces.some(
-                (force) => force.key.toLowerCase() === key.toLowerCase()
-              )
-            );
-            filterCache.set(cacheKey, filtered);
-            return filtered;
+            // Sort by force count (numUnits) - highest first
+            const sorted = [...metaDecks].sort((a, b) => {
+              const aForceCount =
+                a.deck.forces.find(
+                  (force) => force.key.toLowerCase() === key.toLowerCase()
+                )?.numUnits || 0;
+              const bForceCount =
+                b.deck.forces.find(
+                  (force) => force.key.toLowerCase() === key.toLowerCase()
+                )?.numUnits || 0;
+              return bForceCount - aForceCount;
+            });
+            filterCache.set(cacheKey, sorted);
+            return sorted;
           }
         },
         champion: () => {
@@ -1321,11 +1333,23 @@ const MetaTrendsItems = () => {
             if (filterCache.has(cacheKey)) {
               return filterCache.get(cacheKey);
             }
-            const filtered = metaDecks.filter((deck) =>
-              deck.deck.champions.some((champion) => champion.key === key)
-            );
-            filterCache.set(cacheKey, filtered);
-            return filtered;
+            // Sort by champion presence and count - decks with champion first
+            const sorted = [...metaDecks].sort((a, b) => {
+              const aHasChampion = a.deck.champions.some(
+                (champion) => champion.key === key
+              );
+              const bHasChampion = b.deck.champions.some(
+                (champion) => champion.key === key
+              );
+
+              if (aHasChampion && !bHasChampion) return -1;
+              if (!aHasChampion && bHasChampion) return 1;
+
+              // If both have or both don't have, maintain original order
+              return 0;
+            });
+            filterCache.set(cacheKey, sorted);
+            return sorted;
           }
         },
         item: () => {
@@ -1337,14 +1361,24 @@ const MetaTrendsItems = () => {
             if (filterCache.has(cacheKey)) {
               return filterCache.get(cacheKey);
             }
-            const filtered = metaDecks.filter((deck) =>
-              deck.deck.champions.some(
-                (champion) =>
-                  champion.items && champion.items.some((item) => item === key)
-              )
-            );
-            filterCache.set(cacheKey, filtered);
-            return filtered;
+            // Sort by item count across all champions - highest first
+            const sorted = [...metaDecks].sort((a, b) => {
+              const aItemCount = a.deck.champions.reduce((count, champion) => {
+                if (!champion.items) return count;
+                return (
+                  count + champion.items.filter((item) => item === key).length
+                );
+              }, 0);
+              const bItemCount = b.deck.champions.reduce((count, champion) => {
+                if (!champion.items) return count;
+                return (
+                  count + champion.items.filter((item) => item === key).length
+                );
+              }, 0);
+              return bItemCount - aItemCount;
+            });
+            filterCache.set(cacheKey, sorted);
+            return sorted;
           }
         },
         skillTree: () => {
@@ -1356,16 +1390,24 @@ const MetaTrendsItems = () => {
             if (filterCache.has(cacheKey)) {
               return filterCache.get(cacheKey);
             }
-            const filtered = metaDecks.filter((deck) =>
-              deck.deck?.skillTree?.includes(key)
-            );
-            filterCache.set(cacheKey, filtered);
-            return filtered;
+            // Sort by skill presence - decks with skill first
+            const sorted = [...metaDecks].sort((a, b) => {
+              const aHasSkill = a.deck?.skillTree?.includes(key) || false;
+              const bHasSkill = b.deck?.skillTree?.includes(key) || false;
+
+              if (aHasSkill && !bHasSkill) return -1;
+              if (!aHasSkill && bHasSkill) return 1;
+
+              // If both have or both don't have, maintain original order
+              return 0;
+            });
+            filterCache.set(cacheKey, sorted);
+            return sorted;
           }
         },
       };
 
-      newCompsData = filterLogic[type]?.() || metaDecks;
+      newCompsData = sortLogic[type]?.() || metaDecks;
 
       // Reset other selections
       if (type === "trait" || type === "force") {
