@@ -365,7 +365,6 @@ const ReactTltp = ({ variant = "", content, id }) => {
 
         {variant === "trait" && (
           <div className="w-[200px] text-[#fff] bg-black">
-            {console.log("content", content)}
             <div className="flex justify-start items-center gap-x-2">
               {content?.name}
             </div>

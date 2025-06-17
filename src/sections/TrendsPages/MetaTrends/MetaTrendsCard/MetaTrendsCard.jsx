@@ -419,8 +419,6 @@ const MetaTrendsCard = ({
       <MobileTabsNav />
 
       <div className="grid grid-cols-1 m-2">
-        {console.log("championsByCost", championsByCost)}
-
         {/* Mobile View - Show only active tab */}
         <div className="lg:hidden">
           {championsByCost[activeTab] && (

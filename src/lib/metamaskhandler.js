@@ -41,9 +41,7 @@ if (isMetaMaskInstalled()) {
 // check metamask on connected
 const onMetamaskconnect = async () => {
   const chainId = await getChainId();
-  ethereum.on("connect", () => {
-    console.log(chainId);
-  });
+  ethereum.on("connect", () => {});
 };
 
 // on chain change

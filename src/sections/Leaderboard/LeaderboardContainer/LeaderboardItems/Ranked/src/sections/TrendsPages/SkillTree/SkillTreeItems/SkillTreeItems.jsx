@@ -47,8 +47,6 @@ const ProjectItems = () => {
   const { forces } = data?.refs;
   const { skillTree } = data?.refs;
 
-  console.log("skillTree", skillTree);
-
   const [metaDeckSkillTreeStatsData, setMetaDeckSkillTreeStatsData] = useState(
     metaDeckSkillTreeStats
   );
@@ -152,7 +150,6 @@ const ProjectItems = () => {
         return 0;
       });
     }
-    console.log("sortedData", sortedData);
     setMetaDeckSkillTreeStatsData(sortedData);
   }, [metaDeckSkillTreeStats, sortConfig]);
 
@@ -515,10 +512,6 @@ const ProjectItems = () => {
                 </tr>
               </thead>
               <tbody className="bg-[#111111]">
-                {console.log(
-                  "metaDeckSkillTreeStatsData",
-                  metaDeckSkillTreeStatsData
-                )}
                 {metaDeckSkillTreeStatsData.map((item, index) => (
                   <tr
                     className="hover:bg-[#2D2F37] transition-colors duration-200 border-b border-[#2D2F37]"
@@ -640,7 +633,7 @@ const ProjectItems = () => {
                             (c) => c.key === champKey || c.name === champKey
                           );
                           if (!champion) return null;
-                          console.log("champion", champion);
+
                           return (
                             <React.Fragment key={`champ-${index}`}>
                               <CardImage

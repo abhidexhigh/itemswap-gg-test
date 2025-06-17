@@ -85,14 +85,19 @@ const menuData = [
         url: "/recentDecks",
       },
       {
+        id: "Y43TW",
+        title: "Champions Trends",
+        url: "/championsTrends",
+      },
+      {
         id: "VT0WW",
         title: "Items Trends",
         url: "/itemsTrends",
       },
       {
-        id: "Y43TW",
-        title: "Champions Trends",
-        url: "/championsTrends",
+        id: "Y43XW",
+        title: "Skill Trends",
+        url: "/skillTrends",
       },
       {
         id: "Y1Y2T",

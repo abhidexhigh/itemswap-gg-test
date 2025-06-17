@@ -23,16 +23,6 @@ const ModernMatchHistory = ({
   const { t } = useTranslation();
   const others = t("others");
   const [expandedHistory, setExpandedHistory] = useState(null);
-  console.log(
-    match,
-    traits,
-    champions,
-    items,
-    augments,
-    forces,
-    matchHistoryInfo,
-    matchId
-  );
 
   useEffect(() => {
     if (matchId && matchId === match?.key) {

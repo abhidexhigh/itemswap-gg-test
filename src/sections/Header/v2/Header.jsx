@@ -15,14 +15,7 @@ import MobileMenu from "../MobileMenu/MobileMenu";
 import { OptimizedImage } from "src/utils/imageOptimizer";
 
 import data from "@assets/data/menu/menuData";
-import logo from "@assets/image/logo.png";
-import connectIcon from "@assets/images/icons/connect.png";
-import walletIcon1 from "@assets/images/icons/pancake.png";
-import walletIcon2 from "@assets/images/icons/uniswap.png";
-import walletIcon3 from "@assets/images/icons/market.png";
-import walletIcon4 from "@assets/images/icons/gate.png";
 import LanguageSwitcher from "src/lib/LanguageSwitcher";
-import Badge3 from "src/components/badge/Badge3";
 
 const Header = () => {
   const { t } = useTranslation();

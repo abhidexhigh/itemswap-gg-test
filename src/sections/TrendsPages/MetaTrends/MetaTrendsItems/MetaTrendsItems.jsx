@@ -110,16 +110,6 @@ const useInfiniteScroll = (callback, hasMore) => {
           const distanceFromBottom =
             documentHeight - (scrollTop + windowHeight);
 
-          console.log("Scroll Debug:", {
-            isMobile,
-            scrollTop,
-            windowHeight,
-            documentHeight,
-            distanceFromBottom,
-            triggerDistance,
-            shouldTrigger: distanceFromBottom <= triggerDistance,
-          });
-
           if (distanceFromBottom <= triggerDistance) {
             callback();
           }
@@ -1771,19 +1761,12 @@ const MetaTrendsItems = () => {
 
     // Prevent rapid multiple calls (debounce at callback level)
     if (loadingRef.current || now - lastLoadTime.current < 500) {
-      console.log("Blocked duplicate load call");
       return;
     }
 
     if (!hasMoreDecks) {
-      console.log("No more decks to load");
       return;
     }
-
-    console.log("Loading more decks...", {
-      current: visibleDecks,
-      total: compsData.length,
-    });
 
     loadingRef.current = true;
     lastLoadTime.current = now;
@@ -1793,7 +1776,6 @@ const MetaTrendsItems = () => {
     setTimeout(() => {
       setVisibleDecks((prev) => {
         const newCount = Math.min(prev + 5, compsData.length); // Load 5 at a time
-        console.log("Updated visible decks:", newCount);
         return newCount;
       });
       setIsLoadingMore(false);
@@ -1808,7 +1790,6 @@ const MetaTrendsItems = () => {
 
   // Reset when data changes
   useEffect(() => {
-    console.log("Data changed, resetting visible decks");
     setVisibleDecks(3);
     loadingRef.current = false;
     lastLoadTime.current = 0;
@@ -1816,10 +1797,6 @@ const MetaTrendsItems = () => {
 
   const visibleCompsData = useMemo(() => {
     const result = compsData.slice(0, visibleDecks);
-    console.log("Visible decks updated:", {
-      showing: result.length,
-      total: compsData.length,
-    });
     return result;
   }, [compsData, visibleDecks]);
 
