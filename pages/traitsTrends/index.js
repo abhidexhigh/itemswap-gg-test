@@ -24,7 +24,7 @@ export default function ChampionsTrends() {
         <div
           className="backdrop-blur-md"
           style={{
-            backgroundImage: `url(https://res.cloudinary.com/dg0cmj6su/image/upload/v1744785474/smoke_q32s0q.jpg)`,
+            backgroundImage: `url(https://res.cloudinary.com/dg0cmj6su/image/upload/v1750163680/smoke_q32s0q_1_nbvwur.webp)`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
