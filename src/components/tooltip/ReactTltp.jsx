@@ -365,12 +365,33 @@ const ReactTltp = ({ variant = "", content, id }) => {
 
         {variant === "trait" && (
           <div className="w-[200px] text-[#fff] bg-black">
+            {console.log("content", content)}
             <div className="flex justify-start items-center gap-x-2">
               {content?.name}
             </div>
             <div className="text-[12px] font-light mb-2">{content?.desc}</div>
             <div className="text-center">
-              {content.stats ? (
+              {content?.tiers?.map((tier, index) => {
+                if (tier?.tier === "base") return null;
+                return (
+                  <div
+                    className="flex justify-start items-center gap-x-2"
+                    key={index}
+                  >
+                    <div
+                      className={`text-xs font-light ${tier.min === content?.tier?.min ? "text-green-500 font-bold" : ""}`}
+                    >
+                      {tier?.min && `${tier?.min} - `}
+                    </div>
+                    <div
+                      className={`text-xs font-light ${content?.tier?.min && tier.min === content?.tier?.min ? "text-green-500 font-bold" : ""}`}
+                    >
+                      {tier?.desc}
+                    </div>
+                  </div>
+                );
+              })}
+              {/* {content.stats ? (
                 Object.entries(content.stats).map(([key, value]) => (
                   <div
                     className={`mb-1 text-xs flex justify-start items-center ${parseInt(key) === parseInt(content?.numUnits) || parseInt(key) - 1 === parseInt(content?.numUnits) ? "text-[#23aa23] font-bold" : "text-[#fff] font-light"}`}
@@ -386,7 +407,7 @@ const ReactTltp = ({ variant = "", content, id }) => {
                 ))
               ) : (
                 <p>No stats available.</p>
-              )}
+              )} */}
             </div>
           </div>
         )}

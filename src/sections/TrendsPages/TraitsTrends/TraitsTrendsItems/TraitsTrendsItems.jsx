@@ -146,15 +146,30 @@ const ProjectItems = () => {
     return null;
   };
 
-  // Function to get the tier-specific image URL for a trait
-  const getTraitTier = (traitKey, traitTier) => {
+  // Function to get comprehensive trait information for tooltips
+  const getComprehensiveTraitDetails = (traitKey, traitTier) => {
     const trait = traits?.find((t) => t?.key === traitKey);
     if (!trait) return null;
 
     const tierData = trait.tiers?.find(
       (t) => t.tier.toLowerCase() === traitTier.toLowerCase()
     );
-    return tierData || trait;
+
+    // Return comprehensive trait object similar to MetaTrendsItems
+    return tierData?.imageUrl
+      ? {
+          ...trait,
+          tier: tierData,
+          // Add tier-specific properties for tooltip display
+          tierName: tierData.tier,
+          imageUrl: tierData.imageUrl || trait.imageUrl,
+        }
+      : trait;
+  };
+
+  // Legacy function for backward compatibility
+  const getTraitTier = (traitKey, traitTier) => {
+    return getComprehensiveTraitDetails(traitKey, traitTier);
   };
 
   const handleMobileFilterClick = (filterKey) => {
@@ -429,11 +444,14 @@ const ProjectItems = () => {
                     >
                       <div className="flex justify-start items-center gap-2">
                         <TraitImage
-                          trait={getTraitTier(metaTrait?.key, metaTrait?.tier)}
+                          trait={getComprehensiveTraitDetails(
+                            metaTrait?.key,
+                            metaTrait?.tier
+                          )}
                           size="large"
                           borderRadius="rounded-[4px]"
                           backgroundRadius="rounded-[4px]"
-                          tooltipId={metaTrait?.key}
+                          tooltipId={`${metaTrait?.key}-desktop-${index}`}
                           showTooltip={true}
                         />
                         <div className="min-w-0 flex-1">
@@ -579,11 +597,14 @@ const ProjectItems = () => {
                     {/* Image & Name */}
                     <div className="flex items-center space-x-2 min-w-0">
                       <TraitImage
-                        trait={getTraitTier(metaTrait?.key, metaTrait?.tier)}
+                        trait={getComprehensiveTraitDetails(
+                          metaTrait?.key,
+                          metaTrait?.tier
+                        )}
                         size="medium"
                         borderRadius="rounded-[4px]"
                         backgroundRadius="rounded-[4px]"
-                        tooltipId={metaTrait?.key}
+                        tooltipId={`${metaTrait?.key}-mobile-${index}`}
                         showTooltip={true}
                       />
                       <div className="min-w-0 flex-1">
