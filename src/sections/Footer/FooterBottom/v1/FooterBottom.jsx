@@ -26,10 +26,14 @@ const FooterBottom = () => {
 
           <ul className="footer-menu">
             <li>
-              <Link href="#">{others.aboutUs}</Link>
+              <Link href="https://itemswap-guild-test.vercel.app/T&C">
+                {others.aboutUs}
+              </Link>
             </li>
             <li>
-              <Link href="#">{others.termsOfService}</Link>
+              <Link href="https://itemswap-guild-test.vercel.app/PrivacyPolicy">
+                {others.termsOfService}
+              </Link>
             </li>
             <li>
               <Link href="#">{others.privacyPolicy}</Link>
