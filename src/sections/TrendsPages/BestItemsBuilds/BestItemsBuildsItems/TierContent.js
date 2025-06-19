@@ -109,7 +109,7 @@ const ChampionRowContent = ({
   );
 
   return (
-    <tr className="bg-[#1e293b] shadow-xl hover:bg-[#283548] transition-all duration-300 border-b border-[#ffffff10]">
+    <tr className="bg-[#111111] shadow-xl hover:bg-[#283548] transition-all duration-300 border-b border-[#ffffff10]">
       <td className="text-center py-0">
         <div className="flex pt-[10px] pr-[5px] pb-[6px] pl-[8px] justify-between items-center mb-2">
           <div className="flex items-center gap-[8px]">
@@ -231,7 +231,7 @@ const TierCard = ({ cost, itemsData }) => {
           {others?.tier} {cost}
         </p>
       </div>
-      <div className="w-full bg-[#0f172a] rounded-b-lg overflow-hidden">
+      <div className="w-full bg-[#111111] rounded-b-lg overflow-hidden">
         <table className="w-full">
           <tbody>
             {itemsData.map((champion, index) => (

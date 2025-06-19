@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const ProjectCardStyleWrapper = styled.div`
-  background: #090b1a;
+  // background: #090b1a;
   padding: 0;
   position: relative;
 

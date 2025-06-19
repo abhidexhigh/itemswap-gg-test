@@ -96,7 +96,9 @@ body {
 // background: linear-gradient(to right, #A43931, #1D4350); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 // background: linear-gradient(90deg, rgba(19,18,38,1) 0%, rgba(19,18,38,1) 100%);
 //   background-image: url("https://res.cloudinary.com/dg0cmj6su/image/upload/v1726573776/15_rfg99m.webp");
-  background-image: url(${getRandomChampionKey()});
+  background-image: 
+    linear-gradient(to top, rgba(0, 0, 0) 0%, rgba(0,0,0) 53%, transparent 100%),
+    url(${getRandomChampionKey()});
 //   background-image: url("https://res.cloudinary.com/dg0cmj6su/image/upload/v1726658106/24_baandr.webp");
 //   background-image: url("https://res.cloudinary.com/dg0cmj6su/image/upload/v1726658109/27_wkcz2w.webp");
 

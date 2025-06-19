@@ -24,7 +24,15 @@ export default function ItemsTrends() {
           pageTitle="BEST ITEMS BUILDS"
         /> */}
         <div className="h-[360px] md:h-[360px] 2xl:h-[420px]" />
-        <div className="backdrop-blur-md">
+        <div
+          style={{
+            backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0) 0%, rgba(0, 0, 0) 10%, transparent 100%), url(https://res.cloudinary.com/dg0cmj6su/image/upload/v1750163680/smoke_q32s0q_1_nbvwur.webp)`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            backgroundAttachment: "fixed",
+          }}
+        >
           <div className="container px-0 md:px-3">
             <div className="sticky top-14 z-50">
               <TrendsNav selected="bestItemsBuilds" />

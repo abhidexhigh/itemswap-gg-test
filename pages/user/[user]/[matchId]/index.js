@@ -20,7 +20,7 @@ export default function User() {
         <Header />
         {/* <PageHeader currentPage="Traits" pageTitle="Traits" /> */}
         <div className="h-[360px] md:h-[360px] 2xl:h-[420px]" />
-        <div className="backdrop-blur-md">
+        <div>
           <div className="container px-1 md:px-3">
             <Champions />
           </div>

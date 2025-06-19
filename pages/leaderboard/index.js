@@ -18,7 +18,7 @@ export default function IGORankingPage() {
         {metamaskModal && <MetamaskModal />}
         <Header />
         <div className="h-[360px] md:h-[360px] 2xl:h-[420px]" />
-        <div className="backdrop-blur-md">
+        <div>
           <div className="container px-0 md:px-3">
             <LeaderboardSection />
           </div>

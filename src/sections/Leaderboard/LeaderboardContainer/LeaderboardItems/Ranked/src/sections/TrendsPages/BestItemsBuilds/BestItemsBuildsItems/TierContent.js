@@ -44,7 +44,7 @@ const TierCard = ({ cost, itemsData }) => {
           {others?.tier} {cost}
         </p>
       </div>
-      <div className="w-full bg-[#0f172a] rounded-b-lg overflow-hidden">
+      <div className="w-full bg-[#111111] rounded-b-lg overflow-hidden">
         <table className="w-full">
           <tbody>
             {itemsData.map((champion, index) => (

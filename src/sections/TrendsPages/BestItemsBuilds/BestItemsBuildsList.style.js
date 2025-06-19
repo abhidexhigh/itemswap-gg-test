@@ -3,7 +3,7 @@ import styled from "styled-components";
 const ProjectsListStyleWrapper = styled.section`
   height: auto;
   // background: #090a1a;
-  backdrop-filter: blur(12px);
+  // backdrop-filter: blur(12px);
   position: relative;
 
   .previous_projects {
