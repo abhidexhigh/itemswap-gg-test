@@ -11,7 +11,7 @@ import {
 } from "react-icons/hi";
 import { PiEye } from "react-icons/pi";
 import metaDeckSkillTreeStats from "../../../../data/newData/metaDeckSkillTree.json";
-import Comps from "../../../../data/compsNew.json";
+import useCompsData from "../../../../hooks/useCompsData";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
@@ -23,22 +23,22 @@ import SkillTreeImage from "src/components/SkillTreeImage";
 const ProjectItems = () => {
   const { t } = useTranslation();
   const others = t("others");
-  const {
-    props: {
-      pageProps: {
-        dehydratedState: {
-          queries: { data },
-        },
-      },
-    },
-  } = Comps;
-  const { metaDecks } = data?.metaDeckList;
-  const { traits } = data?.refs;
-  const { champions } = data?.refs;
-  const { items } = data?.refs;
-  const { forces } = data?.refs;
-  const { skillTree } = data?.refs;
 
+  // Use the custom hook instead of direct JSON import
+  const {
+    metaDecks,
+    traits,
+    champions,
+    items,
+    forces,
+    skillTree,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useCompsData();
+
+  // All useState hooks must be called before any early returns
   const [metaDeckSkillTreeStatsData, setMetaDeckSkillTreeStatsData] = useState(
     metaDeckSkillTreeStats
   );
@@ -109,6 +109,37 @@ const ProjectItems = () => {
     return null;
   };
 
+  // Helper function to apply search filter
+  const applySearchFilter = useCallback(
+    (dataToFilter) => {
+      const searchLower = searchValue.toLowerCase().trim();
+      setMetaDeckSkillTreeStatsData(
+        dataToFilter.filter((item) => {
+          // If search value is empty, return all items
+          if (!searchLower) return true;
+
+          // Check if item name contains search text
+          if (item.name?.toLowerCase().includes(searchLower)) {
+            return true;
+          }
+
+          // Check in items array as fallback
+          const foundItem = items.find((i) => i.key === item.key);
+          if (
+            foundItem &&
+            foundItem.name?.toLowerCase().includes(searchLower)
+          ) {
+            return true;
+          }
+
+          return false;
+        })
+      );
+    },
+    [searchValue, items]
+  );
+
+  // All useEffect hooks must be called before early returns
   useEffect(() => {
     let sortedData = [...metaDeckSkillTreeStats];
     if (sortConfig !== null) {
@@ -146,6 +177,21 @@ const ProjectItems = () => {
     setMetaDeckSkillTreeStatsData(sortedData);
   }, [metaDeckSkillTreeStats, sortConfig]);
 
+  // Update search filter whenever search value changes
+  useEffect(() => {
+    // Get the current filtered data based on selected variant
+    const currentVariantFilter = selectedVariant;
+    const variantFiltered =
+      currentVariantFilter === "All"
+        ? metaDeckSkillTreeStats
+        : metaDeckSkillTreeStats.filter(
+            (item) => item.variant === currentVariantFilter
+          );
+
+    // Apply search filter on top of variant filter
+    applySearchFilter(variantFiltered);
+  }, [searchValue, selectedVariant, metaDeckSkillTreeStats, applySearchFilter]);
+
   const requestSort = (key) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
@@ -164,51 +210,6 @@ const ProjectItems = () => {
     // Apply search filter on top of variant filter
     applySearchFilter(variantFiltered);
   };
-
-  // Helper function to apply search filter
-  const applySearchFilter = useCallback(
-    (dataToFilter) => {
-      const searchLower = searchValue.toLowerCase().trim();
-      setMetaDeckSkillTreeStatsData(
-        dataToFilter.filter((item) => {
-          // If search value is empty, return all items
-          if (!searchLower) return true;
-
-          // Check if item name contains search text
-          if (item.name?.toLowerCase().includes(searchLower)) {
-            return true;
-          }
-
-          // Check in items array as fallback
-          const foundItem = items.find((i) => i.key === item.key);
-          if (
-            foundItem &&
-            foundItem.name?.toLowerCase().includes(searchLower)
-          ) {
-            return true;
-          }
-
-          return false;
-        })
-      );
-    },
-    [searchValue, items]
-  );
-
-  // Update search filter whenever search value changes
-  useEffect(() => {
-    // Get the current filtered data based on selected variant
-    const currentVariantFilter = selectedVariant;
-    const variantFiltered =
-      currentVariantFilter === "All"
-        ? metaDeckSkillTreeStats
-        : metaDeckSkillTreeStats.filter(
-            (item) => item.variant === currentVariantFilter
-          );
-
-    // Apply search filter on top of variant filter
-    applySearchFilter(variantFiltered);
-  }, [searchValue, selectedVariant, metaDeckSkillTreeStats, applySearchFilter]);
 
   // Override handleButtonClick from TrendFilters to track selected variant
   const handleVariantClick = (button) => {
@@ -353,6 +354,37 @@ const ProjectItems = () => {
       </div>
     );
   };
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="pt-2 bg-[#111111] md:bg-transparent w-full">
+        <div className="flex justify-center items-center py-20">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#D9A876]"></div>
+          <span className="ml-3 text-white">Loading game data...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (isError) {
+    return (
+      <div className="pt-2 bg-[#111111] md:bg-transparent w-full">
+        <div className="flex flex-col justify-center items-center py-20">
+          <div className="text-red-400 mb-4">
+            Failed to load game data: {error}
+          </div>
+          <button
+            onClick={() => refetch()}
+            className="px-4 py-2 bg-[#D9A876] text-black rounded hover:bg-[#F2A03D] transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

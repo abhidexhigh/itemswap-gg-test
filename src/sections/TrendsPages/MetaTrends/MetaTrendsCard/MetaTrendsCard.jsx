@@ -10,44 +10,6 @@ import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import MetaTrendsItem from "../MetaTrendsItem/MetaTrendsItem";
 import { OptimizedImage } from "src/utils/imageOptimizer";
-import CharacterCard from "src/components/card/CharacterCard";
-import DarkSuccubusCard from "src/components/card/DarkCharacterCard";
-import GlitchEffectCard from "src/components/card/GlitchEffectCard";
-import IceFrameCard from "src/components/card/IceFrameCard";
-import FireEdgeCard from "src/components/card/FireEdgeCard";
-import NeonGlowCard from "src/components/card/NeonGlowCard";
-import LightVariantCard from "src/components/card/LightVariantCard";
-import DarkVariantCard from "src/components/card/DarkVariantCard";
-import FireVariantCard from "src/components/card/FireVariantCard";
-import StormVariantCard from "src/components/card/StormVariantCard";
-import WaterVariantCard from "src/components/card/WaterVariantCard";
-import StormVariantCard2 from "src/components/card/StormVariantCard2";
-import LightVariantCard2 from "src/components/card/LightVariantCard2";
-import DarkVariantCard2 from "src/components/card/DarkVariantCard2";
-import WaterVariantCard2 from "src/components/card/WaterVariantCard2";
-import FireVariantCard2 from "src/components/card/FireVariantCard2";
-import NatureVariantCard2 from "src/components/card/NatureVariantCard2";
-import WaterVariantCenterFocus from "src/components/card/WaterVariantCenterFocus";
-import WaterVariantWhirlpool from "src/components/card/WaterVariantWhirlpool";
-import WaterVariantGlacier from "src/components/card/WaterVariantGlacier";
-import FireVariantVolcanic from "src/components/card/FireVariantVolcanic";
-import LightVariantPrism from "src/components/card/LightVariantPrism";
-import DarkVariantChaos from "src/components/card/DarkVariantChaos";
-import NatureVariantJungle from "src/components/card/NatureVariantJungle";
-import WaterVariantAbyssal from "src/components/card/WaterVariantAbyssal";
-import StormVariantTornado from "src/components/card/StormVariantTornado";
-import EarthVariantMountain from "src/components/card/EarthVariantMountain";
-import FireVariantFlame from "src/components/card/FireVariantFlame";
-import AirVariantBreeze from "src/components/card/AirVariantBreeze";
-import EarthVariantCrystal from "src/components/card/EarthVariantCrystal";
-import LightBeamCard from "src/components/card/LightBeamCard";
-import AmbientGlowCard from "src/components/card/AmbientGlowCard";
-import ShimmeryTrailCard from "src/components/card/ShimmeryTrailCard";
-import AuroraCard from "src/components/card/AuroraCard";
-import DustParticleCard from "src/components/card/DustParticleCard";
-import MistyFlowCard from "src/components/card/MistyFlowCard";
-import StarfieldCard from "src/components/card/StarfieldCard";
-import NewCard from "src/components/card/NewCard";
 
 // Memoize the getRandomCharacters function to avoid unnecessary recalculations
 const getRandomCharacters = (characters, count = 12) => {
@@ -67,94 +29,6 @@ const coinIcons = [
   "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550114/03_pfqvqc.png",
   "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550114/04_m1yxes.png",
   "https://res.cloudinary.com/dg0cmj6su/image/upload/v1742550114/05_zqb2ji.png",
-];
-
-// Video data for cards
-const cardVideos = [
-  {
-    cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868503/1933cac0-8062-4696-b41a-134bca40bf98-video_rmayyd.mp4",
-    cost: 3,
-    variant: "Dark",
-  },
-  {
-    cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868501/13b835f5-d24a-4402-a34d-b50601a7c631-video_knnfr4.mp4",
-    cost: 3,
-    variant: "Light",
-  },
-  {
-    cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868500/2d50e1d5-8615-4744-91a0-7945b1e34d09-video_o5nvkl.mp4",
-    cost: 3,
-    variant: "Light",
-  },
-  {
-    cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868499/22eafd38-1097-4ff4-8402-d9f3354a9788-video_1_mvu75e.mp4",
-    cost: 3,
-    variant: "Fire",
-  },
-  {
-    cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868498/439a71ec-c196-4808-aaeb-6ad03134b0ff-video_ejdrvh.mp4",
-    cost: 3,
-    variant: "Dark",
-  },
-  {
-    cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868496/4ea41363-2129-496c-a0c3-1ccb41bec28b-video_bmudfc.mp4",
-    cost: 3,
-    variant: "Dark",
-  },
-  {
-    cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868495/69699059-1e5c-4186-a60a-e12fb430c65f-video_inlinx.mp4",
-    cost: 3,
-    variant: "Water",
-  },
-  {
-    cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868495/71dbd655-8a70-48e0-8fd3-91ad4cc0c8e6-video_h3ufhj.mp4",
-    cost: 3,
-    variant: "Storm",
-  },
-  {
-    cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868495/92399a4e-cba1-44f4-88ec-8e30042c9cff-video_1_srinly.mp4",
-    cost: 3,
-    variant: "Fire",
-  },
-  {
-    cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868494/a3f2338b-7f00-4305-95fd-74e21472bb45-video_ivx5bs.mp4",
-    cost: 3,
-    variant: "Dark",
-  },
-  {
-    cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868493/baed9284-49df-4b12-8b41-84d2b04732d9-video_wdk76c.mp4",
-    cost: 3,
-    variant: "Storm",
-  },
-  {
-    cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868494/9c22f9ac-e4d8-46e2-8c5d-a9706bd4f88c-video_g39dxn.mp4",
-    cost: 3,
-    variant: "Storm",
-  },
-  {
-    cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868493/e2566afc-c3ea-44a6-994c-5f2f3c73f41d-video_nrnl6b.mp4",
-    cost: 3,
-    variant: "Fire",
-  },
-  {
-    cardImage:
-      "https://res.cloudinary.com/dg0cmj6su/video/upload/v1744868492/input_f3pien.mp4",
-    cost: 3,
-    variant: "Water",
-  },
 ];
 
 // Memoize the arrow animation variants

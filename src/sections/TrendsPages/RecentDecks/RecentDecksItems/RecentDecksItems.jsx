@@ -21,7 +21,7 @@ import { PiEye, PiEyeClosed } from "react-icons/pi";
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import CardImage from "src/components/cardImage";
-import Comps from "../../../../data/compsNew.json";
+import { useCompsData } from "../../../../hooks/useCompsData";
 import RecentDecksHistory from "../../../../data/newData/recentDecksHistory.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import { OptimizedImage } from "src/utils/imageOptimizer";
@@ -989,26 +989,23 @@ const RecentDecksItems = () => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const loadingRef = useRef(false);
 
-  // OPTIMIZATION 16: Extract and memoize data once with Maps
+  // OPTIMIZATION 16: Use custom hook to fetch data from API
+  const {
+    champions,
+    items,
+    traits,
+    augments,
+    forces,
+    skillTree,
+    isLoading,
+    error,
+    refetch,
+  } = useCompsData();
+
+  // OPTIMIZATION 17: Extract and memoize data once with Maps
   const gameData = useMemo(() => {
     try {
-      const {
-        props: {
-          pageProps: {
-            dehydratedState: {
-              queries: { data },
-            },
-          },
-        },
-      } = Comps;
-
       const metaDecks = RecentDecksHistory?.metaDecks || EMPTY_ARRAY;
-      const champions = data?.refs?.champions || EMPTY_ARRAY;
-      const items = data?.refs?.items || EMPTY_ARRAY;
-      const traits = data?.refs?.traits || EMPTY_ARRAY;
-      const augments = data?.refs?.augments || EMPTY_ARRAY;
-      const forces = data?.refs?.forces || EMPTY_ARRAY;
-      const skillTree = data?.refs?.skillTree || EMPTY_ARRAY;
 
       // Create Maps for O(1) lookups
       const championsMap = new Map(
@@ -1061,7 +1058,7 @@ const RecentDecksItems = () => {
         traitDetailsMap: new Map(),
       };
     }
-  }, []);
+  }, [champions, items, traits, augments, forces, skillTree]);
 
   const [compsData, setCompsData] = useState(() => gameData.metaDecks);
   const metaDecksRef = useRef(gameData.metaDecks);
@@ -1516,6 +1513,40 @@ const RecentDecksItems = () => {
   const visibleCompsData = useMemo(() => {
     return compsData.slice(0, visibleDecks);
   }, [compsData, visibleDecks]);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="mx-auto md:px-6 lg:px-8 py-6">
+        <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D9A876]"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="mx-auto md:px-6 lg:px-8 py-6">
+        <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
+          <div className="text-red-400 text-6xl">⚠️</div>
+          <div className="text-red-400 text-lg font-medium">
+            Failed to load data
+          </div>
+          <div className="text-gray-400 text-sm text-center max-w-md">
+            {error}. Please check your internet connection and try again.
+          </div>
+          <button
+            onClick={refetch}
+            className="px-4 py-2 bg-[#2D2F37] hover:bg-[#3D3F47] text-[#D9A876] rounded-lg text-sm transition-colors duration-200"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto md:px-6 lg:px-8 py-6">

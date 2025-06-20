@@ -17,7 +17,7 @@ import {
   HiChevronUp,
 } from "react-icons/hi";
 import metaDeckItemStats from "../../../../data/newData/metaDeckItems.json";
-import Comps from "../../../../data/compsNew.json";
+import useCompsData from "../../../../hooks/useCompsData";
 import Forces from "../../../../data/newData/force.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
@@ -203,20 +203,21 @@ const ProjectItems = () => {
   const others = t("others");
   const scrollContainerRef = useRef(null);
 
-  // Pre-process data once
-  const {
-    props: {
-      pageProps: {
-        dehydratedState: {
-          queries: { data },
-        },
-      },
-    },
-  } = Comps;
+  // Use the custom hook instead of direct JSON import
+  const { champions, items, forces, isLoading, isError, error, refetch } =
+    useCompsData();
 
-  const { champions, items, forces } = data?.refs || {};
+  // All useState hooks must be called before any early returns
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: "ascending",
+  });
+  const [searchValue, setSearchValue] = useState("");
+  const [mobileFilter, setMobileFilter] = useState("tops");
+  const [expandedRows, setExpandedRows] = useState(new Set());
+  const [tagFilter, setTagFilter] = useState("All");
 
-  // Memoize lookup maps and processed data
+  // Memoize lookup maps and processed data - MUST be before early returns
   const { itemLookup, championLookup, processedItemData } = useMemo(() => {
     const itemMap = new Map(items?.map((item) => [item.key, item]) || []);
     const championMap = new Map(
@@ -256,16 +257,7 @@ const ProjectItems = () => {
     };
   }, [items, champions]);
 
-  const [sortConfig, setSortConfig] = useState({
-    key: null,
-    direction: "ascending",
-  });
-  const [searchValue, setSearchValue] = useState("");
-  const [mobileFilter, setMobileFilter] = useState("tops");
-  const [expandedRows, setExpandedRows] = useState(new Set());
-  const [tagFilter, setTagFilter] = useState("All");
-
-  // Mobile filter options (excluding serial no, image, name, avg rank, synergy items, top champions)
+  // Mobile filter options - MUST be before early returns
   const mobileFilterOptions = useMemo(
     () => [
       { key: "tops", label: others?.top4 || "Top 4%" },
@@ -276,7 +268,7 @@ const ProjectItems = () => {
     [others]
   );
 
-  // Memoize filtered and sorted data
+  // Memoize filtered and sorted data - MUST be before early returns
   const filteredData = useMemo(() => {
     let data = [...processedItemData];
 
@@ -329,12 +321,12 @@ const ProjectItems = () => {
     return data;
   }, [processedItemData, tagFilter, searchValue, sortConfig]);
 
-  // Virtual scrolling setup with page scroll
+  // Virtual scrolling setup with page scroll - MUST be before early returns
   const itemHeight = 120; // Fixed item height
-
   const { visibleItems, totalHeight, offsetY, startIndex, containerRef } =
     usePageVirtualScroll(filteredData, itemHeight);
 
+  // Event handlers - memoized - MUST be before early returns
   const requestSort = useCallback((key) => {
     setSortConfig((prev) => {
       let direction = "ascending";
@@ -415,14 +407,14 @@ const ProjectItems = () => {
         },
       ];
 
-      const filteredData = hiddenData.filter(
+      const filteredDataHidden = hiddenData.filter(
         (data) => data.key !== mobileFilter
       );
 
       return (
         <div className="p-4 bg-[#1a1a1a] border-t border-[#2D2F37]">
           <div className="grid grid-cols-3 gap-3 mb-4">
-            {filteredData.map((data, index) => (
+            {filteredDataHidden.map((data, index) => (
               <div key={index} className="flex flex-col">
                 <span className="text-xs text-gray-400 mb-1">{data.label}</span>
                 <span className="text-sm text-white">{data.value}</span>
@@ -486,7 +478,7 @@ const ProjectItems = () => {
     setSearchValue(value);
   }, []);
 
-  // Add getCellClass function to highlight sorted column cells
+  // Add getCellClass function to highlight sorted column cells - MUST be before early returns
   const getCellClass = useCallback(
     (key) => {
       if (sortConfig.key === key) {
@@ -497,7 +489,7 @@ const ProjectItems = () => {
     [sortConfig.key]
   );
 
-  // Add renderSortIcon function for consistent icon rendering
+  // Add renderSortIcon function for consistent icon rendering - MUST be before early returns
   const renderSortIcon = useCallback(
     (key) => {
       if (sortConfig.key === key) {
@@ -512,7 +504,7 @@ const ProjectItems = () => {
     [sortConfig]
   );
 
-  // Memoize mobile table rows (no virtual scrolling for mobile due to complexity)
+  // Memoize mobile table rows - MUST be before early returns
   const mobileTableRows = useMemo(() => {
     return filteredData
       .map((item, index) => {
@@ -574,6 +566,37 @@ const ProjectItems = () => {
     renderMobileValue,
     renderExpandedContent,
   ]);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="pt-2 bg-[#111111] md:bg-transparent w-full">
+        <div className="flex justify-center items-center py-20">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#D9A876]"></div>
+          <span className="ml-3 text-white">Loading game data...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (isError) {
+    return (
+      <div className="pt-2 bg-[#111111] md:bg-transparent w-full">
+        <div className="flex flex-col justify-center items-center py-20">
+          <div className="text-red-400 mb-4">
+            Failed to load game data: {error}
+          </div>
+          <button
+            onClick={() => refetch()}
+            className="px-4 py-2 bg-[#D9A876] text-black rounded hover:bg-[#F2A03D] transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

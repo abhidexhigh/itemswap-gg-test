@@ -2,7 +2,7 @@ import { Fragment, useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import Comps from "../../../../data/compsNew.json";
+import useCompsData from "../../../../hooks/useCompsData";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
 import { OptimizedImage } from "src/utils/imageOptimizer";
@@ -200,15 +200,7 @@ const TierCard = ({ cost, itemsData }) => {
   const { t } = useTranslation();
   const others = t("others");
 
-  // Memoize data extraction from Comps
-  const { champions, items, forces } = useMemo(() => {
-    const data = Comps?.props?.pageProps?.dehydratedState?.queries?.data?.refs;
-    return {
-      champions: data?.champions || [],
-      items: data?.items || [],
-      forces: data?.forces || [],
-    };
-  }, []);
+  const { champions, items, forces } = useCompsData();
 
   const [openAccordions, setOpenAccordions] = useState(new Set());
 

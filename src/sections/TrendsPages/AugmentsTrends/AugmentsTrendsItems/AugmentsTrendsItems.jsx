@@ -13,7 +13,7 @@ import {
 } from "react-icons/hi";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import metaDeckAugments from "../../../../data/newData/metaDeckAugments.json";
-import augments from "../../../../data/newData/augments.json";
+import useCompsData from "../../../../hooks/useCompsData";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
 import ColoredValue from "src/components/ColoredValue";
@@ -23,6 +23,10 @@ const ProjectItems = () => {
   const others = t("others");
   const { augmentStats } = metaDeckAugments;
 
+  // Use the custom hook instead of direct JSON import
+  const { augments, isLoading, isError, error, refetch } = useCompsData();
+
+  // All useState hooks must be called before any early returns
   const [augmentsStatsData, setAugmentsStatsData] = useState(augmentStats);
   const [sortConfig, setSortConfig] = useState({
     key: null,
@@ -42,6 +46,73 @@ const ProjectItems = () => {
     { key: "pickRate", label: others?.pickPercentage || "Pick %" },
     { key: "plays", label: others?.played || "Played" },
   ];
+
+  // All useEffect hooks must be called before early returns
+  useEffect(() => {
+    let sortedData = [...augmentStats];
+    if (sortConfig !== null) {
+      sortedData.sort((a, b) => {
+        let aValue, bValue;
+
+        if (["tops", "wins"].includes(sortConfig.key)) {
+          // calculate the top percentage and win percentage based on the plays
+          aValue = (a[sortConfig.key] * 100) / a.plays;
+          bValue = (b[sortConfig.key] * 100) / b.plays;
+        } else {
+          aValue = a[sortConfig.key];
+          bValue = b[sortConfig.key];
+        }
+
+        if (aValue < bValue) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (aValue > bValue) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    setAugmentsStatsData(sortedData);
+  }, [augmentStats, sortConfig]);
+
+  useEffect(() => {
+    setAugmentsStatsData(
+      augmentStats.filter((augment) =>
+        augment.key.toLowerCase().includes(searchValue.toLowerCase())
+      )
+    );
+  }, [searchValue]);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="pt-2 bg-[#111111] md:bg-transparent w-full">
+        <div className="flex justify-center items-center py-20">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#D9A876]"></div>
+          <span className="ml-3 text-white">Loading game data...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (isError) {
+    return (
+      <div className="pt-2 bg-[#111111] md:bg-transparent w-full">
+        <div className="flex flex-col justify-center items-center py-20">
+          <div className="text-red-400 mb-4">
+            Failed to load game data: {error}
+          </div>
+          <button
+            onClick={() => refetch()}
+            className="px-4 py-2 bg-[#D9A876] text-black rounded hover:bg-[#F2A03D] transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const getCellClass = (key) => {
     if (sortConfig.key === key) {
@@ -158,33 +229,6 @@ const ProjectItems = () => {
     );
   };
 
-  useEffect(() => {
-    let sortedData = [...augmentStats];
-    if (sortConfig !== null) {
-      sortedData.sort((a, b) => {
-        let aValue, bValue;
-
-        if (["tops", "wins"].includes(sortConfig.key)) {
-          // calculate the top percentage and win percentage based on the plays
-          aValue = (a[sortConfig.key] * 100) / a.plays;
-          bValue = (b[sortConfig.key] * 100) / b.plays;
-        } else {
-          aValue = a[sortConfig.key];
-          bValue = b[sortConfig.key];
-        }
-
-        if (aValue < bValue) {
-          return sortConfig.direction === "ascending" ? -1 : 1;
-        }
-        if (aValue > bValue) {
-          return sortConfig.direction === "ascending" ? 1 : -1;
-        }
-        return 0;
-      });
-    }
-    setAugmentsStatsData(sortedData);
-  }, [augmentStats, sortConfig]);
-
   const requestSort = (key) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
@@ -192,14 +236,6 @@ const ProjectItems = () => {
     }
     setSortConfig({ key, direction });
   };
-
-  useEffect(() => {
-    setAugmentsStatsData(
-      augmentStats.filter((augment) =>
-        augment.key.toLowerCase().includes(searchValue.toLowerCase())
-      )
-    );
-  }, [searchValue]);
 
   const renderSortIcon = (key) => {
     if (sortConfig.key === key) {

@@ -18,7 +18,7 @@ import {
   HiChevronUp,
 } from "react-icons/hi";
 import metaDeckChampionsStats from "../../../../data/newData/metaDeckChampions.json";
-import Comps from "../../../../data/compsNew.json";
+import useCompsData from "../../../../hooks/useCompsData";
 import CardImage from "src/components/cardImage";
 import TrendFilters from "src/components/trendFilters";
 import ScrollableTable from "src/utils/ScrollableTable";
@@ -349,20 +349,25 @@ const ProjectItems = () => {
   const { t } = useTranslation();
   const others = t("others");
 
-  // Pre-process data once
-  const {
-    props: {
-      pageProps: {
-        dehydratedState: {
-          queries: { data },
-        },
-      },
-    },
-  } = Comps;
+  // Use the custom hook instead of direct JSON import
+  const { champions, items, forces, isLoading, isError, error, refetch } =
+    useCompsData();
 
-  const { champions, items, forces } = data?.refs || {};
+  // All useState hooks must be called before any early returns
+  // State management
+  const [searchValue, setSearchValue] = useState("");
+  const [sortConfig, setSortConfig] = useState({
+    key: null,
+    direction: "ascending",
+  });
+  const [mobileFilter, setMobileFilter] = useState("tops");
+  const [expandedRows, setExpandedRows] = useState(new Set());
+  const [costFilter, setCostFilter] = useState("All");
 
-  // Memoize lookup maps - these are expensive operations
+  // Debounce search - MUST be before early returns
+  const debouncedSearchValue = useDebounce(searchValue, 300);
+
+  // Memoize lookup maps - these are expensive operations - MUST be before early returns
   const { championLookup, mergedData, championRecommendedItems } =
     useMemo(() => {
       const lookup = new Map(
@@ -395,19 +400,7 @@ const ProjectItems = () => {
       };
     }, [champions, items]);
 
-  // State management
-  const [searchValue, setSearchValue] = useState("");
-  const debouncedSearchValue = useDebounce(searchValue, 300); // Debounce search
-
-  const [sortConfig, setSortConfig] = useState({
-    key: null,
-    direction: "ascending",
-  });
-  const [mobileFilter, setMobileFilter] = useState("tops");
-  const [expandedRows, setExpandedRows] = useState(new Set());
-  const [costFilter, setCostFilter] = useState("All");
-
-  // Mobile filter options - memoized
+  // Mobile filter options - memoized - MUST be before early returns
   const mobileFilterOptions = useMemo(
     () => [
       { key: "tops", label: others?.top4 || "Top 4%" },
@@ -423,7 +416,7 @@ const ProjectItems = () => {
     [others]
   );
 
-  // Optimized data processing with better memoization
+  // Optimized data processing with better memoization - MUST be before early returns
   const processedData = useMemo(() => {
     let data = mergedData;
 
@@ -466,7 +459,7 @@ const ProjectItems = () => {
     return data;
   }, [mergedData, costFilter, debouncedSearchValue, sortConfig]);
 
-  // Virtual scrolling setup
+  // Virtual scrolling setup - MUST be before early returns
   const itemHeight = 100;
   const mobileItemHeight = 80;
 
@@ -488,7 +481,7 @@ const ProjectItems = () => {
     containerRef: mobileContainerRef,
   } = useMobileVirtualScroll(processedData, mobileItemHeight, 600);
 
-  // Event handlers - memoized
+  // Event handlers - memoized - MUST be before early returns
   const requestSort = useCallback((key) => {
     setSortConfig((prev) => {
       let direction = "ascending";
@@ -649,6 +642,37 @@ const ProjectItems = () => {
     },
     [sortConfig]
   );
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="pt-2 bg-[#111111] md:bg-transparent">
+        <div className="flex justify-center items-center py-20">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#D9A876]"></div>
+          <span className="ml-3 text-white">Loading game data...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (isError) {
+    return (
+      <div className="pt-2 bg-[#111111] md:bg-transparent">
+        <div className="flex flex-col justify-center items-center py-20">
+          <div className="text-red-400 mb-4">
+            Failed to load game data: {error}
+          </div>
+          <button
+            onClick={() => refetch()}
+            className="px-4 py-2 bg-[#D9A876] text-black rounded hover:bg-[#F2A03D] transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="pt-2 bg-[#111111] md:bg-transparent">

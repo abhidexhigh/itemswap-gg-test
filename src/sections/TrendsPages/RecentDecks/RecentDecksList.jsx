@@ -8,9 +8,7 @@ const RecentDecks = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="min-h-[400px] bg-[#111111] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
+      <div className="min-h-[400px] bg-[#111111] flex items-center justify-center"></div>
     ),
   }
 );
@@ -20,9 +18,7 @@ const RecentDecksList = () => {
     <ProjectsListStyleWrapper>
       <Suspense
         fallback={
-          <div className="min-h-[400px] bg-[#111111] flex items-center justify-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
-          </div>
+          <div className="min-h-[400px] bg-[#111111] flex items-center justify-center"></div>
         }
       >
         <RecentDecks />

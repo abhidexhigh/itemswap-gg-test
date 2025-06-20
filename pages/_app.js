@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import ContextProvider from "src/utils/ContextProvider";
+import { QueryProvider } from "src/providers/QueryProvider";
 import GlobalStyles from "@assets/styles/GlobalStyles";
 import "@assets/styles/globalStyles.css";
 import NProgress from "nprogress";
@@ -56,12 +57,14 @@ const App = ({ Component, pageProps }) => {
   }
 
   return (
-    <ContextProvider>
-      <GlobalStyles pathname={router.pathname} />
-      <AnimatePresence mode="wait">
-        <Component {...pageProps} key={router.route} />
-      </AnimatePresence>
-    </ContextProvider>
+    <QueryProvider>
+      <ContextProvider>
+        <GlobalStyles pathname={router.pathname} />
+        <AnimatePresence mode="wait">
+          <Component {...pageProps} key={router.route} />
+        </AnimatePresence>
+      </ContextProvider>
+    </QueryProvider>
   );
 };
 

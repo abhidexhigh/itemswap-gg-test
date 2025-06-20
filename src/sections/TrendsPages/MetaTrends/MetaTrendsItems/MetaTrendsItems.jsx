@@ -12,7 +12,7 @@ import "react-tooltip/dist/react-tooltip.css";
 import MetaTrendsCard from "../MetaTrendsCard/MetaTrendsCard";
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import Comps from "../../../../data/compsNew.json";
+import { useCompsData } from "../../../../hooks/useCompsData";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
 import { OptimizedImage } from "src/utils/imageOptimizer";
@@ -1139,44 +1139,19 @@ const MetaTrendsItems = () => {
   const [activeTraitsSubTab, setActiveTraitsSubTab] = useState("Origin");
   const [activeSkillsSubTab, setActiveSkillsSubTab] = useState(null);
 
-  // OPTIMIZATION 17: Memoize data extraction to prevent recalculation
-  const gameData = useMemo(() => {
-    try {
-      const {
-        props: {
-          pageProps: {
-            dehydratedState: {
-              queries: { data },
-            },
-          },
-        },
-      } = Comps;
-
-      return {
-        metaDecks: data?.metaDeckList?.metaDecks || [],
-        champions: data?.refs?.champions || [],
-        items: data?.refs?.items || [],
-        traits: data?.refs?.traits || [],
-        augments: data?.refs?.augments || [],
-        forces: data?.refs?.forces || [],
-        skillTree: data?.refs?.skillTree || [],
-      };
-    } catch (error) {
-      console.error("Error extracting data:", error);
-      return {
-        metaDecks: [],
-        champions: [],
-        items: [],
-        traits: [],
-        augments: [],
-        forces: [],
-        skillTree: [],
-      };
-    }
-  }, []);
-
-  const { metaDecks, champions, items, traits, augments, forces, skillTree } =
-    gameData;
+  // OPTIMIZATION 17: Use custom hook to fetch data from API
+  const {
+    metaDecks,
+    champions,
+    items,
+    traits,
+    augments,
+    forces,
+    skillTree,
+    isLoading,
+    error,
+    refetch,
+  } = useCompsData();
 
   const [compsData, setCompsData] = useState(() => metaDecks);
 
@@ -1799,6 +1774,40 @@ const MetaTrendsItems = () => {
     const result = compsData.slice(0, visibleDecks);
     return result;
   }, [compsData, visibleDecks]);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="mx-auto md:px-0 lg:px-0 py-6">
+        <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D9A876]"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="mx-auto md:px-0 lg:px-0 py-6">
+        <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
+          <div className="text-red-400 text-6xl">⚠️</div>
+          <div className="text-red-400 text-lg font-medium">
+            Failed to load data
+          </div>
+          <div className="text-gray-400 text-sm text-center max-w-md">
+            {error}. Please check your internet connection and try again.
+          </div>
+          <button
+            onClick={refetch}
+            className="px-4 py-2 bg-[#2D2F37] hover:bg-[#3D3F47] text-[#D9A876] rounded-lg text-sm transition-colors duration-200"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto md:px-0 lg:px-0 py-6">
