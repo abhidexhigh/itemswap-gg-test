@@ -12,8 +12,8 @@ import {
   HiChevronUp,
 } from "react-icons/hi";
 import ReactTltp from "src/components/tooltip/ReactTltp";
-import metaDeckAugments from "../../../../data/newData/metaDeckAugments.json";
 import useCompsData from "../../../../hooks/useCompsData";
+import { useMetaDeckAugments } from "../../../../hooks/useMetaDeckData";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
 import ColoredValue from "src/components/ColoredValue";
@@ -21,10 +21,21 @@ import ColoredValue from "src/components/ColoredValue";
 const ProjectItems = () => {
   const { t } = useTranslation();
   const others = t("others");
-  const { augmentStats } = metaDeckAugments;
 
   // Use the custom hook instead of direct JSON import
   const { augments, isLoading, isError, error, refetch } = useCompsData();
+
+  // Use meta deck augments hook for augments stats data
+  const {
+    data: metaDeckAugmentsData,
+    isLoading: isAugmentsLoading,
+    isError: isAugmentsError,
+    error: augmentsError,
+    refetch: refetchAugments,
+  } = useMetaDeckAugments();
+
+  // Extract augmentStats from the API data
+  const augmentStats = metaDeckAugmentsData?.augmentStats || [];
 
   // All useState hooks must be called before any early returns
   const [augmentsStatsData, setAugmentsStatsData] = useState(augmentStats);
@@ -49,7 +60,7 @@ const ProjectItems = () => {
 
   // All useEffect hooks must be called before early returns
   useEffect(() => {
-    let sortedData = [...augmentStats];
+    let sortedData = [...(augmentStats || [])];
     if (sortConfig !== null) {
       sortedData.sort((a, b) => {
         let aValue, bValue;
@@ -77,14 +88,14 @@ const ProjectItems = () => {
 
   useEffect(() => {
     setAugmentsStatsData(
-      augmentStats.filter((augment) =>
+      (augmentStats || []).filter((augment) =>
         augment.key.toLowerCase().includes(searchValue.toLowerCase())
       )
     );
-  }, [searchValue]);
+  }, [searchValue, augmentStats]);
 
-  // Show loading state
-  if (isLoading) {
+  // Show loading state for either comps data or augments data
+  if (isLoading || isAugmentsLoading) {
     return (
       <div className="pt-2 bg-[#111111] md:bg-transparent w-full">
         <div className="flex justify-center items-center py-20">
@@ -95,16 +106,19 @@ const ProjectItems = () => {
     );
   }
 
-  // Show error state
-  if (isError) {
+  // Show error state for either comps data or augments data
+  if (isError || isAugmentsError) {
+    const errorMessage = error || augmentsError;
+    const retryFunction = isError ? refetch : refetchAugments;
+
     return (
       <div className="pt-2 bg-[#111111] md:bg-transparent w-full">
         <div className="flex flex-col justify-center items-center py-20">
           <div className="text-red-400 mb-4">
-            Failed to load game data: {error}
+            Failed to load game data: {errorMessage}
           </div>
           <button
-            onClick={() => refetch()}
+            onClick={() => retryFunction()}
             className="px-4 py-2 bg-[#D9A876] text-black rounded hover:bg-[#F2A03D] transition-colors"
           >
             Try Again
@@ -123,10 +137,10 @@ const ProjectItems = () => {
 
   const handleButtonClick = (button) => {
     if (button === "All") {
-      setAugmentsStatsData(augmentStats);
+      setAugmentsStatsData(augmentStats || []);
     } else {
       setAugmentsStatsData(
-        augmentStats.filter(
+        (augmentStats || []).filter(
           (augment) => augment.tier.toLowerCase() === button.toLowerCase()
         )
       );

@@ -12,8 +12,8 @@ import {
   HiChevronDown,
   HiChevronUp,
 } from "react-icons/hi";
-import metaDeckTraitStats from "../../../../data/newData/metaDeckTraits.json";
 import useCompsData from "../../../../hooks/useCompsData";
+import { useMetaDeckTraits } from "../../../../hooks/useMetaDeckData";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
@@ -29,9 +29,19 @@ const ProjectItems = () => {
   const { champions, traits, forces, isLoading, isError, error, refetch } =
     useCompsData();
 
+  // Use meta deck traits hook for traits stats data
+  const {
+    data: metaDeckTraitStats,
+    isLoading: isTraitsLoading,
+    isError: isTraitsError,
+    error: traitsError,
+    refetch: refetchTraits,
+  } = useMetaDeckTraits();
+
   // All useState hooks must be called before any early returns
-  const [metaDeckTraitStatsData, setMetaDeckTraitStatsData] =
-    useState(metaDeckTraitStats);
+  const [metaDeckTraitStatsData, setMetaDeckTraitStatsData] = useState(
+    metaDeckTraitStats || []
+  );
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "ascending",
@@ -50,7 +60,7 @@ const ProjectItems = () => {
 
   // All useEffect hooks must also be called before early returns
   useEffect(() => {
-    let sortedData = [...metaDeckTraitStats];
+    let sortedData = [...(metaDeckTraitStats || [])];
     if (sortConfig !== null) {
       sortedData.sort((a, b) => {
         let aValue, bValue;
@@ -88,17 +98,17 @@ const ProjectItems = () => {
   useEffect(() => {
     if (searchValue) {
       setMetaDeckTraitStatsData(
-        metaDeckTraitStats.filter((trait) =>
+        (metaDeckTraitStats || []).filter((trait) =>
           trait.key.toLowerCase().includes(searchValue.toLowerCase())
         )
       );
     } else {
-      setMetaDeckTraitStatsData(metaDeckTraitStats);
+      setMetaDeckTraitStatsData(metaDeckTraitStats || []);
     }
-  }, [searchValue]);
+  }, [searchValue, metaDeckTraitStats]);
 
-  // Show loading state
-  if (isLoading) {
+  // Show loading state for either comps data or traits data
+  if (isLoading || isTraitsLoading) {
     return (
       <div className="pt-2 bg-[#111111] md:bg-transparent w-full">
         <div className="flex justify-center items-center py-20">
@@ -109,16 +119,19 @@ const ProjectItems = () => {
     );
   }
 
-  // Show error state
-  if (isError) {
+  // Show error state for either comps data or traits data
+  if (isError || isTraitsError) {
+    const errorMessage = error || traitsError;
+    const retryFunction = isError ? refetch : refetchTraits;
+
     return (
       <div className="pt-2 bg-[#111111] md:bg-transparent w-full">
         <div className="flex flex-col justify-center items-center py-20">
           <div className="text-red-400 mb-4">
-            Failed to load game data: {error}
+            Failed to load game data: {errorMessage}
           </div>
           <button
-            onClick={() => refetch()}
+            onClick={() => retryFunction()}
             className="px-4 py-2 bg-[#D9A876] text-black rounded hover:bg-[#F2A03D] transition-colors"
           >
             Try Again
@@ -138,10 +151,10 @@ const ProjectItems = () => {
 
   const handleButtonClick = (button) => {
     if (button === "All") {
-      setMetaDeckTraitStatsData(metaDeckTraitStats);
+      setMetaDeckTraitStatsData(metaDeckTraitStats || []);
     } else {
       setMetaDeckTraitStatsData(
-        metaDeckTraitStats.filter(
+        (metaDeckTraitStats || []).filter(
           (trait) => trait.tier.toLowerCase() === button.toLowerCase()
         )
       );

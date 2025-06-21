@@ -10,8 +10,8 @@ import {
   HiChevronUp,
 } from "react-icons/hi";
 import { PiEye } from "react-icons/pi";
-import metaDeckSkillTreeStats from "../../../../data/newData/metaDeckSkillTree.json";
 import useCompsData from "../../../../hooks/useCompsData";
+import { useMetaDeckSkillTree } from "../../../../hooks/useMetaDeckData";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
@@ -38,9 +38,18 @@ const ProjectItems = () => {
     refetch,
   } = useCompsData();
 
+  // Use meta deck skill tree hook for skill tree stats data
+  const {
+    data: metaDeckSkillTreeStats,
+    isLoading: isSkillTreeLoading,
+    isError: isSkillTreeError,
+    error: skillTreeError,
+    refetch: refetchSkillTree,
+  } = useMetaDeckSkillTree();
+
   // All useState hooks must be called before any early returns
   const [metaDeckSkillTreeStatsData, setMetaDeckSkillTreeStatsData] = useState(
-    metaDeckSkillTreeStats
+    metaDeckSkillTreeStats || []
   );
   const [sortConfig, setSortConfig] = useState({
     key: null,
@@ -70,7 +79,7 @@ const ProjectItems = () => {
   // Get unique variants from the skill tree data and prepare buttons and image URLs
   const uniqueVariants = [
     "All",
-    ...new Set(metaDeckSkillTreeStats.map((item) => item.variant)),
+    ...new Set((metaDeckSkillTreeStats || []).map((item) => item.variant)),
   ];
   const variantImages = {
     All: "/images/all_button.webp",
@@ -141,7 +150,7 @@ const ProjectItems = () => {
 
   // All useEffect hooks must be called before early returns
   useEffect(() => {
-    let sortedData = [...metaDeckSkillTreeStats];
+    let sortedData = [...(metaDeckSkillTreeStats || [])];
     if (sortConfig !== null) {
       sortedData.sort((a, b) => {
         let aValue, bValue;
@@ -183,8 +192,8 @@ const ProjectItems = () => {
     const currentVariantFilter = selectedVariant;
     const variantFiltered =
       currentVariantFilter === "All"
-        ? metaDeckSkillTreeStats
-        : metaDeckSkillTreeStats.filter(
+        ? metaDeckSkillTreeStats || []
+        : (metaDeckSkillTreeStats || []).filter(
             (item) => item.variant === currentVariantFilter
           );
 
@@ -204,8 +213,10 @@ const ProjectItems = () => {
     // Apply both variant and search filters together
     const variantFiltered =
       button === "All"
-        ? metaDeckSkillTreeStats
-        : metaDeckSkillTreeStats.filter((item) => item.variant === button);
+        ? metaDeckSkillTreeStats || []
+        : (metaDeckSkillTreeStats || []).filter(
+            (item) => item.variant === button
+          );
 
     // Apply search filter on top of variant filter
     applySearchFilter(variantFiltered);
@@ -355,8 +366,8 @@ const ProjectItems = () => {
     );
   };
 
-  // Show loading state
-  if (isLoading) {
+  // Show loading state for either comps data or skill tree data
+  if (isLoading || isSkillTreeLoading) {
     return (
       <div className="pt-2 bg-[#111111] md:bg-transparent w-full">
         <div className="flex justify-center items-center py-20">
@@ -367,16 +378,19 @@ const ProjectItems = () => {
     );
   }
 
-  // Show error state
-  if (isError) {
+  // Show error state for either comps data or skill tree data
+  if (isError || isSkillTreeError) {
+    const errorMessage = error || skillTreeError;
+    const retryFunction = isError ? refetch : refetchSkillTree;
+
     return (
       <div className="pt-2 bg-[#111111] md:bg-transparent w-full">
         <div className="flex flex-col justify-center items-center py-20">
           <div className="text-red-400 mb-4">
-            Failed to load game data: {error}
+            Failed to load game data: {errorMessage}
           </div>
           <button
-            onClick={() => refetch()}
+            onClick={() => retryFunction()}
             className="px-4 py-2 bg-[#D9A876] text-black rounded hover:bg-[#F2A03D] transition-colors"
           >
             Try Again

@@ -16,8 +16,8 @@ import {
   HiChevronDown,
   HiChevronUp,
 } from "react-icons/hi";
-import metaDeckItemStats from "../../../../data/newData/metaDeckItems.json";
 import useCompsData from "../../../../hooks/useCompsData";
+import { useMetaDeckItems } from "../../../../hooks/useMetaDeckData";
 import Forces from "../../../../data/newData/force.json";
 import ReactTltp from "src/components/tooltip/ReactTltp";
 import CardImage from "src/components/cardImage";
@@ -207,6 +207,15 @@ const ProjectItems = () => {
   const { champions, items, forces, isLoading, isError, error, refetch } =
     useCompsData();
 
+  // Use meta deck items hook for items stats data
+  const {
+    data: metaDeckItemStats,
+    isLoading: isItemsLoading,
+    isError: isItemsError,
+    error: itemsError,
+    refetch: refetchItems,
+  } = useMetaDeckItems();
+
   // All useState hooks must be called before any early returns
   const [sortConfig, setSortConfig] = useState({
     key: null,
@@ -225,7 +234,7 @@ const ProjectItems = () => {
     );
 
     // Pre-process items with their data
-    const processedItems = metaDeckItemStats.map((itemStat) => {
+    const processedItems = (metaDeckItemStats || []).map((itemStat) => {
       const itemData = itemMap.get(itemStat.key);
       return {
         ...itemStat,
@@ -255,7 +264,7 @@ const ProjectItems = () => {
       championLookup: championMap,
       processedItemData: processedItems,
     };
-  }, [items, champions]);
+  }, [items, champions, metaDeckItemStats]);
 
   // Mobile filter options - MUST be before early returns
   const mobileFilterOptions = useMemo(
@@ -567,8 +576,8 @@ const ProjectItems = () => {
     renderExpandedContent,
   ]);
 
-  // Show loading state
-  if (isLoading) {
+  // Show loading state for either comps data or items data
+  if (isLoading || isItemsLoading) {
     return (
       <div className="pt-2 bg-[#111111] md:bg-transparent w-full">
         <div className="flex justify-center items-center py-20">
@@ -579,16 +588,19 @@ const ProjectItems = () => {
     );
   }
 
-  // Show error state
-  if (isError) {
+  // Show error state for either comps data or items data
+  if (isError || isItemsError) {
+    const errorMessage = error || itemsError;
+    const retryFunction = isError ? refetch : refetchItems;
+
     return (
       <div className="pt-2 bg-[#111111] md:bg-transparent w-full">
         <div className="flex flex-col justify-center items-center py-20">
           <div className="text-red-400 mb-4">
-            Failed to load game data: {error}
+            Failed to load game data: {errorMessage}
           </div>
           <button
-            onClick={() => refetch()}
+            onClick={() => retryFunction()}
             className="px-4 py-2 bg-[#D9A876] text-black rounded hover:bg-[#F2A03D] transition-colors"
           >
             Try Again
