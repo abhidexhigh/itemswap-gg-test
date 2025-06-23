@@ -263,9 +263,9 @@ const ProjectItems = () => {
     switch (key) {
       case "tops":
       case "wins":
-        return `${((item[key] * 100) / item.plays).toFixed(2)}%`;
+        return `${(item[key] / item.plays).toFixed(2)}%`;
       case "threeStarPercentage":
-        return `${(item[key] * 100).toFixed(2)}%`;
+        return `${item[key].toFixed(2)}%`;
       case "plays":
         return item[key].toLocaleString("en-US");
       default:
@@ -277,17 +277,17 @@ const ProjectItems = () => {
     const hiddenData = [
       {
         label: others?.top4 || "Top 4%",
-        value: `${((item.tops * 100) / item.plays).toFixed(2)}%`,
+        value: `${(item.tops / item.plays).toFixed(2)}%`,
         key: "tops",
       },
       {
         label: others?.winPercentage || "Win %",
-        value: `${((item.wins * 100) / item.plays).toFixed(2)}%`,
+        value: `${(item.wins / item.plays).toFixed(2)}%`,
         key: "wins",
       },
       {
         label: others?.threeStarsPercentage || "3⭐ %",
-        value: `${(item.threeStarPercentage * 100).toFixed(2)}%`,
+        value: `${item.threeStarPercentage.toFixed(2)}%`,
         key: "threeStarPercentage",
       },
       {
@@ -612,21 +612,21 @@ const ProjectItems = () => {
                     className={`p-2 flex items-center ${getCellClass("tops")}`}
                   >
                     <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-                      {((item?.tops * 100) / item?.plays).toFixed(2)}%
+                      {(item?.tops / item?.plays).toFixed(2)}%
                     </p>
                   </div>
                   <div
                     className={`p-2 flex items-center ${getCellClass("wins")}`}
                   >
                     <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-                      {((item?.wins * 100) / item?.plays).toFixed(2)}%
+                      {(item?.wins / item?.plays).toFixed(2)}%
                     </p>
                   </div>
                   <div
                     className={`p-2 flex items-center ${getCellClass("threeStarPercentage")}`}
                   >
                     <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-                      {(item?.threeStarPercentage * 100).toFixed(2)}%
+                      {item?.threeStarPercentage.toFixed(2)}%
                     </p>
                   </div>
                   <div

@@ -145,22 +145,22 @@ const DesktopGridRow = memo(
     getCellClass,
   }) => {
     const topsPercentage = useMemo(
-      () => ((champion?.tops * 100) / champion?.plays).toFixed(2),
+      () => (champion?.tops / champion?.plays).toFixed(2),
       [champion?.tops, champion?.plays]
     );
 
     const winsPercentage = useMemo(
-      () => ((champion?.wins * 100) / champion?.plays).toFixed(2),
+      () => (champion?.wins / champion?.plays).toFixed(2),
       [champion?.wins, champion?.plays]
     );
 
     const pickRatePercentage = useMemo(
-      () => (champion?.pickRate * 100).toFixed(2),
+      () => (champion?.pickRate).toFixed(2),
       [champion?.pickRate]
     );
 
     const threeStarPercentage = useMemo(
-      () => (champion?.threeStarPercentage * 100).toFixed(2),
+      () => (champion?.threeStarPercentage).toFixed(2),
       [champion?.threeStarPercentage]
     );
 
@@ -534,10 +534,10 @@ const ProjectItems = () => {
     switch (key) {
       case "tops":
       case "wins":
-        return `${((item[key] * 100) / item.plays).toFixed(2)}%`;
+        return `${(item[key] / item.plays).toFixed(2)}%`;
       case "pickRate":
       case "threeStarPercentage":
-        return `${(item[key] * 100).toFixed(2)}%`;
+        return `${item[key].toFixed(2)}%`;
       case "plays":
         return item[key].toLocaleString("en-US");
       case "threeStarRank":
@@ -552,17 +552,17 @@ const ProjectItems = () => {
       const hiddenData = [
         {
           label: others?.top4 || "Top 4%",
-          value: `${((item.tops * 100) / item.plays).toFixed(2)}%`,
+          value: `${(item.tops / item.plays).toFixed(2)}%`,
           key: "tops",
         },
         {
           label: others?.winPercentage || "Win %",
-          value: `${((item.wins * 100) / item.plays).toFixed(2)}%`,
+          value: `${(item.wins / item.plays).toFixed(2)}%`,
           key: "wins",
         },
         {
           label: others?.pickPercentage || "Pick %",
-          value: `${(item.pickRate * 100).toFixed(2)}%`,
+          value: `${item.pickRate.toFixed(2)}%`,
           key: "pickRate",
         },
         {
@@ -572,7 +572,7 @@ const ProjectItems = () => {
         },
         {
           label: others?.threeStarsPercentage || "3⭐ %",
-          value: `${(item.threeStarPercentage * 100).toFixed(2)}%`,
+          value: `${item.threeStarPercentage.toFixed(2)}%`,
           key: "threeStarPercentage",
         },
         {

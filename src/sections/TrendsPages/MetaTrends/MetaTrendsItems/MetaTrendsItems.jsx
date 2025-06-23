@@ -31,61 +31,86 @@ const shuffle = (array) => {
   return newArray;
 };
 
-// Simplified intersection observer for lazy loading
+// Optimized intersection observer for lazy loading
 const useLazyLoading = () => {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => setIsVisible(entry.isIntersecting),
-      { threshold: 0.1, rootMargin: "50px" }
+      ([entry]) => {
+        if (entry.isIntersecting && !isVisible) {
+          setIsVisible(true);
+          // Once visible, stop observing to prevent unnecessary updates
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.05, rootMargin: "100px" }
     );
 
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
-  }, []);
+  }, [isVisible]);
 
   return [ref, isVisible];
 };
 
-// Simplified scroll handler
+// Optimized scroll handler with proper throttling
 const useInfiniteScroll = (callback, hasMore) => {
-  useEffect(() => {
-    if (!hasMore) return;
+  const callbackRef = useRef(callback);
+  const hasMoreRef = useRef(hasMore);
 
+  // Update refs to avoid recreating the effect
+  useEffect(() => {
+    callbackRef.current = callback;
+    hasMoreRef.current = hasMore;
+  });
+
+  useEffect(() => {
+    if (!hasMoreRef.current) return;
+
+    let timeoutId = null;
     const handleScroll = () => {
-      const { scrollTop, scrollHeight, clientHeight } =
-        document.documentElement;
-      if (scrollTop + clientHeight >= scrollHeight - 1000) {
-        callback();
-      }
+      if (timeoutId) return;
+
+      timeoutId = setTimeout(() => {
+        const { scrollTop, scrollHeight, clientHeight } =
+          document.documentElement;
+        if (
+          scrollTop + clientHeight >= scrollHeight - 800 &&
+          hasMoreRef.current
+        ) {
+          callbackRef.current();
+        }
+        timeoutId = null;
+      }, 100);
     };
 
-    const throttledHandler = (() => {
-      let ticking = false;
-      return () => {
-        if (!ticking) {
-          requestAnimationFrame(() => {
-            handleScroll();
-            ticking = false;
-          });
-          ticking = true;
-        }
-      };
-    })();
-
-    window.addEventListener("scroll", throttledHandler, { passive: true });
-    return () => window.removeEventListener("scroll", throttledHandler);
-  }, [callback, hasMore]);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, []); // Empty dependency array since we use refs
 };
 
-// Lazy wrapper component
+// Optimized lazy wrapper component
 const LazyWrapper = memo(({ children, height = "120px" }) => {
   const [ref, isVisible] = useLazyLoading();
+
   return (
     <div ref={ref} style={{ minHeight: height }}>
-      {isVisible ? children : <div style={{ height }} />}
+      {isVisible ? (
+        children
+      ) : (
+        <div
+          style={{
+            height,
+            backgroundColor: "transparent",
+            contain: "layout style paint",
+          }}
+        />
+      )}
     </div>
   );
 });
@@ -104,79 +129,102 @@ const TabButton = memo(({ active, label, onClick }) => (
 ));
 
 // Optimized item components
-const TraitItem = memo(({ trait, selectedItem, onSelect, i }) => {
-  const handleClick = useCallback(
-    () => onSelect("trait", trait?.key),
-    [onSelect, trait?.key]
-  );
-  const isSelected = trait?.key === selectedItem;
-  const tooltipId = `${trait?.key}-${i}`;
+const TraitItem = memo(
+  ({ trait, selectedItem, onSelect, i }) => {
+    const handleClick = useCallback(
+      () => onSelect("trait", trait?.key),
+      [onSelect, trait?.key]
+    );
+    const isSelected = trait?.key === selectedItem;
+    const tooltipId = useMemo(() => `${trait?.key}-${i}`, [trait?.key, i]);
 
-  return (
-    <div
-      className="flex flex-col items-center gap-2 cursor-pointer group"
-      onClick={handleClick}
-    >
-      <ReactTltp variant="trait" content={trait} id={tooltipId} />
-      <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
-        <TraitImage
-          trait={trait}
-          size="xlarge"
-          className="w-full h-full rounded-lg"
-          data-tooltip-id={tooltipId}
-          loading="lazy"
-        />
-        {isSelected && (
-          <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center z-20">
-            <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
-          </div>
-        )}
+    return (
+      <div
+        className="flex flex-col items-center gap-2 cursor-pointer group"
+        onClick={handleClick}
+        style={{ contain: "layout style paint" }}
+      >
+        <ReactTltp variant="trait" content={trait} id={tooltipId} />
+        <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
+          <TraitImage
+            trait={trait}
+            size="xlarge"
+            className="w-full h-full rounded-lg"
+            data-tooltip-id={tooltipId}
+            loading="lazy"
+          />
+          {isSelected && (
+            <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center z-20">
+              <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
+            </div>
+          )}
+        </div>
+        <span className="hidden lg:block text-sm md:text-base text-[#D9A876] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
+          {trait?.name}
+        </span>
       </div>
-      <span className="hidden lg:block text-sm md:text-base text-[#D9A876] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
-        {trait?.name}
-      </span>
-    </div>
-  );
-});
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.trait?.key === nextProps.trait?.key &&
+      prevProps.selectedItem === nextProps.selectedItem &&
+      prevProps.i === nextProps.i
+    );
+  }
+);
 
-const ForceItem = memo(({ force, selectedItem, onSelect, i }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const handleClick = useCallback(
-    () => onSelect("force", force?.key),
-    [onSelect, force?.key]
-  );
-  const isSelected = force?.key === selectedItem;
-  const tooltipId = `${force?.key}-${i}`;
+const ForceItem = memo(
+  ({ force, selectedItem, onSelect, i }) => {
+    const [isHovered, setIsHovered] = useState(false);
+    const handleClick = useCallback(
+      () => onSelect("force", force?.key),
+      [onSelect, force?.key]
+    );
+    const isSelected = force?.key === selectedItem;
+    const tooltipId = useMemo(() => `${force?.key}-${i}`, [force?.key, i]);
 
-  return (
-    <div
-      className="flex flex-col items-center gap-2 cursor-pointer group"
-      onClick={handleClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <ReactTltp variant="force" content={force} id={tooltipId} />
-      <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
-        <ForceIcon
-          force={force}
-          size="xxlarge"
-          isHovered={isHovered}
-          className="w-full h-full object-cover rounded-lg"
-          data-tooltip-id={tooltipId}
-          loading="lazy"
-        />
-        {isSelected && (
-          <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
-            <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
-          </div>
-        )}
+    const handleMouseEnter = useCallback(() => setIsHovered(true), []);
+    const handleMouseLeave = useCallback(() => setIsHovered(false), []);
+
+    return (
+      <div
+        className="flex flex-col items-center gap-2 cursor-pointer group"
+        onClick={handleClick}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        style={{ contain: "layout style paint" }}
+      >
+        <ReactTltp variant="force" content={force} id={tooltipId} />
+        <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
+          <ForceIcon
+            force={force}
+            size="xxlarge"
+            isHovered={isHovered}
+            className="w-full h-full object-cover rounded-lg"
+            data-tooltip-id={tooltipId}
+            loading="lazy"
+          />
+          {isSelected && (
+            <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+              <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
+            </div>
+          )}
+        </div>
+        <span className="hidden lg:block text-sm md:text-base text-[#cccccc] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
+          {force?.name}
+        </span>
       </div>
-      <span className="hidden lg:block text-sm md:text-base text-[#cccccc] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
-        {force?.name}
-      </span>
-    </div>
-  );
-});
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.force?.key === nextProps.force?.key &&
+      prevProps.selectedItem === nextProps.selectedItem &&
+      prevProps.i === nextProps.i
+    );
+  }
+);
 
 const SkillTreeItem = memo(
   ({ skill, selectedSkillTree, onSelect, i, mobile = false }) => {
@@ -185,16 +233,27 @@ const SkillTreeItem = memo(
       [onSelect, skill?.key]
     );
     const isSelected = skill?.key === selectedSkillTree;
-    const tooltipId = `skill-${skill?.key}-${i}`;
+    const tooltipId = useMemo(
+      () => `skill-${skill?.key}-${i}`,
+      [skill?.key, i]
+    );
 
-    const containerClass = mobile
-      ? "flex flex-col items-center gap-1 cursor-pointer group w-12 sm:w-14 flex-shrink-0"
-      : "flex flex-col items-center gap-1 cursor-pointer group w-16 md:w-20 lg:w-24 flex-shrink-0";
+    const containerClass = useMemo(
+      () =>
+        mobile
+          ? "flex flex-col items-center gap-1 cursor-pointer group w-12 sm:w-14 flex-shrink-0"
+          : "flex flex-col items-center gap-1 cursor-pointer group w-16 md:w-20 lg:w-24 flex-shrink-0",
+      [mobile]
+    );
     const textClass = mobile ? "text-[10px]" : "text-xs";
     const iconClass = mobile ? "text-2xl" : "text-3xl";
 
     return (
-      <div className={containerClass} onClick={handleClick}>
+      <div
+        className={containerClass}
+        onClick={handleClick}
+        style={{ contain: "layout style paint" }}
+      >
         <ReactTltp variant="skillTree" content={skill} id={tooltipId} />
         <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-105">
           <SkillTreeImage
@@ -220,43 +279,61 @@ const SkillTreeItem = memo(
         </span>
       </div>
     );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.skill?.key === nextProps.skill?.key &&
+      prevProps.selectedSkillTree === nextProps.selectedSkillTree &&
+      prevProps.mobile === nextProps.mobile &&
+      prevProps.i === nextProps.i
+    );
   }
 );
 
-const ItemIcon = memo(({ item, selectedItem, onSelect, i }) => {
-  const handleClick = useCallback(
-    () => onSelect("item", item?.key),
-    [onSelect, item?.key]
-  );
-  const isSelected = item?.key === selectedItem;
-  const tooltipId = `${item?.key}-${i}`;
+const ItemIcon = memo(
+  ({ item, selectedItem, onSelect, i }) => {
+    const handleClick = useCallback(
+      () => onSelect("item", item?.key),
+      [onSelect, item?.key]
+    );
+    const isSelected = item?.key === selectedItem;
+    const tooltipId = useMemo(() => `${item?.key}-${i}`, [item?.key, i]);
 
-  return (
-    <div
-      className="flex flex-col items-center gap-2 cursor-pointer group max-w-[84px]"
-      onClick={handleClick}
-    >
-      <ReactTltp variant="item" content={item} id={tooltipId} />
-      <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-110">
-        <OptimizedImage
-          alt={item?.name}
-          width={84}
-          height={84}
-          src={item?.imageUrl}
-          className="w-full h-full object-contain rounded-lg !border !border-[#ffffff20]"
-          data-tooltip-id={tooltipId}
-          loading="lazy"
-          sizes="(max-width: 768px) 50vw, 84px"
-        />
-        {isSelected && (
-          <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
-            <IoMdCheckmarkCircle className="text-[#86efac] text-5xl z-50" />
-          </div>
-        )}
+    return (
+      <div
+        className="flex flex-col items-center gap-2 cursor-pointer group max-w-[84px]"
+        onClick={handleClick}
+        style={{ contain: "layout style paint" }}
+      >
+        <ReactTltp variant="item" content={item} id={tooltipId} />
+        <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-110">
+          <OptimizedImage
+            alt={item?.name}
+            width={84}
+            height={84}
+            src={item?.imageUrl}
+            className="w-full h-full object-contain rounded-lg !border !border-[#ffffff20]"
+            data-tooltip-id={tooltipId}
+            loading="lazy"
+            sizes="(max-width: 768px) 50vw, 84px"
+          />
+          {isSelected && (
+            <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+              <IoMdCheckmarkCircle className="text-[#86efac] text-5xl z-50" />
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.item?.key === nextProps.item?.key &&
+      prevProps.selectedItem === nextProps.selectedItem &&
+      prevProps.i === nextProps.i
+    );
+  }
+);
 
 // Simplified champion component
 const ChampionWithItems = memo(
@@ -329,14 +406,30 @@ const ChampionWithItems = memo(
   }
 );
 
-// Simplified deck header
+// Optimized deck header with better memoization
 const DeckHeader = memo(
   ({ metaDeck, forceMap, traitMap, skillMap, augmentMap }) => {
     const [hoveredForce, setHoveredForce] = useState(null);
 
+    const handleForceMouseEnter = useCallback((forceKey) => {
+      setHoveredForce(forceKey);
+    }, []);
+
+    const handleForceMouseLeave = useCallback(() => {
+      setHoveredForce(null);
+    }, []);
+
     const headerData = useMemo(() => {
+      if (!metaDeck?.deck)
+        return {
+          forceDetails: [],
+          skillDetails: [],
+          traitDetails: [],
+          augmentDetails: [],
+        };
+
       const forceDetails =
-        metaDeck?.deck?.forces
+        metaDeck.deck.forces
           ?.map((force) => ({
             ...force,
             details: forceMap.get(force?.key.toLowerCase()),
@@ -344,12 +437,12 @@ const DeckHeader = memo(
           .filter((force) => force.details) || [];
 
       const skillDetails =
-        metaDeck?.deck?.skillTree
+        metaDeck.deck.skillTree
           ?.map((skill) => skillMap.get(skill))
           .filter(Boolean) || [];
 
       const traitDetails =
-        metaDeck?.deck?.traits
+        metaDeck.deck.traits
           ?.map((trait) => {
             const traitDetails = traitMap.get(trait?.key);
             if (!traitDetails) return null;
@@ -363,12 +456,12 @@ const DeckHeader = memo(
           .filter(Boolean) || [];
 
       const augmentDetails =
-        metaDeck?.deck?.augments
+        metaDeck.deck.augments
           ?.map((augment) => augmentMap.get(augment))
           .filter(Boolean) || [];
 
       return { forceDetails, skillDetails, traitDetails, augmentDetails };
-    }, [metaDeck, forceMap, traitMap, skillMap, augmentMap]);
+    }, [metaDeck?.deck, forceMap, traitMap, skillMap, augmentMap]);
 
     const { forceDetails, skillDetails, traitDetails, augmentDetails } =
       headerData;
@@ -491,8 +584,8 @@ const DeckHeader = memo(
               <div
                 key={`${force.key}-${index}`}
                 className="flex justify-center items-center bg-[#000] rounded-full mx-1 pr-2 border-[1px] border-[#ffffff30] h-[90%]"
-                onMouseEnter={() => setHoveredForce(force?.key)}
-                onMouseLeave={() => setHoveredForce(null)}
+                onMouseEnter={() => handleForceMouseEnter(force?.key)}
+                onMouseLeave={handleForceMouseLeave}
               >
                 <ForceIcon
                   force={force.details}
@@ -555,10 +648,18 @@ const DeckHeader = memo(
         </div>
       </header>
     );
+  },
+  (prevProps, nextProps) => {
+    // Only re-render if metaDeck name or deck composition changes
+    return (
+      prevProps.metaDeck?.name === nextProps.metaDeck?.name &&
+      JSON.stringify(prevProps.metaDeck?.deck) ===
+        JSON.stringify(nextProps.metaDeck?.deck)
+    );
   }
 );
 
-// Simplified deck component
+// Optimized deck component with better performance
 const MetaDeck = memo(
   ({ metaDeck, i, isClosed, handleIsClosed, lookupMaps, others }) => {
     const [isChampionsCollapsed, setIsChampionsCollapsed] = useState(true);
@@ -599,6 +700,9 @@ const MetaDeck = memo(
 
     const { sortedChampions, championsToDisplay } = deckData;
 
+    // Pre-compute deck closed state for better performance
+    const isDeckClosed = isClosed[i];
+
     return (
       <LazyWrapper height="200px">
         <div className="flex flex-col gap-[1px] bg-gradient-to-r from-[#5f5525] to-[#6D4600] p-[1px] rounded-lg overflow-hidden shadow-lg mb-4 md:!mb-10">
@@ -614,7 +718,7 @@ const MetaDeck = memo(
               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#ffffff30] to-[#ffffff30]"></div>
               <div className="flex-1 h-px bg-gradient-to-l from-transparent via-[#ffffff30] to-[#ffffff30]"></div>
             </div>
-            {!isClosed[i] && (
+            {!isDeckClosed && (
               <div className="flex flex-col bg-center bg-no-repeat mt-[-1px]">
                 <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#111111] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6 rounded-b-lg">
                   <div className="-mb-[8px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-[87%] lg:flex-shrink-0">
@@ -715,6 +819,13 @@ const MetaDeck = memo(
         </div>
       </LazyWrapper>
     );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.metaDeck?.name === nextProps.metaDeck?.name &&
+      prevProps.i === nextProps.i &&
+      prevProps.isClosed[prevProps.i] === nextProps.isClosed[nextProps.i]
+    );
   }
 );
 
@@ -769,33 +880,37 @@ const MetaTrendsItems = () => {
     setCompsData(metaDecks || []);
   }, [metaDecks]);
 
-  // Simplified data processing
+  // Optimized data processing with better performance
   const { filteredChampions, groupedArray } = useMemo(() => {
     if (!champions?.length) return { filteredChampions: [], groupedArray: [] };
 
-    const championsByType = {};
-    champions.forEach((champion) => {
-      if (!champion.type) return;
-      if (!championsByType[champion.type]) championsByType[champion.type] = [];
-      championsByType[champion.type].push(champion);
-    });
+    const championsByType = new Map();
+    for (const champion of champions) {
+      if (!champion.type) continue;
+      if (!championsByType.has(champion.type)) {
+        championsByType.set(champion.type, []);
+      }
+      championsByType.get(champion.type).push(champion);
+    }
 
     const filtered = [];
-    Object.values(championsByType).forEach((group) => {
+    for (const group of championsByType.values()) {
       const selected = shuffle([...group]).slice(0, 2);
       filtered.push(...selected);
-    });
+    }
 
-    const groupedByCost = {};
-    filtered.forEach((champion) => {
+    const groupedByCost = new Map();
+    for (const champion of filtered) {
       const { cost } = champion;
-      if (!groupedByCost[cost]) groupedByCost[cost] = [];
-      groupedByCost[cost].push({ ...champion, selected: false });
-    });
+      if (!groupedByCost.has(cost)) {
+        groupedByCost.set(cost, []);
+      }
+      groupedByCost.get(cost).push({ ...champion, selected: false });
+    }
 
     return {
       filteredChampions: filtered,
-      groupedArray: Object.entries(groupedByCost)
+      groupedArray: Array.from(groupedByCost.entries())
         .sort(([costA], [costB]) => costA - costB)
         .map(([, champions]) => champions),
     };
@@ -922,7 +1037,7 @@ const MetaTrendsItems = () => {
     [metaDecks]
   );
 
-  // Simplified filter handler
+  // Optimized filter handler with batched state updates
   const handleFilterChange = useCallback(
     (type, key) => {
       const isCurrentSelection =
@@ -931,26 +1046,25 @@ const MetaTrendsItems = () => {
         (type === "item" && selectedItem === key) ||
         (type === "skillTree" && selectedSkillTree === key);
 
+      // Use React's automatic batching for better performance
       if (isCurrentSelection) {
-        // Reset selection
+        // Reset all selections and data
         setCompsData(metaDecks || []);
         setSelectedChampion(null);
         setSelectedTrait(null);
         setSelectedItem(null);
         setSelectedSkillTree(null);
+        setVisibleDecks(10);
       } else {
-        // Apply filter
+        // Apply filter and update selections
         const filteredDecks = filterAndSortDecks(type, key);
         setCompsData(filteredDecks);
-
-        // Set appropriate selection
         setSelectedChampion(type === "champion" ? key : null);
         setSelectedTrait(type === "trait" || type === "force" ? key : null);
         setSelectedItem(type === "item" ? key : null);
         setSelectedSkillTree(type === "skillTree" ? key : null);
+        setVisibleDecks(10);
       }
-
-      setVisibleDecks(10); // Reset visible decks on filter change
     },
     [
       selectedChampion,
@@ -962,21 +1076,22 @@ const MetaTrendsItems = () => {
     ]
   );
 
-  // Event handlers
+  // Optimized event handlers
   const handleIsClosed = useCallback((event) => {
     const buttonId = event.currentTarget.id;
     setIsClosed((prev) => ({ ...prev, [buttonId]: !prev[buttonId] }));
   }, []);
 
-  // Simplified infinite scroll
+  // Optimized infinite scroll with immediate UI update
   const loadMoreDecks = useCallback(() => {
     if (isLoadingMore || visibleDecks >= compsData.length) return;
 
     setIsLoadingMore(true);
-    setTimeout(() => {
-      setVisibleDecks((prev) => Math.min(prev + 5, compsData.length));
-      setIsLoadingMore(false);
-    }, 100);
+    // Use immediate update for better UX, with small delay to prevent overwhelming
+    requestAnimationFrame(() => {
+      setVisibleDecks((prev) => Math.min(prev + 8, compsData.length));
+      setTimeout(() => setIsLoadingMore(false), 50);
+    });
   }, [compsData.length, visibleDecks, isLoadingMore]);
 
   const hasMoreDecks = visibleDecks < compsData.length;
@@ -1275,7 +1390,10 @@ const MetaTrendsItems = () => {
   }
 
   return (
-    <div className="mx-auto md:px-0 lg:px-0 py-6">
+    <div
+      className="mx-auto md:px-0 lg:px-0 py-6"
+      style={{ contain: "layout style" }}
+    >
       <div className="space-y-6">
         <div>
           <div className="flex justify-center md:justify-start">
@@ -1286,7 +1404,11 @@ const MetaTrendsItems = () => {
           <div className="rounded-lg shadow-lg">{tabContent}</div>
         </div>
 
-        <div className="space-y-4" id="meta-trends-items">
+        <div
+          className="space-y-4"
+          id="meta-trends-items"
+          style={{ contain: "layout" }}
+        >
           {visibleCompsData.length > 0 ? (
             <div className="space-y-4">
               {visibleCompsData.map((metaDeck, index) => (

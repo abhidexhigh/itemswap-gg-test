@@ -235,9 +235,9 @@ const ProjectItems = () => {
     switch (key) {
       case "tops":
       case "wins":
-        return `${((item[key] * 100) / item.plays).toFixed(2)}%`;
+        return `${(item[key] / item.plays).toFixed(2)}%`;
       case "pickRate":
-        return `${(item[key] * 100).toFixed(2)}%`;
+        return `${item[key].toFixed(2)}%`;
       case "plays":
         return item[key].toLocaleString("en-US");
       default:
@@ -249,17 +249,17 @@ const ProjectItems = () => {
     const hiddenData = [
       {
         label: others?.top4 || "Top 4%",
-        value: `${((item.tops * 100) / item.plays).toFixed(2)}%`,
+        value: `${(item.tops / item.plays).toFixed(2)}%`,
         key: "tops",
       },
       {
         label: others?.winPercentage || "Win %",
-        value: `${((item.wins * 100) / item.plays).toFixed(2)}%`,
+        value: `${(item.wins / item.plays).toFixed(2)}%`,
         key: "wins",
       },
       {
         label: others?.pickPercentage || "Pick %",
-        value: `${(item.pickRate * 100).toFixed(2)}%`,
+        value: `${item.pickRate.toFixed(2)}%`,
         key: "pickRate",
       },
       {
@@ -514,27 +514,21 @@ const ProjectItems = () => {
                       className={`p-2 flex items-center ${getCellClass("tops")}`}
                     >
                       <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-                        {((metaTrait?.tops * 100) / metaTrait?.plays).toFixed(
-                          2
-                        )}
-                        %
+                        {(metaTrait?.tops / metaTrait?.plays).toFixed(2)}%
                       </p>
                     </div>
                     <div
                       className={`p-2 flex items-center ${getCellClass("wins")}`}
                     >
                       <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-                        {((metaTrait?.wins * 100) / metaTrait?.plays).toFixed(
-                          2
-                        )}
-                        %
+                        {(metaTrait?.wins / metaTrait?.plays).toFixed(2)}%
                       </p>
                     </div>
                     <div
                       className={`p-2 flex items-center ${getCellClass("pickRate")}`}
                     >
                       <p className="p-0 text-left text-base md:text-lg mb-0 text-[#fff]">
-                        {(metaTrait?.pickRate * 100).toFixed(2)}%
+                        {Number(metaTrait?.pickRate).toFixed(2)}%
                       </p>
                     </div>
                     <div
