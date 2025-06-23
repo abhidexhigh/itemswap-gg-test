@@ -976,10 +976,18 @@ const RecentDecksItems = () => {
         let newCompsData;
         const newFilters = { ...filters };
 
+        // First filter decks that match the criteria, then sort them
         switch (type) {
           case "trait":
             newFilters.selectedTrait = key;
-            newCompsData = [...metaDecks].sort((a, b) => {
+            // Filter decks that have the trait with numUnits > 0
+            const filteredTraitDecks = metaDecks.filter((deck) =>
+              deck.deck?.traits?.some(
+                (trait) => trait.key === key && trait.numUnits > 0
+              )
+            );
+            // Sort filtered decks by trait count
+            newCompsData = filteredTraitDecks.sort((a, b) => {
               const aCount =
                 a.deck?.traits?.find((trait) => trait.key === key)?.numUnits ||
                 0;
@@ -991,7 +999,16 @@ const RecentDecksItems = () => {
             break;
           case "force":
             newFilters.selectedTrait = key;
-            newCompsData = [...metaDecks].sort((a, b) => {
+            // Filter decks that have the force with numUnits > 0
+            const filteredForceDecks = metaDecks.filter((deck) =>
+              deck.deck?.forces?.some(
+                (force) =>
+                  force.key.toLowerCase() === key.toLowerCase() &&
+                  force.numUnits > 0
+              )
+            );
+            // Sort filtered decks by force count
+            newCompsData = filteredForceDecks.sort((a, b) => {
               const aCount =
                 a.deck?.forces?.find(
                   (force) => force.key.toLowerCase() === key.toLowerCase()
@@ -1005,21 +1022,33 @@ const RecentDecksItems = () => {
             break;
           case "champion":
             newFilters.selectedChampion = key;
-            newCompsData = [...metaDecks].sort((a, b) => {
-              const aHas =
-                a.deck?.champions?.some((champion) => champion.key === key) ||
-                false;
-              const bHas =
-                b.deck?.champions?.some((champion) => champion.key === key) ||
-                false;
-              if (aHas && !bHas) return -1;
-              if (!aHas && bHas) return 1;
-              return 0;
+            // Filter decks that have the champion
+            const filteredChampionDecks = metaDecks.filter((deck) =>
+              deck.deck?.champions?.some((champion) => champion.key === key)
+            );
+            // Sort filtered decks by champion tier if available
+            newCompsData = filteredChampionDecks.sort((a, b) => {
+              const aChampion = a.deck?.champions?.find(
+                (champion) => champion.key === key
+              );
+              const bChampion = b.deck?.champions?.find(
+                (champion) => champion.key === key
+              );
+              const aTier = aChampion?.tier || 0;
+              const bTier = bChampion?.tier || 0;
+              return bTier - aTier; // Higher tier champions first
             });
             break;
           case "item":
             newFilters.selectedItem = key;
-            newCompsData = [...metaDecks].sort((a, b) => {
+            // Filter decks that have champions with the item
+            const filteredItemDecks = metaDecks.filter((deck) =>
+              deck.deck?.champions?.some((champion) =>
+                champion.items?.some((item) => item === key)
+              )
+            );
+            // Sort filtered decks by item count
+            newCompsData = filteredItemDecks.sort((a, b) => {
               const aCount =
                 a.deck?.champions?.reduce((count, champion) => {
                   return (
@@ -1046,15 +1075,12 @@ const RecentDecksItems = () => {
               "Sample deck skillTree:",
               metaDecks[0]?.deck?.skillTree
             );
-            newCompsData = [...metaDecks].sort((a, b) => {
-              const aHas = a.deck?.skillTree?.includes(key) || false;
-              const bHas = b.deck?.skillTree?.includes(key) || false;
-              console.log(`Deck ${a.name || "A"}: has skill ${key}? ${aHas}`);
-              console.log(`Deck ${b.name || "B"}: has skill ${key}? ${bHas}`);
-              if (aHas && !bHas) return -1;
-              if (!aHas && bHas) return 1;
-              return 0;
-            });
+            // Filter decks that have the skill
+            const filteredSkillDecks = metaDecks.filter((deck) =>
+              deck.deck?.skillTree?.includes(key)
+            );
+            // For skillTree, maintain original order since filtered decks all contain the skill
+            newCompsData = filteredSkillDecks;
             break;
           default:
             return;
