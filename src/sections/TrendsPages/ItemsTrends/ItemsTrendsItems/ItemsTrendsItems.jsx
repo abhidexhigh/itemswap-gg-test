@@ -657,7 +657,7 @@ const ProjectItems = () => {
               </div>
             </div>
           </div>
-          <div className="w-full sm:w-auto px-4 sm:px-0">
+          <div className="w-full sm:w-auto px-4 sm:px-0 ml-auto">
             <SearchBar
               searchValue={searchValue}
               setSearchValue={handleSearchChange}

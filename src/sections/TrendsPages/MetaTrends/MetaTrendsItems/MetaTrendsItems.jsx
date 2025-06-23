@@ -55,43 +55,36 @@ const useLazyLoading = () => {
   return [ref, isVisible];
 };
 
-// Optimized scroll handler with proper throttling
+// Fixed scroll handler with proper throttling
 const useInfiniteScroll = (callback, hasMore) => {
-  const callbackRef = useRef(callback);
-  const hasMoreRef = useRef(hasMore);
-
-  // Update refs to avoid recreating the effect
   useEffect(() => {
-    callbackRef.current = callback;
-    hasMoreRef.current = hasMore;
-  });
-
-  useEffect(() => {
-    if (!hasMoreRef.current) return;
+    if (!hasMore) return;
 
     let timeoutId = null;
-    const handleScroll = () => {
-      if (timeoutId) return;
+    let isThrottled = false;
 
+    const handleScroll = () => {
+      if (isThrottled) return;
+
+      isThrottled = true;
       timeoutId = setTimeout(() => {
         const { scrollTop, scrollHeight, clientHeight } =
           document.documentElement;
-        if (
-          scrollTop + clientHeight >= scrollHeight - 800 &&
-          hasMoreRef.current
-        ) {
-          callbackRef.current();
+        if (scrollTop + clientHeight >= scrollHeight - 1000 && hasMore) {
+          callback();
         }
-        timeoutId = null;
-      }, 100);
+        isThrottled = false;
+      }, 150);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      if (timeoutId) clearTimeout(timeoutId);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
     };
-  }, []); // Empty dependency array since we use refs
+  }, [callback, hasMore]);
 };
 
 // Optimized lazy wrapper component
@@ -1082,16 +1075,16 @@ const MetaTrendsItems = () => {
     setIsClosed((prev) => ({ ...prev, [buttonId]: !prev[buttonId] }));
   }, []);
 
-  // Optimized infinite scroll with immediate UI update
+  // Fixed infinite scroll load function
   const loadMoreDecks = useCallback(() => {
     if (isLoadingMore || visibleDecks >= compsData.length) return;
 
     setIsLoadingMore(true);
-    // Use immediate update for better UX, with small delay to prevent overwhelming
-    requestAnimationFrame(() => {
+    // Use immediate update for better UX
+    setTimeout(() => {
       setVisibleDecks((prev) => Math.min(prev + 8, compsData.length));
-      setTimeout(() => setIsLoadingMore(false), 50);
-    });
+      setIsLoadingMore(false);
+    }, 100);
   }, [compsData.length, visibleDecks, isLoadingMore]);
 
   const hasMoreDecks = visibleDecks < compsData.length;
