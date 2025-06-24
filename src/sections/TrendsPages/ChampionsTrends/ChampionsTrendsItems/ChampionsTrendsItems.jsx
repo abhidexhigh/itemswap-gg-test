@@ -44,42 +44,6 @@ const useDebounce = (value, delay) => {
   return debouncedValue;
 };
 
-// Optimized virtual scrolling for mobile
-const useMobileVirtualScroll = (items, itemHeight, containerHeight) => {
-  const [scrollTop, setScrollTop] = useState(0);
-  const containerRef = useRef(null);
-
-  const handleScroll = useCallback(() => {
-    if (containerRef.current) {
-      setScrollTop(containerRef.current.scrollTop);
-    }
-  }, []);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const throttledScroll = throttle(handleScroll, 16); // ~60fps
-    container.addEventListener("scroll", throttledScroll, { passive: true });
-
-    return () => {
-      container.removeEventListener("scroll", throttledScroll);
-    };
-  }, [handleScroll]);
-
-  const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - 2);
-  const visibleCount = Math.ceil(containerHeight / itemHeight) + 4;
-  const endIndex = Math.min(startIndex + visibleCount, items.length);
-
-  return {
-    visibleItems: items.slice(startIndex, endIndex),
-    totalHeight: items.length * itemHeight,
-    offsetY: startIndex * itemHeight,
-    startIndex,
-    containerRef,
-  };
-};
-
 // Throttle utility
 const throttle = (func, limit) => {
   let inThrottle;
@@ -481,14 +445,10 @@ const ProjectItems = () => {
     containerRef: desktopContainerRef,
   } = useDesktopVirtualScroll(processedData, itemHeight);
 
-  // Mobile virtual scrolling
-  const {
-    visibleItems: mobileVisibleItems,
-    totalHeight: mobileTotalHeight,
-    offsetY: mobileOffsetY,
-    startIndex: mobileStartIndex,
-    containerRef: mobileContainerRef,
-  } = useMobileVirtualScroll(processedData, mobileItemHeight, 600);
+  // For mobile, show all items without virtual scrolling for better UX
+  const mobileContainerRef = useRef(null);
+  const mobileVisibleItems = processedData; // Show all items on mobile
+  const mobileStartIndex = 0;
 
   // Event handlers - memoized - MUST be before early returns
   const requestSort = useCallback((key) => {
@@ -976,42 +936,28 @@ const ProjectItems = () => {
               </div>
             </div>
 
-            {/* Mobile Virtual Scrolling Container */}
-            <div
-              ref={mobileContainerRef}
-              className="overflow-auto"
-              style={{ height: "600px" }} // Fixed height for mobile virtual scrolling
-            >
-              <div
-                style={{
-                  height: `${mobileTotalHeight}px`,
-                  position: "relative",
-                }}
-              >
-                <div style={{ transform: `translateY(${mobileOffsetY}px)` }}>
-                  {mobileVisibleItems.map((champion, visibleIndex) => {
-                    const actualIndex = mobileStartIndex + visibleIndex;
-                    const championData = championLookup.get(champion.key);
-                    if (!championData?.key) return null;
+            {/* Mobile Items Container - showing all items */}
+            <div ref={mobileContainerRef} className="bg-[#111111]">
+              {mobileVisibleItems.map((champion, index) => {
+                const championData = championLookup.get(champion.key);
+                if (!championData?.key) return null;
 
-                    return (
-                      <MobileRow
-                        key={champion.key}
-                        champion={champion}
-                        index={actualIndex}
-                        championData={championData}
-                        forces={forces}
-                        mobileFilter={mobileFilter}
-                        sortConfig={sortConfig}
-                        expandedRows={expandedRows}
-                        onToggle={toggleRowExpansion}
-                        renderMobileValue={renderMobileValue}
-                        renderExpandedContent={renderExpandedContent}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
+                return (
+                  <MobileRow
+                    key={champion.key}
+                    champion={champion}
+                    index={index}
+                    championData={championData}
+                    forces={forces}
+                    mobileFilter={mobileFilter}
+                    sortConfig={sortConfig}
+                    expandedRows={expandedRows}
+                    onToggle={toggleRowExpansion}
+                    renderMobileValue={renderMobileValue}
+                    renderExpandedContent={renderExpandedContent}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>

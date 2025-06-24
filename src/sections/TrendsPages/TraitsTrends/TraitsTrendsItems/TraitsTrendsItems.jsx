@@ -259,7 +259,7 @@ const ProjectItems = () => {
       },
       {
         label: others?.pickPercentage || "Pick %",
-        value: `${item.pickRate.toFixed(2)}%`,
+        value: `${Number(item.pickRate).toFixed(2)}%`,
         key: "pickRate",
       },
       {
