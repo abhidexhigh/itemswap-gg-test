@@ -4,15 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && next export",
     "start": "next start",
-    "export": "next build && next export -o out",
-    "lint": "next lint --fix",
-    "lint:check": "next lint",
-    "type-check": "tsc --noEmit",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "analyze": "ANALYZE=true npm run build",
-    "clean": "rm -rf .next out node_modules/.cache"
+    "export": "npm run build && next export -o out",
+    "lint": "next lint"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.80.10",
