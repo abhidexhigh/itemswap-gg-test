@@ -95,35 +95,35 @@ const ProjectItems = React.memo(() => {
             {/* TABS END */}
             <div className="flex flex-col md:grid grid-cols-5 gap-3 mt-3">
               <div
-                className={`bg-[#111111] md:block !rounded-lg !border !border-[#ffffff50] shadow-lg transition-all duration-300 hover:border-[#ffffff70] ${
+                className={`bg-[#111111] md:block !rounded-lg !border !border-[#ffffff50] shadow-lg transition-all duration-300 hover:border-[#ffffff70] h-fit ${
                   activeTab === "Tier 1" ? "block" : "hidden"
                 }`}
               >
                 <TierContent cost="1" itemsData={filteredDataByTier[1] || []} />
               </div>
               <div
-                className={`bg-[#111111] md:block !rounded-lg !border !border-[#ffffff50] shadow-lg transition-all duration-300 hover:border-[#ffffff70] ${
+                className={`bg-[#111111] md:block !rounded-lg !border !border-[#ffffff50] shadow-lg transition-all duration-300 hover:border-[#ffffff70] h-fit ${
                   activeTab === "Tier 2" ? "block" : "hidden"
                 }`}
               >
                 <TierContent cost="2" itemsData={filteredDataByTier[2] || []} />
               </div>
               <div
-                className={`bg-[#111111] md:block !rounded-lg !border !border-[#ffffff50] shadow-lg transition-all duration-300 hover:border-[#ffffff70] ${
+                className={`bg-[#111111] md:block !rounded-lg !border !border-[#ffffff50] shadow-lg transition-all duration-300 hover:border-[#ffffff70] h-fit ${
                   activeTab === "Tier 3" ? "block" : "hidden"
                 }`}
               >
                 <TierContent cost="3" itemsData={filteredDataByTier[3] || []} />
               </div>
               <div
-                className={`bg-[#111111] md:block !rounded-lg !border !border-[#ffffff50] shadow-lg transition-all duration-300 hover:border-[#ffffff70] ${
+                className={`bg-[#111111] md:block !rounded-lg !border !border-[#ffffff50] shadow-lg transition-all duration-300 hover:border-[#ffffff70] h-fit ${
                   activeTab === "Tier 4" ? "block" : "hidden"
                 }`}
               >
                 <TierContent cost="4" itemsData={filteredDataByTier[4] || []} />
               </div>
               <div
-                className={`bg-[#111111] md:block !rounded-lg !border !border-[#ffffff50] shadow-lg transition-all duration-300 hover:border-[#ffffff70] ${
+                className={`bg-[#111111] md:block !rounded-lg !border !border-[#ffffff50] shadow-lg transition-all duration-300 hover:border-[#ffffff70] h-fit ${
                   activeTab === "Tier 5" ? "block" : "hidden"
                 }`}
               >
