@@ -22,6 +22,5 @@ module.exports = {
       },
     },
   },
-  // plugins: [require("flowbite/plugin")],
-  plugins: [require("daisyui"), "prettier-plugin-tailwindcss"],
+  plugins: [require("daisyui")],
 };
