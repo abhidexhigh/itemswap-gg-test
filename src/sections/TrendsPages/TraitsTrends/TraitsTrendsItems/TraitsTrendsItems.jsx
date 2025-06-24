@@ -237,7 +237,7 @@ const ProjectItems = () => {
       case "wins":
         return `${(item[key] / item.plays).toFixed(2)}%`;
       case "pickRate":
-        return `${item[key].toFixed(2)}%`;
+        return `${Number(item[key]).toFixed(2)}%`;
       case "plays":
         return item[key].toLocaleString("en-US");
       default:
