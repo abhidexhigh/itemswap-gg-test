@@ -56,7 +56,7 @@ const CardImage = ({
   // Get frame image based on cost
   const frameImage = useMemo(() => {
     const frameData = costWiseFrameData.costWiseFrame.find(
-      (frame) => frame.cost === src.cost
+      (frame) => frame?.cost === src?.cost
     );
     return frameData?.imageUrl || costWiseFrameData.costWiseFrame[0].imageUrl; // fallback to cost 1 frame
   }, [src]);

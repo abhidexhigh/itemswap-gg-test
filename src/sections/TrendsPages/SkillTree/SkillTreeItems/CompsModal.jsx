@@ -387,7 +387,7 @@ const CompsModal = ({
       className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm p-1 sm:p-4"
       style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0 }}
     >
-      <div className="relative bg-[#111111] rounded-lg w-[99%] sm:w-[98%] max-w-[1800px] h-[95vh] sm:h-[90vh] overflow-auto border border-[#2D2F37]">
+      <div className="relative bg-[#111111] rounded-lg w-[98%] sm:w-[98%] 2xl:w-[80%] max-w-[1800px] h-[95vh] sm:h-[90vh] overflow-auto border border-[#2D2F37]">
         <div className="sticky top-0 z-10 bg-[#111111] p-3 sm:p-4 border-b border-[#2D2F37] flex justify-between items-center">
           <h2 className="text-base sm:text-xl font-semibold text-[#FFFFFF] truncate pr-2 mb-0">
             {others.top3} {others.comps} -{" "}
