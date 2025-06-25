@@ -19,6 +19,8 @@ import { OptimizedImage } from "src/utils/imageOptimizer";
 import ForceIcon from "src/components/forceIcon";
 import TraitImage from "src/components/TraitImage/TraitImage";
 import SkillTreeImage from "src/components/SkillTreeImage";
+import AugmentImage from "src/components/AugmentImage";
+import ItemDisplay from "src/components/item/ItemDisplay";
 
 // Simple utility functions
 const shuffle = (array) => {
@@ -372,24 +374,16 @@ const ChampionWithItems = memo(
         </div>
         <div className="inline-flex items-center justify-center w-full gap-0.5 flex-wrap">
           {championItems.map((itemDetails, idx) => (
-            <div
-              key={`${itemDetails.key}-${idx}`}
-              className="relative z-10 hover:z-20 !border !border-[#ffffff20] aspect-square rounded-lg"
-            >
-              <ReactTltp
-                variant="item"
-                content={itemDetails}
-                id={`${itemDetails.key}-${idx}`}
-              />
-              <OptimizedImage
-                alt={itemDetails.name || "Item"}
-                width={20}
-                height={20}
-                src={itemDetails.imageUrl}
-                className="w-[20px] md:w-[30px] rounded-lg transition-all duration-300 hover:scale-150"
-                data-tooltip-id={`${itemDetails.key}-${idx}`}
-                loading="lazy"
-                sizes="30px"
+            <div className="hover:z-20 hover:scale-125 transition-all duration-300">
+              <ItemDisplay
+                key={`${itemDetails.key}-${idx}`}
+                item={itemDetails}
+                tooltipId={`${itemDetails.key}-${idx}`}
+                size="xxSmall"
+                showFrame={true}
+                borderRadius="rounded-lg"
+                backgroundRadius="rounded-lg"
+                style="default"
               />
             </div>
           ))}
@@ -542,31 +536,16 @@ const DeckHeader = memo(
             {traitDetails.length > 0 && augmentDetails.length > 0 && (
               <div className="flex-shrink-0 h-8 w-px bg-[#ffffff30] mx-2"></div>
             )}
-            {augmentDetails.slice(0, 4).map((augment, index) => {
-              const tooltipId = `augment-${augment.key}-${index}`;
-              return (
-                <div
-                  key={`augment-${augment.key}-${index}`}
-                  className="flex-shrink-0"
-                >
-                  <OptimizedImage
-                    alt={augment.name || "Augment"}
-                    width={32}
-                    height={32}
-                    src={augment.imageUrl}
-                    className="!w-[30px] !h-[30px] rounded-md mx-0.5"
-                    data-tooltip-id={tooltipId}
-                    loading="lazy"
-                    sizes="30px"
-                  />
-                  <ReactTltp
-                    variant="augment"
-                    content={augment}
-                    id={tooltipId}
-                  />
-                </div>
-              );
-            })}
+            {augmentDetails.slice(0, 4).map((augment, index) => (
+              <AugmentImage
+                key={`augment-${augment.key}-${index}`}
+                augment={augment}
+                size="default"
+                className="flex-shrink-0 mx-0.5"
+                tooltipId={`augment-${augment.key}-${index}`}
+                loading="lazy"
+              />
+            ))}
           </div>
         </div>
 
@@ -612,31 +591,16 @@ const DeckHeader = memo(
                 <div className="h-12 w-px bg-[#ffffff30]"></div>
               </div>
             )}
-            {augmentDetails.map((augment, index) => {
-              const tooltipId = `augment-${augment.key}-${index}`;
-              return (
-                <div
-                  key={`augment-${augment.key}-${index}`}
-                  className="relative"
-                >
-                  <OptimizedImage
-                    alt={augment.name || "Augment"}
-                    width={48}
-                    height={48}
-                    src={augment.imageUrl}
-                    className="w-[38px] h-[38px] md:w-[36px] md:h-[36px] mx-0.5 rounded-md"
-                    data-tooltip-id={tooltipId}
-                    loading="lazy"
-                    sizes="36px"
-                  />
-                  <ReactTltp
-                    variant="augment"
-                    content={augment}
-                    id={tooltipId}
-                  />
-                </div>
-              );
-            })}
+            {augmentDetails.map((augment, index) => (
+              <AugmentImage
+                key={`augment-${augment.key}-${index}`}
+                augment={augment}
+                size="medium"
+                className="mx-0.5"
+                tooltipId={`augment-${augment.key}-${index}`}
+                loading="lazy"
+              />
+            ))}
           </div>
         </div>
       </header>

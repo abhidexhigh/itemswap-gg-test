@@ -24,6 +24,7 @@ import { OptimizedImage } from "src/utils/imageOptimizer";
 import ForceIcon from "src/components/forceIcon";
 import SkillTreeImage from "src/components/SkillTreeImage";
 import TraitImage from "src/components/TraitImage/TraitImage";
+import AugmentImage from "src/components/AugmentImage";
 
 // Utility functions
 const debounce = (func, wait) => {
@@ -398,7 +399,7 @@ const DeckHeader = memo(({ metaDeck, computedData, augmentDetails }) => {
   if (!metaDeck) return null;
 
   return (
-    <header className="relative flex flex-col md:flex-col justify-between items-start md:items-end bg-[#111111] py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px] rounded-t-lg">
+    <header className="relative flex flex-col md:flex-col justify-between items-start md:items-end py-[15px] pl-3 md:pl-4 pr-3 md:pr-[36px] lg:min-h-[50px] lg:flex-row lg:items-center lg:py-[5px] lg:pr-[16px] rounded-t-lg">
       <div className="inline-flex flex-col flex-wrap gap-[8px] w-full md:w-auto md:flex-row md:items-center md:gap-[4px]">
         <div className="flex items-center gap-x-2">
           <PlacementBadge placement={metaDeck?.placement} />
@@ -516,25 +517,14 @@ const DeckHeader = memo(({ metaDeck, computedData, augmentDetails }) => {
             )}
 
           {augmentDetails.slice(0, 4).map((augment, idx) => (
-            <div
+            <AugmentImage
               key={`mobile-augment-${augment.key}-${idx}`}
-              className="flex-shrink-0"
-            >
-              <OptimizedImage
-                alt={augment.name || "Augment"}
-                width={32}
-                height={32}
-                src={augment.imageUrl}
-                className="!w-[30px] !h-[30px] rounded-md mx-0.5"
-                data-tooltip-id={`mobile-augment-${augment.key}-${idx}`}
-                loading="lazy"
-              />
-              <ReactTltp
-                variant="augment"
-                content={augment}
-                id={`mobile-augment-${augment.key}-${idx}`}
-              />
-            </div>
+              augment={augment}
+              size="default"
+              className="flex-shrink-0 mx-0.5"
+              tooltipId={`mobile-augment-${augment.key}-${idx}`}
+              loading="lazy"
+            />
           ))}
         </div>
       </div>
@@ -588,25 +578,14 @@ const DeckHeader = memo(({ metaDeck, computedData, augmentDetails }) => {
             )}
 
           {augmentDetails.map((augment, idx) => (
-            <div
+            <AugmentImage
               key={`desktop-augment-${augment.key}-${idx}`}
-              className="relative"
-            >
-              <OptimizedImage
-                alt={augment.name || "Augment"}
-                width={48}
-                height={48}
-                src={augment.imageUrl}
-                className="w-[38px] h-[38px] md:w-[36px] md:h-[36px] mx-0.5 rounded-md"
-                data-tooltip-id={`desktop-augment-${augment.key}-${idx}`}
-                loading="lazy"
-              />
-              <ReactTltp
-                variant="augment"
-                content={augment}
-                id={`desktop-augment-${augment.key}-${idx}`}
-              />
-            </div>
+              augment={augment}
+              size="medium"
+              className="mx-0.5"
+              tooltipId={`desktop-augment-${augment.key}-${idx}`}
+              loading="lazy"
+            />
           ))}
         </div>
       </div>
@@ -718,7 +697,7 @@ const MetaDeck = memo(
             />
 
             {!isClosed[index] && (
-              <div className="flex flex-col bg-center bg-no-repeat mt-[-1px]">
+              <div className="flex flex-col bg-center bg-no-repeat mt-[-1px] bg-[#111111]">
                 <div className="flex min-h-[150px] flex-col justify-between items-center bg-[#111111] lg:flex-row lg:gap-[15px] lg:py-[0px] xl:px-6 rounded-b-lg">
                   <div className="-mb-[8px] max-w-[342px] lg:mb-0 lg:w-full lg:max-w-full lg:flex-shrink-0">
                     <div className="flex flex-col">

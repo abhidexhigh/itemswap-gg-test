@@ -17,6 +17,7 @@ import { useMetaDeckAugments } from "../../../../hooks/useMetaDeckData";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import SearchBar from "src/components/searchBar";
 import ColoredValue from "src/components/ColoredValue";
+import AugmentImage from "src/components/AugmentImage";
 
 const ProjectItems = () => {
   const { t } = useTranslation();
@@ -521,32 +522,17 @@ const ProjectItems = () => {
                           className={`p-2 flex items-center ${getCellClass("key")}`}
                         >
                           <div className="flex justify-start items-center space-x-2">
-                            <OptimizedImage
-                              src={
-                                augments.find(
-                                  (augment) =>
-                                    augment.key ===
-                                    item.key?.split("_")[
-                                      item?.key?.split("_").length - 1
-                                    ]
-                                )?.imageUrl
-                              }
-                              alt="icon"
-                              width={80}
-                              height={80}
-                              className="w-12 h-12 sm:w-14 sm:h-14 md:w-[80px] md:h-[80px] rounded-md"
-                              data-tooltip-id={item?.key}
-                            />
-                            <ReactTltp
-                              variant="augment"
-                              id={item?.key}
-                              content={augments.find(
+                            <AugmentImage
+                              augment={augments.find(
                                 (augment) =>
                                   augment.key ===
                                   item.key?.split("_")[
                                     item?.key?.split("_").length - 1
                                   ]
                               )}
+                              size="xxlarge"
+                              tooltipId={item?.key}
+                              className="w-12 h-12 sm:w-14 sm:h-14 md:w-[80px] md:h-[80px]"
                             />
                             <div className="min-w-0 flex-1">
                               <p className="p-0 text-sm sm:text-sm md:text-base mb-1 md:mb-2 text-[#fff] truncate">
@@ -698,20 +684,17 @@ const ProjectItems = () => {
 
                         {/* Image & Name */}
                         <div className="flex items-center space-x-2 min-w-0">
-                          <OptimizedImage
-                            src={
-                              augments.find(
-                                (augment) =>
-                                  augment.key ===
-                                  item.key?.split("_")[
-                                    item?.key?.split("_").length - 1
-                                  ]
-                              )?.imageUrl
-                            }
-                            alt="icon"
-                            width={32}
-                            height={32}
-                            className="w-12 h-12 rounded-md flex-shrink-0"
+                          <AugmentImage
+                            augment={augments.find(
+                              (augment) =>
+                                augment.key ===
+                                item.key?.split("_")[
+                                  item?.key?.split("_").length - 1
+                                ]
+                            )}
+                            size="large"
+                            tooltipId={`mobile-${item?.key}`}
+                            className="w-12 h-12 flex-shrink-0"
                           />
                           <div className="min-w-0 flex-1">
                             <p className="text-white text-sm truncate leading-tight mb-0">

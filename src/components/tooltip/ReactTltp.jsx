@@ -5,6 +5,7 @@ import Comps from "../../data/compsNew.json";
 import { useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import { OptimizedImage } from "../../utils/imageOptimizer";
+import ItemDisplay from "../item/ItemDisplay";
 
 // Single container ID for all tooltips
 const TOOLTIP_CONTAINER_ID = "global-tooltip-container";
@@ -345,18 +346,19 @@ const ReactTltp = ({ variant = "", content, id }) => {
                 content?.compositions.length > 0 &&
                 content?.compositions?.map((comp, index) => (
                   <div className="flex justify-center items-center" key={index}>
-                    <div className="rounded-full">
-                      <OptimizedImage
-                        src={
-                          items?.find((item) => item?.key === comp)?.imageUrl
-                        }
-                        width={24}
-                        height={24}
-                        className="w-10 mr-1"
-                        alt={comp}
-                      />
-                    </div>
-                    {index < content?.compositions?.length - 1 ? " +" : ""}
+                    <ItemDisplay
+                      item={items?.find((item) => item?.key === comp)}
+                      tooltipId={`tooltip-comp-${comp}-${index}`}
+                      size="xxSmall"
+                      showFrame={true}
+                      showTooltip={false}
+                      borderRadius="rounded-full"
+                      backgroundRadius="rounded-full"
+                      style="default"
+                    />
+                    {index < content?.compositions?.length - 1 && (
+                      <span className="mx-1 text-white">+</span>
+                    )}
                   </div>
                 ))}
             </div>

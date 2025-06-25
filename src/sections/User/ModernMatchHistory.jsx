@@ -9,6 +9,7 @@ import CardImage from "../../components/cardImage";
 import ReactTltp from "../../components/tooltip/ReactTltp";
 import { OptimizedImage } from "../../utils/imageOptimizer";
 import ItemDisplay from "src/components/item/ItemDisplay";
+import AugmentImage from "src/components/AugmentImage";
 
 const ModernMatchHistory = ({
   match,
@@ -168,18 +169,12 @@ const ModernMatchHistory = ({
                       className="flex flex-col"
                       whileHover={{ scale: 1.1 }}
                     >
-                      <OptimizedImage
-                        src={augmentData.imageUrl}
-                        width={80}
-                        height={80}
-                        className="w-20 rounded-lg shadow-md"
-                        data-tooltip-id={augment}
-                        alt={augment || "Augment"}
-                      />
-                      <ReactTltp
-                        variant="augment"
-                        content={augmentData}
-                        id={augment}
+                      <AugmentImage
+                        augment={augmentData}
+                        size="xxlarge"
+                        tooltipId={augment}
+                        showTooltip={true}
+                        className="shadow-md"
                       />
                     </motion.div>
                   ) : null;
@@ -351,23 +346,11 @@ const ModernMatchHistory = ({
                                 );
                                 return augmentData?.imageUrl ? (
                                   <div key={i} className="relative">
-                                    <OptimizedImage
-                                      src={augmentData.imageUrl}
-                                      width={20}
-                                      height={20}
-                                      className="w-6 h-6 md:w-12 md:h-12 rounded-md"
-                                      data-tooltip-id={`part-aug-${participant?.name}-${i}`}
-                                      alt={augment || "Augment"}
-                                      onError={(e) => {
-                                        e.target.onerror = null;
-                                        e.target.src =
-                                          "https://res.cloudinary.com/dg0cmj6su/image/upload/v1722934556/coin_6369589_wbb7uk.png";
-                                      }}
-                                    />
-                                    <ReactTltp
-                                      variant="augment"
-                                      content={augmentData}
-                                      id={`part-aug-${participant?.name}-${i}`}
+                                    <AugmentImage
+                                      augment={augmentData}
+                                      size="large"
+                                      tooltipId={`part-aug-${participant?.name}-${i}`}
+                                      className="w-6 h-6 md:w-12 md:h-12"
                                     />
                                   </div>
                                 ) : null;
@@ -583,23 +566,11 @@ const ModernMatchHistory = ({
                                   );
                                   return augmentData?.imageUrl ? (
                                     <div key={i} className="relative">
-                                      <OptimizedImage
-                                        src={augmentData.imageUrl}
-                                        width={20}
-                                        height={20}
-                                        className="w-6 h-6 md:w-12 md:h-12 rounded-md"
-                                        data-tooltip-id={`part-aug-${participant?.name}-${i}`}
-                                        alt={augment || "Augment"}
-                                        onError={(e) => {
-                                          e.target.onerror = null;
-                                          e.target.src =
-                                            "https://res.cloudinary.com/dg0cmj6su/image/upload/v1722934556/coin_6369589_wbb7uk.png";
-                                        }}
-                                      />
-                                      <ReactTltp
-                                        variant="augment"
-                                        content={augmentData}
-                                        id={`part-aug-${participant?.name}-${i}`}
+                                      <AugmentImage
+                                        augment={augmentData}
+                                        size="large"
+                                        tooltipId={`part-aug-${participant?.name}-${i}`}
+                                        className="w-6 h-6 md:w-12 md:h-12"
                                       />
                                     </div>
                                   ) : null;

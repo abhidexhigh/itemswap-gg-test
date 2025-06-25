@@ -34,6 +34,11 @@ const ItemDisplay = ({
 }) => {
   // Size presets - using identical width/height for perfect squares
   const sizePresets = {
+    xxSmall: {
+      container: "h-[24px] w-[24px] md:h-[32px] md:w-[32px]",
+      frame: "h-full w-full",
+      image: "h-[16px] w-[16px] md:h-[24px] md:w-[24px]",
+    },
     xSmall: {
       container: "h-[32px] w-[32px] md:h-[48px] md:w-[48px]",
       frame: "h-full w-full",
