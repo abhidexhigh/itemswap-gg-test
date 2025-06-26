@@ -110,7 +110,10 @@ export default function NavbarWithoutHeadless({ position = "relative" }) {
                 <GradientText value="RPG" style="!text-xl !font-bold" />
               </div>
             </Link>
-            <Link href="/" className="-m-1.5 p-1.5">
+            <Link
+              href="https://itemswap-guild-test.vercel.app/"
+              className="-m-1.5 p-1.5"
+            >
               <span className="sr-only">Your Company</span>
               <Image
                 src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1740651458/ArmyDragone_text_copy_qiojcu.png"
@@ -283,7 +286,10 @@ export default function NavbarWithoutHeadless({ position = "relative" }) {
                   RPG
                 </motion.p>
               </Link>
-              <Link href="/" className="-m-1.5 p-1.5">
+              <Link
+                href="https://itemswap-guild-test.vercel.app"
+                className="-m-1.5 p-1.5"
+              >
                 <span className="sr-only">Your Company</span>
                 <Image
                   src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1740651458/ArmyDragone_text_copy_qiojcu.png"
