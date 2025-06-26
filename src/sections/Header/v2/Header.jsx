@@ -407,69 +407,6 @@ export default function NavbarWithoutHeadless({ position = "relative" }) {
             <div className="mt-6 flow-root">
               <div className="-my-6 divide-y divide-gray-500/10">
                 <div className="space-y-2 py-6">
-                  <Link
-                    href="https://itemswap-guild-test.vercel.app/champions"
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-200 hover:text-black"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {OT.champions}
-                  </Link>
-                  <Link
-                    href="https://itemswap-guild-test.vercel.app/guildNew"
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-200 hover:text-black"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {OT.guild}
-                  </Link>
-                  <Link
-                    href="https://itemswap-guild-test.vercel.app/items"
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-200 hover:text-black"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {OT.items}
-                  </Link>
-                  <Link
-                    href="https://itemswap-guild-test.vercel.app/traits"
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-200 hover:text-black"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {OT.traits}
-                  </Link>
-                  <Link
-                    href="https://itemswap-guild-test.vercel.app/maze"
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-200 hover:text-black"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {OT.maze}
-                  </Link>
-                  <Link
-                    href="https://itemswap-guild-test.vercel.app/huntingGround"
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-200 hover:text-black"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {OT.hunting}
-                  </Link>
-                  <Link
-                    href="https://itemswap-guild-test.vercel.app/dungeon"
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-200 hover:text-black"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {OT.dungeon}
-                  </Link>
-                  <Link
-                    href="https://itemswap-guild-test.vercel.app/tower"
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-200 hover:text-black"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {OT.tower}
-                  </Link>
-                  <Link
-                    href="/leaderboard"
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-200 hover:text-black"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {OT.leaderboard}
-                  </Link>
                   {/* Trends Section */}
                   <div className="-mx-3 rounded-lg px-3 py-2">
                     <button
@@ -544,6 +481,13 @@ export default function NavbarWithoutHeadless({ position = "relative" }) {
                       </div>
                     )}
                   </div>
+                  <Link
+                    href="/leaderboard"
+                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-200 hover:text-black"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {OT.leaderboard}
+                  </Link>
                 </div>
               </div>
             </div>
