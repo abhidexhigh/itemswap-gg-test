@@ -33,7 +33,7 @@ export default function ItemsTrends() {
         >
           <div className="container">
             {/* <PageHeader currentPage="META TRENDS" pageTitle="META TRENDS" /> */}
-            <div className="sticky top-[4.3rem] z-50">
+            <div className="sticky top-[3.3rem] md:top-[4.3rem] z-50">
               <TrendsNav selected="recentDecks" />
             </div>
             <RecentDecks />
