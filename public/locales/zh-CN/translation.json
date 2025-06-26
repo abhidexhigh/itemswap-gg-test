@@ -130,6 +130,11 @@
     "bestAugments": "最佳强化",
     "skillTree": "技能树",
     "skillTrends": "技能趋势",
-    "skills": "技能"
+    "skills": "技能",
+    "guild": "公会",
+    "maze": "迷宫",
+    "tower": "塔",
+    "dungeon": "副本",
+    "hunting": "狩猎"
   }
 }

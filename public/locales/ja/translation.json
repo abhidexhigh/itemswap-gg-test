@@ -130,6 +130,11 @@
     "bestAugments": "ベストオーグメント",
     "skillTree": "スキルツリー",
     "skillTrends": "スキルトレンド",
-    "skills": "スキル"
+    "skills": "スキル",
+    "guild": "ギルド",
+    "maze": "メイズ",
+    "tower": "タワー",
+    "dungeon": "ダンジョン",
+    "hunting": "ハンティング"
   }
 }

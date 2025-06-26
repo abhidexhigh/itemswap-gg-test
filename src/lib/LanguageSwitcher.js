@@ -63,7 +63,7 @@ const LanguageSwitcher = () => {
             {Object.entries(languages).map(([code, name]) => (
               <li
                 key={code}
-                className={`px-4 py-2 hover:bg-gray-800 cursor-pointer ${selectedLanguage === code ? "bg-blue-500 text-white" : ""}`}
+                className={`px-4 py-2 hover:bg-gray-800 cursor-pointer leading-10 ${selectedLanguage === code ? "bg-blue-500 text-white" : ""}`}
                 onClick={() => changeLanguage(code)}
               >
                 {name}

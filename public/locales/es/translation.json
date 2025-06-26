@@ -130,6 +130,11 @@
     "bestAugments": "Mejores aumentos",
     "skillTree": "Árbol de habilidades",
     "skillTrends": "Tendencias de habilidades",
-    "skills": "Habilidades"
+    "skills": "Habilidades",
+    "guild": "Guild",
+    "maze": "Maze",
+    "tower": "Tower",
+    "dungeon": "Dungeon",
+    "hunting": "Hunting"
   }
 }

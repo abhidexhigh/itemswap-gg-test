@@ -130,6 +130,11 @@
     "bestAugments": "Best Augments",
     "skillTree": "Skill Tree",
     "skillTrends": "Skill Trends",
-    "skills": "Skills"
+    "skills": "Skills",
+    "guild": "Guild",
+    "maze": "Maze",
+    "tower": "Tower",
+    "dungeon": "Dungeon",
+    "hunting": "Hunting"
   }
 }

@@ -130,6 +130,11 @@
     "bestAugments": "Tăng cường tốt nhất",
     "skillTree": "Cây kỹ năng",
     "skillTrends": "Xu hướng kỹ năng",
-    "skills": "Kỹ năng"
+    "skills": "Kỹ năng",
+    "guild": "Guild",
+    "maze": "Maze",
+    "tower": "Tower",
+    "dungeon": "Dungeon",
+    "hunting": "Hunting"
   }
 }

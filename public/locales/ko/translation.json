@@ -130,6 +130,11 @@
     "bestAugments": "최고의 증강",
     "skillTree": "스킬 트리",
     "skillTrends": "스킬 트렌드",
-    "skills": "스킬"
+    "skills": "스킬",
+    "guild": "길드",
+    "maze": "미로",
+    "tower": "타워",
+    "dungeon": "던전",
+    "hunting": "사냥"
   }
 }
