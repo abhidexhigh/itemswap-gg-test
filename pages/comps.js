@@ -24,7 +24,7 @@ export default function ItemsTrends() {
         <Header />
         <div className="h-[360px] md:h-[360px] 2xl:h-[420px]" />
         {/* <PageHeader currentPage="META TRENDS" pageTitle="META TRENDS" /> */}
-        <div className="sticky top-14 z-50">
+        <div className="sticky top-[4.3rem] z-50">
           <TrendsNav selected="metaTrends" />
         </div>
         {/* <div className="bg-transparent-20"></div> */}

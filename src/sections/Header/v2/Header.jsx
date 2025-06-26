@@ -9,6 +9,7 @@ import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import LanguageSwitcher from "../../../lib/LanguageSwitcher";
+import GradientText from "src/components/gradientText/GradientText";
 
 export default function NavbarWithoutHeadless({ position = "relative" }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -97,16 +98,16 @@ export default function NavbarWithoutHeadless({ position = "relative" }) {
       >
         <nav
           aria-label="Global"
-          className="mx-auto bg-gradient-to-b from-[#00000040] via-[#00000040] to-[#00000000] p-2 md:p-5 lg:pl-32 lg:pr-24"
+          className="mx-auto bg-gradient-to-b from-[#00000040] via-[#00000040] to-[#00000000] p-2 md:p-3 lg:pl-32 lg:pr-24"
         >
           <div className="flex w-full items-center justify-between lg:hidden">
             {/*arena switcher for mobile */}
             <Link
-              href="https://itemswap-gg-test-five.vercel.app"
+              href="https://itemswap-guild-test.vercel.app/champions"
               className="flex lg:hidden"
             >
               <div className="flex items-center gap-x-1">
-                <div>ARENA</div>
+                <GradientText value="RPG" style="!text-xl !font-bold" />
               </div>
             </Link>
             <Link href="/" className="-m-1.5 p-1.5">
@@ -138,32 +139,8 @@ export default function NavbarWithoutHeadless({ position = "relative" }) {
           </div>
 
           {/* Desktop Navigation - replaces PopoverGroup */}
-          <div className="hidden w-full lg:flex lg:items-center lg:justify-between lg:gap-x-12 lg:pb-2.5">
+          <div className="hidden w-full lg:flex lg:items-center lg:justify-between px-3 lg:gap-x-12 lg:pb-2.5">
             <div className="lg:flex md:gap-x-6 2xl:gap-x-12">
-              <Link
-                href="https://itemswap-guild-test.vercel.app/champions"
-                className={`text-[#fff4e2] text-xl !font-normal leading-[4rem] ${isActive("/champions") ? "!font-medium text-yellow-300" : "text-[#fff4e2]"}`}
-              >
-                {OT.champions}
-              </Link>
-              <Link
-                href="https://itemswap-guild-test.vercel.app/guildNew"
-                className={`text-[#fff4e2] text-xl !font-normal leading-[4rem] ${isActive("/guildNew") ? "!font-medium text-yellow-300" : "text-[#fff4e2]"}`}
-              >
-                {OT.guild}
-              </Link>
-              <Link
-                href="https://itemswap-guild-test.vercel.app/items"
-                className={`text-[#fff4e2] text-xl !font-normal leading-[4rem] ${isActive("/items") ? "!font-medium text-yellow-300" : "text-[#fff4e2]"}`}
-              >
-                {OT.items}
-              </Link>
-              <Link
-                href="/leaderboard"
-                className={`text-[#fff4e2] text-xl !font-normal leading-[4rem] ${isActive("/leaderboard") ? "!font-medium text-yellow-300" : "text-[#fff4e2]"}`}
-              >
-                {OT.leaderboard}
-              </Link>
               {/* Trends Dropdown */}
               <div className="relative" ref={trendsDropdownRef}>
                 <button
@@ -253,10 +230,16 @@ export default function NavbarWithoutHeadless({ position = "relative" }) {
                   </div>
                 )}
               </div>
-            </div>
-            <div className="flex md:gap-x-4 2xl:gap-x-12">
               <Link
-                href={"https://itemswap-gg-test-five.vercel.app/champions"}
+                href="/leaderboard"
+                className={`text-[#fff4e2] text-xl !font-normal leading-[4rem] ${isActive("/leaderboard") ? "!font-medium text-yellow-300" : "text-[#fff4e2]"}`}
+              >
+                {OT.leaderboard}
+              </Link>
+            </div>
+            <div className="absolute left-1/2 -translate-x-1/2 flex md:gap-x-4 2xl:gap-x-12">
+              <Link
+                href={"https://itemswap-guild-test.vercel.app/champions"}
                 className="relative h-fit cursor-pointer transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105"
               >
                 <motion.video
@@ -315,19 +298,19 @@ export default function NavbarWithoutHeadless({ position = "relative" }) {
                 className="relative h-fit cursor-pointer transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105"
               >
                 <motion.video
-                  autoPlay
+                  // autoPlay
                   muted
                   loop
-                  className="w-24 rounded-lg shadow-lg"
-                  animate={{
-                    scale: [1, 1.1, 1], // Zoom in & out effect
-                    rotate: [0, 1, -1, 0], // Slight rotation
-                  }}
-                  transition={{
-                    duration: 3, // Smooth animation duration
-                    repeat: Infinity, // Loop animation
-                    ease: "easeInOut",
-                  }}
+                  className="w-24 rounded-lg shadow-lg grayscale"
+                  // animate={{
+                  //   scale: [1, 1.1, 1], // Zoom in & out effect
+                  //   rotate: [0, 1, -1, 0], // Slight rotation
+                  // }}
+                  // transition={{
+                  //   duration: 3, // Smooth animation duration
+                  //   repeat: Infinity, // Loop animation
+                  //   ease: "easeInOut",
+                  // }}
                 >
                   <source
                     src="https://res.cloudinary.com/dg0cmj6su/video/upload/v1740742060/TFT_SIZE_u2kvc9.webm"
@@ -357,36 +340,6 @@ export default function NavbarWithoutHeadless({ position = "relative" }) {
               </Link>
             </div>
             <div className="lg:flex md:gap-x-6 2xl:gap-x-12">
-              <Link
-                href="https://itemswap-guild-test.vercel.app/traits"
-                className={`text-[#fff4e2] text-xl !font-normal leading-[4rem] ${isActive("/traits") ? "!font-medium text-yellow-300" : "text-[#fff4e2]"}`}
-              >
-                {OT.traits}
-              </Link>
-              <Link
-                href="https://itemswap-guild-test.vercel.app/maze"
-                className={`text-[#fff4e2] text-xl !font-normal leading-[4rem] ${isActive("/maze") ? "!font-medium text-yellow-300" : "text-[#fff4e2]"}`}
-              >
-                {OT.maze}
-              </Link>
-              <Link
-                href="https://itemswap-guild-test.vercel.app/dungeon"
-                className={`text-[#fff4e2] text-xl !font-normal leading-[4rem] ${isActive("/dungeon") ? "!font-medium text-yellow-300" : "text-[#fff4e2]"}`}
-              >
-                {OT.dungeon}
-              </Link>
-              <Link
-                href="https://itemswap-guild-test.vercel.app/tower"
-                className={`text-[#fff4e2] text-xl !font-normal leading-[4rem] ${isActive("/tower") ? "!font-medium text-yellow-300" : "text-[#fff4e2]"}`}
-              >
-                {OT.tower}
-              </Link>
-              <Link
-                href="https://itemswap-guild-test.vercel.app/huntingGround"
-                className={`text-[#fff4e2] text-xl !font-normal leading-[4rem] ${isActive("/huntingGround") ? "!font-medium text-yellow-300" : "text-[#fff4e2]"}`}
-              >
-                {OT.hunting}
-              </Link>
               <div className="leading-[4rem] m-auto">
                 <LanguageSwitcher device="mobile" />
               </div>

@@ -30,7 +30,7 @@ export default function SkillTrends() {
           }}
         >
           <div className="container px-0 md:px-3">
-            <div className="sticky top-14 z-50">
+            <div className="sticky top-[4.3rem] z-50">
               <TrendsNav selected="skillTrends" />
             </div>
             {/* <div className="bg-transparent-20"></div> */}
