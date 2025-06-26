@@ -243,19 +243,19 @@ export default function NavbarWithoutHeadless({ position = "relative" }) {
                 className="relative h-fit cursor-pointer transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105"
               >
                 <motion.video
-                  autoPlay
+                  // autoPlay
                   muted
                   loop
-                  className="w-24 rounded-lg shadow-lg"
-                  animate={{
-                    scale: [1, 1.1, 1], // Zoom in & out effect
-                    rotate: [0, 1, -1, 0], // Slight rotation
-                  }}
-                  transition={{
-                    duration: 3, // Smooth animation duration
-                    repeat: Infinity, // Loop animation
-                    ease: "easeInOut",
-                  }}
+                  className="w-24 rounded-lg shadow-lg grayscale"
+                  // animate={{
+                  //   scale: [1, 1.1, 1], // Zoom in & out effect
+                  //   rotate: [0, 1, -1, 0], // Slight rotation
+                  // }}
+                  // transition={{
+                  //   duration: 3, // Smooth animation duration
+                  //   repeat: Infinity, // Loop animation
+                  //   ease: "easeInOut",
+                  // }}
                 >
                   <source
                     src="https://res.cloudinary.com/dg0cmj6su/video/upload/v1740742060/TFT_SIZE_u2kvc9.webm"
@@ -298,19 +298,19 @@ export default function NavbarWithoutHeadless({ position = "relative" }) {
                 className="relative h-fit cursor-pointer transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-105"
               >
                 <motion.video
-                  // autoPlay
+                  autoPlay
                   muted
                   loop
-                  className="w-24 rounded-lg shadow-lg grayscale"
-                  // animate={{
-                  //   scale: [1, 1.1, 1], // Zoom in & out effect
-                  //   rotate: [0, 1, -1, 0], // Slight rotation
-                  // }}
-                  // transition={{
-                  //   duration: 3, // Smooth animation duration
-                  //   repeat: Infinity, // Loop animation
-                  //   ease: "easeInOut",
-                  // }}
+                  className="w-24 rounded-lg shadow-lg"
+                  animate={{
+                    scale: [1, 1.1, 1], // Zoom in & out effect
+                    rotate: [0, 1, -1, 0], // Slight rotation
+                  }}
+                  transition={{
+                    duration: 3, // Smooth animation duration
+                    repeat: Infinity, // Loop animation
+                    ease: "easeInOut",
+                  }}
                 >
                   <source
                     src="https://res.cloudinary.com/dg0cmj6su/video/upload/v1740742060/TFT_SIZE_u2kvc9.webm"
