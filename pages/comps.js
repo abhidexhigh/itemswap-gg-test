@@ -22,7 +22,7 @@ export default function ItemsTrends() {
         {walletModalvisibility && <WalletModal />}
         {metamaskModal && <MetamaskModal />}
         <Header />
-        <div className="h-[360px] md:h-[360px] 2xl:h-[420px]" />
+        <div className="h-[294px] md:h-[360px] 2xl:h-[420px]" />
         {/* <PageHeader currentPage="META TRENDS" pageTitle="META TRENDS" /> */}
         <div className="sticky top-[3.3rem] md:top-[4.3rem] z-50">
           <TrendsNav selected="metaTrends" />
