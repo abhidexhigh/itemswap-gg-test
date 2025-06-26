@@ -58,7 +58,7 @@ const throttle = (func, limit) => {
   };
 };
 
-// Virtual scrolling hook for desktop - simplified
+// Virtual scrolling hook for desktop only
 const useDesktopVirtualScroll = (items, itemHeight, buffer = 3) => {
   const [scrollTop, setScrollTop] = useState(0);
   const [containerTop, setContainerTop] = useState(0);
@@ -98,7 +98,7 @@ const useDesktopVirtualScroll = (items, itemHeight, buffer = 3) => {
   };
 };
 
-// Memoized desktop row component with better optimization
+// Memoized desktop row component
 const DesktopGridRow = memo(
   ({
     champion,
@@ -140,7 +140,7 @@ const DesktopGridRow = memo(
           gridTemplateColumns:
             "60px 1fr 120px 120px 120px 120px 120px 120px 120px 260px",
           height: "100px",
-          willChange: "transform", // Optimize for animations
+          willChange: "transform",
         }}
       >
         <div
@@ -233,82 +233,6 @@ const DesktopGridRow = memo(
 
 DesktopGridRow.displayName = "DesktopGridRow";
 
-// Optimized mobile row component
-const MobileRow = memo(
-  ({
-    champion,
-    index,
-    championData,
-    forces,
-    mobileFilter,
-    sortConfig,
-    expandedRows,
-    onToggle,
-    renderMobileValue,
-    renderExpandedContent,
-  }) => {
-    const isExpanded = expandedRows.has(index);
-
-    const handleClick = useCallback(() => {
-      onToggle(index);
-    }, [index, onToggle]);
-
-    return (
-      <div className="border-b border-[#2D2F37]">
-        <div
-          className="grid gap-1 p-3 items-center cursor-pointer hover:bg-[#2D2F37] transition-colors duration-200"
-          style={{
-            gridTemplateColumns: "10% 45% 20% 22%",
-            willChange: "background-color",
-          }}
-          onClick={handleClick}
-        >
-          <div className="text-center text-white font-medium">{index + 1}</div>
-
-          <div className="flex items-center space-x-2 min-w-0">
-            <CardImage
-              src={championData}
-              imgStyle="w-12 h-12"
-              identificationImageStyle="w-3 h-3"
-              textStyle="text-[8px] hidden"
-              forces={forces}
-              cardSize="!w-[60px] !h-[60px]"
-            />
-            <div className="min-w-0 flex-1">
-              <p className="text-white text-sm truncate leading-tight mb-0">
-                {championData.key}
-              </p>
-            </div>
-          </div>
-
-          <div className="text-center text-white text-sm">
-            <ColoredValue value={champion?.avgPlacement} prefix="#" />
-          </div>
-
-          <div
-            className={`text-center text-sm ${
-              mobileFilter === sortConfig.key
-                ? "text-[#D9A876] font-medium"
-                : "text-white"
-            } flex items-center justify-center space-x-1`}
-          >
-            <span>{renderMobileValue(champion, mobileFilter)}</span>
-            {isExpanded ? (
-              <HiChevronUp className="w-3 h-3" />
-            ) : (
-              <HiChevronDown className="w-3 h-3" />
-            )}
-          </div>
-        </div>
-
-        {isExpanded && renderExpandedContent(champion)}
-      </div>
-    );
-  }
-);
-
-MobileRow.displayName = "MobileRow";
-
 const ProjectItems = () => {
   const { t } = useTranslation();
   const others = t("others");
@@ -326,8 +250,10 @@ const ProjectItems = () => {
     refetch: refetchChampions,
   } = useMetaDeckChampions();
 
-  // All useState hooks must be called before any early returns
-  // State management
+  // State management - simplified like TraitsTrendsItems.jsx
+  const [metaDeckChampionsStatsData, setMetaDeckChampionsStatsData] = useState(
+    metaDeckChampionsStats || []
+  );
   const [searchValue, setSearchValue] = useState("");
   const [sortConfig, setSortConfig] = useState({
     key: null,
@@ -337,78 +263,44 @@ const ProjectItems = () => {
   const [expandedRows, setExpandedRows] = useState(new Set());
   const [costFilter, setCostFilter] = useState("All");
 
-  // Debounce search - MUST be before early returns
-  const debouncedSearchValue = useDebounce(searchValue, 300);
+  // Mobile filter options
+  const mobileFilterOptions = [
+    { key: "tops", label: others?.top4 || "Top 4%" },
+    { key: "wins", label: others?.winPercentage || "Win %" },
+    { key: "pickRate", label: others?.pickPercentage || "Pick %" },
+    { key: "plays", label: others?.played || "Played" },
+    {
+      key: "threeStarPercentage",
+      label: others?.threeStarsPercentage || "3-Stars%",
+    },
+    { key: "threeStarRank", label: others?.threeStarsRank || "3-Stars Rank" },
+  ];
 
-  // Memoize lookup maps - these are expensive operations - MUST be before early returns
-  const { championLookup, mergedData, championRecommendedItems } =
-    useMemo(() => {
-      const lookup = new Map(
-        champions?.map((champion) => [champion.key, champion]) || []
-      );
+  // Simplified data processing like TraitsTrendsItems.jsx
+  useEffect(() => {
+    let data = [...(metaDeckChampionsStats || [])];
 
-      const merged = (metaDeckChampionsStats || []).map((champion) => ({
-        ...champion,
-        ...(lookup.get(champion.key) || {}),
-      }));
+    // Merge champion data
+    data = data.map((champion) => ({
+      ...champion,
+      ...(champions?.find((champ) => champ.key === champion.key) || {}),
+    }));
 
-      // Pre-calculate recommended items
-      const itemsMap = new Map();
-      champions?.forEach((champion) => {
-        if (champion.recommendItems) {
-          const recommendedItems = champion.recommendItems
-            .map((itemKey) => {
-              const key = itemKey?.split("_")[itemKey?.split("_").length - 1];
-              return items?.find((item) => item.key === key);
-            })
-            .filter(Boolean);
-          itemsMap.set(champion.key, recommendedItems);
-        }
-      });
-
-      return {
-        championLookup: lookup,
-        mergedData: merged,
-        championRecommendedItems: itemsMap,
-      };
-    }, [champions, items, metaDeckChampionsStats]);
-
-  // Mobile filter options - memoized - MUST be before early returns
-  const mobileFilterOptions = useMemo(
-    () => [
-      { key: "tops", label: others?.top4 || "Top 4%" },
-      { key: "wins", label: others?.winPercentage || "Win %" },
-      { key: "pickRate", label: others?.pickPercentage || "Pick %" },
-      { key: "plays", label: others?.played || "Played" },
-      {
-        key: "threeStarPercentage",
-        label: others?.threeStarsPercentage || "3-Stars%",
-      },
-      { key: "threeStarRank", label: others?.threeStarsRank || "3-Stars Rank" },
-    ],
-    [others]
-  );
-
-  // Optimized data processing with better memoization - MUST be before early returns
-  const processedData = useMemo(() => {
-    let data = mergedData;
-
-    // Apply cost filter first (most selective)
+    // Apply cost filter
     if (costFilter !== "All") {
       data = data.filter((champion) => champion.cost == costFilter);
     }
 
     // Apply search filter
-    if (debouncedSearchValue) {
-      const searchLower = debouncedSearchValue.toLowerCase();
+    if (searchValue) {
       data = data.filter((champion) =>
-        champion.key.toLowerCase().includes(searchLower)
+        champion.key.toLowerCase().includes(searchValue.toLowerCase())
       );
     }
 
     // Apply sorting
     if (sortConfig.key) {
-      data = [...data].sort((a, b) => {
+      data.sort((a, b) => {
         let aValue, bValue;
 
         if (["tops", "wins"].includes(sortConfig.key)) {
@@ -429,188 +321,18 @@ const ProjectItems = () => {
       });
     }
 
-    return data;
-  }, [mergedData, costFilter, debouncedSearchValue, sortConfig]);
+    setMetaDeckChampionsStatsData(data);
+  }, [metaDeckChampionsStats, champions, costFilter, searchValue, sortConfig]);
 
-  // Virtual scrolling setup - MUST be before early returns
+  // Desktop virtual scrolling setup
   const itemHeight = 100;
-  const mobileItemHeight = 80;
-
-  // Desktop virtual scrolling
   const {
     visibleItems: desktopVisibleItems,
     totalHeight: desktopTotalHeight,
     offsetY: desktopOffsetY,
     startIndex: desktopStartIndex,
     containerRef: desktopContainerRef,
-  } = useDesktopVirtualScroll(processedData, itemHeight);
-
-  // For mobile, show all items without virtual scrolling for better UX
-  const mobileContainerRef = useRef(null);
-  const mobileVisibleItems = processedData; // Show all items on mobile
-  const mobileStartIndex = 0;
-
-  // Event handlers - memoized - MUST be before early returns
-  const requestSort = useCallback((key) => {
-    setSortConfig((prev) => {
-      let direction = "ascending";
-      if (prev.key === key && prev.direction === "ascending") {
-        direction = "descending";
-      }
-      return { key, direction };
-    });
-  }, []);
-
-  const handleMobileFilterClick = useCallback(
-    (filterKey) => {
-      setMobileFilter((prev) => {
-        if (prev === filterKey && sortConfig.key === filterKey) {
-          const newDirection =
-            sortConfig.direction === "ascending" ? "descending" : "ascending";
-          setSortConfig({ key: filterKey, direction: newDirection });
-          return prev;
-        } else {
-          setSortConfig({ key: filterKey, direction: "descending" });
-          return filterKey;
-        }
-      });
-    },
-    [sortConfig]
-  );
-
-  const toggleRowExpansion = useCallback((index) => {
-    setExpandedRows((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(index)) {
-        newSet.delete(index);
-      } else {
-        newSet.add(index);
-      }
-      return newSet;
-    });
-  }, []);
-
-  const renderMobileValue = useCallback((item, key) => {
-    switch (key) {
-      case "tops":
-      case "wins":
-        return `${(item[key] / item.plays).toFixed(2)}%`;
-      case "pickRate":
-      case "threeStarPercentage":
-        return `${item[key].toFixed(2)}%`;
-      case "plays":
-        return item[key].toLocaleString("en-US");
-      case "threeStarRank":
-        return `#${item[key].toFixed(2)}`;
-      default:
-        return item[key];
-    }
-  }, []);
-
-  const renderExpandedContent = useCallback(
-    (item) => {
-      const hiddenData = [
-        {
-          label: others?.top4 || "Top 4%",
-          value: `${(item.tops / item.plays).toFixed(2)}%`,
-          key: "tops",
-        },
-        {
-          label: others?.winPercentage || "Win %",
-          value: `${(item.wins / item.plays).toFixed(2)}%`,
-          key: "wins",
-        },
-        {
-          label: others?.pickPercentage || "Pick %",
-          value: `${item.pickRate.toFixed(2)}%`,
-          key: "pickRate",
-        },
-        {
-          label: others?.played || "Played",
-          value: item.plays.toLocaleString("en-US"),
-          key: "plays",
-        },
-        {
-          label: others?.threeStarsPercentage || "3⭐ %",
-          value: `${item.threeStarPercentage.toFixed(2)}%`,
-          key: "threeStarPercentage",
-        },
-        {
-          label: others?.threeStarsRank || "3⭐ Rank",
-          value: `#${item.threeStarRank.toFixed(2)}`,
-          key: "threeStarRank",
-        },
-      ];
-
-      const filteredDataHidden = hiddenData.filter(
-        (data) => data.key !== mobileFilter
-      );
-      const recommendedItems = championRecommendedItems.get(item.key) || [];
-
-      return (
-        <div className="grid grid-cols-3 gap-3 p-4 bg-[#1a1a1a] border-t border-[#2D2F37]">
-          {filteredDataHidden.map((data, index) => (
-            <div key={index} className="flex flex-col">
-              <span className="text-xs text-gray-400 mb-1">{data.label}</span>
-              <span className="text-sm text-white">{data.value}</span>
-            </div>
-          ))}
-          <div className="flex flex-col">
-            <span className="text-xs text-gray-400 mb-2">
-              {others?.recommended} {others?.items}
-            </span>
-            <div className="flex flex-wrap justify-start gap-1">
-              {recommendedItems.slice(0, 6).map((itemImg, idx) => (
-                <div key={idx} className="relative">
-                  <ItemDisplay
-                    item={itemImg}
-                    size="xSmall"
-                    borderRadius="rounded-[4px]"
-                    backgroundRadius="rounded-[4px]"
-                    tooltipId={itemImg?.name}
-                    showTooltip={true}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      );
-    },
-    [mobileFilter, championRecommendedItems, others]
-  );
-
-  const handleButtonClick = useCallback((button) => {
-    setCostFilter(button);
-  }, []);
-
-  const handleSearchChange = useCallback((value) => {
-    setSearchValue(value);
-  }, []);
-
-  const getCellClass = useCallback(
-    (key) => {
-      if (sortConfig.key === key) {
-        return "bg-[#2D2F37] text-[#D9A876]";
-      }
-      return "";
-    },
-    [sortConfig.key]
-  );
-
-  const renderSortIcon = useCallback(
-    (key) => {
-      if (sortConfig.key === key) {
-        return sortConfig.direction === "ascending" ? (
-          <HiArrowSmUp className="text-lg" />
-        ) : (
-          <HiArrowSmDown className="text-lg" />
-        );
-      }
-      return null;
-    },
-    [sortConfig]
-  );
+  } = useDesktopVirtualScroll(metaDeckChampionsStatsData, itemHeight);
 
   // Show loading state for either comps data or champions data
   if (isLoading || isChampionsLoading) {
@@ -645,6 +367,156 @@ const ProjectItems = () => {
       </div>
     );
   }
+
+  const requestSort = (key) => {
+    let direction = "ascending";
+    if (sortConfig.key === key && sortConfig.direction === "ascending") {
+      direction = "descending";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const handleButtonClick = (button) => {
+    setCostFilter(button);
+  };
+
+  const getCellClass = (key) => {
+    if (sortConfig.key === key) {
+      return "bg-[#2D2F37] text-[#D9A876]";
+    }
+    return "";
+  };
+
+  const renderSortIcon = (key) => {
+    if (sortConfig.key === key) {
+      return sortConfig.direction === "ascending" ? (
+        <HiArrowSmUp className="text-lg" />
+      ) : (
+        <HiArrowSmDown className="text-lg" />
+      );
+    }
+    return null;
+  };
+
+  const handleMobileFilterClick = (filterKey) => {
+    setMobileFilter(filterKey);
+
+    // If clicking on the same filter, toggle sort direction
+    if (mobileFilter === filterKey && sortConfig.key === filterKey) {
+      const newDirection =
+        sortConfig.direction === "ascending" ? "descending" : "ascending";
+      setSortConfig({ key: filterKey, direction: newDirection });
+    } else {
+      // Auto-sort by the selected filter (default to descending for new selections)
+      setSortConfig({ key: filterKey, direction: "descending" });
+    }
+  };
+
+  const toggleRowExpansion = (index) => {
+    const newExpandedRows = new Set(expandedRows);
+    if (newExpandedRows.has(index)) {
+      newExpandedRows.delete(index);
+    } else {
+      newExpandedRows.add(index);
+    }
+    setExpandedRows(newExpandedRows);
+  };
+
+  const renderMobileValue = (item, key) => {
+    switch (key) {
+      case "tops":
+      case "wins":
+        return `${(item[key] / item.plays).toFixed(2)}%`;
+      case "pickRate":
+      case "threeStarPercentage":
+        return `${item[key].toFixed(2)}%`;
+      case "plays":
+        return item[key].toLocaleString("en-US");
+      case "threeStarRank":
+        return `#${item[key].toFixed(2)}`;
+      default:
+        return item[key];
+    }
+  };
+
+  const renderExpandedContent = (item) => {
+    const hiddenData = [
+      {
+        label: others?.top4 || "Top 4%",
+        value: `${(item.tops / item.plays).toFixed(2)}%`,
+        key: "tops",
+      },
+      {
+        label: others?.winPercentage || "Win %",
+        value: `${(item.wins / item.plays).toFixed(2)}%`,
+        key: "wins",
+      },
+      {
+        label: others?.pickPercentage || "Pick %",
+        value: `${item.pickRate.toFixed(2)}%`,
+        key: "pickRate",
+      },
+      {
+        label: others?.played || "Played",
+        value: item.plays.toLocaleString("en-US"),
+        key: "plays",
+      },
+      {
+        label: others?.threeStarsPercentage || "3⭐ %",
+        value: `${item.threeStarPercentage.toFixed(2)}%`,
+        key: "threeStarPercentage",
+      },
+      {
+        label: others?.threeStarsRank || "3⭐ Rank",
+        value: `#${item.threeStarRank.toFixed(2)}`,
+        key: "threeStarRank",
+      },
+    ];
+
+    const filteredDataHidden = hiddenData.filter(
+      (data) => data.key !== mobileFilter
+    );
+
+    // Get recommended items
+    const recommendedItems = item.recommendItems
+      ? item.recommendItems
+          .map((itemKey) => {
+            const key = itemKey?.split("_")[itemKey?.split("_").length - 1];
+            return items?.find((itemObj) => itemObj.key === key);
+          })
+          .filter(Boolean)
+      : [];
+
+    return (
+      <div className="grid grid-cols-3 gap-3 p-4 bg-[#1a1a1a] border-t border-[#2D2F37]">
+        {filteredDataHidden.map((data, index) => (
+          <div key={index} className="flex flex-col">
+            <span className="text-xs text-gray-400 mb-1">{data.label}</span>
+            <span className="text-sm text-white">{data.value}</span>
+          </div>
+        ))}
+        <div className="flex flex-col">
+          <span className="text-xs text-gray-400 mb-2">
+            {others?.recommended} {others?.items}
+          </span>
+          <div className="flex flex-wrap justify-start gap-1">
+            {recommendedItems.slice(0, 6).map((itemImg, idx) => (
+              <div key={idx} className="relative">
+                <ItemDisplay
+                  item={itemImg}
+                  size="xSmall"
+                  borderRadius="rounded-[4px]"
+                  backgroundRadius="rounded-[4px]"
+                  tooltipId={itemImg?.name}
+                  showTooltip={true}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="pt-2 bg-[#111111] md:bg-transparent">
@@ -742,7 +614,7 @@ const ProjectItems = () => {
         <div className="mb-2 md:mb-0 px-4">
           <SearchBar
             searchValue={searchValue}
-            setSearchValue={handleSearchChange}
+            setSearchValue={setSearchValue}
             placeholder="Search champion..."
           />
         </div>
@@ -860,18 +732,24 @@ const ProjectItems = () => {
               <div style={{ transform: `translateY(${desktopOffsetY}px)` }}>
                 {desktopVisibleItems.map((champion, visibleIndex) => {
                   const actualIndex = desktopStartIndex + visibleIndex;
-                  const championData = championLookup.get(champion.key);
-                  if (!championData?.key) return null;
+                  if (!champion?.key) return null;
 
-                  const recommendedItems =
-                    championRecommendedItems.get(champion.key) || [];
+                  const recommendedItems = champion.recommendItems
+                    ? champion.recommendItems
+                        .map((itemKey) => {
+                          const key =
+                            itemKey?.split("_")[itemKey?.split("_").length - 1];
+                          return items?.find((item) => item.key === key);
+                        })
+                        .filter(Boolean)
+                    : [];
 
                   return (
                     <DesktopGridRow
                       key={champion.key}
                       champion={champion}
                       index={actualIndex}
-                      championData={championData}
+                      championData={champion}
                       recommendedItems={recommendedItems}
                       forces={forces}
                       getCellClass={getCellClass}
@@ -883,7 +761,7 @@ const ProjectItems = () => {
           </div>
         </div>
 
-        {/* Mobile Table with Virtual Scrolling */}
+        {/* Mobile Table - Simplified like TraitsTrendsItems.jsx */}
         <div className="block md:hidden">
           <div className="bg-[#111111]">
             {/* Mobile Table Header - Sticky */}
@@ -936,29 +814,61 @@ const ProjectItems = () => {
               </div>
             </div>
 
-            {/* Mobile Items Container - showing all items */}
-            <div ref={mobileContainerRef} className="bg-[#111111]">
-              {mobileVisibleItems.map((champion, index) => {
-                const championData = championLookup.get(champion.key);
-                if (!championData?.key) return null;
+            {/* Mobile Items Container - Direct rendering like TraitsTrendsItems.jsx */}
+            {metaDeckChampionsStatsData.map((champion, index) => {
+              if (!champion?.key) return null;
 
-                return (
-                  <MobileRow
-                    key={champion.key}
-                    champion={champion}
-                    index={index}
-                    championData={championData}
-                    forces={forces}
-                    mobileFilter={mobileFilter}
-                    sortConfig={sortConfig}
-                    expandedRows={expandedRows}
-                    onToggle={toggleRowExpansion}
-                    renderMobileValue={renderMobileValue}
-                    renderExpandedContent={renderExpandedContent}
-                  />
-                );
-              })}
-            </div>
+              return (
+                <div key={champion.key} className="border-b border-[#2D2F37]">
+                  <div
+                    className="grid gap-1 p-3 items-center cursor-pointer hover:bg-[#2D2F37] transition-colors duration-200"
+                    style={{ gridTemplateColumns: "10% 45% 20% 22%" }}
+                    onClick={() => toggleRowExpansion(index)}
+                  >
+                    <div className="text-center text-white font-medium">
+                      {index + 1}
+                    </div>
+
+                    <div className="flex items-center space-x-2 min-w-0">
+                      <CardImage
+                        src={champion}
+                        imgStyle="w-12 h-12"
+                        identificationImageStyle="w-3 h-3"
+                        textStyle="text-[8px] hidden"
+                        forces={forces}
+                        cardSize="!w-[60px] !h-[60px]"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-white text-sm truncate leading-tight mb-0">
+                          {champion.key}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="text-center text-white text-sm">
+                      <ColoredValue value={champion?.avgPlacement} prefix="#" />
+                    </div>
+
+                    <div
+                      className={`text-center text-sm ${
+                        mobileFilter === sortConfig.key
+                          ? "text-[#D9A876] font-medium"
+                          : "text-white"
+                      } flex items-center justify-center space-x-1`}
+                    >
+                      <span>{renderMobileValue(champion, mobileFilter)}</span>
+                      {expandedRows.has(index) ? (
+                        <HiChevronUp className="w-3 h-3" />
+                      ) : (
+                        <HiChevronDown className="w-3 h-3" />
+                      )}
+                    </div>
+                  </div>
+
+                  {expandedRows.has(index) && renderExpandedContent(champion)}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
