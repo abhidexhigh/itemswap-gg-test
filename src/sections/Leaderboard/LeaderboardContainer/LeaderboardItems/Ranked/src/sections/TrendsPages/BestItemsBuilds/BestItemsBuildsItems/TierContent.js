@@ -84,7 +84,6 @@ const TierCard = ({ cost, itemsData }) => {
                                   width={30}
                                   height={30}
                                   loading="lazy"
-                                  placeholder="blur"
                                   blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"
                                   className="w-full border-[1px] rounded-lg border-[#ffffff60] hover:border-[#ffffff90] transition-all duration-300 shadow-md group-hover:scale-105"
                                 />
@@ -158,7 +157,6 @@ const TierCard = ({ cost, itemsData }) => {
                                             width={30}
                                             height={30}
                                             loading="lazy"
-                                            placeholder="blur"
                                             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"
                                             className="w-[56px] md:w-[44px] group-hover:scale-105 transition-transform duration-300 shadow-md"
                                           />

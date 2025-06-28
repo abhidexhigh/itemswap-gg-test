@@ -34,7 +34,6 @@ const ItemComponent = ({ item, items, isLarge = false }) => {
           width={30}
           height={30}
           loading="lazy"
-          placeholder="blur"
           blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"
           className={
             isLarge

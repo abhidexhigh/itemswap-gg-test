@@ -34,8 +34,9 @@ export const OptimizedImage = ({
       height={height}
       className={className}
       priority={priority}
-      placeholder={placeholder ? "blur" : "empty"}
-      blurDataURL={placeholder ? blurDataURL : undefined}
+      // placeholder={placeholder ? "blur" : "empty"}
+      // blurDataURL={placeholder ? blurDataURL : undefined}
+      placeholder="empty"
       quality={75} // Optimize quality for better performance
       loading={priority ? "eager" : "lazy"}
       {...props}

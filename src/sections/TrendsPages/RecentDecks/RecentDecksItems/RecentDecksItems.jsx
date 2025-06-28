@@ -928,7 +928,6 @@ const RecentDecksItems = () => {
   // Filter handler
   const handleFilterChange = useCallback(
     debounce((type, key) => {
-      console.log(`Filter change: ${type} - ${key}`); // Debug log
       const metaDecks = gameData.metaDecks;
       if (!metaDecks?.length) return;
 
@@ -1046,14 +1045,7 @@ const RecentDecksItems = () => {
             });
             break;
           case "skillTree":
-            console.log(
-              `SkillTree filter - current: ${filters.selectedSkillTree}, new: ${key}`
-            );
             newFilters.selectedSkillTree = key;
-            console.log(
-              "Sample deck skillTree:",
-              metaDecks[0]?.deck?.skillTree
-            );
             // Filter decks that have the skill
             const filteredSkillDecks = metaDecks.filter((deck) =>
               deck.deck?.skillTree?.includes(key)

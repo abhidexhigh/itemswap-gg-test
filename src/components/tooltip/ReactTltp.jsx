@@ -260,7 +260,6 @@ const ReactTltp = ({ variant = "", content, id }) => {
                   alt="dollar"
                   width={24}
                   height={24}
-                  placeholder="blur"
                   blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/SkhXQAAAABJRU5ErkJggg=="
                 />
                 {content?.cost}
@@ -275,7 +274,6 @@ const ReactTltp = ({ variant = "", content, id }) => {
                     alt={trait}
                     width={24}
                     height={24}
-                    placeholder="blur"
                     blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/SkhXQAAAABJRU5ErkJggg=="
                   />
                   <span className="text-xs font-light">{trait}</span>
@@ -292,7 +290,6 @@ const ReactTltp = ({ variant = "", content, id }) => {
                       alt="skill"
                       width={24}
                       height={24}
-                      placeholder="blur"
                       blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/SkhXQAAAABJRU5ErkJggg=="
                       className="w-8 rounded-sm !border !border-white/60"
                     />
@@ -428,7 +425,6 @@ const ReactTltp = ({ variant = "", content, id }) => {
                     alt={trait?.name}
                     width={24}
                     height={24}
-                    placeholder="blur"
                     blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/SkhXQAAAABJRU5ErkJggg=="
                   />
                   <div className="text-sm text-center font-light">
