@@ -164,8 +164,8 @@ const ForceIcon = ({
         src={iconFrameUrl}
         className="absolute top-0 right-0 w-full h-full object-contain pointer-events-none z-10"
         alt="Border Image"
-        width={200}
-        height={200}
+        width={100}
+        height={100}
         loading="eager"
         fetchPriority="high"
       />

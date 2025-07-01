@@ -96,26 +96,30 @@ const ItemDisplay = ({
       {/* Frame Image */}
       {showFrame && (
         <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
-          <Image
+          <OptimizedImage
             src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1746434099/item_1_mpqgp5.webp"
             alt="item frame"
-            width={96}
-            height={96}
+            width={36}
+            height={36}
             className={`aspect-square object-contain ${frameSizeClass}`}
+            loading="eager"
+            fetchPriority="high"
           />
         </div>
       )}
 
       {/* Item Image */}
       <div className="relative z-10 flex items-center justify-center">
-        <Image
+        <OptimizedImage
           src={item?.imageUrl}
           alt={item?.name}
-          width={96}
-          height={96}
+          width={36}
+          height={36}
           className={`aspect-square object-contain ${
             isHovered ? "opacity-100" : "opacity-80"
           } ${isFaded ? "opacity-20 grayscale" : ""} ${borderRadius}`}
+          loading="eager"
+          fetchPriority="high"
         />
       </div>
     </div>

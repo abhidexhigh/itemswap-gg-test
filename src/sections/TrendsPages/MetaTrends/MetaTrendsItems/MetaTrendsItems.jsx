@@ -124,7 +124,16 @@ const TabButton = memo(({ active, label, onClick }) => (
   </button>
 ));
 
-// Optimized item components using new tooltip system
+// Reusable CSS classes to reduce repetition in item components
+const itemContainerClass =
+  "flex flex-col items-center gap-2 cursor-pointer group";
+const imageContainerClass =
+  "relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105";
+const selectedOverlayClass =
+  "absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center z-20";
+const labelClass =
+  "hidden lg:block text-sm md:text-base text-[#D9A876] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full";
+
 const TraitItem = memo(
   ({ trait, selectedItem, onSelect, i }) => {
     const handleClick = useCallback(
@@ -135,12 +144,8 @@ const TraitItem = memo(
 
     return (
       <WithTooltip variant="trait" content={trait}>
-        <div
-          className="flex flex-col items-center gap-2 cursor-pointer group"
-          onClick={handleClick}
-          style={{ contain: "layout style paint" }}
-        >
-          <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
+        <div className={itemContainerClass} onClick={handleClick}>
+          <div className={imageContainerClass}>
             <TraitImage
               trait={trait}
               size="xlarge"
@@ -149,25 +154,20 @@ const TraitItem = memo(
               showTooltip={false}
             />
             {isSelected && (
-              <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center z-20">
+              <div className={selectedOverlayClass}>
                 <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
               </div>
             )}
           </div>
-          <span className="hidden lg:block text-sm md:text-base text-[#D9A876] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
-            {trait?.name}
-          </span>
+          <span className={labelClass}>{trait?.name}</span>
         </div>
       </WithTooltip>
     );
   },
-  (prevProps, nextProps) => {
-    return (
-      prevProps.trait?.key === nextProps.trait?.key &&
-      prevProps.selectedItem === nextProps.selectedItem &&
-      prevProps.i === nextProps.i
-    );
-  }
+  (prevProps, nextProps) =>
+    prevProps.trait?.key === nextProps.trait?.key &&
+    prevProps.selectedItem === nextProps.selectedItem &&
+    prevProps.i === nextProps.i
 );
 
 const ForceItem = memo(
@@ -179,19 +179,15 @@ const ForceItem = memo(
     );
     const isSelected = force?.key === selectedItem;
 
-    const handleMouseEnter = useCallback(() => setIsHovered(true), []);
-    const handleMouseLeave = useCallback(() => setIsHovered(false), []);
-
     return (
       <WithTooltip variant="force" content={force}>
         <div
-          className="flex flex-col items-center gap-2 cursor-pointer group"
+          className={itemContainerClass}
           onClick={handleClick}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          style={{ contain: "layout style paint" }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
-          <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
+          <div className={imageContainerClass}>
             <ForceIcon
               force={force}
               size="xxlarge"
@@ -200,7 +196,7 @@ const ForceItem = memo(
               loading="lazy"
             />
             {isSelected && (
-              <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+              <div className={selectedOverlayClass}>
                 <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
               </div>
             )}
@@ -212,13 +208,10 @@ const ForceItem = memo(
       </WithTooltip>
     );
   },
-  (prevProps, nextProps) => {
-    return (
-      prevProps.force?.key === nextProps.force?.key &&
-      prevProps.selectedItem === nextProps.selectedItem &&
-      prevProps.i === nextProps.i
-    );
-  }
+  (prevProps, nextProps) =>
+    prevProps.force?.key === nextProps.force?.key &&
+    prevProps.selectedItem === nextProps.selectedItem &&
+    prevProps.i === nextProps.i
 );
 
 const SkillTreeItem = memo(
@@ -228,28 +221,16 @@ const SkillTreeItem = memo(
       [onSelect, skill?.key]
     );
     const isSelected = skill?.key === selectedSkillTree;
-    const tooltipId = useMemo(
-      () => `skill-${skill?.key}-${i}`,
-      [skill?.key, i]
-    );
 
-    const containerClass = useMemo(
-      () =>
-        mobile
-          ? "flex flex-col items-center gap-1 cursor-pointer group w-12 sm:w-14 flex-shrink-0"
-          : "flex flex-col items-center gap-1 cursor-pointer group w-16 md:w-20 lg:w-24 flex-shrink-0",
-      [mobile]
-    );
+    const containerClass = mobile
+      ? "flex flex-col items-center gap-1 cursor-pointer group w-12 sm:w-14 flex-shrink-0"
+      : "flex flex-col items-center gap-1 cursor-pointer group w-16 md:w-20 lg:w-24 flex-shrink-0";
     const textClass = mobile ? "text-[10px]" : "text-xs";
     const iconClass = mobile ? "text-2xl" : "text-3xl";
 
     return (
       <WithTooltip variant="skillTree" content={skill}>
-        <div
-          className={containerClass}
-          onClick={handleClick}
-          style={{ contain: "layout style paint" }}
-        >
+        <div className={containerClass} onClick={handleClick}>
           <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-105">
             <SkillTreeImage
               skill={skill}
@@ -259,7 +240,7 @@ const SkillTreeItem = memo(
               loading="lazy"
             />
             {isSelected && (
-              <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+              <div className={selectedOverlayClass}>
                 <IoMdCheckmarkCircle
                   className={`text-[#86efac] ${iconClass} z-50`}
                 />
@@ -275,14 +256,11 @@ const SkillTreeItem = memo(
       </WithTooltip>
     );
   },
-  (prevProps, nextProps) => {
-    return (
-      prevProps.skill?.key === nextProps.skill?.key &&
-      prevProps.selectedSkillTree === nextProps.selectedSkillTree &&
-      prevProps.mobile === nextProps.mobile &&
-      prevProps.i === nextProps.i
-    );
-  }
+  (prevProps, nextProps) =>
+    prevProps.skill?.key === nextProps.skill?.key &&
+    prevProps.selectedSkillTree === nextProps.selectedSkillTree &&
+    prevProps.mobile === nextProps.mobile &&
+    prevProps.i === nextProps.i
 );
 
 const ItemIcon = memo(
@@ -298,7 +276,6 @@ const ItemIcon = memo(
         <div
           className="flex flex-col items-center gap-2 cursor-pointer group max-w-[84px]"
           onClick={handleClick}
-          style={{ contain: "layout style paint" }}
         >
           <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-110">
             <OptimizedImage
@@ -311,7 +288,7 @@ const ItemIcon = memo(
               sizes="(max-width: 768px) 50vw, 84px"
             />
             {isSelected && (
-              <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+              <div className={selectedOverlayClass}>
                 <IoMdCheckmarkCircle className="text-[#86efac] text-5xl z-50" />
               </div>
             )}
@@ -320,13 +297,10 @@ const ItemIcon = memo(
       </WithTooltip>
     );
   },
-  (prevProps, nextProps) => {
-    return (
-      prevProps.item?.key === nextProps.item?.key &&
-      prevProps.selectedItem === nextProps.selectedItem &&
-      prevProps.i === nextProps.i
-    );
-  }
+  (prevProps, nextProps) =>
+    prevProps.item?.key === nextProps.item?.key &&
+    prevProps.selectedItem === nextProps.selectedItem &&
+    prevProps.i === nextProps.i
 );
 
 // Simplified champion component
@@ -346,28 +320,24 @@ const ChampionWithItems = memo(
 
     return (
       <div className="flex flex-col items-center gap-x-4 flex-grow basis-0 min-w-[65px] md:min-w-[80px] max-w-[78px] md:max-w-[150px]">
-        <div className="inline-flex items-center justify-center flex-col">
-          <div className="flex flex-col w-full aspect-square rounded-[20px]">
-            <div className="relative inline-flex rounded-[10px]">
-              <CardImage
-                src={championDetails}
-                forces={forces}
-                tier={tier}
-                imgStyle="w-[68px] md:w-[84px]"
-                identificationImageStyle="w=[16px] md:w-[32px]"
-                textStyle="text-[10px] md:text-[16px] hidden"
-                cardSize="!w-[80px] !h-[80px] md:!w-[106px] md:!h-[106px]"
-                showCost={true}
-                loading="lazy"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="inline-flex items-center justify-center w-full gap-0.5 flex-wrap">
+        <CardImage
+          src={championDetails}
+          forces={forces}
+          tier={tier}
+          imgStyle="w-[68px] md:w-[84px]"
+          identificationImageStyle="w=[16px] md:w-[32px]"
+          textStyle="text-[10px] md:text-[16px] hidden"
+          cardSize="!w-[80px] !h-[80px] md:!w-[106px] md:!h-[106px]"
+          showCost={true}
+          loading="lazy"
+        />
+        <div className="flex items-center justify-center w-full gap-0.5 flex-wrap">
           {championItems.map((itemDetails, idx) => (
-            <div className="hover:z-20 hover:scale-125 transition-all duration-300">
+            <div
+              key={`${itemDetails.key}-${idx}`}
+              className="hover:z-20 hover:scale-125 transition-all duration-300"
+            >
               <ItemDisplay
-                key={`${itemDetails.key}-${idx}`}
                 item={itemDetails}
                 tooltipId={`${itemDetails.key}-${idx}`}
                 size="xxSmall"
@@ -470,47 +440,43 @@ const DeckHeader = memo(
 
         {/* Mobile layout */}
         <div className="flex md:hidden flex-col gap-y-3 mt-2 w-full items-center">
-          <div className="flex items-center gap-x-2 w-fit overflow-hidden !border !border-[#ffffff40] rounded-lg p-1">
+          <div className="flex items-center gap-x-2 w-fit overflow-hidden border border-[#ffffff40] rounded-lg p-1">
             {forceDetails.slice(0, 4).map((force, index) => (
               <WithTooltip key={`${force.key}-${index}`} content={force?.key}>
-                <div className="flex-shrink-0 w-[30px] h-[30px]">
-                  <ForceIcon
-                    force={force.details}
-                    size="custom"
-                    customSize="w-full h-full"
-                    className="aspect-square"
-                    isHovered={hoveredForce === force?.key}
-                    loading="lazy"
-                  />
-                </div>
+                <ForceIcon
+                  force={force.details}
+                  size="custom"
+                  customSize="w-[30px] h-[30px]"
+                  className="flex-shrink-0 aspect-square"
+                  isHovered={hoveredForce === force?.key}
+                  loading="lazy"
+                />
               </WithTooltip>
             ))}
             {forceDetails.length > 0 && skillDetails.length > 0 && (
               <div className="flex-shrink-0 h-8 w-px bg-[#ffffff30] mx-1"></div>
             )}
             {skillDetails.slice(0, 3).map((skill, index) => (
-              <div
+              <SkillTreeImage
                 key={`${skill.key}-${index}`}
+                skill={skill}
+                size="default"
                 className="flex-shrink-0 w-[30px] h-[30px] shadow-md rounded-full shadow-[#ffffff20]"
-              >
-                <SkillTreeImage skill={skill} size="default" loading="lazy" />
-              </div>
+                loading="lazy"
+              />
             ))}
           </div>
 
           <div className="flex items-center gap-x-1 w-fit overflow-x-auto scrollbar-hide">
-            {traitDetails.slice(0, 6).map((trait, index) => {
-              return (
-                <div key={`${trait.key}-${index}`} className="flex-shrink-0">
-                  <TraitImage
-                    trait={trait}
-                    size="small"
-                    className="!w-[34px] !h-[34px]"
-                    loading="lazy"
-                  />
-                </div>
-              );
-            })}
+            {traitDetails.slice(0, 6).map((trait, index) => (
+              <TraitImage
+                key={`${trait.key}-${index}`}
+                trait={trait}
+                size="small"
+                className="flex-shrink-0 !w-[34px] !h-[34px]"
+                loading="lazy"
+              />
+            ))}
             {traitDetails.length > 0 && augmentDetails.length > 0 && (
               <div className="flex-shrink-0 h-8 w-px bg-[#ffffff30] mx-2"></div>
             )}
@@ -718,30 +684,28 @@ const MetaDeck = memo(
                           }
                         </dt>
                         <dd className="text-base font-medium leading-4 text-[#D9A876]">
-                          <span>{value}</span>
+                          {value}
                         </dd>
                       </dl>
                     ))}
                   </div>
 
-                  <div className="md:flex flex-col hidden">
-                    <div className="flex w-full flex-col gap-y-4 h-full justify-between rounded-[4px] bg-[#1D1D1D] pt-[10px] pb-1 px-[16px] sm:px-[18px]">
-                      {[
-                        [others?.top4, "65.3%"],
-                        [others?.winPercentage, "26.6%"],
-                        [others?.pickPercentage, "0.39%"],
-                        [others?.avgPlacement, "4.52"],
-                      ].map(([label, value], i) => (
-                        <dl key={i} className="flex justify-between gap-x-6">
-                          <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
-                            {label}
-                          </dt>
-                          <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-[#D9A876]">
-                            <span>{value}</span>
-                          </dd>
-                        </dl>
-                      ))}
-                    </div>
+                  <div className="hidden md:flex flex-col w-full gap-y-4 h-full justify-between rounded-[4px] bg-[#1D1D1D] pt-[10px] pb-1 px-[16px] sm:px-[18px]">
+                    {[
+                      [others?.top4, "65.3%"],
+                      [others?.winPercentage, "26.6%"],
+                      [others?.pickPercentage, "0.39%"],
+                      [others?.avgPlacement, "4.52"],
+                    ].map(([label, value], i) => (
+                      <dl key={i} className="flex justify-between gap-x-6">
+                        <dt className="text-[11px] md:text-[14px] font-medium leading-5 text-[#999]">
+                          {label}
+                        </dt>
+                        <dd className="text-[11px] md:text-[14px] font-medium leading-5 text-[#D9A876]">
+                          {value}
+                        </dd>
+                      </dl>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -1075,45 +1039,39 @@ const MetaTrendsItems = () => {
             </div>
 
             {/* Mobile View */}
-            <div className="lg:hidden">
-              {activeTraitsSubTab === "Origin" && (
-                <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 w-full max-h-[300px] overflow-y-auto">
-                  {traits?.slice(0, 24).map((trait, i) => (
-                    <div
-                      key={`trait-${trait.key}-${i}`}
-                      className="w-full max-w-[70px] sm:max-w-[80px]"
-                    >
-                      <LazyWrapper height="80px">
-                        <TraitItem
-                          trait={trait}
-                          selectedItem={selectedTrait}
-                          onSelect={handleFilterChange}
-                          i={i}
-                        />
-                      </LazyWrapper>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {activeTraitsSubTab === "Forces" && (
-                <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 w-full max-h-[300px] overflow-y-auto">
-                  {forces?.slice(0, 24).map((force, i) => (
-                    <div
-                      key={`force-${force.key}-${i}`}
-                      className="w-full max-w-[70px] sm:max-w-[80px]"
-                    >
-                      <LazyWrapper height="80px">
-                        <ForceItem
-                          force={force}
-                          selectedItem={selectedTrait}
-                          onSelect={handleFilterChange}
-                          i={i}
-                        />
-                      </LazyWrapper>
-                    </div>
-                  ))}
-                </div>
-              )}
+            <div className="lg:hidden grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 w-full max-h-[300px] overflow-y-auto">
+              {activeTraitsSubTab === "Origin" &&
+                traits?.slice(0, 24).map((trait, i) => (
+                  <div
+                    key={`trait-${trait.key}-${i}`}
+                    className="w-full max-w-[70px] sm:max-w-[80px]"
+                  >
+                    <LazyWrapper height="80px">
+                      <TraitItem
+                        trait={trait}
+                        selectedItem={selectedTrait}
+                        onSelect={handleFilterChange}
+                        i={i}
+                      />
+                    </LazyWrapper>
+                  </div>
+                ))}
+              {activeTraitsSubTab === "Forces" &&
+                forces?.slice(0, 24).map((force, i) => (
+                  <div
+                    key={`force-${force.key}-${i}`}
+                    className="w-full max-w-[70px] sm:max-w-[80px]"
+                  >
+                    <LazyWrapper height="80px">
+                      <ForceItem
+                        force={force}
+                        selectedItem={selectedTrait}
+                        onSelect={handleFilterChange}
+                        i={i}
+                      />
+                    </LazyWrapper>
+                  </div>
+                ))}
             </div>
 
             {/* Desktop View */}
@@ -1157,24 +1115,22 @@ const MetaTrendsItems = () => {
         );
       case "Items":
         return (
-          <div className="p-3 md:p-6 bg-[#111111] rounded-lg mt-2 max-h-[155px] md:max-h-full overflow-y-auto">
-            <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-8 xl:!flex justify-center xl:!flex-wrap gap-1 lg:gap-4">
-              {filteredItems.slice(0, 40).map((item, i) => (
-                <div
-                  key={`item-${item.key}-${i}`}
-                  className="w-full max-w-[50px] sm:max-w-[60px] md:max-w-[84px]"
-                >
-                  <LazyWrapper height="60px">
-                    <ItemIcon
-                      item={item}
-                      selectedItem={selectedItem}
-                      onSelect={handleFilterChange}
-                      i={i}
-                    />
-                  </LazyWrapper>
-                </div>
-              ))}
-            </div>
+          <div className="p-3 md:p-6 bg-[#111111] rounded-lg mt-2 max-h-[155px] md:max-h-full overflow-y-auto grid grid-cols-6 sm:grid-cols-8 md:grid-cols-6 lg:grid-cols-8 xl:!flex justify-center xl:!flex-wrap gap-1 lg:gap-4">
+            {filteredItems.slice(0, 40).map((item, i) => (
+              <div
+                key={`item-${item.key}-${i}`}
+                className="w-full max-w-[50px] sm:max-w-[60px] md:max-w-[84px]"
+              >
+                <LazyWrapper height="60px">
+                  <ItemIcon
+                    item={item}
+                    selectedItem={selectedItem}
+                    onSelect={handleFilterChange}
+                    i={i}
+                  />
+                </LazyWrapper>
+              </div>
+            ))}
           </div>
         );
       case "SkillTree":
@@ -1205,45 +1161,40 @@ const MetaTrendsItems = () => {
             </div>
 
             {/* Mobile View */}
-            <div className="lg:hidden">
-              {activeSkillsSubTab && skillsByVariant[activeSkillsSubTab] && (
-                <div className="flex flex-wrap justify-center gap-2 w-full max-h-[300px] overflow-y-auto px-2">
-                  {skillsByVariant[activeSkillsSubTab]
-                    .slice(0, 20)
-                    .map((skill, i) => (
-                      <LazyWrapper
-                        height="60px"
-                        key={`mobile-skill-${skill.key}-${i}`}
-                      >
-                        <SkillTreeItem
-                          skill={skill}
-                          selectedSkillTree={selectedSkillTree}
-                          onSelect={handleFilterChange}
-                          i={i}
-                          mobile={true}
-                        />
-                      </LazyWrapper>
-                    ))}
-                </div>
-              )}
+            <div className="lg:hidden flex flex-wrap justify-center gap-2 w-full max-h-[300px] overflow-y-auto px-2">
+              {activeSkillsSubTab &&
+                skillsByVariant[activeSkillsSubTab]
+                  ?.slice(0, 20)
+                  .map((skill, i) => (
+                    <LazyWrapper
+                      height="60px"
+                      key={`mobile-skill-${skill.key}-${i}`}
+                    >
+                      <SkillTreeItem
+                        skill={skill}
+                        selectedSkillTree={selectedSkillTree}
+                        onSelect={handleFilterChange}
+                        i={i}
+                        mobile={true}
+                      />
+                    </LazyWrapper>
+                  ))}
             </div>
 
             {/* Desktop View */}
-            <div className="hidden lg:block">
-              <div className="flex flex-wrap justify-center gap-3 w-full">
-                {skillTree
-                  ?.filter((skill) => skill?.imageUrl)
-                  ?.slice(0, 30)
-                  ?.map((skill, i) => (
-                    <SkillTreeItem
-                      key={`desktop-skill-${skill.key}-${i}`}
-                      skill={skill}
-                      selectedSkillTree={selectedSkillTree}
-                      onSelect={handleFilterChange}
-                      i={i}
-                    />
-                  ))}
-              </div>
+            <div className="hidden lg:flex flex-wrap justify-center gap-3 w-full">
+              {skillTree
+                ?.filter((skill) => skill?.imageUrl)
+                ?.slice(0, 30)
+                ?.map((skill, i) => (
+                  <SkillTreeItem
+                    key={`desktop-skill-${skill.key}-${i}`}
+                    skill={skill}
+                    selectedSkillTree={selectedSkillTree}
+                    onSelect={handleFilterChange}
+                    i={i}
+                  />
+                ))}
             </div>
           </div>
         );
@@ -1289,10 +1240,8 @@ const MetaTrendsItems = () => {
   // Loading state
   if (isLoading) {
     return (
-      <div className="mx-auto md:px-0 lg:px-0 py-6">
-        <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D9A876]"></div>
-        </div>
+      <div className="mx-auto md:px-0 lg:px-0 py-6 flex flex-col items-center justify-center min-h-[400px] space-y-4">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D9A876]"></div>
       </div>
     );
   }
@@ -1300,22 +1249,20 @@ const MetaTrendsItems = () => {
   // Error state
   if (error) {
     return (
-      <div className="mx-auto md:px-0 lg:px-0 py-6">
-        <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
-          <div className="text-red-400 text-6xl">⚠️</div>
-          <div className="text-red-400 text-lg font-medium">
-            Failed to load data
-          </div>
-          <div className="text-gray-400 text-sm text-center max-w-md">
-            {error}. Please check your internet connection and try again.
-          </div>
-          <button
-            onClick={refetch}
-            className="px-4 py-2 bg-[#2D2F37] hover:bg-[#3D3F47] text-[#D9A876] rounded-lg text-sm transition-colors duration-200"
-          >
-            Retry
-          </button>
+      <div className="mx-auto md:px-0 lg:px-0 py-6 flex flex-col items-center justify-center min-h-[400px] space-y-4">
+        <div className="text-red-400 text-6xl">⚠️</div>
+        <div className="text-red-400 text-lg font-medium">
+          Failed to load data
         </div>
+        <div className="text-gray-400 text-sm text-center max-w-md">
+          {error}. Please check your internet connection and try again.
+        </div>
+        <button
+          onClick={refetch}
+          className="px-4 py-2 bg-[#2D2F37] hover:bg-[#3D3F47] text-[#D9A876] rounded-lg text-sm transition-colors duration-200"
+        >
+          Retry
+        </button>
       </div>
     );
   }
@@ -1356,11 +1303,9 @@ const MetaTrendsItems = () => {
 
               {/* Loading indicator */}
               {isLoadingMore && (
-                <div className="flex justify-center py-6">
-                  <div className="flex items-center space-x-2 text-[#D9A876]">
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#D9A876]"></div>
-                    <span className="text-sm">Loading more decks...</span>
-                  </div>
+                <div className="flex justify-center py-6 items-center space-x-2 text-[#D9A876]">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#D9A876]"></div>
+                  <span className="text-sm">Loading more decks...</span>
                 </div>
               )}
 
