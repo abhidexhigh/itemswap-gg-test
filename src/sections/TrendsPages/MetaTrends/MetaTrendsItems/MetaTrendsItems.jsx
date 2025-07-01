@@ -1039,7 +1039,7 @@ const MetaTrendsItems = () => {
             </div>
 
             {/* Mobile View */}
-            <div className="lg:hidden grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 w-full max-h-[300px] overflow-y-auto">
+            <div className="lg:!hidden grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2 w-full max-h-[300px] overflow-y-auto">
               {activeTraitsSubTab === "Origin" &&
                 traits?.slice(0, 24).map((trait, i) => (
                   <div
