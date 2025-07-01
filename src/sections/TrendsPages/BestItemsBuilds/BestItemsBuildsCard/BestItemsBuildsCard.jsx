@@ -1,7 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { Tooltip } from "react-tooltip";
-import TraitTooltip from "src/components/tooltip/TraitTooltip";
-import "react-tooltip/dist/react-tooltip.css";
+import { WithTooltip } from "src/components/tooltip/GlobalTooltip";
 import ProjectCardStyleWrapper from "./BestItemsBuildsCard.style";
 import GirlCrush from "@assets/image/traits/GirlCrush.svg";
 import TrainGoldBg from "@assets/image/traitBackgrounds/gold.svg";
@@ -81,13 +79,22 @@ const ProjectCard = ({
         </div>
         <div className="previous-traits">
           <div className="previous-image">
-            <div style={inlineStyle} data-tooltip-id="my-tooltip">
-              <img
-                src={GirlCrush.src}
-                className="power-icon"
-                alt="Power icon"
-              />
-            </div>
+            <WithTooltip 
+              variant="trait" 
+              content={{
+                name: "Lillia",
+                desc: "Confetti Bloom: Deal magic damage to adjacent enemies. Heal Lillia and her nearest ally.",
+                imageUrl: GirlCrush.src
+              }}
+            >
+              <div style={inlineStyle}>
+                <img
+                  src={GirlCrush.src}
+                  className="power-icon"
+                  alt="Power icon"
+                />
+              </div>
+            </WithTooltip>
             <div style={inlineStyle}>
               <img
                 src={Blockbuster.src}
@@ -131,28 +138,6 @@ const ProjectCard = ({
           <ProgressBar progress={progress} />
         </div>
       </div> */}
-      <Tooltip
-        id="my-tooltip"
-        effect="solid"
-        style={{
-          zIndex: 999,
-          backgroundColor: "#1e1e2f",
-          opacity: "1 !important",
-        }}
-      >
-        <TraitTooltip
-          title="Lillia"
-          icon={GirlCrush.src}
-          description={{
-            title: "Confetti Bloom",
-            text: "Deal magic damage to adjacent enemies. Heal Lillia and her nearest ally.",
-          }}
-          magicDamage="180 / 270 / 400"
-          healAmount="180 / 220 / 260"
-          allyHealAmount="90 / 110 / 130"
-          rangeFilled={70}
-        />
-      </Tooltip>
     </ProjectCardStyleWrapper>
   );
 };

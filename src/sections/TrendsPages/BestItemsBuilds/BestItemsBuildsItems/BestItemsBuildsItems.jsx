@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
-import "react-tooltip/dist/react-tooltip.css";
 import TierContent from "./TierContent";
 import BestItemsBuilds from "../../../../data/newData/bestItemsBuilds.json";
 import ProjectCardStyleWrapper from "./BestItemsBuildsItems.style";

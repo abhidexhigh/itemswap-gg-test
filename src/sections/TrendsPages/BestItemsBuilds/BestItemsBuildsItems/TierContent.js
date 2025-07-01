@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import "../../../../../i18n";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import useCompsData from "../../../../hooks/useCompsData";
-import ReactTltp from "src/components/tooltip/ReactTltp";
+import { WithTooltip } from "src/components/tooltip/GlobalTooltip";
 import CardImage from "src/components/cardImage";
 import { OptimizedImage } from "src/utils/imageOptimizer";
 
@@ -17,33 +17,33 @@ const ItemComponent = ({ item, items, isLarge = false }) => {
   if (!itemData) return null;
 
   return (
-    <div
-      className={
-        isLarge
-          ? "flex-shrink-0"
-          : "rounded-lg overflow-hidden border-[1px] border-[#ffffff60] hover:border-[#ffffff90] transition-all duration-300 group"
-      }
-    >
+    <WithTooltip variant="item" content={itemData}>
       <div
-        className={`relative overflow-hidden ${isLarge ? "w-[60px] h-[60px] md:w-[36px] md:h-[36px] group" : "w-[56px] h-[56px] md:w-[44px] md:h-[44px]"}`}
-        data-tooltip-id={item}
+        className={
+          isLarge
+            ? "flex-shrink-0"
+            : "rounded-lg overflow-hidden border-[1px] border-[#ffffff60] hover:border-[#ffffff90] transition-all duration-300 group"
+        }
       >
-        <OptimizedImage
-          src={itemData.imageUrl}
-          alt={"item"}
-          width={30}
-          height={30}
-          loading="lazy"
-          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"
-          className={
-            isLarge
-              ? "w-full h-full object-cover border-[1px] rounded-lg border-[#ffffff60] hover:border-[#ffffff90] transition-all duration-300 shadow-md group-hover:scale-105"
-              : "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 shadow-md"
-          }
-        />
+        <div
+          className={`relative overflow-hidden ${isLarge ? "w-[60px] h-[60px] md:w-[36px] md:h-[36px] group" : "w-[56px] h-[56px] md:w-[44px] md:h-[44px]"}`}
+        >
+          <OptimizedImage
+            src={itemData.imageUrl}
+            alt={"item"}
+            width={30}
+            height={30}
+            loading="lazy"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"
+            className={
+              isLarge
+                ? "w-full h-full object-cover border-[1px] rounded-lg border-[#ffffff60] hover:border-[#ffffff90] transition-all duration-300 shadow-md group-hover:scale-105"
+                : "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 shadow-md"
+            }
+          />
+        </div>
       </div>
-      <ReactTltp variant="item" id={item} content={itemData} />
-    </div>
+    </WithTooltip>
   );
 };
 
