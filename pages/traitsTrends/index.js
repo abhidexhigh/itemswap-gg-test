@@ -5,7 +5,6 @@ import SEO from "@components/SEO";
 import WalletModal from "@components/modal/walletModal/WalletModal";
 import MetamaskModal from "@components/modal/metamaskModal/MetamaskModal";
 import Header from "@sections/Header/v2";
-import PageHeader from "@sections/ProjectPages/ProjectsList/PageHeader";
 import TraitsTrends from "@sections/TrendsPages/TraitsTrends";
 import Footer from "@sections/Footer/v1";
 import TrendsNav from "src/components/trendsNav";

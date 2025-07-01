@@ -19,7 +19,7 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import CardImage from "src/components/cardImage";
 import { useCompsData } from "../../../../hooks/useCompsData";
 import RecentDecksHistory from "../../../../data/newData/recentDecksHistory.json";
-import ReactTltp from "src/components/tooltip/ReactTltp";
+import { WithTooltip } from "src/components/tooltip/GlobalTooltip";
 import { OptimizedImage } from "src/utils/imageOptimizer";
 import ForceIcon from "src/components/forceIcon";
 import SkillTreeImage from "src/components/SkillTreeImage";
@@ -139,33 +139,30 @@ const TraitItem = memo(({ trait, selectedTrait, onSelect, index }) => {
 
   return (
     <LazyComponent>
-      <div
-        className="flex flex-col items-center gap-2 cursor-pointer group"
-        onClick={handleClick}
-      >
-        <ReactTltp
-          variant="trait"
-          content={trait}
-          id={`${trait?.key}-${index}`}
-        />
-        <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
-          <TraitImage
-            trait={trait}
-            size="xlarge"
-            className="w-full h-full rounded-lg"
-            data-tooltip-id={`${trait?.key}-${index}`}
-            loading="lazy"
-          />
-          {isSelected && (
-            <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center z-20">
-              <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
-            </div>
-          )}
+      <WithTooltip variant="trait" content={trait}>
+        <div
+          className="flex flex-col items-center gap-2 cursor-pointer group"
+          onClick={handleClick}
+        >
+          <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
+            <TraitImage
+              trait={trait}
+              size="xlarge"
+              className="w-full h-full rounded-lg"
+              loading="lazy"
+              showTooltip={false}
+            />
+            {isSelected && (
+              <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center z-20">
+                <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
+              </div>
+            )}
+          </div>
+          <span className="hidden lg:block text-sm md:text-base text-[#D9A876] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
+            {trait?.name}
+          </span>
         </div>
-        <span className="hidden lg:block text-sm md:text-base text-[#D9A876] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
-          {trait?.name}
-        </span>
-      </div>
+      </WithTooltip>
     </LazyComponent>
   );
 });
@@ -184,36 +181,32 @@ const ForceItem = memo(({ force, selectedTrait, onSelect, index }) => {
 
   return (
     <LazyComponent>
-      <div
-        className="flex flex-col items-center gap-2 cursor-pointer group"
-        onClick={handleClick}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        <ReactTltp
-          variant="force"
-          content={force}
-          id={`${force?.key}-${index}`}
-        />
-        <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
-          <ForceIcon
-            force={force}
-            size="xxlarge"
-            isHovered={isHovered}
-            className="w-full h-full object-cover rounded-lg"
-            data-tooltip-id={`${force?.key}-${index}`}
-            loading="lazy"
-          />
-          {isSelected && (
-            <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
-              <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
-            </div>
-          )}
+      <WithTooltip variant="force" content={force}>
+        <div
+          className="flex flex-col items-center gap-2 cursor-pointer group"
+          onClick={handleClick}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div className="relative aspect-square w-full max-w-[96px] transition-transform duration-200 group-hover:scale-105">
+            <ForceIcon
+              force={force}
+              size="xxlarge"
+              isHovered={isHovered}
+              className="w-full h-full object-cover rounded-lg"
+              loading="lazy"
+            />
+            {isSelected && (
+              <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+                <IoMdCheckmarkCircle className="text-[#86efac] text-4xl z-50" />
+              </div>
+            )}
+          </div>
+          <span className="hidden lg:block text-sm md:text-base text-[#cccccc] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
+            {force?.name}
+          </span>
         </div>
-        <span className="hidden lg:block text-sm md:text-base text-[#cccccc] bg-[#1b1a32] px-3 py-1 rounded-full truncate max-w-full">
-          {force?.name}
-        </span>
-      </div>
+      </WithTooltip>
     </LazyComponent>
   );
 });
@@ -233,35 +226,31 @@ const SkillTreeItem = memo(
 
     return (
       <LazyComponent>
-        <div className={containerClass} onClick={handleClick}>
-          <ReactTltp
-            variant="skillTree"
-            content={skill}
-            id={`skill-${skill?.key}-${index}`}
-          />
-          <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-105">
-            <SkillTreeImage
-              skill={skill}
-              size={mobile ? "xlarge" : "large"}
-              tooltipId={`skill-${skill?.key}-${index}`}
-              className="w-full h-full"
-              showTooltip={false}
-              loading="lazy"
-            />
-            {isSelected && (
-              <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
-                <IoMdCheckmarkCircle
-                  className={`text-[#86efac] ${iconClass} z-50`}
-                />
-              </div>
-            )}
+        <WithTooltip variant="skillTree" content={skill}>
+          <div className={containerClass} onClick={handleClick}>
+            <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-105">
+              <SkillTreeImage
+                skill={skill}
+                size={mobile ? "xlarge" : "large"}
+                className="w-full h-full"
+                showTooltip={false}
+                loading="lazy"
+              />
+              {isSelected && (
+                <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+                  <IoMdCheckmarkCircle
+                    className={`text-[#86efac] ${iconClass} z-50`}
+                  />
+                </div>
+              )}
+            </div>
+            <span
+              className={`${textClass} truncate max-w-full text-center text-[#cccccc] mt-1`}
+            >
+              {skill?.name}
+            </span>
           </div>
-          <span
-            className={`${textClass} truncate max-w-full text-center text-[#cccccc] mt-1`}
-          >
-            {skill?.name}
-          </span>
-        </div>
+        </WithTooltip>
       </LazyComponent>
     );
   }
@@ -276,29 +265,29 @@ const ItemIcon = memo(({ item, selectedItem, onSelect, index }) => {
 
   return (
     <LazyComponent>
-      <div
-        className="flex flex-col items-center gap-2 cursor-pointer group max-w-[84px]"
-        onClick={handleClick}
-      >
-        <ReactTltp variant="item" content={item} id={`${item?.key}-${index}`} />
-        <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-110">
-          <OptimizedImage
-            alt={item?.name}
-            width={84}
-            height={84}
-            src={item?.imageUrl}
-            className="w-full h-full object-contain rounded-lg !border !border-[#ffffff20]"
-            data-tooltip-id={`${item?.key}-${index}`}
-            loading="lazy"
-            priority={false}
-          />
-          {isSelected && (
-            <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
-              <IoMdCheckmarkCircle className="text-[#86efac] text-5xl z-50" />
-            </div>
-          )}
+      <WithTooltip variant="item" content={item}>
+        <div
+          className="flex flex-col items-center gap-2 cursor-pointer group max-w-[84px]"
+          onClick={handleClick}
+        >
+          <div className="relative aspect-square w-full transition-transform duration-200 group-hover:scale-110">
+            <OptimizedImage
+              alt={item?.name}
+              width={84}
+              height={84}
+              src={item?.imageUrl}
+              className="w-full h-full object-contain rounded-lg !border !border-[#ffffff20]"
+              loading="lazy"
+              priority={false}
+            />
+            {isSelected && (
+              <div className="absolute inset-0 bg-[#00000080] rounded-lg flex items-center justify-center">
+                <IoMdCheckmarkCircle className="text-[#86efac] text-5xl z-50" />
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      </WithTooltip>
     </LazyComponent>
   );
 });
@@ -344,10 +333,7 @@ const ChampionWithItems = memo(
         <div className="flex flex-col items-center gap-x-4 flex-grow basis-0 min-w-[65px] md:min-w-[80px] max-w-[78px] md:max-w-[110px]">
           <div className="inline-flex items-center justify-center flex-col">
             <div className="flex flex-col w-full aspect-square rounded-[20px]">
-              <div
-                className="relative inline-flex rounded-lg"
-                data-tooltip-id={championDetails.key}
-              >
+              <div className="relative inline-flex rounded-lg">
                 <CardImage
                   src={championDetails}
                   forces={forces}
@@ -359,11 +345,6 @@ const ChampionWithItems = memo(
                   loading="lazy"
                 />
               </div>
-              <ReactTltp
-                variant="champion"
-                id={championDetails.key}
-                content={championDetails}
-              />
             </div>
           </div>
           <div className="inline-flex items-center justify-center w-full gap-0.5 flex-wrap">
@@ -372,20 +353,16 @@ const ChampionWithItems = memo(
                 key={`item-${itemDetails.key}-${idx}`}
                 className="relative z-10 hover:z-20 !border !border-[#ffffff20] aspect-square rounded-lg"
               >
-                <ReactTltp
-                  variant="item"
-                  content={itemDetails}
-                  id={`item-${itemDetails.key}-${idx}`}
-                />
-                <OptimizedImage
-                  alt={itemDetails.name || "Item"}
-                  width={30}
-                  height={30}
-                  src={itemDetails.imageUrl}
-                  className="w-[20px] md:w-[30px] rounded-lg hover:scale-150 transition-all duration-300"
-                  data-tooltip-id={`item-${itemDetails.key}-${idx}`}
-                  loading="lazy"
-                />
+                <WithTooltip variant="item" content={itemDetails}>
+                  <OptimizedImage
+                    alt={itemDetails.name || "Item"}
+                    width={30}
+                    height={30}
+                    src={itemDetails.imageUrl}
+                    className="w-[20px] md:w-[30px] rounded-lg hover:scale-150 transition-all duration-300"
+                    loading="lazy"
+                  />
+                </WithTooltip>
               </div>
             ))}
           </div>
@@ -430,18 +407,15 @@ const DeckHeader = memo(({ metaDeck, computedData, augmentDetails }) => {
         <div className="hidden md:flex items-center gap-1 ml-4">
           {computedData.traitDetails.slice(0, 5).map((trait, idx) => (
             <div key={`trait-${trait.key}-${idx}`} className="relative">
-              <TraitImage
-                trait={trait}
-                size="default"
-                className="w-[38px] h-[38px] md:w-[36px] md:h-[36px]"
-                data-tooltip-id={`trait-${trait.key}-${idx}`}
-                loading="lazy"
-              />
-              <ReactTltp
-                variant="trait"
-                id={`trait-${trait.key}-${idx}`}
-                content={trait}
-              />
+              <WithTooltip variant="trait" content={trait}>
+                <TraitImage
+                  trait={trait}
+                  size="default"
+                  className="w-[38px] h-[38px] md:w-[36px] md:h-[36px]"
+                  loading="lazy"
+                  showTooltip={false}
+                />
+              </WithTooltip>
             </div>
           ))}
         </div>
@@ -455,18 +429,15 @@ const DeckHeader = memo(({ metaDeck, computedData, augmentDetails }) => {
               key={`mobile-force-${force.key}-${idx}`}
               className="flex-shrink-0 w-[30px] h-[30px]"
             >
-              <ForceIcon
-                force={force.details}
-                size="custom"
-                customSize="w-full h-full"
-                className="aspect-square"
-                data-tooltip-id={`mobile-force-${force?.key}-${idx}`}
-                loading="lazy"
-              />
-              <ReactTltp
-                content={force?.key}
-                id={`mobile-force-${force?.key}-${idx}`}
-              />
+              <WithTooltip content={force?.key}>
+                <ForceIcon
+                  force={force.details}
+                  size="custom"
+                  customSize="w-full h-full"
+                  className="aspect-square"
+                  loading="lazy"
+                />
+              </WithTooltip>
             </div>
           ))}
 
@@ -496,18 +467,15 @@ const DeckHeader = memo(({ metaDeck, computedData, augmentDetails }) => {
               key={`mobile-trait-${trait.key}-${idx}`}
               className="flex-shrink-0"
             >
-              <TraitImage
-                trait={trait}
-                size="small"
-                className="!w-[34px] !h-[34px]"
-                data-tooltip-id={`mobile-trait-${trait.key}-${idx}`}
-                loading="lazy"
-              />
-              <ReactTltp
-                variant="trait"
-                id={`mobile-trait-${trait.key}-${idx}`}
-                content={trait}
-              />
+              <WithTooltip variant="trait" content={trait}>
+                <TraitImage
+                  trait={trait}
+                  size="small"
+                  className="!w-[34px] !h-[34px]"
+                  loading="lazy"
+                  showTooltip={false}
+                />
+              </WithTooltip>
             </div>
           ))}
 
@@ -537,18 +505,15 @@ const DeckHeader = memo(({ metaDeck, computedData, augmentDetails }) => {
               key={`desktop-force-${force.key}-${idx}`}
               className="flex justify-center items-center bg-[#000] rounded-full mx-1 pr-2 border-[1px] border-[#ffffff30] h-[90%]"
             >
-              <ForceIcon
-                force={force.details}
-                size="custom"
-                customSize="w-[30px] h-[30px] md:w-[36px] md:h-[36px]"
-                className="mr-1"
-                data-tooltip-id={`desktop-force-${force?.key}-${idx}`}
-                loading="lazy"
-              />
-              <ReactTltp
-                content={force?.key}
-                id={`desktop-force-${force?.key}-${idx}`}
-              />
+              <WithTooltip content={force?.key}>
+                <ForceIcon
+                  force={force.details}
+                  size="custom"
+                  customSize="w-[30px] h-[30px] md:w-[36px] md:h-[36px]"
+                  className="mr-1"
+                  loading="lazy"
+                />
+              </WithTooltip>
               <span className="text-[18px]">{force?.numUnits}</span>
             </div>
           ))}

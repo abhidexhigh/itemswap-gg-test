@@ -36,6 +36,7 @@ const mobileBanners = [
 ];
 
 function getRandomChampionKey() {
+  console.log("getRandomChampionKey");
   const randomIndex = Math.floor(Math.random() * banners.length);
   return banners[randomIndex];
 }

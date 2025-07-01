@@ -1,6 +1,6 @@
 import React from "react";
 import { OptimizedImage } from "src/utils/imageOptimizer";
-import ReactTltp from "../tooltip/ReactTltp";
+import { WithTooltip } from "../tooltip/GlobalTooltip";
 
 const TraitImage = ({
   trait,
@@ -25,7 +25,7 @@ const TraitImage = ({
   const frameUrl =
     "https://res.cloudinary.com/dg0cmj6su/image/upload/v1746632714/vecteezy_gold-square-frame-on-transparent-background_42730276_1_1_ree5mp.webp";
 
-  return (
+  const content = (
     <div className={`relative ${imageSize} ${className}`} {...props}>
       {/* Main trait image */}
       <OptimizedImage
@@ -49,9 +49,8 @@ const TraitImage = ({
                 : 56
         }
         src={trait?.tier?.imageUrl || trait?.imageUrl}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover object-center w-full h-full"
+        className="object-cover object-center w-full h-full"
         loading="eager"
-        data-tooltip-id={tooltipId}
       />
 
       {/* Gold frame overlay */}
@@ -81,12 +80,15 @@ const TraitImage = ({
           loading="eager"
         />
       )}
-
-      {/* Tooltip always rendered to prevent flickering */}
-      {showTooltip && (
-        <ReactTltp variant="trait" id={tooltipId} content={trait} />
-      )}
     </div>
+  );
+
+  return showTooltip ? (
+    <WithTooltip variant="trait" content={trait}>
+      {content}
+    </WithTooltip>
+  ) : (
+    content
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { OptimizedImage } from "../../utils/imageOptimizer";
-import ReactTltp from "../tooltip/ReactTltp";
+import { WithTooltip } from "../tooltip/GlobalTooltip";
 
 const SkillTreeImage = memo(
   ({
@@ -31,7 +31,7 @@ const SkillTreeImage = memo(
     const uniqueTooltipId =
       tooltipId || `skill-${skillDetails.key}-${Math.random()}`;
 
-    return (
+    const content = (
       <div className={`relative inline-block ${containerSize} ${className}`}>
         {/* Frame Image */}
         <OptimizedImage
@@ -52,20 +52,18 @@ const SkillTreeImage = memo(
             height={40}
             src={skillDetails.imageUrl}
             className="w-full h-full object-cover aspect-square"
-            data-tooltip-id={showTooltip ? uniqueTooltipId : undefined}
             loading="eager"
           />
         </div>
-
-        {/* Tooltip */}
-        {showTooltip && (
-          <ReactTltp
-            variant="skillTree"
-            content={skillDetails}
-            id={uniqueTooltipId}
-          />
-        )}
       </div>
+    );
+
+    return showTooltip ? (
+      <WithTooltip variant="skillTree" content={skillDetails}>
+        {content}
+      </WithTooltip>
+    ) : (
+      content
     );
   }
 );

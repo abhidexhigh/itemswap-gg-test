@@ -6,7 +6,7 @@ import React, {
   useMemo,
 } from "react";
 import { OptimizedImage } from "../../utils/imageOptimizer";
-import ReactTltp from "../tooltip/ReactTltp";
+import { WithTooltip } from "../tooltip/GlobalTooltip";
 import ForceIcon from "../forceIcon";
 import costWiseFrameData from "../../data/costWiseFrame.json";
 
@@ -247,7 +247,7 @@ const CardImage = ({
     return tier > 0 ? Array(tier).fill(1) : [];
   }, [tier]);
 
-  return (
+  const cardContent = (
     <div className="inline-flex flex-col items-center">
       <div className="inline-flex items-center justify-center flex-col">
         <div className="inline-flex flex-col w-full">
@@ -280,7 +280,6 @@ const CardImage = ({
                 height: "100%",
                 aspectRatio: "1/1",
               }}
-              data-tooltip-id={src?.key}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
@@ -388,14 +387,16 @@ const CardImage = ({
                 />
               </div>
             )}
-
-            {isVisible && (
-              <ReactTltp variant="champion" id={src?.key} content={src} />
-            )}
           </div>
         </div>
       </div>
     </div>
+  );
+
+  return (
+    <WithTooltip variant="champion" content={src}>
+      {cardContent}
+    </WithTooltip>
   );
 };
 

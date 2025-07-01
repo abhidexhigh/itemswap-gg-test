@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { IoMdClose, IoMdCheckmarkCircle } from "react-icons/io";
-import ReactTltp from "src/components/tooltip/ReactTltp";
+import { WithTooltip } from "src/components/tooltip/GlobalTooltip";
 import CardImage from "src/components/cardImage";
 import { OptimizedImage } from "../../../../utils/imageOptimizer";
 import ForceIcon from "src/components/forceIcon";
@@ -25,10 +25,7 @@ export const ChampionWithItems = ({
     <div className="flex flex-col items-center gap-x-2 sm:gap-x-4 flex-grow basis-0 min-w-[78px] sm:min-w-[65px] md:min-w-[80px] max-w-[70px] sm:max-w-[78px] md:max-w-[150px]">
       <div className="inline-flex items-center justify-center flex-col">
         <div className="flex flex-col w-full aspect-square rounded-[20px]">
-          <div
-            className="relative inline-flex rounded-[10px]"
-            data-tooltip-id={championDetails.key}
-          >
+          <div className="relative inline-flex rounded-[10px]">
             <CardImage
               src={championDetails}
               imgStyle="sm:!w-20 md:!w-32"
@@ -39,11 +36,6 @@ export const ChampionWithItems = ({
               cardSize="!w-[80px] !h-[80px] md:!w-[96px] md:!h-[96px]"
             />
           </div>
-          <ReactTltp
-            variant="champion"
-            id={championDetails.key}
-            content={championDetails}
-          />
         </div>
       </div>
 
@@ -57,20 +49,16 @@ export const ChampionWithItems = ({
               key={idx}
               className="relative z-0 hover:z-20 !border !border-[#ffffff20] aspect-square rounded-lg"
             >
-              <ReactTltp
-                variant="item"
-                content={itemDetails}
-                id={itemDetails.key}
-              />
-              <OptimizedImage
-                alt={itemDetails.name || "Item"}
-                width={50}
-                height={50}
-                src={itemDetails.imageUrl}
-                className="w-[17px] sm:w-[20px] md:w-[28px] rounded-lg hover:scale-150 transition-all duration-300"
-                data-tooltip-id={itemDetails.key}
-                loading="lazy"
-              />
+              <WithTooltip variant="item" content={itemDetails}>
+                <OptimizedImage
+                  alt={itemDetails.name || "Item"}
+                  width={50}
+                  height={50}
+                  src={itemDetails.imageUrl}
+                  className="w-[17px] sm:w-[20px] md:w-[28px] rounded-lg hover:scale-150 transition-all duration-300"
+                  loading="lazy"
+                />
+              </WithTooltip>
             </div>
           );
         })}
@@ -127,18 +115,15 @@ export const CompCard = ({
                   onMouseEnter={() => setHoveredForce(force?.key)}
                   onMouseLeave={() => setHoveredForce(null)}
                 >
-                  <ForceIcon
-                    force={forceDetails}
-                    size="custom"
-                    customSize="w-[30px] h-[30px] md:w-[40px] md:h-[40px]"
-                    className="mr-1"
-                    data-tooltip-id={`force-${force?.key}-${i}`}
-                    isHovered={hoveredForce === force?.key}
-                  />
-                  <ReactTltp
-                    content={force?.key}
-                    id={`force-${force?.key}-${i}`}
-                  />
+                  <WithTooltip content={force?.key}>
+                    <ForceIcon
+                      force={forceDetails}
+                      size="custom"
+                      customSize="w-[30px] h-[30px] md:w-[40px] md:h-[40px]"
+                      className="mr-1"
+                      isHovered={hoveredForce === force?.key}
+                    />
+                  </WithTooltip>
                   <span className="text-[18px]">{force?.numUnits}</span>
                 </div>
               );
@@ -172,18 +157,15 @@ export const CompCard = ({
                   onMouseEnter={() => setHoveredForce(force?.key)}
                   onMouseLeave={() => setHoveredForce(null)}
                 >
-                  <ForceIcon
-                    force={forceDetails}
-                    size="custom"
-                    customSize="w-full h-full"
-                    className="aspect-square"
-                    data-tooltip-id={`force-${force?.key}-${i}`}
-                    isHovered={hoveredForce === force?.key}
-                  />
-                  <ReactTltp
-                    content={force?.key}
-                    id={`force-${force?.key}-${i}`}
-                  />
+                  <WithTooltip content={force?.key}>
+                    <ForceIcon
+                      force={forceDetails}
+                      size="custom"
+                      customSize="w-full h-full"
+                      className="aspect-square"
+                      isHovered={hoveredForce === force?.key}
+                    />
+                  </WithTooltip>
                 </div>
               );
             })}
@@ -215,24 +197,24 @@ export const CompCard = ({
 
                 return (
                   <div key={i} className="flex-shrink-0">
-                    <TraitImage
-                      trait={{
-                        ...traitDetails,
-                        tier,
-                        numUnits: trait?.numUnits,
-                      }}
-                      size="small"
-                      className="w-[24px] h-[24px]"
-                      data-tooltip-id={`mobile-trait-${traitDetails.key}-${i}`}
-                    />
-                    <ReactTltp
+                    <WithTooltip
                       variant="trait"
-                      id={`mobile-trait-${traitDetails.key}-${i}`}
                       content={{
                         ...traitDetails,
                         numUnits: trait?.numUnits,
                       }}
-                    />
+                    >
+                      <TraitImage
+                        trait={{
+                          ...traitDetails,
+                          tier,
+                          numUnits: trait?.numUnits,
+                        }}
+                        size="small"
+                        className="w-[24px] h-[24px]"
+                        showTooltip={false}
+                      />
+                    </WithTooltip>
                   </div>
                 );
               })}
@@ -262,20 +244,24 @@ export const CompCard = ({
 
               return (
                 <div key={i} className="relative">
-                  <TraitImage
-                    trait={{ ...traitDetails, tier, numUnits: trait?.numUnits }}
-                    size="default"
-                    className="w-[38px] h-[38px] md:w-[48px] md:h-[48px]"
-                    data-tooltip-id={`trait-${traitDetails.key}-${i}`}
-                  />
-                  <ReactTltp
+                  <WithTooltip
                     variant="trait"
-                    id={`trait-${traitDetails.key}-${i}`}
                     content={{
                       ...traitDetails,
                       numUnits: trait?.numUnits,
                     }}
-                  />
+                  >
+                    <TraitImage
+                      trait={{
+                        ...traitDetails,
+                        tier,
+                        numUnits: trait?.numUnits,
+                      }}
+                      size="default"
+                      className="w-[38px] h-[38px] md:w-[48px] md:h-[48px]"
+                      showTooltip={false}
+                    />
+                  </WithTooltip>
                 </div>
               );
             })}

@@ -48,7 +48,7 @@ const NewsAndPatchesTabs = () => {
             className="mx-auto mt-2 w-48"
           />
           <p className="mx-auto mt-4 max-w-2xl text-center text-lg text-gray-300">
-            Stay informed about the latest updates for Army Dragone
+            Stay informed about the latest updates for Force of Rune
           </p>
         </motion.div>
 

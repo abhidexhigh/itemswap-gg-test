@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { OptimizedImage } from "../../utils/imageOptimizer";
-import ReactTltp from "../tooltip/ReactTltp";
+import { WithTooltip } from "../tooltip/GlobalTooltip";
 
 const AugmentImage = memo(
   ({
@@ -58,7 +58,7 @@ const AugmentImage = memo(
     const uniqueTooltipId =
       tooltipId || `augment-${augment.key}-${Math.random()}`;
 
-    return (
+    const content = (
       <div
         className={`relative inline-block ${config.containerClass} ${className}`}
         {...props}
@@ -70,16 +70,18 @@ const AugmentImage = memo(
           height={config.height}
           src={augment.imageUrl}
           className="w-full h-full object-contain object-center rounded-md border border-[#ffffff20]"
-          data-tooltip-id={showTooltip ? uniqueTooltipId : undefined}
           loading={loading}
           sizes={config.sizes}
         />
-
-        {/* Tooltip */}
-        {showTooltip && (
-          <ReactTltp variant="augment" content={augment} id={uniqueTooltipId} />
-        )}
       </div>
+    );
+
+    return showTooltip ? (
+      <WithTooltip variant="augment" content={augment}>
+        {content}
+      </WithTooltip>
+    ) : (
+      content
     );
   }
 );

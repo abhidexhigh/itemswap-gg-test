@@ -11,13 +11,13 @@ const NewsSection = () => {
   const newsItems = [
     {
       id: 1,
-      title: "Army Dragone Global Launch",
+      title: "Force of Rune Global Launch",
       date: "June 10, 2025",
       image:
         "https://res.cloudinary.com/dg0cmj6su/image/upload/v1740733283/RPG_3_mfl20e.webm",
       imageType: "video",
       excerpt:
-        "The wait is over! Army Dragone is now available worldwide on all platforms.",
+        "The wait is over! Force of Rune is now available worldwide on all platforms.",
       category: "Release",
     },
     {
@@ -63,7 +63,7 @@ const NewsSection = () => {
             transition={{ duration: 0.5, delay: 0.1 }}
           >
             {LT.newsDescription ||
-              "Stay up to date with the latest Army Dragone updates and announcements"}
+              "Stay up to date with the latest Force of Rune updates and announcements"}
           </motion.p>
         </div>
 

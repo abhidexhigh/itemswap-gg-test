@@ -1,16 +1,8 @@
 import Image from "next/image";
 
 /**
- * Optimized Image component with common configurations
+ * Highly optimized Image component for better performance
  * @param {Object} props - Image component props
- * @param {string} props.src - Image source URL
- * @param {string} props.alt - Alt text for the image
- * @param {number} props.width - Width of the image
- * @param {number} props.height - Height of the image
- * @param {string} props.className - Additional CSS classes
- * @param {boolean} props.priority - Whether to prioritize loading
- * @param {boolean} props.placeholder - Whether to show placeholder
- * @returns {JSX.Element} Optimized Image component
  */
 export const OptimizedImage = ({
   src,
@@ -19,12 +11,13 @@ export const OptimizedImage = ({
   height,
   className = "",
   priority = false,
-  placeholder = true,
+  placeholder = false, // Disabled by default for performance
+  loading,
+  sizes,
   ...props
 }) => {
-  // Default blur placeholder
-  const blurDataURL =
-    "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQtJSEkLzUvLy0vMC4wLi8vLzUvLy8vLy8vLy8vLy8vLy8vLy8vLy8vLz/2wBDAR0dHh4eHRoaHSQtJSEkLzUvLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLy8vLz/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=";
+  // Determine loading strategy
+  const loadingStrategy = loading || (priority ? "eager" : "lazy");
 
   return (
     <Image
@@ -34,11 +27,14 @@ export const OptimizedImage = ({
       height={height}
       className={className}
       priority={priority}
-      // placeholder={placeholder ? "blur" : "empty"}
-      // blurDataURL={placeholder ? blurDataURL : undefined}
-      placeholder="empty"
-      quality={75} // Optimize quality for better performance
-      loading={priority ? "eager" : "lazy"}
+      placeholder="empty" // Always use empty for better performance
+      quality={20} // Reduced quality for better performance (was 75)
+      loading={loadingStrategy}
+      // sizes={sizes || "(max-width: 768px) 100vw, 50vw"} // Better responsive sizing
+      // Disable optimization for better performance in some cases
+      unoptimized={false}
+      // Add decoding for better performance
+      decoding="async"
       {...props}
     />
   );
@@ -46,24 +42,24 @@ export const OptimizedImage = ({
 
 /**
  * Helper function to determine if an image should be loaded with priority
- * @param {number} index - Index of the image in a list
- * @param {number} threshold - Threshold for priority loading (default: 4)
- * @returns {boolean} Whether to prioritize loading
+ * More conservative approach for better performance
  */
-export const shouldPrioritizeImage = (index, threshold = 4) => {
+export const shouldPrioritizeImage = (index, threshold = 2) => {
+  // Reduced from 4 to 2
   return index < threshold;
 };
 
 /**
  * Helper function to get optimized image dimensions
- * @param {string} size - Size variant ('small' | 'medium' | 'large')
- * @returns {Object} Width and height for the specified size
+ * Smaller sizes for better performance
  */
 export const getOptimizedDimensions = (size) => {
   const dimensions = {
-    small: { width: 48, height: 48 },
-    medium: { width: 72, height: 72 },
-    large: { width: 96, height: 96 },
+    tiny: { width: 24, height: 24 },
+    small: { width: 40, height: 40 }, // Reduced from 48
+    medium: { width: 64, height: 64 }, // Reduced from 72
+    large: { width: 80, height: 80 }, // Reduced from 96
+    xlarge: { width: 96, height: 96 },
   };
   return dimensions[size] || dimensions.medium;
 };

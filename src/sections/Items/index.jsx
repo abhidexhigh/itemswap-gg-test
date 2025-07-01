@@ -8,7 +8,7 @@ import { FaPlus, FaEquals } from "react-icons/fa";
 import itemsData from "./items.json";
 import ItemTable from "./ItemTable.jsx";
 import itemsData1 from "../../data/newData/items.json";
-import ReactTltp from "src/components/tooltip/ReactTltp.jsx";
+import { WithTooltip } from "src/components/tooltip/GlobalTooltip";
 import { OptimizedImage } from "../../utils/imageOptimizer";
 
 const Items = () => {
@@ -74,23 +74,17 @@ const Items = () => {
                       className="w-[48px] h-[48px] md:w-[72px] md:h-[72px] rounded-[50%] overflow-hidden"
                       onClick={() => setSpace1(null)}
                     >
-                      <div
-                        className="relative overflow-hidden"
-                        data-tooltip-id={space1?.key}
-                      >
-                        <OptimizedImage
-                          alt="ItemImage"
-                          width={100}
-                          height={100}
-                          src={space1?.imageUrl}
-                          className="w-full h-full"
-                        />
-                      </div>
-                      <ReactTltp
-                        key={space1?.key}
-                        id={space1?.key}
-                        content={space1?.name}
-                      />
+                      <WithTooltip content={space1?.name}>
+                        <div className="relative overflow-hidden">
+                          <OptimizedImage
+                            alt="ItemImage"
+                            width={100}
+                            height={100}
+                            src={space1?.imageUrl}
+                            className="w-full h-full"
+                          />
+                        </div>
+                      </WithTooltip>
                     </button>
                   )}
                 </div>
@@ -101,23 +95,17 @@ const Items = () => {
                       className="w-[48px] h-[48px] md:w-[72px] md:h-[72px] rounded-[50%] overflow-hidden"
                       onClick={() => setSpace2(null)}
                     >
-                      <div
-                        className="relative overflow-hidden"
-                        data-tooltip-id={space2?.key}
-                      >
-                        <OptimizedImage
-                          alt="ItemImage"
-                          width={100}
-                          height={100}
-                          src={space2?.imageUrl}
-                          className="w-full h-full"
-                        />
-                      </div>
-                      <ReactTltp
-                        key={space2?.key}
-                        id={space2?.key}
-                        content={space2?.name}
-                      />
+                      <WithTooltip content={space2?.name}>
+                        <div className="relative overflow-hidden">
+                          <OptimizedImage
+                            alt="ItemImage"
+                            width={100}
+                            height={100}
+                            src={space2?.imageUrl}
+                            className="w-full h-full"
+                          />
+                        </div>
+                      </WithTooltip>
                     </button>
                   )}
                 </div>
@@ -131,77 +119,7 @@ const Items = () => {
                         setSpace2(null);
                       }}
                     >
-                      <div
-                        className="relative overflow-hidden"
-                        data-tooltip-id={
-                          space1?.key === space2?.key
-                            ? itemsData1.filter(
-                                (item) =>
-                                  item?.compositions?.length === 2 &&
-                                  item?.compositions?.every(
-                                    (comp) => comp === space1?.key
-                                  )
-                              )[0]?.imageUrl
-                            : itemsData1.find(
-                                (item) =>
-                                  item.compositions?.includes(space1?.key) &&
-                                  item.compositions?.includes(space2?.key)
-                              )?.key
-                        }
-                      >
-                        <OptimizedImage
-                          alt="ItemImage"
-                          width={100}
-                          height={100}
-                          src={
-                            space1?.key === space2?.key
-                              ? itemsData1.filter(
-                                  (item) =>
-                                    item?.compositions?.length === 2 &&
-                                    item?.compositions?.every(
-                                      (comp) => comp === space1?.key
-                                    )
-                                )[0]?.imageUrl
-                              : itemsData1.find(
-                                  (item) =>
-                                    item.compositions?.includes(space1?.key) &&
-                                    item.compositions?.includes(space2?.key)
-                                )?.imageUrl
-                          }
-                          className="w-[48px] h-[48px] md:w-[72px] md:h-[72px]"
-                        />
-                      </div>
-                      <ReactTltp
-                        key={
-                          space1?.key === space2?.key
-                            ? itemsData1.filter(
-                                (item) =>
-                                  item?.compositions?.length === 2 &&
-                                  item?.compositions?.every(
-                                    (comp) => comp === space1?.key
-                                  )
-                              )[0]?.imageUrl
-                            : itemsData1.find(
-                                (item) =>
-                                  item.compositions?.includes(space1?.key) &&
-                                  item.compositions?.includes(space2?.key)
-                              )?.key
-                        }
-                        id={
-                          space1?.key === space2?.key
-                            ? itemsData1.filter(
-                                (item) =>
-                                  item?.compositions?.length === 2 &&
-                                  item?.compositions?.every(
-                                    (comp) => comp === space1?.key
-                                  )
-                              )[0]?.imageUrl
-                            : itemsData1.find(
-                                (item) =>
-                                  item.compositions?.includes(space1?.key) &&
-                                  item.compositions?.includes(space2?.key)
-                              )?.key
-                        }
+                      <WithTooltip
                         content={
                           space1?.key === space2?.key
                             ? itemsData1.filter(
@@ -210,14 +128,40 @@ const Items = () => {
                                   item?.compositions?.every(
                                     (comp) => comp === space1?.key
                                   )
-                              )[0]?.imageUrl
+                              )[0]?.name
                             : itemsData1.find(
                                 (item) =>
                                   item.compositions?.includes(space1?.key) &&
                                   item.compositions?.includes(space2?.key)
                               )?.name
                         }
-                      />
+                      >
+                        <div className="relative overflow-hidden">
+                          <OptimizedImage
+                            alt="ItemImage"
+                            width={100}
+                            height={100}
+                            src={
+                              space1?.key === space2?.key
+                                ? itemsData1.filter(
+                                    (item) =>
+                                      item?.compositions?.length === 2 &&
+                                      item?.compositions?.every(
+                                        (comp) => comp === space1?.key
+                                      )
+                                  )[0]?.imageUrl
+                                : itemsData1.find(
+                                    (item) =>
+                                      item.compositions?.includes(
+                                        space1?.key
+                                      ) &&
+                                      item.compositions?.includes(space2?.key)
+                                  )?.imageUrl
+                            }
+                            className="w-[48px] h-[48px] md:w-[72px] md:h-[72px]"
+                          />
+                        </div>
+                      </WithTooltip>
                     </button>
                   )}
                 </div>
@@ -242,25 +186,19 @@ const Items = () => {
                         }
                       }}
                     >
-                      <div
-                        className="relative overflow-hidden"
-                        data-tooltip-id={item?.key}
-                      >
-                        <OptimizedImage
-                          alt="ItemImage"
-                          width={100}
-                          height={100}
-                          src={item?.imageUrl}
-                          className={`w-full h-full ${
-                            space1 && space2 ? "opacity-[0.5]" : ""
-                          }`}
-                        />
-                      </div>
-                      <ReactTltp
-                        key={item?.key}
-                        id={item?.key}
-                        content={item?.name}
-                      />
+                      <WithTooltip content={item?.name}>
+                        <div className="relative overflow-hidden">
+                          <OptimizedImage
+                            alt="ItemImage"
+                            width={100}
+                            height={100}
+                            src={item?.imageUrl}
+                            className={`w-full h-full ${
+                              space1 && space2 ? "opacity-[0.5]" : ""
+                            }`}
+                          />
+                        </div>
+                      </WithTooltip>
                     </button>
                   ))}
               </div>
@@ -295,83 +233,21 @@ const Items = () => {
                     .map((item) => (
                       <div className="flex gap-x-[4px] items-center justify-center">
                         <div className="rounded-[50%] overflow-hidden">
-                          <div
-                            className="relative overflow-hidden"
-                            data-tooltip-id={space1?.key}
-                          >
-                            <OptimizedImage
-                              alt="ItemImage"
-                              width={100}
-                              height={100}
-                              src={space1?.imageUrl}
-                              className="w-[48px] h-[48px] md:w-[64px] md:h-[64px]"
-                            />
-                          </div>
-                          <ReactTltp
-                            key={space1?.key}
-                            id={space1?.key}
-                            content={space1?.name}
-                          />
+                          <WithTooltip content={space1?.name}>
+                            <div className="relative overflow-hidden">
+                              <OptimizedImage
+                                alt="ItemImage"
+                                width={100}
+                                height={100}
+                                src={space1?.imageUrl}
+                                className="w-[48px] h-[48px] md:w-[64px] md:h-[64px]"
+                              />
+                            </div>
+                          </WithTooltip>
                         </div>
                         <FaPlus className="text-[#ca9372]" />
                         <div className="rounded-[50%] overflow-hidden">
-                          <div
-                            className="relative overflow-hidden"
-                            data-tooltip-id={
-                              item?.compositions?.find((i) => i !== space1?.key)
-                                ? itemsData1?.find(
-                                    (i) =>
-                                      i?.key ===
-                                      item?.compositions?.find(
-                                        (i) => i !== space1?.key
-                                      )
-                                  )?.key
-                                : space1?.key
-                            }
-                          >
-                            <OptimizedImage
-                              alt="ItemImage"
-                              width={100}
-                              height={100}
-                              src={
-                                item?.compositions?.find(
-                                  (i) => i !== space1?.key
-                                )
-                                  ? itemsData1?.find(
-                                      (i) =>
-                                        i?.key ===
-                                        item?.compositions?.find(
-                                          (i) => i !== space1?.key
-                                        )
-                                    )?.imageUrl
-                                  : space1?.imageUrl
-                              }
-                              className="w-[48px] h-[48px] md:w-[64px] md:h-[64px]"
-                            />
-                          </div>
-                          <ReactTltp
-                            key={
-                              item?.compositions?.find((i) => i !== space1?.key)
-                                ? itemsData1?.find(
-                                    (i) =>
-                                      i?.key ===
-                                      item?.compositions?.find(
-                                        (i) => i !== space1?.key
-                                      )
-                                  )?.key
-                                : space1?.key
-                            }
-                            id={
-                              item?.compositions?.find((i) => i !== space1?.key)
-                                ? itemsData1?.find(
-                                    (i) =>
-                                      i?.key ===
-                                      item?.compositions?.find(
-                                        (i) => i !== space1?.key
-                                      )
-                                  )?.key
-                                : space1?.key
-                            }
+                          <WithTooltip
                             content={
                               item?.compositions?.find((i) => i !== space1?.key)
                                 ? itemsData1?.find(
@@ -383,27 +259,43 @@ const Items = () => {
                                   )?.name
                                 : space1?.name
                             }
-                          />
+                          >
+                            <div className="relative overflow-hidden">
+                              <OptimizedImage
+                                alt="ItemImage"
+                                width={100}
+                                height={100}
+                                src={
+                                  item?.compositions?.find(
+                                    (i) => i !== space1?.key
+                                  )
+                                    ? itemsData1?.find(
+                                        (i) =>
+                                          i?.key ===
+                                          item?.compositions?.find(
+                                            (i) => i !== space1?.key
+                                          )
+                                      )?.imageUrl
+                                    : space1?.imageUrl
+                                }
+                                className="w-[48px] h-[48px] md:w-[64px] md:h-[64px]"
+                              />
+                            </div>
+                          </WithTooltip>
                         </div>
                         <FaEquals className="text-[#ca9372]" />
                         <div className="rounded-[10px] overflow-hidden">
-                          <div
-                            className="relative overflow-hidden"
-                            data-tooltip-id={item?.key}
-                          >
-                            <OptimizedImage
-                              alt="ItemImage"
-                              width={100}
-                              height={100}
-                              src={item?.imageUrl}
-                              className="w-[48px] h-[48px] md:w-[64px] md:h-[64px]"
-                            />
-                          </div>
-                          <ReactTltp
-                            key={item?.key}
-                            id={item?.key}
-                            content={item?.name}
-                          />
+                          <WithTooltip content={item?.name}>
+                            <div className="relative overflow-hidden">
+                              <OptimizedImage
+                                alt="ItemImage"
+                                width={100}
+                                height={100}
+                                src={item?.imageUrl}
+                                className="w-[48px] h-[48px] md:w-[64px] md:h-[64px]"
+                              />
+                            </div>
+                          </WithTooltip>
                         </div>
                       </div>
                     ))}
@@ -1632,39 +1524,7 @@ const Items = () => {
                               <div className="flex items-center gap-x-[2px] flex-shrink-0 min-h-[32px]">
                                 <FaPlus />
                                 <div className="relative">
-                                  <Image
-                                    alt="ItemImage"
-                                    width={100}
-                                    height={100}
-                                    src={
-                                      item2?.compositions?.find(
-                                        (i) => i !== item?.key
-                                      )
-                                        ? itemsData1?.find(
-                                            (id) =>
-                                              id?.key ===
-                                              item2?.compositions?.find(
-                                                (i) => i !== item?.key
-                                              )
-                                          )?.imageUrl
-                                        : item?.imageUrl
-                                    }
-                                    className="rounded-[6px] w-[32px] h-[32px] md:w-[48px] md:h-[48px]"
-                                    data-tooltip-id={
-                                      item2?.compositions?.find(
-                                        (i) => i !== item?.key
-                                      )
-                                        ? itemsData1?.find(
-                                            (id) =>
-                                              id?.key ===
-                                              item2?.compositions?.find(
-                                                (i) => i !== item?.key
-                                              )
-                                          )?.key
-                                        : item?.key
-                                    }
-                                  />
-                                  <ReactTltp
+                                  <WithTooltip
                                     content={
                                       item2?.compositions?.find(
                                         (i) => i !== item?.key
@@ -1678,35 +1538,39 @@ const Items = () => {
                                           )?.name
                                         : item?.name
                                     }
-                                    id={
-                                      item2?.compositions?.find(
-                                        (i) => i !== item?.key
-                                      )
-                                        ? itemsData1?.find(
-                                            (id) =>
-                                              id?.key ===
-                                              item2?.compositions?.find(
-                                                (i) => i !== item?.key
-                                              )
-                                          )?.key
-                                        : item?.key
-                                    }
-                                  />
+                                  >
+                                    <Image
+                                      alt="ItemImage"
+                                      width={100}
+                                      height={100}
+                                      src={
+                                        item2?.compositions?.find(
+                                          (i) => i !== item?.key
+                                        )
+                                          ? itemsData1?.find(
+                                              (id) =>
+                                                id?.key ===
+                                                item2?.compositions?.find(
+                                                  (i) => i !== item?.key
+                                                )
+                                            )?.imageUrl
+                                          : item?.imageUrl
+                                      }
+                                      className="rounded-[6px] w-[32px] h-[32px] md:w-[48px] md:h-[48px]"
+                                    />
+                                  </WithTooltip>
                                 </div>
                                 <FaEquals />
                                 <div className="relative">
-                                  <Image
-                                    alt="ItemImage"
-                                    width={100}
-                                    height={100}
-                                    src={item2?.imageUrl}
-                                    className="rounded-[6px] w-[32px] h-[32px] md:w-[48px] md:h-[48px]"
-                                    data-tooltip-id={item2?.key}
-                                  />
-                                  <ReactTltp
-                                    content={item2?.name}
-                                    id={item2?.key}
-                                  />
+                                  <WithTooltip content={item2?.name}>
+                                    <Image
+                                      alt="ItemImage"
+                                      width={100}
+                                      height={100}
+                                      src={item2?.imageUrl}
+                                      className="rounded-[6px] w-[32px] h-[32px] md:w-[48px] md:h-[48px]"
+                                    />
+                                  </WithTooltip>
                                 </div>
                               </div>
                               <div

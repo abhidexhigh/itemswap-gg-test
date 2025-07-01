@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Image from "next/image";
-import ReactTltp from "../tooltip/ReactTltp";
+import { WithTooltip } from "../tooltip/GlobalTooltip";
+import { OptimizedImage } from "../../utils/imageOptimizer";
 
 // Background styles
 const backgroundStyles = {
@@ -81,7 +82,7 @@ const ItemDisplay = ({
     imageSize ||
     (typeof size === "object" ? size.image : sizePresets[size]?.image);
 
-  return (
+  const content = (
     <div
       className={`relative flex items-center justify-center ${containerSizeClass}`}
     >
@@ -115,15 +116,17 @@ const ItemDisplay = ({
           className={`aspect-square object-contain ${
             isHovered ? "opacity-100" : "opacity-80"
           } ${isFaded ? "opacity-20 grayscale" : ""} ${borderRadius}`}
-          data-tooltip-id={tooltipId}
         />
       </div>
-
-      {/* Tooltip always rendered to prevent flickering */}
-      {showTooltip && (
-        <ReactTltp variant="item" id={tooltipId} content={item} />
-      )}
     </div>
+  );
+
+  return showTooltip ? (
+    <WithTooltip variant="item" content={item}>
+      {content}
+    </WithTooltip>
+  ) : (
+    content
   );
 };
 
