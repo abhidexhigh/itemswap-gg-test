@@ -240,7 +240,7 @@ export default function NavbarWithoutHeadless({ position = "relative" }) {
                 {OT.leaderboard}
               </Link>
               <Link
-                href="https://itemswap-guild-test.vercel.app/updates?v=ARENA"
+                href="https://itemswap-guild-test.vercel.app/updates?v=FORChess"
                 className={`text-[#fff4e2] text-xl !font-normal leading-[4rem] ${isActive("/updates") ? "!font-medium text-yellow-300" : "text-[#fff4e2]"}`}
               >
                 {OT.updates}
@@ -501,7 +501,7 @@ export default function NavbarWithoutHeadless({ position = "relative" }) {
                     {OT.leaderboard}
                   </Link>
                   <Link
-                    href="https://itemswap-guild-test.vercel.app/updates?v=ARENA"
+                    href="https://itemswap-guild-test.vercel.app/updates?v=FORChess"
                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-gray-200 hover:text-black"
                     onClick={() => setMobileMenuOpen(false)}
                   >
