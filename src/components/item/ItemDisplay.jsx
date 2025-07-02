@@ -99,8 +99,40 @@ const ItemDisplay = ({
           <OptimizedImage
             src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1746434099/item_1_mpqgp5.webp"
             alt="item frame"
-            width={36}
-            height={36}
+            width={
+              size === "xxSmall"
+                ? 36
+                : size === "xSmall"
+                  ? 48
+                  : size === "small"
+                    ? 60
+                    : size === "midSmall"
+                      ? 72
+                      : size === "midMedium"
+                        ? 84
+                        : size === "medium"
+                          ? 96
+                          : size === "large"
+                            ? 124
+                            : 36
+            }
+            height={
+              size === "xxSmall"
+                ? 36
+                : size === "xSmall"
+                  ? 48
+                  : size === "small"
+                    ? 60
+                    : size === "midSmall"
+                      ? 72
+                      : size === "midMedium"
+                        ? 84
+                        : size === "medium"
+                          ? 96
+                          : size === "large"
+                            ? 124
+                            : 36
+            }
             className={`aspect-square object-contain ${frameSizeClass}`}
             loading="eager"
             fetchPriority="high"
@@ -113,8 +145,40 @@ const ItemDisplay = ({
         <OptimizedImage
           src={item?.imageUrl}
           alt={item?.name}
-          width={36}
-          height={36}
+          width={
+            size === "xxSmall"
+              ? 36
+              : size === "xSmall"
+                ? 48
+                : size === "small"
+                  ? 60
+                  : size === "midSmall"
+                    ? 72
+                    : size === "midMedium"
+                      ? 84
+                      : size === "medium"
+                        ? 96
+                        : size === "large"
+                          ? 124
+                          : 36
+          }
+          height={
+            size === "xxSmall"
+              ? 36
+              : size === "xSmall"
+                ? 48
+                : size === "small"
+                  ? 60
+                  : size === "midSmall"
+                    ? 72
+                    : size === "midMedium"
+                      ? 84
+                      : size === "medium"
+                        ? 96
+                        : size === "large"
+                          ? 124
+                          : 36
+          }
           className={`aspect-square object-contain ${
             isHovered ? "opacity-100" : "opacity-80"
           } ${isFaded ? "opacity-20 grayscale" : ""} ${borderRadius}`}

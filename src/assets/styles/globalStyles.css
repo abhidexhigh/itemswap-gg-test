@@ -269,3 +269,56 @@ body > .tooltip-portal .react-tooltip,
   /* Safari and Chrome */
   display: none;
 }
+
+/* Mobile scroll improvements */
+@media only screen and (max-width: 768px) {
+  /* Ensure proper scrolling on mobile */
+  html {
+    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
+  }
+  
+  body {
+    -webkit-overflow-scrolling: touch;
+    touch-action: manipulation;
+    overflow-x: hidden;
+  }
+  
+  /* Fix rubber band scrolling issues */
+  #__next {
+    overflow-x: hidden;
+    position: relative;
+  }
+  
+  /* Prevent scroll stuck issues on mobile */
+  .scroll-container, 
+  .overflow-auto, 
+  .overflow-y-auto,
+  [style*="overflow"] {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+  
+  /* Fix any fixed position elements that might interfere */
+  .fixed {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+}
+
+/* Specific fixes for iOS Safari */
+@supports (-webkit-appearance: none) {
+  @media only screen and (max-width: 768px) {
+    body {
+      /* Prevent Safari bounce scroll */
+      overscroll-behavior-y: none;
+      /* Ensure touch scrolling */
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Fix for viewport units on mobile */
+    .min-h-screen {
+      min-height: -webkit-fill-available;
+    }
+  }
+}

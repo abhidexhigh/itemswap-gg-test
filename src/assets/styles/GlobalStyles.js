@@ -232,44 +232,52 @@ button {
 }
 
 @media only screen and (max-width: 480px) {
-    html, body {
-        height: 100%;
+    html {
         margin: 0;
         padding: 0;
         overflow-x: hidden;
+        /* Enable smooth scrolling */
+        scroll-behavior: smooth;
     }
 
     body {
         font-size: 15px;
         position: relative;
         min-height: 100vh;
+        margin: 0;
+        padding: 0;
         background: none;
+        /* Fix mobile scroll issues */
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        touch-action: manipulation;
     }
 
     body::before {
         content: '';
-        position: fixed;
+        position: absolute;
         top: 0;
         left: 0;
         width: 100%;
-        height: 100%;
+        min-height: 100vh;
         background-image: url(${getRandomMobileBanner()});
         background-position: center 25px;
         background-repeat: no-repeat;
         background-size: 100% auto;
         z-index: -1;
+        /* Improve rendering performance */
         -webkit-transform: translate3d(0,0,0);
         transform: translate3d(0,0,0);
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
-        -webkit-perspective: 1000;
-        perspective: 1000;
+        will-change: transform;
     }
 
     #__next {
         position: relative;
         z-index: 1;
         background: transparent;
+        min-height: 100vh;
     }
 }
 
