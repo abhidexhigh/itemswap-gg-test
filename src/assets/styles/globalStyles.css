@@ -275,19 +275,19 @@ body > .tooltip-portal .react-tooltip,
   /* Ensure proper scrolling on mobile */
   html {
     -webkit-overflow-scrolling: touch;
-    overflow-x: hidden;
+    /* Remove overflow-x: hidden as it interferes with sticky positioning */
   }
   
   body {
     -webkit-overflow-scrolling: touch;
     touch-action: manipulation;
-    overflow-x: hidden;
+    /* Remove overflow-x: hidden as it interferes with sticky positioning */
   }
   
   /* Fix rubber band scrolling issues */
   #__next {
-    overflow-x: hidden;
     position: relative;
+    /* Remove overflow-x: hidden to allow sticky positioning */
   }
   
   /* Prevent scroll stuck issues on mobile */
@@ -303,6 +303,11 @@ body > .tooltip-portal .react-tooltip,
   .fixed {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+  }
+
+  /* Apply overflow-x: hidden only to elements that actually need it */
+  .prevent-horizontal-scroll {
+    overflow-x: hidden;
   }
 }
 

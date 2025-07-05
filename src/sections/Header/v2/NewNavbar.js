@@ -115,7 +115,7 @@ export default function Navbar({ position = "relative" }) {
           <Link href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
             <Image
-              src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1740651458/ArmyDragone_text_copy_qiojcu.png"
+              src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1751623428/ForceOfRune_oakpme.webp"
               alt="ItemSwap"
               width={100}
               height={100}
@@ -216,7 +216,7 @@ export default function Navbar({ position = "relative" }) {
             <Link href="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
               <Image
-                src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1740651458/ArmyDragone_text_copy_qiojcu.png"
+                src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1751623428/ForceOfRune_oakpme.webp"
                 alt="ItemSwap"
                 width={100}
                 height={100}

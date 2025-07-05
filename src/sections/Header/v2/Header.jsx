@@ -34,12 +34,26 @@ export default function NavbarWithoutHeadless({ position = "relative" }) {
 
     if (mobileMenuOpen) {
       document.addEventListener("click", handleBackdropClick);
-      document.body.style.overflow = "hidden";
+      // Instead of setting overflow: hidden, preserve scroll position
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = "0";
+      document.body.style.right = "0";
+    } else {
+      // Restore scroll position when menu is closed
+      const scrollY = document.body.style.top;
+      if (scrollY) {
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.left = "";
+        document.body.style.right = "";
+        window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      }
     }
 
     return () => {
       document.removeEventListener("click", handleBackdropClick);
-      document.body.style.overflow = "unset";
     };
   }, [mobileMenuOpen]);
 
@@ -91,10 +105,11 @@ export default function NavbarWithoutHeadless({ position = "relative" }) {
 
   return (
     <>
+      {/* Fixed header positioning to properly handle sticky behavior on mobile */}
       <header
         className={`bg-gradient-to-b from-[#191F1F] via-[#191F1F] to-[#191F1F] ${
-          position === "absolute" ? "z-[999] w-full md:absolute" : ""
-        } sticky top-0 z-[9999999999999] shadow-lg`}
+          position === "absolute" ? "absolute z-[999] w-full" : "sticky top-0"
+        } z-[9999999999999] shadow-lg`}
       >
         <nav
           aria-label="Global"
@@ -116,7 +131,7 @@ export default function NavbarWithoutHeadless({ position = "relative" }) {
             >
               <span className="sr-only">Your Company</span>
               <Image
-                src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1740651458/ArmyDragone_text_copy_qiojcu.png"
+                src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1751623428/ForceOfRune_oakpme.webp"
                 alt="ItemSwap"
                 width={100}
                 height={100}
@@ -148,7 +163,7 @@ export default function NavbarWithoutHeadless({ position = "relative" }) {
               <div className="relative" ref={trendsDropdownRef}>
                 <button
                   onClick={() => setTrendsDropdownOpen(!trendsDropdownOpen)}
-                  className={`flex items-center gap-x-1 text-[#fff4e2] text-xl !font-normal leading-[4rem] ${
+                  className={`flex items-center gap-x-1 text-[#fff4e2] text-xl !font-normal leading-[3rem] ${
                     isActive("/metaTrends") ||
                     isActive("/recentDecks") ||
                     isActive("/championsTrends") ||
@@ -235,13 +250,13 @@ export default function NavbarWithoutHeadless({ position = "relative" }) {
               </div>
               <Link
                 href="/leaderboard"
-                className={`text-[#fff4e2] text-xl !font-normal leading-[4rem] ${isActive("/leaderboard") ? "!font-medium text-yellow-300" : "text-[#fff4e2]"}`}
+                className={`text-[#fff4e2] text-xl !font-normal leading-[3rem] ${isActive("/leaderboard") ? "!font-medium text-yellow-300" : "text-[#fff4e2]"}`}
               >
                 {OT.leaderboard}
               </Link>
               <Link
                 href="https://itemswap-guild-test.vercel.app/updates?v=FOR Chess"
-                className={`text-[#fff4e2] text-xl !font-normal leading-[4rem] ${isActive("/updates") ? "!font-medium text-yellow-300" : "text-[#fff4e2]"}`}
+                className={`text-[#fff4e2] text-xl !font-normal leading-[3rem] ${isActive("/updates") ? "!font-medium text-yellow-300" : "text-[#fff4e2]"}`}
               >
                 {OT.updates}
               </Link>
@@ -298,7 +313,7 @@ export default function NavbarWithoutHeadless({ position = "relative" }) {
               >
                 <span className="sr-only">Your Company</span>
                 <Image
-                  src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1740651458/ArmyDragone_text_copy_qiojcu.png"
+                  src="https://res.cloudinary.com/dg0cmj6su/image/upload/v1751623428/ForceOfRune_oakpme.webp"
                   alt="ItemSwap"
                   width={100}
                   height={100}

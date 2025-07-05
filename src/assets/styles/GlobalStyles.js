@@ -235,7 +235,7 @@ button {
     html {
         margin: 0;
         padding: 0;
-        overflow-x: hidden;
+        /* Remove overflow-x: hidden as it interferes with sticky positioning */
         /* Enable smooth scrolling */
         scroll-behavior: smooth;
     }
@@ -248,7 +248,7 @@ button {
         padding: 0;
         background: none;
         /* Fix mobile scroll issues */
-        overflow-x: hidden;
+        /* Remove overflow-x: hidden as it interferes with sticky positioning */
         -webkit-overflow-scrolling: touch;
         touch-action: manipulation;
     }

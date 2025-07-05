@@ -372,7 +372,7 @@ const ProjectItems = () => {
             <div className="w-full">
               {/* Grid Header - Sticky */}
               <div
-                className="grid bg-[#000000] sticky top-[113px] z-50 border-b border-[#2D2F37]"
+                className="grid bg-[#000000] sticky top-[110px] z-50 border-b border-[#2D2F37]"
                 style={{
                   gridTemplateColumns:
                     "60px 1fr 150px 130px 130px 130px 150px 300px",
